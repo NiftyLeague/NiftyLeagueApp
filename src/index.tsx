@@ -5,9 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-// load mock apis
-import '_mockApis';
-
 // project imports
 import App from 'App';
 import { BASE_PATH } from 'config';
@@ -22,16 +19,16 @@ import 'assets/scss/style.scss';
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 ReactDOM.render(
-    <Provider store={store}>
-        <PersistGate loading={null} persistor={persister}>
-            <ConfigProvider>
-                <BrowserRouter basename={BASE_PATH}>
-                    <App />
-                </BrowserRouter>
-            </ConfigProvider>
-        </PersistGate>
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persister}>
+      <ConfigProvider>
+        <BrowserRouter basename={BASE_PATH}>
+          <App />
+        </BrowserRouter>
+      </ConfigProvider>
+    </PersistGate>
+  </Provider>,
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -17,21 +17,21 @@ import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
 // ==============================|| APP ||============================== //
 
 const App = () => (
-    <ThemeCustomization>
-        {/* RTL layout */}
-        <RTLLayout>
-            <Locales>
-                <NavigationScroll>
-                    <AuthProvider>
-                        <>
-                            <Routes />
-                            <Snackbar />
-                        </>
-                    </AuthProvider>
-                </NavigationScroll>
-            </Locales>
-        </RTLLayout>
-    </ThemeCustomization>
+  <ThemeCustomization>
+    {/* RTL layout */}
+    <RTLLayout>
+      <Locales>
+        <NavigationScroll>
+          <AuthProvider>
+            <>
+              <Routes />
+              <Snackbar />
+            </>
+          </AuthProvider>
+        </NavigationScroll>
+      </Locales>
+    </RTLLayout>
+  </ThemeCustomization>
 );
 
 export default App;
