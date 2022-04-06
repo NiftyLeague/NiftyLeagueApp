@@ -163,7 +163,7 @@
       "npm run lint"
     ],
     "*.{js,jsx,ts,tsx,md,mdx}": [
-      "npm run prettier"
+      "npm run format"
     ]
   },
   "engines": {
