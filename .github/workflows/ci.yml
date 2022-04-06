@@ -1,0 +1,35 @@
+name: Validate, build, and test on every push
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Configure npm caching
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run prettier
+        run: npm run prettier
+      - name: Check linter
+        run: npm run lint
+      - name: Run test
+        run: npm run test
+      - name: Build the project
+        run: npm run build
