@@ -23,8 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies (with cache)
+        run: bahmutov/npm-install@v1
       - name: Run prettier
         run: npm run prettier
       - name: Check linter
