@@ -12,16 +12,16 @@ import { useEffect } from 'react';
  * @param {PropTypes.node} children children element/node
  */
 const AuthGuard = ({ children }: GuardProps) => {
-    const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('login', { replace: true });
-        }
-    }, [isLoggedIn, navigate]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('login', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
-    return children;
+  return children;
 };
 
 export default AuthGuard;
