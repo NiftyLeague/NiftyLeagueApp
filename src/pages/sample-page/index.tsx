@@ -37,7 +37,7 @@ const SamplePage = () => (
     <EmptyStateModal
       message="I love cats"
       buttonCTA="Me too!"
-      handleClick={handleClick}
+      onClick={handleClick}
     />
   </>
 );
