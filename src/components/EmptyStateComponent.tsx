@@ -17,7 +17,7 @@ const style = {
 
 const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
   message,
-  buttonCTA,
+  buttonText,
   onClick,
 }) => (
   <div>
