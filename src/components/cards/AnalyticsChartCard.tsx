@@ -78,8 +78,8 @@ const AnalyticsChartCard = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {dropData?.options.map((option, index) => (
-            <MenuItem key={index} onClick={handleClose}>
+          {dropData?.options.map((option) => (
+            <MenuItem key={option.value} onClick={handleClose}>
               {option.label}
             </MenuItem>
           ))}
@@ -90,8 +90,8 @@ const AnalyticsChartCard = ({
 
   let listItem;
   if (listData) {
-    listItem = listData.map((item, index) => (
-      <Grid item key={index} sm={12}>
+    listItem = listData.map((item) => (
+      <Grid item key={item.value} sm={12}>
         <Box
           sx={{
             color: item.color,

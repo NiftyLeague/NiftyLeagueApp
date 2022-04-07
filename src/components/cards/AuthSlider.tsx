@@ -18,9 +18,9 @@ const AuthSlider = ({ items }: { items: AuthSliderProps[] }) => {
 
   return (
     <Slider {...settings}>
-      {items.map((item, i) => (
+      {items.map((item) => (
         <Grid
-          key={i}
+          key={item.title}
           container
           direction="column"
           alignItems="center"
