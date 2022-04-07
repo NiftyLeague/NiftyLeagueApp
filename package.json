@@ -9,12 +9,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
-    "lint": "npm run check-types && npm run lint:script",
+    "lint": "npm run lint:script",
     "lint:fix": "npm run lint:script -- --fix",
     "lint:script": "eslint --ignore-path .eslintignore ./src --ext .ts,.tsx,.js,.jsx",
     "format": "prettier --write './src/**/*.{ts,tsx,js,jsx}'",
     "check-types": "tsc",
-    "validate": "npm-run-all format lint test build"
+    "validate": "npm-run-all format lint check-types test build"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.4",
