@@ -4,7 +4,7 @@ import { Button, Card, Typography } from '@mui/material';
 interface EmptyStateComponentProps {
   message?: string;
   buttonText?: string;
-  handleClick: (values: any) => any;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 const style = {
   position: 'relative' as 'relative',
