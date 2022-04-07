@@ -20,7 +20,9 @@ const SamplePage = () => (
         labours.
       </Typography>
     </MainCard>
-    <EmptyStateModal />
+    <EmptyStateModal variant="overview" />
+    <EmptyStateModal variant="comics" />
+    <EmptyStateModal variant="degen" />
   </>
 );
 
