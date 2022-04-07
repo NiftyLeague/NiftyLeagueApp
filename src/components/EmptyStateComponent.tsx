@@ -25,7 +25,7 @@ const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         {message}
       </Typography>
-      <Button onClick={handleClick}>{buttonCTA}</Button>
+      <Button onClick={onClick}>{buttonText}</Button>
     </Card>
   </div>
 );
