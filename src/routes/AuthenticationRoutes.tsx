@@ -1,5 +1,5 @@
 // project imports
-import MinimalLayout from 'layout/MinimalLayout';
+import MinimalLayout from 'components/layout/MinimalLayout';
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
