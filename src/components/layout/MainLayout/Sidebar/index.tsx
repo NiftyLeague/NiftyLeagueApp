@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, Stack, useMediaQuery } from '@mui/material';
+import { Box, Button, Drawer, Stack, useMediaQuery } from '@mui/material';
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -14,7 +14,6 @@ import MenuCard from './MenuCard';
 import { openDrawer } from 'store/slices/menu';
 import { useDispatch, useSelector } from 'store';
 import { drawerWidth } from 'store/constant';
-import Chip from 'components/extended/Chip';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -53,13 +52,7 @@ const Sidebar = ({ window }: SidebarProps) => {
         <MenuList />
         <MenuCard />
         <Stack direction="row" justifyContent="center" sx={{ mb: 2 }}>
-          <Chip
-            label={process.env.REACT_APP_VERSION}
-            disabled
-            chipcolor="secondary"
-            size="small"
-            sx={{ cursor: 'pointer' }}
-          />
+          <Button variant="contained">Hello world</Button>
         </Stack>
       </PerfectScrollbar>
     ),
