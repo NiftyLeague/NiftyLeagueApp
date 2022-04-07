@@ -14,16 +14,19 @@ import { useEffect } from 'react';
  */
 
 const GuestGuard = ({ children }: GuardProps) => {
-    const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate(DASHBOARD_PATH, { replace: true });
-        }
-    }, [isLoggedIn, navigate]);
+  console.log('demo');
 
-    return children;
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log('demo 1');
+      navigate(DASHBOARD_PATH, { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
+
+  return children;
 };
 
 export default GuestGuard;
