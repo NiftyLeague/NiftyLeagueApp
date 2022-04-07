@@ -17,11 +17,8 @@ const GuestGuard = ({ children }: GuardProps) => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  console.log('demo');
-
   useEffect(() => {
     if (isLoggedIn) {
-      console.log('demo 1');
       navigate(DASHBOARD_PATH, { replace: true });
     }
   }, [isLoggedIn, navigate]);

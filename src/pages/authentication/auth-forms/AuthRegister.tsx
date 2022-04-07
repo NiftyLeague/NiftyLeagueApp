@@ -56,6 +56,7 @@ const FirebaseRegister = ({ ...others }) => {
     try {
       await firebaseGoogleSignIn();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   };
@@ -185,6 +186,7 @@ const FirebaseRegister = ({ ...others }) => {
               },
             );
           } catch (err: any) {
+            // eslint-disable-next-line no-console
             console.error(err);
             if (scriptedRef.current) {
               setStatus({ success: false });

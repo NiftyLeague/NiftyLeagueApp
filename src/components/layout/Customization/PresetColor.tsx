@@ -129,9 +129,9 @@ const PresetColor = () => {
   return (
     <SubCard title="Preset Color">
       <Grid item container spacing={2} alignItems="center">
-        {colorOptions.map((color, index) => (
+        {colorOptions.map((color) => (
           <PresetColorBox
-            key={index}
+            key={color.id}
             color={color}
             presetColor={presetColor}
             setPresetColor={onChangePresetColor}

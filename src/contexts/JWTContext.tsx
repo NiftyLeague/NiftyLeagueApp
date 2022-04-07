@@ -73,6 +73,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
           });
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         dispatch({
           type: LOGOUT,
@@ -140,6 +141,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     dispatch({ type: LOGOUT });
   };
 
+  // eslint-disable-next-line no-console
   const resetPassword = (email: string) => console.log(email);
 
   const updateProfile = () => {};

@@ -146,11 +146,11 @@ const Comment = ({
     comment.data?.replies &&
     comment.data?.replies.length
   ) {
-    repliesResult = comment.data?.replies.map((reply, index) => (
+    repliesResult = comment.data?.replies.map((reply) => (
       <Reply
         postId={postId}
         commentId={comment.id}
-        key={index}
+        key={reply.id}
         onReply={handleChangeReply}
         reply={reply}
         handleReplayLikes={handleReplayLikes}

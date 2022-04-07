@@ -101,8 +101,8 @@ const FormControlSelect = ({
           ),
         }}
       >
-        {currencies?.map((option, index) => (
-          <MenuItem key={index} value={option.value}>
+        {currencies?.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
