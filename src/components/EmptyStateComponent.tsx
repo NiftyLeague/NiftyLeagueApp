@@ -3,7 +3,7 @@ import { Button, Card, Typography } from '@mui/material';
 
 interface EmptyStateComponentProps {
   message?: string;
-  buttonCTA?: string;
+  buttonText?: string;
   handleClick: (values: any) => any;
 }
 const style = {
