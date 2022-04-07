@@ -31,7 +31,7 @@ const SamplePage = () => (
     />
     <EmptyStateModal
       message="Is Wahyu the best?"
-      buttonCTA="Yes!"
+      buttonText="Yes!"
       onClick={handleClick}
     />
     <EmptyStateModal
