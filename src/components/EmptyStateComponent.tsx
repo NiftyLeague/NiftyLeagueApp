@@ -4,6 +4,7 @@ import { Button, Card, Typography } from '@mui/material';
 interface EmptyStateComponentProps {
   message?: string;
   buttonCTA?: string;
+  handleClick: (values: any) => any;
 }
 const style = {
   position: 'relative' as 'relative',
@@ -17,13 +18,14 @@ const style = {
 const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
   message,
   buttonCTA,
+  handleClick,
 }) => (
   <div>
     <Card sx={style}>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         {message}
       </Typography>
-      <Button>{buttonCTA}</Button>
+      <Button onClick={handleClick}>{buttonCTA}</Button>
     </Card>
   </div>
 );
