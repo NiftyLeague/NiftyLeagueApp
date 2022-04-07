@@ -27,7 +27,7 @@ const SamplePage = () => (
     <EmptyStateModal
       message="You don't have anything here."
       buttonCTA="Buy stuff!"
-      handleClick={handleClick}
+      onClick={handleClick}
     />
     <EmptyStateModal
       message="Is Wahyu the best?"
