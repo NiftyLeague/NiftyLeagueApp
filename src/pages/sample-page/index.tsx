@@ -32,7 +32,7 @@ const SamplePage = () => (
     <EmptyStateModal
       message="Is Wahyu the best?"
       buttonCTA="Yes!"
-      handleClick={handleClick}
+      onClick={handleClick}
     />
     <EmptyStateModal
       message="I love cats"
