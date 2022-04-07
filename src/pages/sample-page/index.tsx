@@ -26,7 +26,7 @@ const SamplePage = () => (
     </MainCard>
     <EmptyStateModal
       message="You don't have anything here."
-      buttonCTA="Buy stuff!"
+      buttonText="Buy stuff!"
       onClick={handleClick}
     />
     <EmptyStateModal
