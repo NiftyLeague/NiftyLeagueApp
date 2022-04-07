@@ -18,7 +18,7 @@ const style = {
 const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
   message,
   buttonCTA,
-  handleClick,
+  onClick,
 }) => (
   <div>
     <Card sx={style}>
