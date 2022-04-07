@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Card, Typography } from '@mui/material';
 
 interface EmptyStateComponentProps {
-  variant?: Variant;
+  message?: string;
+  buttonCTA?: string;
 }
-
-type Variant = 'overview' | 'comics' | 'degen';
-
-const ErrorMessages = {
-  overview: {
-    message: 'You do not own anything yet.',
-    cta: 'Buy stuff',
-  },
-  comics: {
-    message: 'You do not own any Comics yet.',
-    cta: 'Buy Comics',
-  },
-  degen: {
-    message: 'You do not own any DEGENs yet.',
-    cta: 'Buy DEGENs',
-  },
-};
-
 const style = {
   position: 'relative' as 'relative',
   width: 400,
@@ -32,20 +15,15 @@ const style = {
 };
 
 const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
-  variant,
+  message,
+  buttonCTA,
 }) => (
   <div>
     <Card sx={style}>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        {variant === 'overview' && ErrorMessages.overview.message}
-        {variant === 'degen' && ErrorMessages.degen.message}
-        {variant === 'comics' && ErrorMessages.comics.message}
+        {message}
       </Typography>
-      <Button>
-        {variant === 'overview' && ErrorMessages.overview.cta}
-        {variant === 'degen' && ErrorMessages.degen.cta}
-        {variant === 'comics' && ErrorMessages.comics.cta}
-      </Button>
+      <Button>{buttonCTA}</Button>
     </Card>
   </div>
 );

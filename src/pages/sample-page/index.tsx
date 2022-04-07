@@ -20,9 +20,12 @@ const SamplePage = () => (
         labours.
       </Typography>
     </MainCard>
-    <EmptyStateModal variant="overview" />
-    <EmptyStateModal variant="comics" />
-    <EmptyStateModal variant="degen" />
+    <EmptyStateModal
+      message="You don't have anything here."
+      buttonCTA="Buy stuff!"
+    />
+    <EmptyStateModal message="Is Wahyu the best?" buttonCTA="Yes!" />
+    <EmptyStateModal message="I love cats" buttonCTA="Me too!" />
   </>
 );
 
