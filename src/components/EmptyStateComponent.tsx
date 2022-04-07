@@ -7,14 +7,26 @@ interface EmptyStateComponentProps {
 
 type Variant = 'overview' | 'comics' | 'degen';
 
+const ErrorMessages = {
+  overview: {
+    message: 'You do not own anything yet.',
+    cta: 'Buy stuff',
+  },
+  comics: {
+    message: 'You do not own any Comics yet.',
+    cta: 'Buy Comics',
+  },
+  degen: {
+    message: 'You do not own any DEGENs yet.',
+    cta: 'Buy DEGENs',
+  },
+};
+
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: 'relative' as 'relative',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '2px solid #0F0',
   boxShadow: 24,
   p: 4,
 };
@@ -24,13 +36,16 @@ const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
 }) => (
   <div>
     <Card sx={style}>
-      <Typography id="modal-modal-title" variant="h6" component="h2">
-        No DEGENs
-      </Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        You do not own any DEGENs yet.
+        {variant === 'overview' && ErrorMessages.overview.message}
+        {variant === 'degen' && ErrorMessages.degen.message}
+        {variant === 'comics' && ErrorMessages.comics.message}
       </Typography>
-      <Button>Buy a Degen</Button>
+      <Button>
+        {variant === 'overview' && ErrorMessages.overview.cta}
+        {variant === 'degen' && ErrorMessages.degen.cta}
+        {variant === 'comics' && ErrorMessages.comics.cta}
+      </Button>
     </Card>
   </div>
 );
