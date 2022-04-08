@@ -1,0 +1,120 @@
+import { Stack, Typography, Button, useTheme, IconButton } from '@mui/material';
+import { GridColDef, DataGrid, GridRowsProp } from '@mui/x-data-grid';
+import { useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+
+interface Props {
+  rows: GridRowsProp;
+}
+
+const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
+  const { palette } = useTheme();
+  const [pageSize, setPageSize] = useState(10);
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+
+  const handleRowMouseEnter = (event: Event) => {
+    event.preventDefault();
+    const htmlRow = event.currentTarget as HTMLDivElement;
+    setSelectedRowId(htmlRow?.getAttribute('data-id'));
+  };
+
+  const handleRowMouseLeave = () => {
+    setSelectedRowId(null);
+  };
+
+  const commonColumnProp = {
+    minWidth: 100,
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'renter',
+      headerName: 'Renter',
+      width: 150,
+      renderCell: (params) => (
+        <Stack direction="row" columnGap={1} alignItems="center">
+          {selectedRowId && +params.row.id === +selectedRowId && (
+            <IconButton aria-label="edit">
+              <EditIcon fontSize="small" />
+            </IconButton>
+          )}
+          <Typography>
+            {params.value} {selectedRowId}
+          </Typography>
+        </Stack>
+      ),
+    },
+    { field: 'degenId', headerName: 'Degen ID' },
+    { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
+    { field: 'winLoss', headerName: 'Win-Loss', ...commonColumnProp },
+    {
+      field: 'timePlayed',
+      headerName: 'Time Played',
+      ...commonColumnProp,
+      width: 150,
+    },
+    {
+      field: 'totalEarnings',
+      headerName: 'Total Earnings',
+      ...commonColumnProp,
+      width: 150,
+    },
+    {
+      field: 'yourEarnings',
+      headerName: 'Your Earnings',
+      ...commonColumnProp,
+      width: 150,
+    },
+    { field: 'costs', headerName: 'Costs', ...commonColumnProp },
+    { field: 'profits', headerName: 'Profits', ...commonColumnProp },
+    {
+      field: 'roi',
+      headerName: 'ROI %',
+      ...commonColumnProp,
+      renderCell: (params) => {
+        let color;
+        if (params.value === 0) color = palette.text.primary;
+        if (params.value > 0) color = palette.success.main;
+        if (params.value < 0) color = palette.error.main;
+        return <Typography color={color}>{params.value}%</Typography>;
+      },
+    },
+    {
+      field: 'rentalRenewsIn',
+      headerName: 'Rental Renews In',
+      ...commonColumnProp,
+      width: 150,
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 200,
+      ...commonColumnProp,
+      renderCell: (params) => (
+        <Button variant="outlined" color="secondary">
+          Terminate Rental ID:{params.value}
+        </Button>
+      ),
+    },
+  ];
+
+  return (
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      autoPageSize
+      rowsPerPageOptions={[10, 25, 100]}
+      // Page size and handler required to set default to 10
+      pageSize={pageSize}
+      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+      componentsProps={{
+        row: {
+          onMouseEnter: handleRowMouseEnter,
+          onMouseLeave: handleRowMouseLeave,
+        },
+      }}
+    />
+  );
+};
+
+export default MyRentalsDataGrid;
