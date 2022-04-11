@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Check version
+        run: node -v && npm -v
       - name: Install dependencies (with cache)
         run: npm install
       - name: Run prettier
