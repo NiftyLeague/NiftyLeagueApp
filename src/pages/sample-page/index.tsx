@@ -5,10 +5,6 @@ import { Typography } from '@mui/material';
 import MainCard from 'components/cards/MainCard';
 import EmptyStateModal from 'components/EmptyStateComponent';
 
-function handleClick() {
-  console.log('haha');
-}
-
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const SamplePage = () => (
@@ -27,18 +23,9 @@ const SamplePage = () => (
     <EmptyStateModal
       message="You don't have anything here."
       buttonText="Buy stuff!"
-      onClick={handleClick}
     />
-    <EmptyStateModal
-      message="Is Wahyu the best?"
-      buttonText="Yes!"
-      onClick={handleClick}
-    />
-    <EmptyStateModal
-      message="I love cats"
-      buttonText="Me too!"
-      onClick={handleClick}
-    />
+    <EmptyStateModal message="Is Wahyu the best?" buttonText="Yes!" />
+    <EmptyStateModal message="I love cats" buttonText="Me too!" />
   </>
 );
 
