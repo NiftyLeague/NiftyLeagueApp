@@ -69,6 +69,7 @@ export const AWSCognitoProvider = ({
           });
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         dispatch({
           type: LOGOUT,

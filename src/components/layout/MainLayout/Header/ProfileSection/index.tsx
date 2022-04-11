@@ -60,6 +60,7 @@ const ProfileSection = () => {
     try {
       await logout();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   };

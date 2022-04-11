@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'store';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import Customization from '../Customization';
 
 interface MainStyleProps {
   theme: Theme;
@@ -148,6 +149,7 @@ const MainLayout = () => {
           </>
         )}
       </Main>
+      <Customization />
     </Box>
   );
 };
