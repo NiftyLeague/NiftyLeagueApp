@@ -67,6 +67,7 @@ const AuthForgotPassword = ({ ...others }) => {
             }, 1500);
           }
         } catch (err: any) {
+          // eslint-disable-next-line no-console
           console.error(err);
           if (scriptedRef.current) {
             setStatus({ success: false });

@@ -30,8 +30,8 @@ const SalesLineChartCard = ({
 
   let footerHtml;
   if (footerData) {
-    footerHtml = footerData.map((item, index) => (
-      <Grid item key={index}>
+    footerHtml = footerData.map((item) => (
+      <Grid item key={item.value}>
         <Box
           sx={{
             mt: 3,

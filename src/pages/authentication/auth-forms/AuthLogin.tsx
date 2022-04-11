@@ -51,6 +51,7 @@ const FirebaseLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
     try {
       await firebaseGoogleSignIn();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   };
@@ -182,6 +183,7 @@ const FirebaseLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
               },
             );
           } catch (err: any) {
+            // eslint-disable-next-line no-console
             console.error(err);
             if (scriptedRef.current) {
               setStatus({ success: false });
