@@ -1,15 +1,22 @@
+// react
+import React from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box } from '@mui/material';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Toolbar,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem,
+} from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
-import MobileSection from './MobileSection';
-import ProfileSection from './ProfileSection';
-import LocalizationSection from './LocalizationSection';
-import MegaMenuSection from './MegaMenuSection';
-import NotificationSection from './NotificationSection';
+
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 
@@ -17,6 +24,8 @@ import { openDrawer } from 'store/slices/menu';
 import { IconMenu2 } from '@tabler/icons';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
+
+const pages = ['Home', 'Ecosystem', 'Team', 'Roadmap', 'Docs'];
 
 const Header = () => {
   const theme = useTheme();
@@ -74,29 +83,38 @@ const Header = () => {
           <IconMenu2 stroke={1.5} size="1.3rem" />
         </Avatar>
       </Box>
-
-      {/* header search */}
-      <SearchSection />
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
-
-      {/* mega-menu */}
-      <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-        <MegaMenuSection />
-      </Box>
-
-      {/* live customization & localization */}
-      <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-        <LocalizationSection />
-      </Box>
-
-      {/* notification & profile */}
-      <NotificationSection />
-      <ProfileSection />
-
-      {/* mobile header */}
-      <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-        <MobileSection />
+      <Box sx={{ flex: 1 }}>
+        <AppBar position="static">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters sx={{ justifyContent: 'flex-end' }}>
+              <Box>
+                <Menu open={false}>
+                  {pages.map((page) => (
+                    <MenuItem key={page}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+              <Box
+                sx={{
+                  display: { xs: 'none', md: 'flex' },
+                  justifyContent: 'space-between',
+                  gap: 4,
+                }}
+              >
+                {pages.map((page) => (
+                  <Button
+                    key={page}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
       </Box>
     </>
   );
