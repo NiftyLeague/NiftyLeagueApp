@@ -5,33 +5,26 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
-      - name: Configure npm caching
-        uses: actions/cache@v2
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.3.0
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Check version
-        run: node -v && npm -v
-      - name: Install dependencies (with cache)
-        run: npm install
+          cmd: install
       - name: Run prettier
-        run: npm run format
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: format
       - name: Check linter
-        run: npm run lint
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: lint
       - name: Run test
-        run: npm run test
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: test
       - name: Build the project
-        run: npm run build
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build
