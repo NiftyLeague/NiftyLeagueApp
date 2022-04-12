@@ -30,7 +30,7 @@ export const AWS_API = {
 // like '/berry-material-react/react/default'
 export const BASE_PATH = '';
 
-export const DASHBOARD_PATH = '/sample-page';
+export const DASHBOARD_PATH = '/';
 
 const config: ConfigProps = {
   fontFamily: `'Roboto', sans-serif`,
