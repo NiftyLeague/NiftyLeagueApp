@@ -1,12 +1,11 @@
-import { Stack, Button, IconButton } from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Stack, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GameCard from 'components/cards/GameCard';
 import SectionTitle from 'components/sections/SectionTitle';
 import games from 'constants/games';
-import degens from '../../constants/degens';
-import DegenCard from '../../components/cards/DegenCard';
+import degens from 'constants/degens';
+import DegenCard from 'components/cards/DegenCard';
+import PaginationIconOnly from 'components/pagination/PaginationIconOnly';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -21,14 +20,7 @@ const NiftyLeagueAppPage = () => {
         actions={
           <Stack direction="row" gap={2}>
             <Button variant="outlined">View All Games</Button>
-            <Stack direction="row" gap={1}>
-              <IconButton size="small">
-                <ArrowBackIosNewIcon />
-              </IconButton>
-              <IconButton size="small">
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </Stack>
+            <PaginationIconOnly />
           </Stack>
         }
       >
@@ -37,7 +29,7 @@ const NiftyLeagueAppPage = () => {
       <Stack direction="row" flexWrap="wrap" gap={4}>
         {games.map((game) => (
           <GameCard
-            key={game.title}
+            key={game.image}
             title={game.title}
             onlineCounter={game.onlineCounter}
             description={game.description}
@@ -50,14 +42,7 @@ const NiftyLeagueAppPage = () => {
         actions={
           <Stack direction="row" gap={2}>
             <Button variant="outlined">View All Rentals</Button>
-            <Stack direction="row" gap={1}>
-              <IconButton size="small">
-                <ArrowBackIosNewIcon />
-              </IconButton>
-              <IconButton size="small">
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </Stack>
+            <PaginationIconOnly />
           </Stack>
         }
       >
@@ -66,7 +51,7 @@ const NiftyLeagueAppPage = () => {
       <Stack direction="row" flexWrap="wrap" gap={4}>
         {degens.map((degen) => (
           <DegenCard
-            key={degen.title}
+            key={degen.image}
             id={degen.id}
             title={degen.title}
             multiplier={degen.multiplier}
