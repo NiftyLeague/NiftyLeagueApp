@@ -7,6 +7,9 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('pages/sample-page')));
+const NiftyLeagueAppPage = Loadable(
+  lazy(() => import('pages/nifty-league-app')),
+);
 const DashboardOverviewPage = Loadable(lazy(() => import('pages/dashboard')));
 const DashboardRentalPage = Loadable(
   lazy(() => import('pages/dashboard/rentals')),
@@ -24,7 +27,7 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <SamplePage />,
+      element: <NiftyLeagueAppPage />,
     },
     {
       path: '/sample-page',
