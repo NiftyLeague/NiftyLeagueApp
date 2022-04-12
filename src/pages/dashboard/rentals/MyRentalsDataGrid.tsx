@@ -1,16 +1,33 @@
-import { Stack, Typography, Button, useTheme, IconButton } from '@mui/material';
-import { GridColDef, DataGrid, GridRowsProp } from '@mui/x-data-grid';
+import {
+  Stack,
+  Typography,
+  Button,
+  useTheme,
+  IconButton,
+  Dialog,
+} from '@mui/material';
+import {
+  GridColDef,
+  DataGrid,
+  GridRowsProp,
+  GridRenderCellParams,
+} from '@mui/x-data-grid';
 import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import { Rental } from 'types/rental';
+import RenameRentalDialogContent from './RenameRentalDialogContent';
 
 interface Props {
-  rows: GridRowsProp;
+  rows: GridRowsProp<Rental>;
 }
 
 const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [selectedRowForEditing, setSelectedRowForEditing] =
+    useState<Rental | null>(null);
+  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   const handleRowMouseEnter = (event: Event) => {
     event.preventDefault();
@@ -20,6 +37,11 @@ const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
 
   const handleRowMouseLeave = () => {
     setSelectedRowId(null);
+  };
+
+  const handleRenameDegen = (params: GridRenderCellParams) => {
+    setSelectedRowForEditing(params.row);
+    setIsRenameDegenModalOpen(true);
   };
 
   const commonColumnProp = {
@@ -34,7 +56,10 @@ const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           {selectedRowId && +params.row.id === +selectedRowId && (
-            <IconButton aria-label="edit">
+            <IconButton
+              aria-label="edit"
+              onClick={() => handleRenameDegen(params)}
+            >
               <EditIcon fontSize="small" />
             </IconButton>
           )}
@@ -99,21 +124,30 @@ const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
   ];
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      autoPageSize
-      rowsPerPageOptions={[10, 25, 100]}
-      // Page size and handler required to set default to 10
-      pageSize={pageSize}
-      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-      componentsProps={{
-        row: {
-          onMouseEnter: handleRowMouseEnter,
-          onMouseLeave: handleRowMouseLeave,
-        },
-      }}
-    />
+    <>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoPageSize
+        rowsPerPageOptions={[10, 25, 100]}
+        // Page size and handler required to set default to 10
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        componentsProps={{
+          row: {
+            onMouseEnter: handleRowMouseEnter,
+            onMouseLeave: handleRowMouseLeave,
+          },
+        }}
+      />
+      {/* Rename Degen Dialog */}
+      <Dialog
+        open={isRenameDegenModalOpen}
+        onClose={() => setIsRenameDegenModalOpen(false)}
+      >
+        <RenameRentalDialogContent rental={selectedRowForEditing} />
+      </Dialog>
+    </>
   );
 };
 
