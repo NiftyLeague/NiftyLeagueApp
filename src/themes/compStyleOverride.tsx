@@ -318,6 +318,7 @@ export default function componentStyleOverrides(
       styleOverrides: {
         paper: {
           padding: '12px 0 12px 0',
+          backgroundColor: theme.palette.dark.main,
         },
       },
     },
@@ -348,6 +349,13 @@ export default function componentStyleOverrides(
       styleOverrides: {
         root: {
           fontSize: '1.25rem',
+        },
+      },
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        dividers: {
+          borderColor: theme.palette.grey[800],
         },
       },
     },
