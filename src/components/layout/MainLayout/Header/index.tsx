@@ -3,15 +3,13 @@ import React from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-  AppBar,
   Avatar,
   Box,
-  Toolbar,
   Typography,
   Menu,
-  Container,
-  Button,
   MenuItem,
+  Stack,
+  Link,
 } from '@mui/material';
 
 // project imports
@@ -34,7 +32,11 @@ const Header = () => {
   const { drawerOpen } = useSelector((state) => state.menu);
 
   return (
-    <>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      sx={{ height: 60, width: '100%' }}
+    >
       {/* logo & toggler button */}
       <Box
         sx={{
@@ -44,6 +46,7 @@ const Header = () => {
             width: 'auto',
           },
         }}
+        alignItems="center"
       >
         <Box
           component="span"
@@ -83,40 +86,30 @@ const Header = () => {
           <IconMenu2 stroke={1.5} size="1.3rem" />
         </Avatar>
       </Box>
-      <Box sx={{ flex: 1 }}>
-        <AppBar position="static">
-          <Container maxWidth="xl">
-            <Toolbar disableGutters sx={{ justifyContent: 'flex-end' }}>
-              <Box>
-                <Menu open={false}>
-                  {pages.map((page) => (
-                    <MenuItem key={page}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-              <Box
-                sx={{
-                  display: { xs: 'none', md: 'flex' },
-                  justifyContent: 'space-between',
-                  gap: 4,
-                }}
-              >
-                {pages.map((page) => (
-                  <Button
-                    key={page}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page}
-                  </Button>
-                ))}
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
+      <Box>
+        <Menu open={false}>
+          {pages.map((page) => (
+            <MenuItem key={page}>
+              <Typography textAlign="center">{page}</Typography>
+            </MenuItem>
+          ))}
+        </Menu>
       </Box>
-    </>
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          justifyContent: 'space-between',
+          gap: 4,
+          alignItems: 'center',
+        }}
+      >
+        {pages.map((page) => (
+          <Link key={page} href="#" color="inherit" underline="hover">
+            {page}
+          </Link>
+        ))}
+      </Box>
+    </Stack>
   );
 };
 
