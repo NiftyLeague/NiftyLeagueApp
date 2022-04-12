@@ -6,7 +6,6 @@ import Loadable from 'components/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('pages/sample-page')));
 const NiftyLeagueAppPage = Loadable(
   lazy(() => import('pages/nifty-league-app')),
 );
@@ -14,6 +13,7 @@ const DashboardOverviewPage = Loadable(lazy(() => import('pages/dashboard')));
 const DashboardRentalPage = Loadable(
   lazy(() => import('pages/dashboard/rentals')),
 );
+const GamesPage = Loadable(lazy(() => import('pages/games')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -30,8 +30,8 @@ const MainRoutes = {
       element: <NiftyLeagueAppPage />,
     },
     {
-      path: '/sample-page',
-      element: <SamplePage />,
+      path: '/games',
+      element: <GamesPage />,
     },
     {
       path: '/dashboard',
