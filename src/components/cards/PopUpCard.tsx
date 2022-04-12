@@ -25,7 +25,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ title, content, uielement }) => {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 800,
-            bgcolor: theme.palette.dark.dark,
+            bgcolor: theme.palette.dark[800],
             border: `1px solid${theme.palette.primary.main}`,
             boxShadow: 24,
             p: 4,
