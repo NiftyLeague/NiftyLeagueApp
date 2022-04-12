@@ -12,7 +12,7 @@
     "lint": "npm run lint:script",
     "lint:fix": "npm run lint:script -- --fix",
     "lint:script": "eslint --ignore-path .eslintignore ./src --ext .ts,.tsx,.js,.jsx",
-    "format": "prettier --write './src/**/*.{ts,tsx,js,jsx}'",
+    "format": "prettier --write './src/**/*.{ts,tsx,js,jsx,json}'",
     "check-types": "tsc",
     "validate": "npm-run-all format lint check-types test build"
   },
