@@ -2,27 +2,33 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
+import {
+  IconBrandChrome,
+  IconHelp,
+  IconSitemap,
+  IconDashboard,
+} from '@tabler/icons';
 
 // constant
 const icons = {
   IconBrandChrome,
   IconHelp,
   IconSitemap,
+  IconDashboard,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const other = {
-  id: 'sample-docs-roadmap',
+  id: 'main-menu',
   type: 'group',
   children: [
     {
-      id: 'sample-page',
-      title: <FormattedMessage id="sample-page" />,
+      id: 'nifty-league-app',
+      title: <FormattedMessage id="nifty-league-app" />,
       type: 'item',
-      url: '/sample-page',
-      icon: icons.IconBrandChrome,
+      url: '/',
+      icon: icons.IconDashboard,
       breadcrumbs: false,
     },
     {
