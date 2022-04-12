@@ -2,9 +2,25 @@ import { Stack, Grid, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import comics from 'constants/comics';
 import ComicCard from 'components/cards/ComicCard';
+import EmptyStateComponent from 'components/EmptyStateComponent';
 
 const DashboardComicsPage = (): JSX.Element => {
   const theme = useTheme();
+  if (!comics.length)
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        display="flex"
+        height="100%"
+      >
+        <EmptyStateComponent
+          message="You don't own any Comics yet."
+          buttonText="Buy a Comic"
+        />
+      </Grid>
+    );
   return (
     <Grid container spacing={2}>
       <Grid item xs={8}>
