@@ -17,6 +17,7 @@ const DashboardRentalPage = Loadable(
 const DashboardComicsPage = Loadable(
   lazy(() => import('pages/dashboard/comics')),
 );
+const SidebarTest = Loadable(lazy(() => import('pages/sidebar-test')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -31,6 +32,10 @@ const MainRoutes = {
     {
       path: '/',
       element: <NiftyLeagueAppPage />,
+    },
+    {
+      path: '/sidebar-test',
+      element: <SidebarTest />,
     },
     {
       path: '/sample-page',

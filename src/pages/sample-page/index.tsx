@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 
 // project imports
 import MainCard from 'components/cards/MainCard';
-import EmptyStateModal from 'components/EmptyStateComponent';
+// import EmptyStateModal from 'components/EmptyStateComponent';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -20,12 +20,12 @@ const SamplePage = () => (
         labours.
       </Typography>
     </MainCard>
-    <EmptyStateModal
+    {/* <EmptyStateModal
       message="You don't have anything here."
       buttonText="Buy stuff!"
     />
     <EmptyStateModal message="Is Wahyu the best?" buttonText="Yes!" />
-    <EmptyStateModal message="I love cats" buttonText="Me too!" />
+    <EmptyStateModal message="I love cats" buttonText="Me too!" /> */}
   </>
 );
 
