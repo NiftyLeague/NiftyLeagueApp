@@ -9,7 +9,9 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 const NiftyLeagueAppPage = Loadable(
   lazy(() => import('pages/nifty-league-app')),
 );
-const DashboardOverviewPage = Loadable(lazy(() => import('pages/dashboard')));
+const DashboardOverviewPage = Loadable(
+  lazy(() => import('pages/dashboard/overview')),
+);
 const DashboardRentalPage = Loadable(
   lazy(() => import('pages/dashboard/rentals')),
 );
