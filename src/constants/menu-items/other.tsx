@@ -8,6 +8,7 @@ import {
   IconSitemap,
   IconDashboard,
   IconDeviceGamepad,
+  IconTag,
 } from '@tabler/icons';
 
 // constant
@@ -17,6 +18,7 @@ const icons = {
   IconSitemap,
   IconDashboard,
   IconDeviceGamepad,
+  IconTag,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -31,6 +33,14 @@ const other = {
       type: 'item',
       url: '/',
       icon: icons.IconDashboard,
+      breadcrumbs: false,
+    },
+    {
+      id: 'degen-rentals',
+      title: <FormattedMessage id="degen-rentals" />,
+      type: 'item',
+      url: '/degen-rentals',
+      icon: icons.IconTag,
       breadcrumbs: false,
     },
     {
