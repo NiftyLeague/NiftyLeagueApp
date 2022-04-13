@@ -6,12 +6,14 @@ import HoverDataCard from 'components/cards/HoverDataCard';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
+  onDeposit?: React.MouseEventHandler<HTMLButtonElement>;
   onClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClaimAll?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const MyNFTL = ({
   onWithdraw,
+  onDeposit,
   onClaim,
   onClaimAll,
 }: MyNFTLProps): JSX.Element => {
@@ -81,9 +83,19 @@ const MyNFTL = ({
               customStyle={{ backgroundColor: theme.palette.primary.dark }}
               secondary="Available to Claim"
               actions={
-                <Button fullWidth variant="contained" onClick={onWithdraw}>
-                  Withdraw
-                </Button>
+                <Stack direction="row" gap={2}>
+                  <Button fullWidth variant="contained" onClick={onWithdraw}>
+                    Withdraw
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={onDeposit}
+                  >
+                    Deposit
+                  </Button>
+                </Stack>
               }
             />
           </Grid>
