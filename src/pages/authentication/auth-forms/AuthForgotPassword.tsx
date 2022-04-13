@@ -66,6 +66,7 @@ const AuthForgotPassword = ({ ...others }) => {
               navigate('/login', { replace: true });
             }, 1500);
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
           // eslint-disable-next-line no-console
           console.error(err);

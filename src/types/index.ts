@@ -52,7 +52,9 @@ export type OverrideIcon =
   | (OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
       muiName: string;
     })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ComponentClass<any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | FunctionComponent<any>
   | TablerIcon;
 
@@ -163,5 +165,6 @@ export type ChangeEventFunc = (e: React.ChangeEvent<HTMLInputElement>) => void;
 // amit
 
 export type KeyedObject = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: string | number | KeyedObject | any;
 };
