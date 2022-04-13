@@ -24,7 +24,7 @@
     "react/react-in-jsx-scope": 0,
     "react/jsx-props-no-spreading": 0,
     "import/order": 0,
-    "no-console": ["error"],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-shadow": 0,
     "@typescript-eslint/naming-convention": 0,
     "import/no-cycle": 0,

@@ -7,6 +7,7 @@ import {
   IconHelp,
   IconSitemap,
   IconDashboard,
+  IconDeviceGamepad,
 } from '@tabler/icons';
 
 // constant
@@ -15,6 +16,7 @@ const icons = {
   IconHelp,
   IconSitemap,
   IconDashboard,
+  IconDeviceGamepad,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -29,6 +31,14 @@ const other = {
       type: 'item',
       url: '/',
       icon: icons.IconDashboard,
+      breadcrumbs: false,
+    },
+    {
+      id: 'games',
+      title: <FormattedMessage id="games" />,
+      type: 'item',
+      url: '/games',
+      icon: icons.IconDeviceGamepad,
       breadcrumbs: false,
     },
     {

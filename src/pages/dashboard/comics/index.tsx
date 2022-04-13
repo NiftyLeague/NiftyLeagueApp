@@ -2,7 +2,7 @@ import { Stack, Grid, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import comics from 'constants/comics';
 import ComicCard from 'components/cards/ComicCard';
-import EmptyStateComponent from 'components/EmptyStateComponent';
+import EmptyState from 'components/EmptyState';
 
 const DashboardComicsPage = (): JSX.Element => {
   const theme = useTheme();
@@ -15,7 +15,7 @@ const DashboardComicsPage = (): JSX.Element => {
         display="flex"
         height="100%"
       >
-        <EmptyStateComponent
+        <EmptyState
           message="You don't own any Comics yet."
           buttonText="Buy a Comic"
         />

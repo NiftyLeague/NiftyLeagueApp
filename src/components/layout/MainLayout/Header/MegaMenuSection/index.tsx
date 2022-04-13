@@ -57,6 +57,7 @@ const MegaMenuSection = () => {
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anchorRef = useRef<any>(null);
 
   const handleToggle = () => {
