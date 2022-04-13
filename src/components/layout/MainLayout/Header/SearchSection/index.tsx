@@ -83,6 +83,7 @@ const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(
 interface Props {
   value: string;
   setValue: (value: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   popupState: any;
 }
 

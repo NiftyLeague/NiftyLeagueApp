@@ -19,9 +19,9 @@ Please delete any options that are not relevant.
 - [ ] My code follows the style guidelines of this project
 - [ ] I ran ESLint and other linters for modified files
 - [ ] I have performed a self-review of my own code and tested it
-- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have commented on my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
-- [ ] My code needed automated testing. I have added them (this is optional task)
+- [ ] My code needed automated testing. I have added them (this is an optional task)
 
 ## Screenshots (if any)
 

@@ -44,6 +44,7 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
 
   useEffect(() => {
     const childrens = menu.children ? menu.children : [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     childrens.forEach((item: any) => {
       if (pathname && pathname.includes('product-details')) {
         if (item.url && item.url.includes('product-details')) {

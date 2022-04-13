@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Card, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-interface EmptyStateComponentProps {
+interface EmptyStateProps {
   message?: string;
   buttonText?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
+const EmptyState: React.FC<EmptyStateProps> = ({
   message,
   buttonText,
   onClick,
@@ -15,7 +15,7 @@ const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
   const theme = useTheme();
 
   return (
-    <div>
+    <>
       <Card
         sx={{
           position: 'relative',
@@ -35,8 +35,8 @@ const EmptyStateComponent: React.FC<EmptyStateComponentProps> = ({
           {buttonText}
         </Button>
       </Card>
-    </div>
+    </>
   );
 };
 
-export default EmptyStateComponent;
+export default EmptyState;

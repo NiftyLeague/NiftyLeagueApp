@@ -31,6 +31,7 @@ const MobileSection = () => {
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anchorRef = useRef<any>(null);
 
   const handleToggle = () => {

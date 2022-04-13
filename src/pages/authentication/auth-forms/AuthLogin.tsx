@@ -174,7 +174,7 @@ const FirebaseLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                 // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
                 // github issue: https://github.com/formium/formik/issues/2430
               },
-              (err: any) => {
+              (err) => {
                 if (scriptedRef.current) {
                   setStatus({ success: false });
                   setErrors({ submit: err.message });
@@ -182,6 +182,7 @@ const FirebaseLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                 }
               },
             );
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (err: any) {
             // eslint-disable-next-line no-console
             console.error(err);
