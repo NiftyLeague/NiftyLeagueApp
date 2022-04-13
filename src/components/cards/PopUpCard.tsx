@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useTheme } from '@mui/material/styles';
+import { DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface PopUpCardProps {
   title?: string;
@@ -32,7 +34,19 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ title, content, uielement }) => {
             textAlign: 'center',
           }}
         >
-          <Typography variant="h3">{title}</Typography>
+          <DialogTitle>{title}</DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Typography sx={{ m: 2 }}>{content}</Typography>
           {uielement}
         </Box>
