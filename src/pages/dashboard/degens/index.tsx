@@ -21,7 +21,7 @@ const DashboardDegensPage = (): JSX.Element => {
       renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
         <>
           {/* Main Grid title */}
-          <SectionTitle actions={<div>Sort by</div>}>
+          <SectionTitle firstSection actions={<div>Sort by</div>}>
             <Stack direction="row" alignItems="center" gap={1}>
               <IconButton
                 onClick={() => setIsDrawerOpen(!isDrawerOpen)}
