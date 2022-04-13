@@ -31,7 +31,6 @@
     "prefer-destructuring": 0,
     "import/no-unresolved": [2, { "caseSensitive": false }],
     "@typescript-eslint/no-unused-vars": ["error"],
-    "@typescript-eslint/no-explicit-any": ["error"],
     "prettier/prettier": [
       2,
       {
