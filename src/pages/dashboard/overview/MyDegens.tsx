@@ -37,13 +37,25 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 1500,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 800,
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
         },
