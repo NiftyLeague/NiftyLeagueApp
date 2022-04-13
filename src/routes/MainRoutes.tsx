@@ -1,8 +1,7 @@
-import { lazy } from 'react';
-
 // project imports
 import MainLayout from 'components/layout/MainLayout';
 import Loadable from 'components/Loadable';
+import { lazy } from 'react';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 // sample page routing

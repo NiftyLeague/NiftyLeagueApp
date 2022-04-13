@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material';
 import { gridSpacing } from 'store/constant';
+import MyComics from './MyComics';
+import MyDegens from './MyDegens';
 import MyNFTL from './MyNFTL';
 import MyRentals from './MyRentals';
-import MyDegens from './MyDegens';
-import MyComics from './MyComics';
 
 const DashboardOverview = (): JSX.Element => (
   <Grid container spacing={gridSpacing}>

@@ -1,9 +1,8 @@
 // material-ui
 import { Grid, Stack, Typography } from '@mui/material';
-
+import { GenericCardProps } from 'types';
 // project imports
 import MainCard from './MainCard';
-import { GenericCardProps } from 'types';
 
 // ============================|| HOVER DATA CARD ||============================ //
 
