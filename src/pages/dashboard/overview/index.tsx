@@ -19,10 +19,10 @@ const DashboardOverview = (): JSX.Element => (
     </Grid>
     <Grid item xs={12}>
       <Grid container spacing={gridSpacing}>
-        <Grid item xs={8}>
+        <Grid item xs={7}>
           <MyDegens />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <MyComics />
         </Grid>
       </Grid>
