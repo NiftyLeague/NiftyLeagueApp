@@ -32,10 +32,10 @@ const SamplePage = () => (
       actions={
         <>
           <Button variant="contained" sx={{ m: 2 }}>
-            Get Windows
+            Get Windows version
           </Button>
           <Button variant="contained" sx={{ m: 2 }}>
-            Get MacOS
+            Get MacOS version
           </Button>
         </>
       }
