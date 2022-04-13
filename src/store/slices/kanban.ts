@@ -436,6 +436,7 @@ export function deleteItem(
 }
 
 export function addStory(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   story: any,
   userStory: KanbanUserStory[],
   userStoryOrder: string[],

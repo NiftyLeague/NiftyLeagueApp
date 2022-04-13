@@ -66,6 +66,7 @@ function ElevationScroll({ children, window }: ElevationScrollProps) {
 const AppBar = ({ ...others }) => {
   const [drawerToggle, setDrawerToggle] = React.useState<boolean>(false);
   /** Method called on multiple components with different event types */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const drawerToggler = (open: boolean) => (event: any) => {
     if (
       event.type! === 'keydown' &&
