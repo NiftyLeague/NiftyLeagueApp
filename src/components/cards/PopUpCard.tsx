@@ -9,49 +9,47 @@ import CloseIcon from '@mui/icons-material/Close';
 interface PopUpCardProps {
   title?: string;
   content?: string;
-  uielement?: JSX.Element;
+  actions?: React.ReactNode;
 }
 
-const PopUpCard: React.FC<PopUpCardProps> = ({ title, content, uielement }) => {
+const PopUpCard: React.FC<PopUpCardProps> = ({ title, content, actions }) => {
   const [open, setOpen] = React.useState(true);
   const handleClose = () => setOpen(false);
   const theme = useTheme();
 
   return (
-    <div>
-      <Modal open={open} onClose={handleClose}>
-        <Box
+    <Modal open={open} onClose={handleClose}>
+      <Box
+        sx={{
+          position: 'relative',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 800,
+          bgcolor: theme.palette.dark[800],
+          border: `1px solid${theme.palette.primary.main}`,
+          boxShadow: 24,
+          p: 4,
+          textAlign: 'center',
+        }}
+      >
+        <DialogTitle>{title}</DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
           sx={{
-            position: 'relative',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 800,
-            bgcolor: theme.palette.dark[800],
-            border: `1px solid${theme.palette.primary.main}`,
-            boxShadow: 24,
-            p: 4,
-            textAlign: 'center',
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
           }}
         >
-          <DialogTitle>{title}</DialogTitle>
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography sx={{ m: 2 }}>{content}</Typography>
-          {uielement}
-        </Box>
-      </Modal>
-    </div>
+          <CloseIcon />
+        </IconButton>
+        <Typography sx={{ m: 2 }}>{content}</Typography>
+        {actions}
+      </Box>
+    </Modal>
   );
 };
 
