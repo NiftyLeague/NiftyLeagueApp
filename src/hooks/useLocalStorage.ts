@@ -25,6 +25,7 @@ export default function useLocalStorage<ValueType>(
   }, [key, defaultValue]);
 
   const setValueInLocalStorage = (newValue: ValueType) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue((currentValue: any) => {
       const result =
         typeof newValue === 'function' ? newValue(currentValue) : newValue;

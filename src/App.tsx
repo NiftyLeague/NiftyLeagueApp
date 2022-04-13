@@ -4,7 +4,6 @@ import Routes from 'routes';
 // project imports
 import Locales from 'components/Locales';
 import NavigationScroll from 'components/layout/NavigationScroll';
-import RTLLayout from 'components/RTLLayout';
 import Snackbar from 'components/extended/Snackbar';
 import ThemeCustomization from 'themes';
 
@@ -18,19 +17,16 @@ import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
 
 const App = () => (
   <ThemeCustomization>
-    {/* RTL layout */}
-    <RTLLayout>
-      <Locales>
-        <NavigationScroll>
-          <AuthProvider>
-            <>
-              <Routes />
-              <Snackbar />
-            </>
-          </AuthProvider>
-        </NavigationScroll>
-      </Locales>
-    </RTLLayout>
+    <Locales>
+      <NavigationScroll>
+        <AuthProvider>
+          <>
+            <Routes />
+            <Snackbar />
+          </>
+        </AuthProvider>
+      </NavigationScroll>
+    </Locales>
   </ThemeCustomization>
 );
 
