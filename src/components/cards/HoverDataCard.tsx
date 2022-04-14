@@ -26,7 +26,7 @@ const HoverDataCard = ({
       alignItems="center"
     >
       <Grid item sm={12}>
-        <Typography variant="h5" color="inherit">
+        <Typography variant="h5" color="inherit" textAlign="center">
           {title}
         </Typography>
       </Grid>
