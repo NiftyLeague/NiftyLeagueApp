@@ -52,6 +52,7 @@ const DashboardDegensPage = (): JSX.Element => {
           <Grid container spacing={2}>
             {_degens.map((degen) => (
               <Grid
+                key={degen.id}
                 item
                 xs={12}
                 sm={6}
@@ -60,7 +61,6 @@ const DashboardDegensPage = (): JSX.Element => {
                 xl={3}
               >
                 <DegenCard
-                  key={degen.title}
                   id={degen.id}
                   title={degen.title}
                   multiplier={degen.multiplier}
