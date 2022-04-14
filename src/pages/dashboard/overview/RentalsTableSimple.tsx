@@ -13,12 +13,12 @@ import { Rental } from 'types/rental';
 import { ColumnType } from './MyRentals';
 
 interface RentalsTableSimpleProps {
-  retails: Rental[];
+  rentals: Rental[];
   columns: ColumnType[];
 }
 
 const RentalsTableSimple = ({
-  retails,
+  rentals,
   columns,
 }: RentalsTableSimpleProps): JSX.Element => {
   const { palette } = useTheme();
@@ -41,15 +41,15 @@ const RentalsTableSimple = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {retails.map((retail) => (
-              <TableRow hover key={retail.id}>
+            {rentals.map((rental) => (
+              <TableRow hover key={rental.id}>
                 {columns.map((column: ColumnType) => {
-                  const value = retail[column.id];
+                  const value = rental[column.id];
                   if (column.id === 'roi') {
                     let color;
-                    if (retail.roi === 0) color = palette.text.primary;
-                    if (retail.roi > 0) color = palette.success.main;
-                    if (retail.roi < 0) color = palette.error.main;
+                    if (rental.roi === 0) color = palette.text.primary;
+                    if (rental.roi > 0) color = palette.success.main;
+                    if (rental.roi < 0) color = palette.error.main;
                     return (
                       <TableCell key={column.id} align={column.align}>
                         <Typography color={color}>{value}%</Typography>
