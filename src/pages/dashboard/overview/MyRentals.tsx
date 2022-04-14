@@ -41,7 +41,7 @@ const columns: ColumnType[] = [
   },
 ];
 
-const createRentail = (
+const createRental = (
   renter: string,
   degenId: string,
   multiplier: string,
@@ -59,10 +59,10 @@ const createRentail = (
   rentalRenewsIn,
 });
 
-const retails = [
-  createRentail('SEIYA', '3743', '12x', '98%', '187,325', 200, '17:03:17'),
-  createRentail('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
-  createRentail('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+const rentals = [
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 200, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
 ];
 
 const MyRentals = ({ onViewAllRentals }: MyRentalsProps): JSX.Element => (
@@ -82,7 +82,7 @@ const MyRentals = ({ onViewAllRentals }: MyRentalsProps): JSX.Element => (
       </SectionTitle>
     </Grid>
     <Grid item xs={12}>
-      <RentalsTableSimple retails={retails} columns={columns} />
+      <RentalsTableSimple rentals={rentals} columns={columns} />
     </Grid>
   </Grid>
 );
