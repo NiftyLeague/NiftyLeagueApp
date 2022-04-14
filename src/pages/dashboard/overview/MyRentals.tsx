@@ -1,7 +1,7 @@
 import { Button, Grid, Stack } from '@mui/material';
 import SectionTitle from 'components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
-import { gridSpacing } from 'store/constant';
+import { sectionSpacing } from 'store/constant';
 
 interface MyRentalsProps {
   onViewAllRentals?: React.MouseEventHandler<HTMLButtonElement>;
@@ -66,7 +66,7 @@ const retails = [
 ];
 
 const MyRentals = ({ onViewAllRentals }: MyRentalsProps): JSX.Element => (
-  <Grid container spacing={gridSpacing}>
+  <Grid container spacing={sectionSpacing}>
     <Grid item xs={12}>
       <SectionTitle
         firstSection
