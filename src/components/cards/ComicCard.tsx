@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material/styles';
 import {
   Button,
   Card,
@@ -7,6 +6,7 @@ import {
   CardMedia,
   Stack,
   Typography,
+  useTheme,
 } from '@mui/material';
 
 export interface ComicCardProps {

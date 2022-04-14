@@ -11,14 +11,21 @@ interface MyDegensProps {
   onViewAllDegens?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
+const BoxDegenStyles = {
+  px: '10px',
+  '& .MuiCardContent-root': {
+    p: '12px',
+  },
+  '& .MuiTypography-h3': {
+    fontSize: '16px',
+  },
+  '& .MuiCardActions-root': {
+    p: '12px',
+  },
+};
+
 const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
   const refSlider = useRef<Slider>(null);
-  const otherSettings = {
-    settings: {
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    },
-  };
   const settings = {
     dots: false,
     centerMode: true,
@@ -27,25 +34,31 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
     arrows: false,
     centerPadding: '0',
     slidesToShow: 3,
+    slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1500,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
         },
       },
       {
         breakpoint: 600,
-        ...otherSettings,
-      },
-      {
-        breakpoint: 480,
-        ...otherSettings,
-      },
-      {
-        breakpoint: 320,
-        ...otherSettings,
+        settings: {
+          slidesToShow: 1,
+        },
       },
     ],
   };
@@ -81,7 +94,7 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
       <Grid item xs={12}>
         <Slider {...settings} ref={refSlider}>
           {degens.map((degen) => (
-            <Box sx={{ px: '10px' }}>
+            <Box sx={BoxDegenStyles}>
               <DegenCard key={degen.title} {...degen} />
             </Box>
           ))}
