@@ -1,4 +1,4 @@
-import { IconButton, Stack } from '@mui/material';
+import { Button, Grid, IconButton, Pagination, Stack } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import DegenCard from 'components/cards/DegenCard';
 import DegensFilter from 'components/extended/DegensFilter/ index';
@@ -7,6 +7,9 @@ import SectionTitle from 'components/sections/SectionTitle';
 import degens from 'constants/degens';
 import { useState } from 'react';
 import { Degen } from 'types/degens';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SortButton from 'components/extended/SortButton';
+import DegenSortOptions from 'constants/sort';
 
 const DashboardDegensPage = (): JSX.Element => {
   const [_degens, setDegens] = useState<Degen[]>(degens);
@@ -19,9 +22,22 @@ const DashboardDegensPage = (): JSX.Element => {
       )}
       // Main grid
       renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
-        <>
+        <Stack gap={2}>
           {/* Main Grid title */}
-          <SectionTitle firstSection actions={<div>Sort by</div>}>
+          <SectionTitle
+            firstSection
+            actions={
+              <SortButton sortOptions={DegenSortOptions}>
+                <Button
+                  id="demo-positioned-button"
+                  aria-controls="demo-positioned-menu"
+                  aria-haspopup="true"
+                  sx={{ color: 'grey.500', fontWeight: 400 }}
+                  endIcon={<KeyboardArrowDownIcon />}
+                />
+              </SortButton>
+            }
+          >
             <Stack direction="row" alignItems="center" gap={1}>
               <IconButton
                 onClick={() => setIsDrawerOpen(!isDrawerOpen)}
@@ -33,21 +49,31 @@ const DashboardDegensPage = (): JSX.Element => {
             </Stack>
           </SectionTitle>
           {/* Main grid content */}
-          <Stack direction="row" flexWrap="wrap" gap={4}>
+          <Grid container spacing={2}>
             {_degens.map((degen) => (
-              <DegenCard
-                key={degen.title}
-                id={degen.id}
-                title={degen.title}
-                multiplier={degen.multiplier}
-                activeRentals={degen.activeRentals}
-                price={degen.price}
-                ownerId={degen.ownerId}
-                image={degen.image}
-              />
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={isDrawerOpen ? 6 : 4}
+                lg={isDrawerOpen ? 6 : 4}
+                xl={3}
+              >
+                <DegenCard
+                  key={degen.title}
+                  id={degen.id}
+                  title={degen.title}
+                  multiplier={degen.multiplier}
+                  activeRentals={degen.activeRentals}
+                  price={degen.price}
+                  ownerId={degen.ownerId}
+                  image={degen.image}
+                />
+              </Grid>
             ))}
-          </Stack>
-        </>
+          </Grid>
+          <Pagination count={10} color="primary" sx={{ margin: '0 auto' }} />
+        </Stack>
       )}
     />
   );
