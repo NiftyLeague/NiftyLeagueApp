@@ -9,12 +9,19 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
-import useQuery from 'hooks/useQuery';
-import { ChangeEvent, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Degen } from 'types/degens';
+import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 
+type FilterSource =
+  | 'prices'
+  | 'multipliers'
+  | 'rentals'
+  | 'tribes'
+  | 'backgrounds';
 interface Props {
   degens: Degen[];
   setDegens: React.Dispatch<SetStateAction<Degen[]>>;
@@ -22,44 +29,128 @@ interface Props {
 
 const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
   const theme = useTheme();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const [pricesRangeValue, setPricesRangeValue] = useState<number[]>([
-    300, 1500,
-  ]);
-  const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>([
-    3, 12,
-  ]);
-  const [rentalsRangeValue, setRentalsRangeValue] = useState<number[]>([
-    15, 26,
-  ]);
-  const [tribesValue, setTribesValue] = useState<string[]>([]);
 
-  const handleTribeChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // Filter states
+  const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
+    defaultFilterValues().prices,
+  );
+  const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
+    defaultFilterValues().multipliers,
+  );
+  const [rentalsRangeValue, setRentalsRangeValue] = useState<number[]>(
+    defaultFilterValues().rentals,
+  );
+  const [tribesValue, setTribesValue] = useState<string[]>(
+    defaultFilterValues().tribes,
+  );
+  const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
+    defaultFilterValues().backgrounds,
+  );
+
+  // For checkbox filter
+  const handleCheckboxChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    source: FilterSource,
+    state: string[],
+    setState: React.Dispatch<SetStateAction<string[]>>,
+  ) => {
     const { checked, value } = e.target;
-    // eslint-disable-next-line no-console
-    console.log({ checked, value });
+    let newState = null;
     if (checked) {
-      setTribesValue([...tribesValue, value]);
+      newState = [...state, value];
     } else {
-      setTribesValue(tribesValue.filter((tribe) => tribe !== value));
+      newState = state.filter((item) => item !== value);
     }
+    setState(newState);
+    handleChangeCommitted(
+      source,
+      newState.length > 0 ? newState.join('-') : '',
+    );
   };
 
-  const [backgroundsValue, setBackgroundsValue] = useState<string[]>([]);
-
-  const handleBackgroundChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { checked, value } = e.target;
-    // eslint-disable-next-line no-console
-    console.log({ checked, value });
-    if (checked) {
-      setBackgroundsValue([...backgroundsValue, value]);
-    } else {
-      setBackgroundsValue(backgroundsValue.filter((tribe) => tribe !== value));
+  // Set search params from filter values
+  // Use value to manually set the source's value
+  // Useful for checkbox filters since using setState won't update the value fast enough
+  // Previously tried useEffect but it was unreliable since tribe and backgrounds will overwrite each other
+  const handleChangeCommitted = (
+    source: FilterSource,
+    value: string | null = null,
+  ) => {
+    let keyValue = {};
+    switch (source) {
+      case 'prices':
+        keyValue = { prices: pricesRangeValue.join('-') };
+        break;
+      case 'multipliers':
+        keyValue = { multipliers: multipliersRangeValue.join('-') };
+        break;
+      case 'rentals':
+        keyValue = { rentals: rentalsRangeValue.join('-') };
+        break;
+      case 'tribes':
+        keyValue = { tribes: value };
+        break;
+      case 'backgrounds':
+        keyValue = { backgrounds: value };
+        break;
     }
+    const params = {
+      ...(Object.fromEntries(searchParams.entries()) as {
+        [key in FilterSource]?: string;
+      }),
+      ...keyValue,
+    };
+    if (value?.length === 0) {
+      delete params[source];
+    }
+    setSearchParams(params);
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const query = useQuery();
+
+  const handleReset = () => {
+    setPricesRangeValue(defaultFilterValues().prices);
+    setMultipliersRangeValue(defaultFilterValues().multipliers);
+    setRentalsRangeValue(defaultFilterValues().rentals);
+    setTribesValue(defaultFilterValues().tribes);
+    setBackgroundsValue(defaultFilterValues().backgrounds);
+    setSearchParams({});
+  };
+
+  // Update local state on mounted
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams.entries()) as {
+      [key in FilterSource]?: string;
+    };
+    if (params.prices && params.prices.split('-').length === 2) {
+      setPricesRangeValue(
+        params.prices.split('-').map(Number) || defaultFilterValues().prices,
+      );
+    }
+    if (params.multipliers && params.multipliers.split('-').length === 2) {
+      setMultipliersRangeValue(
+        params.multipliers.split('-').map(Number) ||
+          defaultFilterValues().multipliers,
+      );
+    }
+    if (params.rentals && params.rentals.split('-').length === 2) {
+      setRentalsRangeValue(
+        params.rentals.split('-').map(Number) || defaultFilterValues().rentals,
+      );
+    }
+    if (params.tribes && params.tribes.split('-').length <= tribes.length) {
+      setTribesValue(params.tribes.split('-') || defaultFilterValues().tribes);
+    }
+    if (
+      params.backgrounds &&
+      params.backgrounds.split('-').length <= backgrounds.length
+    ) {
+      setBackgroundsValue(
+        params.backgrounds.split('-') || defaultFilterValues().backgrounds,
+      );
+    }
+  }, [searchParams]);
+
   return (
     <Stack gap={1}>
       <Stack
@@ -70,7 +161,9 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
       >
         <Typography variant="h4">Filter Rentals</Typography>
         <Stack direction="row" gap={2}>
-          <Button variant="outlined">Reset</Button>
+          <Button variant="outlined" onClick={handleReset}>
+            Reset
+          </Button>
         </Stack>
       </Stack>
       <Stack>
@@ -84,6 +177,7 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
               unit=" NFTL"
               label="Price"
               onChange={(_, value) => setPricesRangeValue(value as number[])}
+              onChangeCommitted={() => handleChangeCommitted('prices')}
             />
             <FilterRangeSlider
               value={multipliersRangeValue}
@@ -93,12 +187,14 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
               onChange={(_, value) =>
                 setMultipliersRangeValue(value as number[])
               }
+              onChangeCommitted={() => handleChangeCommitted('multipliers')}
             />
             <FilterRangeSlider
               value={rentalsRangeValue}
               max={40}
               label="Rentals"
               onChange={(_, value) => setRentalsRangeValue(value as number[])}
+              onChangeCommitted={() => handleChangeCommitted('rentals')}
             />
           </Stack>
         </FilterAccordion>
@@ -112,7 +208,14 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
                     name={tribe}
                     value={tribe}
                     checked={tribesValue.includes(tribe)}
-                    onChange={handleTribeChange}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'tribes',
+                        tribesValue,
+                        setTribesValue,
+                      )
+                    }
                   />
                 }
                 label={tribe}
@@ -132,7 +235,14 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
                     name={background}
                     value={background}
                     checked={backgroundsValue.includes(background)}
-                    onChange={handleBackgroundChange}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'backgrounds',
+                        backgroundsValue,
+                        setBackgroundsValue,
+                      )
+                    }
                   />
                 }
                 label={background}
