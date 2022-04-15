@@ -25,6 +25,10 @@ export default function componentStyleOverrides(
           fontWeight: 500,
           borderRadius: '4px',
         },
+        outlinedPrimary: {
+          color: '#fff',
+          borderColor: theme.palette.primary.main,
+        },
       },
     },
     MuiPaper: {
