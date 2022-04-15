@@ -6,6 +6,8 @@ import {
   CardMedia,
   Link,
   Stack,
+  SxProps,
+  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -18,6 +20,7 @@ export interface DegenCardProps {
   ownerId?: string;
   price?: number;
   image?: string;
+  sx?: SxProps<Theme>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -30,13 +33,14 @@ const DegenCard: React.FC<DegenCardProps> = ({
   ownerId,
   price,
   image,
+  sx,
   onClickRent,
   onClickDetail,
 }) => {
   const theme = useTheme();
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, ...sx }}>
       <CardMedia component="img" height="200" image={image} alt={title} />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
@@ -90,10 +94,15 @@ const DegenCard: React.FC<DegenCardProps> = ({
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
           Rent Degen
         </Button>
-        <Button variant="contained" color="secondary" fullWidth>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          sx={{ minWidth: 105 }}
+        >
           View Traits
         </Button>
       </CardActions>
