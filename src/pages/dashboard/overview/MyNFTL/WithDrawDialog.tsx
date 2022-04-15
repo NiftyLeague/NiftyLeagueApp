@@ -141,8 +141,8 @@ const WithDrawDialog = ({
                   if (getValues('amountInput') !== '') {
                     resetField('amountInput');
                   }
-                  setBalanceWithdraw(value * (balance / 100));
                   field.onChange(value);
+                  setBalanceWithdraw(value * (balance / 100));
                 }}
                 sx={{
                   bgcolor: theme.palette.secondary.light,
@@ -211,7 +211,14 @@ const WithDrawDialog = ({
               <FormGroup>
                 <FormControlLabel
                   sx={{ m: 0, justifyContent: 'center' }}
-                  control={<Checkbox {...field} />}
+                  control={
+                    <Checkbox
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  }
                   label={
                     <Typography variant="body1">
                       I have read the
@@ -238,7 +245,7 @@ const WithDrawDialog = ({
             type="submit"
             variant="contained"
             fullWidth
-            disabled={!getValues('isCheckedTerm')}
+            disabled={!getValues('isCheckedTerm') || balanceWithdraw === 0}
           >
             Withdraw earnings
           </Button>
