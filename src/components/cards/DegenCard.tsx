@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Link,
   Stack,
   Typography,
   useTheme,
@@ -39,13 +40,12 @@ const DegenCard: React.FC<DegenCardProps> = ({
       <CardMedia component="img" height="200" image={image} alt={title} />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
-          <Typography gutterBottom variant="h3" component="div">
+          <Typography gutterBottom variant="h3">
             {title}
           </Typography>
           <Typography
             gutterBottom
             variant="body2"
-            component="div"
             sx={{
               color: theme.palette.warning.main,
             }}
@@ -54,7 +54,17 @@ const DegenCard: React.FC<DegenCardProps> = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">{`Degen #${id}`}</Typography>
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={theme.palette.text.secondary}
+            // underline props is not working
+            sx={{ textDecoration: 'underline' }}
+          >
+            {`Degen #${id}`}
+          </Link>
           <Typography
             variant="body2"
             sx={{ color: theme.palette.success.main }}
@@ -66,7 +76,17 @@ const DegenCard: React.FC<DegenCardProps> = ({
           <Typography variant="body2" sx={{ color: theme.palette.error.main }}>
             {`${price} NFTL/ 1 week`}
           </Typography>
-          <Typography variant="body2">{`Owned by ${ownerId}`}</Typography>
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={theme.palette.text.secondary}
+            // underline props is not working
+            sx={{ textDecoration: 'underline' }}
+          >
+            {`Owned by #${ownerId}`}
+          </Link>
         </Stack>
       </CardContent>
       <CardActions>
