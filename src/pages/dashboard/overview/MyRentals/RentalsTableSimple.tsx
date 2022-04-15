@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Rental } from 'types/rental';
-import { ColumnType } from './MyRentals';
+import { ColumnType } from '.';
 
 interface RentalsTableSimpleProps {
   rentals: Rental[];
