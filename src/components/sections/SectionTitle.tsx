@@ -16,6 +16,8 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
     alignItems="center"
     mb={2}
     mt={firstSection ? 0 : 4}
+    gap={2}
+    flexWrap="wrap"
   >
     <Typography variant="h2">{children}</Typography>
     {actions}
