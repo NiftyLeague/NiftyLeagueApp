@@ -6,6 +6,8 @@ import {
   CardContent,
   CardMedia,
   Stack,
+  SxProps,
+  Theme,
   Typography,
 } from '@mui/material';
 
@@ -15,6 +17,7 @@ export interface GameCardProps {
   onlineCounter?: number;
   image?: string;
   isComingSoon?: boolean;
+  sx?: SxProps<Theme>;
   onPlayOnDesktopClick?: React.MouseEventHandler<HTMLButtonElement>;
   onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -25,61 +28,77 @@ const GameCard: React.FC<GameCardProps> = ({
   onlineCounter,
   image,
   isComingSoon,
+  sx,
   onPlayOnDesktopClick,
   onPlayOnWebClick,
 }) => {
   const theme = useTheme();
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: 345,
+        ...sx,
+      }}
+    >
       <CardMedia component="img" height="200" image={image} alt={title} />
-      <CardContent>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography gutterBottom variant="h3" component="div">
-            {title}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="body2"
-            component="div"
-            sx={{
-              color: isComingSoon
-                ? theme.palette.warning.main
-                : theme.palette.success.main,
-            }}
-          >
-            {isComingSoon ? 'coming soon' : `${onlineCounter} online`}
-          </Typography>
-        </Stack>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        {isComingSoon ? (
-          <Button variant="contained" fullWidth disabled color="inherit">
-            Coming Soon
-          </Button>
-        ) : (
-          <>
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={onPlayOnDesktopClick}
+      <Stack justifyContent="space-between" flexGrow={1}>
+        <CardContent>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography gutterBottom variant="h3" component="div">
+              {title}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant="body2"
+              component="div"
+              sx={{
+                color: isComingSoon
+                  ? theme.palette.warning.main
+                  : theme.palette.success.main,
+              }}
             >
-              Play on Desktop
+              {isComingSoon ? 'coming soon' : `${onlineCounter} online`}
+            </Typography>
+          </Stack>
+          <Typography variant="body2" color="text.secondary">
+            {description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          {isComingSoon ? (
+            <Button variant="contained" fullWidth disabled color="inherit">
+              Coming Soon
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              onClick={onPlayOnWebClick}
+          ) : (
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              columnGap={1}
+              rowGap={2}
+              width="100%"
             >
-              Play on Web
-            </Button>
-          </>
-        )}
-      </CardActions>
+              <Button
+                variant="contained"
+                sx={{ minWidth: 138, flex: 1 }}
+                onClick={onPlayOnDesktopClick}
+              >
+                Play on Desktop
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ minWidth: 138, flex: 1 }}
+                onClick={onPlayOnWebClick}
+              >
+                Play on Web
+              </Button>
+            </Stack>
+          )}
+        </CardActions>
+      </Stack>
     </Card>
   );
 };
