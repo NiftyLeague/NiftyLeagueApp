@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Grid, Button, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
 import HoverDataCard from 'components/cards/HoverDataCard';
+import WithDrawDialog from './WithDrawDialog';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
@@ -18,6 +20,7 @@ const MyNFTL = ({
   onClaimAll,
 }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
+  const [isShowWithdraw, setIsShowWithdraw] = useState(false);
 
   return (
     <Grid container spacing={sectionSpacing}>
@@ -84,7 +87,11 @@ const MyNFTL = ({
               secondary="Available to Claim"
               actions={
                 <Stack direction="row" gap={2}>
-                  <Button fullWidth variant="contained" onClick={onWithdraw}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => setIsShowWithdraw(true)}
+                  >
                     Withdraw
                   </Button>
                   <Button
@@ -95,6 +102,11 @@ const MyNFTL = ({
                   >
                     Deposit
                   </Button>
+                  <WithDrawDialog
+                    isShow={isShowWithdraw}
+                    onClose={() => setIsShowWithdraw(false)}
+                    balance={114893}
+                  />
                 </Stack>
               }
             />
