@@ -1,11 +1,7 @@
-import { Box, Button, Grid, Stack } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import ComicCard from 'components/cards/ComicCard';
-import PaginationIconOnly from 'components/pagination/PaginationIconOnly';
-import SectionTitle from 'components/sections/SectionTitle';
 import comics from 'constants/comics';
-import { useRef } from 'react';
-import Slider from 'react-slick';
-import { sectionSpacing } from 'store/constant';
+import SectionSlider from 'components/sections/SectionSlider';
 
 interface MyComicsProps {
   onViewAllComics?: React.MouseEventHandler<HTMLButtonElement>;
@@ -31,16 +27,8 @@ const BoxComicStyles = {
   },
 };
 const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
-  const refSlider = useRef<Slider>(null);
   const settings = {
-    dots: false,
-    centerMode: true,
-    swipeToSlide: false,
-    focusOnSelect: true,
-    arrows: false,
-    centerPadding: '0',
     slidesToShow: 2,
-    slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1500,
@@ -69,44 +57,23 @@ const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
     ],
   };
 
-  const onClickNext = () => {
-    refSlider?.current?.slickNext();
-  };
-
-  const onClickPrev = () => {
-    refSlider?.current?.slickPrev();
-  };
-
   return (
-    <Grid container spacing={sectionSpacing}>
-      <Grid item xs={12}>
-        <SectionTitle
-          firstSection
-          actions={
-            <Stack direction="row" gap={2}>
-              <Button variant="outlined" onClick={onViewAllComics}>
-                View All Comics
-              </Button>
-              <PaginationIconOnly
-                onClickNext={onClickNext}
-                onClickPrev={onClickPrev}
-              />
-            </Stack>
-          }
-        >
-          My Comics
-        </SectionTitle>
-      </Grid>
-      <Grid item xs={12}>
-        <Slider {...settings} ref={refSlider}>
-          {comics.map((comic) => (
-            <Box sx={BoxComicStyles}>
-              <ComicCard key={comic.title} {...comic} />
-            </Box>
-          ))}
-        </Slider>
-      </Grid>
-    </Grid>
+    <SectionSlider
+      firstSection
+      title="My Comics"
+      sliderSettingsOverride={settings}
+      actions={
+        <Button variant="outlined" onClick={onViewAllComics}>
+          View All Comics
+        </Button>
+      }
+    >
+      {comics.map((comic) => (
+        <Box sx={BoxComicStyles}>
+          <ComicCard key={comic.title} {...comic} />
+        </Box>
+      ))}
+    </SectionSlider>
   );
 };
 
