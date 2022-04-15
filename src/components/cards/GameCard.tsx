@@ -15,7 +15,8 @@ export interface GameCardProps {
   onlineCounter?: number;
   image?: string;
   isComingSoon?: boolean;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onPlayOnDesktopClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const GameCard: React.FC<GameCardProps> = ({
@@ -24,7 +25,8 @@ const GameCard: React.FC<GameCardProps> = ({
   onlineCounter,
   image,
   isComingSoon,
-  onClick,
+  onPlayOnDesktopClick,
+  onPlayOnWebClick,
 }) => {
   const theme = useTheme();
 
@@ -59,9 +61,23 @@ const GameCard: React.FC<GameCardProps> = ({
             Coming Soon
           </Button>
         ) : (
-          <Button variant="contained" fullWidth onClick={onClick}>
-            Download Desktop App
-          </Button>
+          <>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={onPlayOnDesktopClick}
+            >
+              Play on Desktop
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              onClick={onPlayOnWebClick}
+            >
+              Play on Web
+            </Button>
+          </>
         )}
       </CardActions>
     </Card>
