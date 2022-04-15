@@ -1,7 +1,7 @@
 import { Grid, Stack } from '@mui/material';
 import PaginationIconOnly from 'components/pagination/PaginationIconOnly';
 import { PropsWithChildren, ReactNode, useRef } from 'react';
-import Slider from 'react-slick';
+import Slider, { Settings } from 'react-slick';
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from './SectionTitle';
 
@@ -9,7 +9,7 @@ interface Props {
   title: string;
   firstSection?: boolean;
   actions?: ReactNode;
-  sliderSettingsOverride?: Partial<Slider>;
+  sliderSettingsOverride?: Settings;
 }
 
 const SectionSlider = ({
@@ -56,7 +56,7 @@ const SectionSlider = ({
       },
     ],
     ...sliderSettingsOverride,
-  } as Partial<Slider>;
+  } as Settings;
 
   const onClickNext = () => {
     refSlider?.current?.slickNext();
