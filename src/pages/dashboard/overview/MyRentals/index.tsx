@@ -63,6 +63,16 @@ const rentals = [
   createRental('SEIYA', '3743', '12x', '98%', '187,325', 200, '17:03:17'),
   createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
   createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 100, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 100, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
+  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
 ];
 
 const MyRentals = ({ onViewAllRentals }: MyRentalsProps): JSX.Element => (
