@@ -13,6 +13,7 @@ import LogoSection from '../LogoSection';
 import { openDrawer } from 'store/slices/menu';
 import { useDispatch, useSelector } from 'store';
 import { drawerWidth } from 'store/constant';
+import UserProfile from './UserProfile';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -48,6 +49,7 @@ const Sidebar = ({ window }: SidebarProps) => {
           paddingRight: '16px',
         }}
       >
+        <UserProfile />
         <MenuList />
       </PerfectScrollbar>
     ),
