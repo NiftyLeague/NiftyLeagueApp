@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 
-const styledChip = {
+const chipStyles = {
   color: 'white',
   borderRadius: 1,
   width: 'fit-content',
