@@ -1,11 +1,9 @@
 // assets
-import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
+import { IconDashboard } from '@tabler/icons';
 
 // constant
 const icons = {
-  IconBrandChrome,
-  IconHelp,
-  IconSitemap,
+  IconDashboard,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -15,34 +13,34 @@ const LoggedInItems = {
   type: 'group',
   children: [
     {
-      id: 'menu-level-subtitle',
+      id: 'dashboard',
       title: 'My Dashboard',
       type: 'collapse',
-      icon: icons.IconHelp,
+      icon: icons.IconDashboard,
       children: [
         {
-          id: 'mydashboard-submenu-1.1',
+          id: 'dashboard-overview',
           title: 'Overview',
           type: 'item',
-          url: '/overview',
+          url: '/dashboard',
         },
         {
-          id: 'mydashboard-submenu-1.2',
+          id: 'dashboard-degens',
           title: 'Degens',
           type: 'item',
-          url: '/degens',
+          url: '/dashboard/degens',
         },
         {
-          id: 'mydashboard-submenu-1.3',
+          id: 'dashboard-comics',
           title: 'Comics',
           type: 'item',
-          url: '/comics',
+          url: '/dashboard/comics',
         },
         {
-          id: 'mydashboard-submenu-1.4',
+          id: 'dashboard-rentals',
           title: 'Rentals',
           type: 'item',
-          url: '/rentals',
+          url: '/dashboard/rentals',
         },
       ],
     },
