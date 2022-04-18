@@ -1,11 +1,11 @@
 // assets
-import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
+import { IconDeviceGamepad, IconTag, IconLayoutGrid } from '@tabler/icons';
 
 // constant
 const icons = {
-  IconBrandChrome,
-  IconHelp,
-  IconSitemap,
+  IconDeviceGamepad,
+  IconTag,
+  IconLayoutGrid,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -18,22 +18,25 @@ const DefaultItems = {
       id: 'avatar-chip-menu',
       title: 'Nifty League App',
       type: 'item',
-      url: '#',
-      icon: icons.IconHelp,
+      url: '/',
+      icon: icons.IconLayoutGrid,
+      breadcrumbs: false,
     },
     {
       id: 'outline-chip-menu',
       title: 'Degen Rentals',
       type: 'item',
-      url: '#',
-      icon: icons.IconHelp,
+      url: '/degen-rentals',
+      icon: icons.IconTag,
+      breadcrumbs: false,
     },
     {
       id: 'outline-chip-menu',
       title: 'Games',
       type: 'item',
-      url: '#',
-      icon: icons.IconHelp,
+      url: '/games',
+      icon: icons.IconDeviceGamepad,
+      breadcrumbs: false,
     },
   ],
 };
