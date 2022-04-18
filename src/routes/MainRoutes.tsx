@@ -18,6 +18,9 @@ const GamesPage = Loadable(lazy(() => import('pages/games')));
 const DashboardComicsPage = Loadable(
   lazy(() => import('pages/dashboard/comics')),
 );
+const DashboardDegensPage = Loadable(
+  lazy(() => import('pages/dashboard/degens')),
+);
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -51,6 +54,10 @@ const MainRoutes = {
         {
           path: 'comics',
           element: <DashboardComicsPage />,
+        },
+        {
+          path: 'degens',
+          element: <DashboardDegensPage />,
         },
       ],
     },
