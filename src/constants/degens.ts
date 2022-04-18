@@ -11,7 +11,7 @@ const degens: Degen[] = [
     image: 'https://berrydashboard.io/static/media/profile-back-5.5f9f39de.png',
   },
   {
-    id: 4782,
+    id: 4783,
     title: 'No Name Degen',
     multiplier: 1.5,
     activeRentals: 292,
@@ -20,7 +20,7 @@ const degens: Degen[] = [
     image: 'https://berrydashboard.io/static/media/profile-back-7.d8ac257e.png',
   },
   {
-    id: 4782,
+    id: 4784,
     title: 'No Name Degen',
     multiplier: 1.5,
     activeRentals: 292,
@@ -29,7 +29,7 @@ const degens: Degen[] = [
     image: 'https://berrydashboard.io/static/media/profile-back-8.86814b2f.png',
   },
   {
-    id: 4782,
+    id: 4785,
     title: 'No Name Degen',
     multiplier: 1.5,
     activeRentals: 292,
@@ -38,7 +38,7 @@ const degens: Degen[] = [
     image: 'https://berrydashboard.io/static/media/profile-back-9.b5846921.png',
   },
   {
-    id: 4782,
+    id: 4786,
     title: 'No Name Degen',
     multiplier: 1.5,
     activeRentals: 292,

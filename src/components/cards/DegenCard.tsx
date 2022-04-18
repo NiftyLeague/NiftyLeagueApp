@@ -1,12 +1,15 @@
-import { useTheme } from '@mui/material/styles';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Link,
   Stack,
+  SxProps,
+  Theme,
   Typography,
+  useTheme,
 } from '@mui/material';
 
 export interface DegenCardProps {
@@ -17,6 +20,7 @@ export interface DegenCardProps {
   ownerId?: string;
   price?: number;
   image?: string;
+  sx?: SxProps<Theme>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -29,23 +33,23 @@ const DegenCard: React.FC<DegenCardProps> = ({
   ownerId,
   price,
   image,
+  sx,
   onClickRent,
   onClickDetail,
 }) => {
   const theme = useTheme();
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, ...sx }}>
       <CardMedia component="img" height="200" image={image} alt={title} />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
-          <Typography gutterBottom variant="h3" component="div">
+          <Typography gutterBottom variant="h3">
             {title}
           </Typography>
           <Typography
             gutterBottom
             variant="body2"
-            component="div"
             sx={{
               color: theme.palette.warning.main,
             }}
@@ -54,7 +58,17 @@ const DegenCard: React.FC<DegenCardProps> = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">{`Degen #${id}`}</Typography>
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={theme.palette.text.secondary}
+            // underline props is not working
+            sx={{ textDecoration: 'underline' }}
+          >
+            {`Degen #${id}`}
+          </Link>
           <Typography
             variant="body2"
             sx={{ color: theme.palette.success.main }}
@@ -66,14 +80,29 @@ const DegenCard: React.FC<DegenCardProps> = ({
           <Typography variant="body2" sx={{ color: theme.palette.error.main }}>
             {`${price} NFTL/ 1 week`}
           </Typography>
-          <Typography variant="body2">{`Owned by ${ownerId}`}</Typography>
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={theme.palette.text.secondary}
+            // underline props is not working
+            sx={{ textDecoration: 'underline' }}
+          >
+            {`Owned by #${ownerId}`}
+          </Link>
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
           Rent Degen
         </Button>
-        <Button variant="contained" color="secondary" fullWidth>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          sx={{ minWidth: 105 }}
+        >
           View Traits
         </Button>
       </CardActions>
