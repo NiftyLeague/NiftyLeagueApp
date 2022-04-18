@@ -13,6 +13,19 @@ import {
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 
+const styledChip = {
+  color: 'white',
+  borderRadius: 1,
+  width: 'fit-content',
+  fontSize: 8,
+  fontWeight: 'bold',
+  m: 0.5,
+  '&:hover': {
+    backgroundColor: 'transparent',
+    cursor: 'auto',
+  },
+};
+
 export interface DegenCardProps {
   id?: number;
   title?: string;
@@ -43,59 +56,35 @@ const DegenCard: React.FC<DegenCardProps> = ({
   return (
     <Card sx={{ maxWidth: 345, ...sx }}>
       <CardMedia component="img" height="200" image={image} alt={title} />
-      <CardContent sx={{ paddingBottom: 0 }}>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="flex-start"
-          sx={{ display: 'flex', flexWrap: 'wrap', mb: 1 }}
-        >
-          <Chip
-            chipcolor="error"
-            label={`${price} NFTL/ 1 week`}
-            sx={{
-              color: 'white',
-              borderRadius: 1,
-              m: 0.5,
-              '&:hover': {
-                backgroundColor: 'transparent',
-                cursor: 'auto',
-              },
-            }}
-            variant="outlined"
-            size="small"
-          />
-          <Chip
-            chipcolor="success"
-            label={`${activeRentals} active rentals`}
-            sx={{
-              color: 'white',
-              borderRadius: 1,
-              m: 0.5,
-              '&:hover': {
-                backgroundColor: 'transparent',
-                cursor: 'auto',
-              },
-            }}
-            variant="outlined"
-            size="small"
-          />
-          <Chip
-            chipcolor="warning"
-            label={`${multiplier}x Multiplier`}
-            sx={{
-              color: 'white',
-              borderRadius: 1,
-              m: 0.5,
-              '&:hover': {
-                backgroundColor: 'transparent',
-                cursor: 'auto',
-              },
-            }}
-            variant="outlined"
-            size="small"
-          />
-        </Stack>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1 }}
+      >
+        <Chip
+          chipcolor="error"
+          label={`${price} NFTL/ 1 week`}
+          sx={styledChip}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="success"
+          label={`${activeRentals} active rentals`}
+          sx={styledChip}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="warning"
+          label={`${multiplier}x Multiplier`}
+          sx={styledChip}
+          variant="outlined"
+          size="small"
+        />
+      </Stack>
+      <CardContent sx={{ paddingBottom: 0, paddingTop: 0 }}>
         <Stack direction="row" justifyContent="space-between">
           <Typography gutterBottom variant="h3">
             {title}
