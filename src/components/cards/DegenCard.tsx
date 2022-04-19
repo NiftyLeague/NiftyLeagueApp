@@ -11,6 +11,20 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import Chip from 'components/extended/Chip';
+
+const chipStyles = {
+  color: 'white',
+  borderRadius: 1,
+  width: 'fit-content',
+  fontSize: 8,
+  fontWeight: 'bold',
+  m: 0.5,
+  '&:hover': {
+    backgroundColor: 'transparent',
+    cursor: 'auto',
+  },
+};
 
 export interface DegenCardProps {
   id?: number;
@@ -42,20 +56,39 @@ const DegenCard: React.FC<DegenCardProps> = ({
   return (
     <Card sx={{ maxWidth: 345, ...sx }}>
       <CardMedia component="img" height="200" image={image} alt={title} />
-      <CardContent sx={{ paddingBottom: 0 }}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1 }}
+      >
+        <Chip
+          chipcolor="error"
+          label={`${price} NFTL/ 1 week`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="success"
+          label={`${activeRentals} active rentals`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="warning"
+          label={`${multiplier}x Multiplier`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+      </Stack>
+      <CardContent sx={{ paddingBottom: 0, paddingTop: 0 }}>
         <Stack direction="row" justifyContent="space-between">
           <Typography gutterBottom variant="h3">
             {title}
           </Typography>
-          <Typography
-            gutterBottom
-            variant="body2"
-            sx={{
-              color: theme.palette.warning.main,
-            }}
-          >
-            {`${multiplier}x Multiplier`}
-          </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Link
@@ -65,21 +98,10 @@ const DegenCard: React.FC<DegenCardProps> = ({
             variant="body2"
             color={theme.palette.text.secondary}
             // underline props is not working
-            sx={{ textDecoration: 'underline' }}
+            sx={{ textDecoration: 'none' }}
           >
             {`Degen #${id}`}
           </Link>
-          <Typography
-            variant="body2"
-            sx={{ color: theme.palette.success.main }}
-          >
-            {`${activeRentals} active rentals`}
-          </Typography>
-        </Stack>
-        <Stack mt={0.5} direction="row" justifyContent="space-between">
-          <Typography variant="body2" sx={{ color: theme.palette.error.main }}>
-            {`${price} NFTL/ 1 week`}
-          </Typography>
           <Link
             href="#"
             target="_blank"
@@ -87,7 +109,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             variant="body2"
             color={theme.palette.text.secondary}
             // underline props is not working
-            sx={{ textDecoration: 'underline' }}
+            sx={{ textDecoration: 'none' }}
           >
             {`Owned by #${ownerId}`}
           </Link>
@@ -98,8 +120,8 @@ const DegenCard: React.FC<DegenCardProps> = ({
           Rent Degen
         </Button>
         <Button
-          variant="contained"
-          color="secondary"
+          variant="outlined"
+          color="primary"
           fullWidth
           sx={{ minWidth: 105 }}
         >
