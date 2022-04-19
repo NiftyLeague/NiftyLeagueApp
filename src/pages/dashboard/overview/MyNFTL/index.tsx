@@ -4,11 +4,7 @@ import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
 import HoverDataCard from 'components/cards/HoverDataCard';
 import WithdrawForm from './WithdrawForm';
-import {
-  DialogWrapper,
-  DialogOpenButton,
-  DialogContents as Dialog,
-} from 'components/dialog';
+import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
@@ -90,13 +86,13 @@ const MyNFTL = ({
               secondary="Available to Claim"
               actions={
                 <Stack direction="row" gap={2}>
-                  <DialogWrapper>
-                    <DialogOpenButton>
+                  <Dialog>
+                    <DialogTrigger>
                       <Button fullWidth variant="contained">
                         Withdraw
                       </Button>
-                    </DialogOpenButton>
-                    <Dialog
+                    </DialogTrigger>
+                    <DialogContent
                       aria-labelledby="customized-dialog-title"
                       dialogTitle="Withdraw Game & Rental Earnings"
                       sx={{
@@ -109,8 +105,8 @@ const MyNFTL = ({
                       }}
                     >
                       <WithdrawForm balance={114893} />
-                    </Dialog>
-                  </DialogWrapper>
+                    </DialogContent>
+                  </Dialog>
                   <Button
                     fullWidth
                     variant="contained"
