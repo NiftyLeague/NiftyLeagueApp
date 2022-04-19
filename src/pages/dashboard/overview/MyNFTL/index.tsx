@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { Grid, Button, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
 import HoverDataCard from 'components/cards/HoverDataCard';
-import WithdrawDialog from './WithdrawDialog';
+import WithdrawForm from './WithdrawForm';
+import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
@@ -20,15 +20,6 @@ const MyNFTL = ({
   onClaimAll,
 }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
-  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setIsWithdrawDialogOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsWithdrawDialogOpen(false);
-  };
 
   return (
     <Grid container spacing={sectionSpacing}>
@@ -95,13 +86,27 @@ const MyNFTL = ({
               secondary="Available to Claim"
               actions={
                 <Stack direction="row" gap={2}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleClickOpen}
-                  >
-                    Withdraw
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button fullWidth variant="contained">
+                        Withdraw
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent
+                      aria-labelledby="customized-dialog-title"
+                      dialogTitle="Withdraw Game & Rental Earnings"
+                      sx={{
+                        '& h2': {
+                          textAlign: 'center',
+                        },
+                        '& .MuiDialogContent-root': {
+                          textAlign: 'center',
+                        },
+                      }}
+                    >
+                      <WithdrawForm balance={114893} />
+                    </DialogContent>
+                  </Dialog>
                   <Button
                     fullWidth
                     variant="contained"
@@ -110,11 +115,6 @@ const MyNFTL = ({
                   >
                     Deposit
                   </Button>
-                  <WithdrawDialog
-                    isOpen={isWithdrawDialogOpen}
-                    onClose={handleClose}
-                    balance={114893}
-                  />
                 </Stack>
               }
             />
