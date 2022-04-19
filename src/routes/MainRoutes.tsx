@@ -15,6 +15,7 @@ const DashboardRentalPage = Loadable(
   lazy(() => import('pages/dashboard/rentals')),
 );
 const GamesPage = Loadable(lazy(() => import('pages/games')));
+const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 const DashboardComicsPage = Loadable(
   lazy(() => import('pages/dashboard/comics')),
 );
@@ -35,6 +36,10 @@ const MainRoutes = {
     {
       path: '/',
       element: <NiftyLeagueAppPage />,
+    },
+    {
+      path: '/degen-rentals',
+      element: <DegenRentalsPage />,
     },
     {
       path: '/games',
