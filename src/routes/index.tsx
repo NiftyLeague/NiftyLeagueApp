@@ -1,9 +1,8 @@
 import { useRoutes } from 'react-router-dom';
 
 // routes
-import MainRoutes from './MainRoutes';
-import LoginRoutes from './LoginRoutes';
-import AuthenticationRoutes from './AuthenticationRoutes';
+import PrivateRoutes from './PrivateRoutes';
+import PublicRoutes from './PublicRoutes';
 import MaintenanceRoutes from './MaintenanceRoutes';
 
 // hooks
@@ -13,10 +12,5 @@ import useGoogleAnalytics from 'hooks/useGoogleAnalytics';
 
 export default function ThemeRoutes() {
   useGoogleAnalytics();
-  return useRoutes([
-    MainRoutes,
-    LoginRoutes,
-    AuthenticationRoutes,
-    MaintenanceRoutes,
-  ]);
+  return useRoutes([PublicRoutes, PrivateRoutes, MaintenanceRoutes]);
 }
