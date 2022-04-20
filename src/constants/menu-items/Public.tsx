@@ -10,8 +10,8 @@ const icons = {
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
-const DefaultItems = {
-  id: 'default',
+const PublicItems = {
+  id: 'public-items',
   type: 'group',
   children: [
     {
@@ -41,4 +41,4 @@ const DefaultItems = {
   ],
 };
 
-export default DefaultItems;
+export default PublicItems;
