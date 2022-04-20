@@ -44,13 +44,6 @@ export default function componentStyleOverrides(
         },
       },
     },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          border: `1px solid ${theme.palette.grey[800]}`,
-        },
-      },
-    },
     MuiCardHeader: {
       styleOverrides: {
         root: {
