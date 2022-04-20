@@ -10,12 +10,12 @@ const icons = {
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
-const DefaultItems = {
-  id: 'default',
+const PublicItems = {
+  id: 'public-items',
   type: 'group',
   children: [
     {
-      id: 'avatar-chip-menu',
+      id: 'nifty-league-app',
       title: 'Nifty League App',
       type: 'item',
       url: '/',
@@ -23,7 +23,7 @@ const DefaultItems = {
       breadcrumbs: false,
     },
     {
-      id: 'outline-chip-menu',
+      id: 'degen-rentals',
       title: 'Degen Rentals',
       type: 'item',
       url: '/degen-rentals',
@@ -31,7 +31,7 @@ const DefaultItems = {
       breadcrumbs: false,
     },
     {
-      id: 'outline-chip-menu',
+      id: 'games',
       title: 'Games',
       type: 'item',
       url: '/games',
@@ -41,4 +41,4 @@ const DefaultItems = {
   ],
 };
 
-export default DefaultItems;
+export default PublicItems;
