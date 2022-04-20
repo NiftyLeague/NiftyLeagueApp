@@ -1,46 +1,30 @@
-import { Button, useTheme } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 import GameCard from 'components/cards/GameCard';
 import games from 'constants/games';
 import SectionSlider from 'components/sections/SectionSlider';
+import { cardSpacing } from 'store/constant';
 
-const GamesPage = () => {
-  const theme = useTheme();
-  return (
-    <>
-      <SectionSlider
-        firstSection
-        title="Desktop Games"
-        actions={<Button variant="outlined">Download Desktop App</Button>}
-      >
-        {games.map((game) => (
-          <GameCard
-            key={game.image}
-            title={game.title}
-            onlineCounter={game.onlineCounter}
-            description={game.description}
-            image={game.image}
-            isComingSoon={game.isComingSoon}
-            // Setting minHeight so carousel doesn't look weird with varying height cards
-            sx={{ marginRight: theme.spacing(4), minHeight: 478 }}
-          />
-        ))}
-      </SectionSlider>
-      <SectionSlider title="WebGL Games">
-        {games.map((game) => (
-          <GameCard
-            key={game.image}
-            title={game.title}
-            onlineCounter={game.onlineCounter}
-            description={game.description}
-            image={game.image}
-            isComingSoon={game.isComingSoon}
-            // Setting minHeight so carousel doesn't look weird with varying height cards
-            sx={{ marginRight: theme.spacing(4), minHeight: 478 }}
-          />
-        ))}
-      </SectionSlider>
-    </>
-  );
-};
+const GamesPage = () => (
+  <SectionSlider
+    firstSection
+    isSlider={false}
+    title="Games"
+    actions={<Button variant="outlined">Download Desktop App</Button>}
+  >
+    <Grid
+      container
+      flexDirection="row"
+      flexWrap="wrap"
+      justifyContent="space-between"
+      spacing={cardSpacing}
+    >
+      {games.map((game) => (
+        <Grid key={game.title} item sm={12} md={6} lg={4} xl={3}>
+          <GameCard {...game} />
+        </Grid>
+      ))}
+    </Grid>
+  </SectionSlider>
+);
 
 export default GamesPage;

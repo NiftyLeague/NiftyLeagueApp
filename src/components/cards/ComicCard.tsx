@@ -7,6 +7,8 @@ import {
   Stack,
   Typography,
   useTheme,
+  Theme,
+  SxProps,
 } from '@mui/material';
 
 export interface ComicCardProps {
@@ -15,6 +17,7 @@ export interface ComicCardProps {
   multiplier?: number;
   wearableName?: string;
   image?: string;
+  sx?: SxProps<Theme>;
   onViewComic?: React.MouseEventHandler<HTMLButtonElement>;
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -27,11 +30,12 @@ const ComicCard: React.FC<ComicCardProps> = ({
   image,
   onViewComic,
   onBurnComic,
+  sx,
 }) => {
   const theme = useTheme();
 
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ width: '100%', height: '100%', ...sx }}>
       <CardMedia component="img" height="200" image={image} alt={title} />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
