@@ -15,14 +15,12 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   const { isLoggedIn } = useAuth();
   const { palette } = useTheme();
 
-  const cardStyle = '#191b1f';
-
   return (
     <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
-      bgcolor={cardStyle}
+      bgcolor={palette.background.default}
       borderRadius={2}
       p={4}
     >
