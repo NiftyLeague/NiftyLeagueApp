@@ -19,7 +19,7 @@ const chipStyles = {
   color: 'white',
   borderRadius: 1,
   width: 'fit-content',
-  fontSize: 8,
+  fontSize: 11,
   fontWeight: 'bold',
   m: 0.5,
   '&:hover': {
@@ -66,7 +66,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
       <Stack
         direction="row"
         justifyContent="center"
-        alignItems="flex-start"
         sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1 }}
       >
         <Chip
