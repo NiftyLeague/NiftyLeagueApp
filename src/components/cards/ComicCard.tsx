@@ -35,7 +35,14 @@ const ComicCard: React.FC<ComicCardProps> = ({
   const theme = useTheme();
 
   return (
-    <Card sx={{ width: '100%', height: '100%', ...sx }}>
+    <Card
+      sx={{
+        width: '100%',
+        height: '100%',
+        border: `1px solid ${theme.palette.grey[800]}`,
+        ...sx,
+      }}
+    >
       <CardMedia component="img" height="200" image={image} alt={title} />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">

@@ -61,7 +61,15 @@ const DegenCard: React.FC<DegenCardProps> = ({
   const [showEditName, setShowEditName] = useState(false);
 
   return (
-    <Card sx={{ width: '100%', height: '100%', ...sx }} onClick={onClick}>
+    <Card
+      sx={{
+        width: '100%',
+        height: '100%',
+        border: `1px solid ${palette.grey[800]}`,
+        ...sx,
+      }}
+      onClick={onClick}
+    >
       <CardMedia component="img" height="200" image={image} alt={title} />
       <Stack
         direction="row"
