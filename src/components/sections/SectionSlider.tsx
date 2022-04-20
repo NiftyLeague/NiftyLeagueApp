@@ -10,6 +10,7 @@ interface Props {
   firstSection?: boolean;
   actions?: ReactNode;
   sliderSettingsOverride?: Settings;
+  isSlider?: boolean;
 }
 
 const SectionSlider = ({
@@ -18,15 +19,16 @@ const SectionSlider = ({
   children,
   actions,
   sliderSettingsOverride,
+  isSlider = true,
 }: PropsWithChildren<Props>): JSX.Element => {
   const refSlider = useRef<Slider>(null);
   const settings = {
     dots: false,
     swipeToSlide: false,
-    focusOnSelect: true,
+    focusOnSelect: false,
+    swipe: false,
     arrows: false,
-    centerPadding: '0',
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     infinite: false,
     responsive: [
@@ -74,10 +76,12 @@ const SectionSlider = ({
           actions={
             <Stack direction="row" gap={2}>
               {actions}
-              <PaginationIconOnly
-                onClickNext={onClickNext}
-                onClickPrev={onClickPrev}
-              />
+              {isSlider && (
+                <PaginationIconOnly
+                  onClickNext={onClickNext}
+                  onClickPrev={onClickPrev}
+                />
+              )}
             </Stack>
           }
         >
@@ -85,9 +89,13 @@ const SectionSlider = ({
         </SectionTitle>
       </Grid>
       <Grid item xs={12}>
-        <Slider {...settings} ref={refSlider}>
-          {children}
-        </Slider>
+        {isSlider ? (
+          <Slider {...settings} ref={refSlider}>
+            {children}
+          </Slider>
+        ) : (
+          children
+        )}
       </Grid>
     </Grid>
   );

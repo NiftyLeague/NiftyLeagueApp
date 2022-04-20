@@ -42,6 +42,42 @@ const games: Game[] = [
       'https://berrydashboard.io/static/media/profile-back-10.c597e179.png',
     isComingSoon: true,
   },
+  {
+    title: 'The Witcher 3',
+    description:
+      'The Witcher 3 is a story-driven, next-generation open world role-playing game set in a visually stunning fantasy universe full.',
+    onlineCounter: 0,
+    image:
+      'https://berrydashboard.io/static/media/profile-back-10.c597e179.png',
+    isComingSoon: true,
+  },
+  {
+    title: 'The Witcher 3',
+    description:
+      'The Witcher 3 is a story-driven, next-generation open world role-playing game set in a visually stunning fantasy universe full.',
+    onlineCounter: 0,
+    image:
+      'https://berrydashboard.io/static/media/profile-back-10.c597e179.png',
+    isComingSoon: true,
+  },
+  {
+    title: 'The Witcher 3',
+    description:
+      'The Witcher 3 is a story-driven, next-generation open world role-playing game set in a visually stunning fantasy universe full.',
+    onlineCounter: 0,
+    image:
+      'https://berrydashboard.io/static/media/profile-back-10.c597e179.png',
+    isComingSoon: true,
+  },
+  {
+    title: 'The Witcher 3',
+    description:
+      'The Witcher 3 is a story-driven, next-generation open world role-playing game set in a visually stunning fantasy universe full.',
+    onlineCounter: 0,
+    image:
+      'https://berrydashboard.io/static/media/profile-back-10.c597e179.png',
+    isComingSoon: true,
+  },
 ];
 
 export default games;
