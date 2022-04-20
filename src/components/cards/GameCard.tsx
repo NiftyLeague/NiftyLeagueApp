@@ -41,6 +41,7 @@ const GameCard: React.FC<GameCardProps> = ({
         flexDirection: 'column',
         width: '100%',
         height: '100%',
+        backgroundColor: '#191b1f',
         ...sx,
       }}
     >
