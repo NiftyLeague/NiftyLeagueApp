@@ -5,25 +5,23 @@ import { Typography } from '@mui/material';
 
 // project imports
 import NavGroup from './NavGroup';
-import {
-  DefaultItems,
-  LoggedInItems,
-  LoggedOutItems,
-} from 'constants/menu-items';
+import { PublicItems, PrivateItems } from 'constants/menu-items';
+import useAuth from 'hooks/useAuth';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
   if (loginStatus) {
-    return { items: [...DefaultItems.items, ...LoggedInItems.items] };
+    return { items: [...PublicItems.items, ...PrivateItems.items] };
   }
 
-  return { items: [...DefaultItems.items, ...LoggedOutItems.items] };
+  return { items: [...PublicItems.items] };
 };
 
 const MenuList = () => {
-  // TODO: replace with hook to get login status
-  const navItems = getMenuItemsByLoginStatus(true).items.map((item) => {
+  const { isLoggedIn } = useAuth();
+
+  const navItems = getMenuItemsByLoginStatus(isLoggedIn).items.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;

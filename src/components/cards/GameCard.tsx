@@ -42,6 +42,7 @@ const GameCard: React.FC<GameCardProps> = ({
         width: '100%',
         height: '100%',
         backgroundColor: theme.palette.background.default,
+        border: `1px solid ${theme.palette.grey[800]}`,
         ...sx,
       }}
     >
@@ -90,8 +91,8 @@ const GameCard: React.FC<GameCardProps> = ({
                 Play on Desktop
               </Button>
               <Button
-                variant="contained"
-                color="secondary"
+                variant="outlined"
+                color="primary"
                 sx={{ minWidth: 138, flex: 1 }}
                 onClick={onPlayOnWebClick}
               >

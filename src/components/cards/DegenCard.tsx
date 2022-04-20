@@ -19,7 +19,7 @@ const chipStyles = {
   color: 'white',
   borderRadius: 1,
   width: 'fit-content',
-  fontSize: 8,
+  fontSize: 11,
   fontWeight: 'bold',
   m: 0.5,
   '&:hover': {
@@ -61,13 +61,20 @@ const DegenCard: React.FC<DegenCardProps> = ({
   const [showEditName, setShowEditName] = useState(false);
 
   return (
-    <Card sx={{ width: '100%', height: '100%', ...sx }} onClick={onClick}>
+    <Card
+      sx={{
+        width: '100%',
+        height: '100%',
+        border: `1px solid ${palette.grey[800]}`,
+        ...sx,
+      }}
+      onClick={onClick}
+    >
       <CardMedia component="img" height="200" image={image} alt={title} />
       <Stack
         direction="row"
-        justifyContent="center"
         alignItems="flex-start"
-        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1 }}
+        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1, px: 1 }}
       >
         <Chip
           chipcolor="error"
