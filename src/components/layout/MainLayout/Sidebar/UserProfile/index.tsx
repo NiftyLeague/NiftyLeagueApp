@@ -20,7 +20,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      bgcolor="secondary.main"
+      bgcolor={palette.background.default}
       borderRadius={2}
       p={4}
     >

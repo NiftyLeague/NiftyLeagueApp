@@ -41,6 +41,7 @@ const GameCard: React.FC<GameCardProps> = ({
         flexDirection: 'column',
         width: '100%',
         height: '100%',
+        backgroundColor: theme.palette.background.default,
         border: `1px solid ${theme.palette.grey[800]}`,
         ...sx,
       }}
