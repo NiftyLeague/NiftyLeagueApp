@@ -16,10 +16,10 @@ const PaginationIconOnly: React.FC<PaginationIconOnlyProps> = ({
   onClickNext,
 }) => (
   <Stack direction="row" gap={1}>
-    <IconButton size="small" disabled={hasPrev === false} onClick={onClickPrev}>
+    <IconButton disabled={hasPrev === false} onClick={onClickPrev}>
       <ArrowBackIosNewIcon fontSize="small" />
     </IconButton>
-    <IconButton size="small" disabled={hasNext === false} onClick={onClickNext}>
+    <IconButton disabled={hasNext === false} onClick={onClickNext}>
       <ArrowForwardIosIcon fontSize="small" />
     </IconButton>
   </Stack>
