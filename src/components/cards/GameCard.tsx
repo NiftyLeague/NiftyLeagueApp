@@ -39,17 +39,8 @@ const GameCard: React.FC<GameCardProps> = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '24%',
-        [theme.breakpoints.down('lg')]: {
-          width: '32.33%',
-        },
-        [theme.breakpoints.down('md')]: {
-          width: '49%',
-        },
-        [theme.breakpoints.down('sm')]: {
-          width: '100%',
-        },
-        marginBottom: '16px',
+        width: '100%',
+        height: '100%',
         ...sx,
       }}
     >

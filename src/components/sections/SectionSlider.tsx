@@ -25,10 +25,10 @@ const SectionSlider = ({
   const settings = {
     dots: false,
     swipeToSlide: false,
-    focusOnSelect: true,
+    focusOnSelect: false,
+    swipe: false,
     arrows: false,
-    centerPadding: '0',
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     infinite: false,
     responsive: [
