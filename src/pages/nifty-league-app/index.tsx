@@ -13,7 +13,7 @@ const NiftyLeagueAppPage = () => (
       actions={<Button variant="outlined">View All Games</Button>}
     >
       {games.map((game) => (
-        <Box paddingRight={1}>
+        <Box paddingRight={2}>
           <GameCard key={game.image} {...game} sx={{ minHeight: 478 }} />
         </Box>
       ))}
@@ -23,7 +23,7 @@ const NiftyLeagueAppPage = () => (
       actions={<Button variant="outlined">View All Rentals</Button>}
     >
       {degens.map((degen) => (
-        <Box paddingRight={1}>
+        <Box paddingRight={2}>
           <DegenCard key={degen.image} {...degen} />
         </Box>
       ))}
