@@ -65,6 +65,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
       sx={{
         width: '100%',
         height: '100%',
+        border: `1px solid ${palette.grey[800]}`,
         ...sx,
       }}
       onClick={onClick}
