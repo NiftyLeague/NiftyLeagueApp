@@ -1,22 +1,17 @@
-import LoggedIn from './LoggedIn';
-import LoggedOut from './LoggedOut';
-import Default from './Default';
+import Private from './Private';
+import Public from './Public';
 import { NavItemType } from 'types';
 
 // ==============================|| MENU ITEMS ||============================== //
 
-const LoggedOutItems: { items: NavItemType[] } = {
-  items: [LoggedOut],
+const PrivateItems: { items: NavItemType[] } = {
+  items: [Private],
 };
 
-const LoggedInItems: { items: NavItemType[] } = {
-  items: [LoggedIn],
+const PublicItems: { items: NavItemType[] } = {
+  items: [Public],
 };
 
-const DefaultItems: { items: NavItemType[] } = {
-  items: [Default],
-};
+export default PublicItems;
 
-export default DefaultItems;
-
-export { LoggedInItems, LoggedOutItems, DefaultItems };
+export { PrivateItems, PublicItems };
