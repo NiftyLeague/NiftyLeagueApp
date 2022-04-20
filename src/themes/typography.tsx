@@ -95,7 +95,7 @@ const Typography = (
     width: '100%',
     minHeight: 'calc(100vh - 88px)',
     flexGrow: 1,
-    padding: '0px',
+    padding: '20px',
     marginTop: '88px',
     marginRight: '20px',
     borderRadius: `${borderRadius}px`,
