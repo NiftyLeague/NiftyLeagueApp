@@ -65,8 +65,8 @@ const DegenCard: React.FC<DegenCardProps> = ({
       <CardMedia component="img" height="200" image={image} alt={title} />
       <Stack
         direction="row"
-        justifyContent="center"
-        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1 }}
+        alignItems="flex-start"
+        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1, px: 1 }}
       >
         <Chip
           chipcolor="error"
