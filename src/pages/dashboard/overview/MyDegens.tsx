@@ -8,7 +8,7 @@ interface MyDegensProps {
 }
 
 const BoxDegenStyles = {
-  px: '10px',
+  px: 1,
   '& .MuiCardContent-root': {
     p: '12px',
   },

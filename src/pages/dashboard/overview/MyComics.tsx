@@ -8,7 +8,7 @@ interface MyComicsProps {
 }
 
 const BoxComicStyles = {
-  px: '10px',
+  px: 1,
   '& .MuiPaper-root': {
     maxWidth: 345,
     height: 356,
