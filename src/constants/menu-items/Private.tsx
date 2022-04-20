@@ -8,8 +8,8 @@ const icons = {
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
-const LoggedInItems = {
-  id: 'logged-in',
+const PrivateItems = {
+  id: 'private-items',
   type: 'group',
   children: [
     {
@@ -47,4 +47,4 @@ const LoggedInItems = {
   ],
 };
 
-export default LoggedInItems;
+export default PrivateItems;
