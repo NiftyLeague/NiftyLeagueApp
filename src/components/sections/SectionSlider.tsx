@@ -28,6 +28,7 @@ const SectionSlider = ({
     focusOnSelect: false,
     swipe: false,
     arrows: false,
+    centerPadding: '0',
     slidesToShow: 4,
     slidesToScroll: 1,
     infinite: false,
