@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   Card,
@@ -12,6 +13,7 @@ import {
   useTheme,
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
+import EditIcon from '@mui/icons-material/Edit';
 
 const chipStyles = {
   color: 'white',
@@ -35,6 +37,8 @@ export interface DegenCardProps {
   price?: number;
   image?: string;
   sx?: SxProps<Theme>;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -48,13 +52,16 @@ const DegenCard: React.FC<DegenCardProps> = ({
   price,
   image,
   sx,
+  onClick,
+  onClickEditName,
   onClickRent,
   onClickDetail,
 }) => {
-  const theme = useTheme();
+  const { palette } = useTheme();
+  const [showEditName, setShowEditName] = useState(false);
 
   return (
-    <Card sx={{ maxWidth: 345, ...sx }}>
+    <Card sx={{ maxWidth: 345, ...sx }} onClick={onClick}>
       <CardMedia component="img" height="200" image={image} alt={title} />
       <Stack
         direction="row"
@@ -85,10 +92,18 @@ const DegenCard: React.FC<DegenCardProps> = ({
         />
       </Stack>
       <CardContent sx={{ paddingBottom: 0, paddingTop: 0 }}>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction="row"
+          gap={1}
+          onMouseEnter={() => setShowEditName(true)}
+          onMouseLeave={() => setShowEditName(false)}
+        >
           <Typography gutterBottom variant="h3">
             {title}
           </Typography>
+          {showEditName && (
+            <EditIcon sx={{ cursor: 'pointer' }} onClick={onClickEditName} />
+          )}
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Link
@@ -96,7 +111,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             target="_blank"
             rel="nofollow"
             variant="body2"
-            color={theme.palette.text.secondary}
+            color={palette.text.secondary}
             // underline props is not working
             sx={{ textDecoration: 'none' }}
           >
@@ -107,7 +122,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             target="_blank"
             rel="nofollow"
             variant="body2"
-            color={theme.palette.text.secondary}
+            color={palette.text.secondary}
             // underline props is not working
             sx={{ textDecoration: 'none' }}
           >
