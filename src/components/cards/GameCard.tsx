@@ -39,7 +39,8 @@ const GameCard: React.FC<GameCardProps> = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: 345,
+        width: '100%',
+        height: '100%',
         ...sx,
       }}
     >
