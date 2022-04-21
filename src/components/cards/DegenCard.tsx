@@ -66,6 +66,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
         width: '100%',
         height: '100%',
         border: `1px solid ${palette.grey[800]}`,
+        backgroundColor: palette.background.default,
         ...sx,
       }}
       onClick={onClick}
@@ -85,14 +86,14 @@ const DegenCard: React.FC<DegenCardProps> = ({
         />
         <Chip
           chipcolor="success"
-          label={`${activeRentals} rentals`}
+          label={`${activeRentals} Rentals`}
           sx={chipStyles}
           variant="outlined"
           size="small"
         />
         <Chip
           chipcolor="warning"
-          label={`${multiplier}x Multiplier`}
+          label={`${multiplier}x`}
           sx={chipStyles}
           variant="outlined"
           size="small"
@@ -138,14 +139,14 @@ const DegenCard: React.FC<DegenCardProps> = ({
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
+        <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
           Rent Degen
         </Button>
         <Button
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ minWidth: 105 }}
+          sx={{ minWidth: 80 }}
         >
           View Traits
         </Button>
