@@ -40,6 +40,7 @@ const ComicCard: React.FC<ComicCardProps> = ({
         width: '100%',
         height: '100%',
         border: `1px solid ${theme.palette.grey[800]}`,
+        backgroundColor: theme.palette.background.default,
         ...sx,
       }}
     >
