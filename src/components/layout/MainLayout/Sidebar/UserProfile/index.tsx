@@ -23,6 +23,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
       bgcolor={palette.background.default}
       borderRadius={2}
       p={4}
+      sx={{ border: `1px solid ${palette.grey[800]}` }}
     >
       <Avatar alt="avatar" sx={{ height: 80, width: 80 }}>
         <IconUser color={palette.grey[800]} height={40} width={40} />
