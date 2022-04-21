@@ -139,14 +139,14 @@ const DegenCard: React.FC<DegenCardProps> = ({
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
+        <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
           Rent Degen
         </Button>
         <Button
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ minWidth: 105 }}
+          sx={{ minWidth: 80 }}
         >
           View Traits
         </Button>
