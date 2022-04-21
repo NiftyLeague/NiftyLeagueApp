@@ -79,7 +79,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
       >
         <Chip
           chipcolor="error"
-          label={`${price} NFTL/ 1 week`}
+          label={`${price} NFTL`}
           sx={chipStyles}
           variant="outlined"
           size="small"
