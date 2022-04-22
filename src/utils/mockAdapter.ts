@@ -1,7 +1,3 @@
-/**
- * Adaptor for axios
- */
-
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axios from './axios';
 
