@@ -1,9 +1,19 @@
 export interface Degen {
-  id: number;
-  title: string;
-  multiplier: number;
-  activeRentals: number;
-  ownerId: string;
+  id: string;
+  stats: Object;
+  rental_count: number;
+  is_active: boolean;
+  last_rented_at: number;
+  total_rented: number;
   price: number;
-  image: string;
+  price_daily: number;
+  tribe: string;
+  background: string;
+  traits_string: string;
+  multiplier: number;
+  multipliers: {
+    background: number;
+  };
+  name: string;
+  owner: string;
 }
