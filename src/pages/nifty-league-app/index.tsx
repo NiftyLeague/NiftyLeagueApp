@@ -24,7 +24,16 @@ const NiftyLeagueAppPage = () => (
     >
       {degens.map((degen) => (
         <Box paddingRight={2}>
-          <DegenCard key={degen.image} {...degen} />
+          <DegenCard
+            key={degen.id}
+            id={degen.id}
+            name={degen.name}
+            multiplier={degen.multiplier}
+            owner={degen.owner}
+            price={degen.price}
+            background={degen.background}
+            activeRentals={degen.rental_count}
+          />
         </Box>
       ))}
     </SectionSlider>

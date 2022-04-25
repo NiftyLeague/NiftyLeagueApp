@@ -64,7 +64,16 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
     >
       {degens.map((degen) => (
         <Box sx={BoxDegenStyles}>
-          <DegenCard key={degen.title} {...degen} />
+          <DegenCard
+            key={degen.id}
+            id={degen.id}
+            name={degen.name}
+            multiplier={degen.multiplier}
+            owner={degen.owner}
+            price={degen.price}
+            background={degen.background}
+            activeRentals={degen.rental_count}
+          />
         </Box>
       ))}
     </SectionSlider>

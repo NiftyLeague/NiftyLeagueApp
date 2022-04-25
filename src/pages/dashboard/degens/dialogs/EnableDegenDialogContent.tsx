@@ -43,7 +43,7 @@ const EnableDisableDegenDialogContent = ({
               component="p"
               sx={{ textAlign: 'center' }}
             >
-              Owned by {degen?.ownerId}
+              Owned by {degen?.owner}
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="center" mb={1}>

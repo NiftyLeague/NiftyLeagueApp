@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import DegenCard from 'components/cards/DegenCard';
-import DegensFilter from 'components/extended/DegensFilter/ index';
+import DegensFilter from 'components/extended/DegensFilter';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
 import degens from 'constants/degens';
@@ -87,12 +87,12 @@ const DashboardDegensPage = (): JSX.Element => {
                 >
                   <DegenCard
                     id={degen.id}
-                    title={degen.title}
+                    name={degen.name}
                     multiplier={degen.multiplier}
-                    activeRentals={degen.activeRentals}
+                    owner={degen.owner}
                     price={degen.price}
-                    ownerId={degen.ownerId}
-                    image={degen.image}
+                    background={degen.background}
+                    activeRentals={degen.rental_count}
                     onClick={() => handleClickCard(degen)}
                     onClickEditName={() => handleClickEditName(degen)}
                   />

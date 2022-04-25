@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
-  CardMedia,
   Link,
   Stack,
   SxProps,
@@ -14,6 +12,7 @@ import {
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 import EditIcon from '@mui/icons-material/Edit';
+import DegenImage from './DegenImage';
 
 const chipStyles = {
   color: 'white',
@@ -29,13 +28,13 @@ const chipStyles = {
 };
 
 export interface DegenCardProps {
-  id?: number;
-  title?: string;
+  id: string | number;
+  name?: string;
   multiplier?: number;
   activeRentals?: number;
-  ownerId?: string;
+  owner?: string;
   price?: number;
-  image?: string;
+  background?: string;
   sx?: SxProps<Theme>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
@@ -45,12 +44,12 @@ export interface DegenCardProps {
 
 const DegenCard: React.FC<DegenCardProps> = ({
   id,
-  title,
+  name,
   multiplier,
   activeRentals,
-  ownerId,
+  owner,
   price,
-  image,
+  background,
   sx,
   onClick,
   onClickEditName,
@@ -58,7 +57,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
   onClickDetail,
 }) => {
   const { palette } = useTheme();
-  const [showEditName, setShowEditName] = useState(false);
 
   return (
     <Card
@@ -66,51 +64,55 @@ const DegenCard: React.FC<DegenCardProps> = ({
         width: '100%',
         height: '100%',
         border: `1px solid ${palette.grey[800]}`,
-        backgroundColor: palette.background.default,
         ...sx,
       }}
       onClick={onClick}
     >
-      <CardMedia component="img" height="200" image={image} alt={title} />
-      <Stack
-        direction="row"
-        alignItems="flex-start"
-        sx={{ display: 'flex', flexWrap: 'wrap', mt: 1, mb: 1, px: 1 }}
-      >
-        <Chip
-          chipcolor="error"
-          label={`${price} NFTL`}
-          sx={chipStyles}
-          variant="outlined"
-          size="small"
-        />
-        <Chip
-          chipcolor="success"
-          label={`${activeRentals} Rentals`}
-          sx={chipStyles}
-          variant="outlined"
-          size="small"
-        />
-        <Chip
-          chipcolor="warning"
-          label={`${multiplier}x`}
-          sx={chipStyles}
-          variant="outlined"
-          size="small"
-        />
-      </Stack>
-      <CardContent sx={{ paddingBottom: 0, paddingTop: 0 }}>
+      <DegenImage tokenId={id} />
+      <CardContent sx={{ pb: 0, pt: 1 }}>
+        <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+          <Chip
+            chipcolor="error"
+            label={`${price} NFTL/ 1 week`}
+            sx={chipStyles}
+            variant="outlined"
+            size="small"
+          />
+          <Chip
+            chipcolor="success"
+            label={`${activeRentals} rentals`}
+            sx={chipStyles}
+            variant="outlined"
+            size="small"
+          />
+          <Chip
+            chipcolor="warning"
+            label={`${multiplier}x Multiplier`}
+            sx={chipStyles}
+            variant="outlined"
+            size="small"
+          />
+        </Stack>
         <Stack
           direction="row"
           gap={1}
-          onMouseEnter={() => setShowEditName(true)}
-          onMouseLeave={() => setShowEditName(false)}
+          sx={{
+            '&:hover': {
+              '& svg': {
+                display: 'block',
+              },
+            },
+          }}
         >
           <Typography gutterBottom variant="h3">
-            {title}
+            {name || 'No Name Degen'}
           </Typography>
-          {showEditName && (
-            <EditIcon sx={{ cursor: 'pointer' }} onClick={onClickEditName} />
+          {name && (
+            <EditIcon
+              sx={{ cursor: 'pointer', display: 'none' }}
+              onClick={onClickEditName}
+              fontSize="small"
+            />
           )}
         </Stack>
         <Stack direction="row" justifyContent="space-between">
@@ -120,7 +122,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
             rel="nofollow"
             variant="body2"
             color={palette.text.secondary}
-            // underline props is not working
             sx={{ textDecoration: 'none' }}
           >
             {`Degen #${id}`}
@@ -131,22 +132,21 @@ const DegenCard: React.FC<DegenCardProps> = ({
             rel="nofollow"
             variant="body2"
             color={palette.text.secondary}
-            // underline props is not working
             sx={{ textDecoration: 'none' }}
           >
-            {`Owned by #${ownerId}`}
+            {`Owned by ${owner?.substring(0, 5)}`}
           </Link>
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
+        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
           Rent Degen
         </Button>
         <Button
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ minWidth: 80 }}
+          sx={{ minWidth: 105 }}
         >
           View Traits
         </Button>
