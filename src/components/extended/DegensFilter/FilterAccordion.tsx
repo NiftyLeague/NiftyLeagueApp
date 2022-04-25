@@ -18,6 +18,7 @@ const FilterAccordion = ({ summary, children }: Props): JSX.Element => {
     <Accordion
       defaultExpanded
       sx={{
+        backgroundColor: `${theme.palette.grey[800]}3d`,
         '&:not(:last-child)': {
           borderBottom: 0,
         },
