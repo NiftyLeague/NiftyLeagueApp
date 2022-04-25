@@ -38,7 +38,7 @@ const RenameDegenDialogContent = ({ degen }: Props): JSX.Element => {
               component="p"
               sx={{ textAlign: 'center' }}
             >
-              Owned by {degen?.ownerId}
+              Owned by {degen?.owner}
             </Typography>
           </Stack>
           <TextField
