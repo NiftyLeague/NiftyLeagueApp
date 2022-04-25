@@ -1,7 +1,7 @@
 const defaultFilterValues = () => ({
-  prices: [300, 1500],
-  multipliers: [3, 12],
-  rentals: [15, 26],
+  prices: [0, 2000],
+  multipliers: [0, 15],
+  rentals: [0, 40],
   tribes: [],
   backgrounds: [],
 });

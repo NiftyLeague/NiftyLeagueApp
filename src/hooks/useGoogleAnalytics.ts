@@ -12,7 +12,9 @@ const useGoogleAnalytics = () => {
 
   useEffect(() => {
     const currentPath = location.pathname + location.search;
-    sendPageview(currentPath);
+    if ((window as any).ga) {
+      sendPageview(currentPath);
+    }
   }, [location]);
 };
 
