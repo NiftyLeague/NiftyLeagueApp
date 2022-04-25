@@ -17,7 +17,7 @@ import DegenImage from './DegenImage';
 const chipStyles = {
   color: 'white',
   borderRadius: 1,
-  width: 'fit-content',
+  width: 'auto',
   fontSize: 11,
   fontWeight: 'bold',
   m: 0.5,
@@ -70,24 +70,28 @@ const DegenCard: React.FC<DegenCardProps> = ({
     >
       <DegenImage tokenId={id} />
       <CardContent sx={{ pb: 0, pt: 1 }}>
-        <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ mb: 1, width: 'auto' }}
+        >
           <Chip
             chipcolor="error"
-            label={`${price} NFTL/ 1 week`}
+            label={`${price} NFTL`}
             sx={chipStyles}
             variant="outlined"
             size="small"
           />
           <Chip
             chipcolor="success"
-            label={`${activeRentals} rentals`}
+            label={`${activeRentals} Rentals`}
             sx={chipStyles}
             variant="outlined"
             size="small"
           />
           <Chip
             chipcolor="warning"
-            label={`${multiplier}x Multiplier`}
+            label={`${multiplier}x`}
             sx={chipStyles}
             variant="outlined"
             size="small"
