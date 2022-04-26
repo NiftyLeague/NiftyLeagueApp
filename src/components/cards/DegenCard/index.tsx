@@ -35,6 +35,7 @@ export interface DegenCardProps {
   owner?: string;
   price?: number;
   background?: string;
+  isDashboardDegen?: string;
   sx?: SxProps<Theme>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
@@ -50,6 +51,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
   owner,
   price,
   background,
+  isDashboardDegen,
   sx,
   onClick,
   onClickEditName,
@@ -127,7 +129,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
             rel="nofollow"
             variant="body2"
             color={palette.text.secondary}
-            sx={{ textDecoration: 'none' }}
           >
             {`Degen #${id}`}
           </Link>
@@ -137,36 +138,40 @@ const DegenCard: React.FC<DegenCardProps> = ({
             rel="nofollow"
             variant="body2"
             color={palette.text.secondary}
-            sx={{ textDecoration: 'none' }}
           >
             {`Owned by ${owner?.substring(0, 5)}`}
           </Link>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Link
-            href="#"
-            target="_blank"
-            rel="nofollow"
-            variant="body2"
-            color={palette.error.main}
-            sx={{ textDecoration: 'none' }}
-          >
-            {`${id} NFTL Available`}
-          </Link>
-          <Link
-            href="#"
-            target="_blank"
-            rel="nofollow"
-            variant="body2"
-            color={palette.grey[700]}
-          >
-            Disable Rentals
-          </Link>
+          {isDashboardDegen && (
+            <Link
+              href="#"
+              target="_blank"
+              rel="nofollow"
+              variant="body2"
+              color={palette.error.main}
+            >
+              {`${id} NFTL Available`}
+            </Link>
+          )}
+          {isDashboardDegen && (
+            <Link
+              href="#"
+              target="_blank"
+              rel="nofollow"
+              variant="body2"
+              color={palette.grey[700]}
+            >
+              Disable Rentals
+            </Link>
+          )}
         </Stack>
       </CardContent>
       <CardActions>
         <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
-          Claim NFTL
+          {typeof isDashboardDegen !== 'undefined'
+            ? isDashboardDegen
+            : 'Rent Now'}
         </Button>
         <Button
           variant="outlined"
