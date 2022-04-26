@@ -17,7 +17,7 @@ import DegenImage from './DegenImage';
 const chipStyles = {
   color: 'white',
   borderRadius: 1,
-  width: 'auto',
+  width: '100%',
   fontSize: 11,
   fontWeight: 'bold',
   m: 0.5,
@@ -64,39 +64,40 @@ const DegenCard: React.FC<DegenCardProps> = ({
         width: '100%',
         height: '100%',
         border: `1px solid ${palette.grey[800]}`,
+        backgroundColor: palette.background.default,
         ...sx,
       }}
       onClick={onClick}
     >
       <DegenImage tokenId={id} />
+      <Stack
+        direction="row"
+        justifyContent="space-evenly"
+        sx={{ m: 1, width: 'auto' }}
+      >
+        <Chip
+          chipcolor="error"
+          label={`${price} NFTL`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="success"
+          label={`${activeRentals} {Rentals}`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+        <Chip
+          chipcolor="warning"
+          label={`${multiplier}x`}
+          sx={chipStyles}
+          variant="outlined"
+          size="small"
+        />
+      </Stack>
       <CardContent sx={{ pb: 0, pt: 1 }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          sx={{ mb: 1, width: 'auto' }}
-        >
-          <Chip
-            chipcolor="error"
-            label={`${price} NFTL`}
-            sx={chipStyles}
-            variant="outlined"
-            size="small"
-          />
-          <Chip
-            chipcolor="success"
-            label={`${activeRentals} Rentals`}
-            sx={chipStyles}
-            variant="outlined"
-            size="small"
-          />
-          <Chip
-            chipcolor="warning"
-            label={`${multiplier}x`}
-            sx={chipStyles}
-            variant="outlined"
-            size="small"
-          />
-        </Stack>
         <Stack
           direction="row"
           gap={1}
@@ -141,16 +142,37 @@ const DegenCard: React.FC<DegenCardProps> = ({
             {`Owned by ${owner?.substring(0, 5)}`}
           </Link>
         </Stack>
+        <Stack direction="row" justifyContent="space-between">
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={palette.error.main}
+            sx={{ textDecoration: 'none' }}
+          >
+            {`${id} NFTL Available`}
+          </Link>
+          <Link
+            href="#"
+            target="_blank"
+            rel="nofollow"
+            variant="body2"
+            color={palette.grey[700]}
+          >
+            Disable Rentals
+          </Link>
+        </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth sx={{ minWidth: 105 }}>
-          Rent Degen
+        <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
+          Claim NFTL
         </Button>
         <Button
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ minWidth: 105 }}
+          sx={{ minWidth: 80 }}
         >
           View Traits
         </Button>

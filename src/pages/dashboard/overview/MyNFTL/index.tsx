@@ -44,7 +44,9 @@ const MyNFTL = ({
               title="NFTL in Wallet"
               primary="4,573,983"
               customStyle={{
-                backgroundColor: theme.palette.primary.dark,
+                backgroundColor: theme.palette.background.default,
+                border: '1px solid',
+                borderColor: theme.palette.grey[800],
                 height: '100%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -59,7 +61,9 @@ const MyNFTL = ({
                   title="All-Time Rental Earnings"
                   primary="300,573"
                   customStyle={{
-                    backgroundColor: theme.palette.primary.dark,
+                    backgroundColor: theme.palette.background.default,
+                    border: '1px solid',
+                    borderColor: theme.palette.grey[800],
                   }}
                 />
               </Grid>
@@ -68,7 +72,9 @@ const MyNFTL = ({
                   title="All-Time Game Earnings"
                   primary="300,573"
                   customStyle={{
-                    backgroundColor: theme.palette.primary.dark,
+                    backgroundColor: theme.palette.background.default,
+                    border: '1px solid',
+                    borderColor: theme.palette.grey[800],
                   }}
                 />
               </Grid>
@@ -82,7 +88,11 @@ const MyNFTL = ({
             <HoverDataCard
               title="Game & Rental Balance"
               primary="114,983"
-              customStyle={{ backgroundColor: theme.palette.primary.dark }}
+              customStyle={{
+                backgroundColor: theme.palette.background.default,
+                border: '1px solid',
+                borderColor: theme.palette.grey[800],
+              }}
               secondary="Available to Claim"
               actions={
                 <Stack direction="row" gap={2}>
@@ -123,7 +133,11 @@ const MyNFTL = ({
             <HoverDataCard
               title="Daily NFTL Accrued"
               primary="300,573 NFTL"
-              customStyle={{ backgroundColor: theme.palette.primary.dark }}
+              customStyle={{
+                backgroundColor: theme.palette.background.default,
+                border: '1px solid',
+                borderColor: theme.palette.grey[800],
+              }}
               secondary="Available to Claim"
               actions={
                 <Button fullWidth variant="contained" onClick={onClaim}>
