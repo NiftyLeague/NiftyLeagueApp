@@ -26,7 +26,7 @@ import { Degen } from 'types/degens';
 
 const PER_PAGE: number = 8;
 
-const DegenRentalsPage = (): JSX.Element => {
+const DashboardDegensPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [searchParams] = useSearchParams();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
@@ -135,4 +135,4 @@ const DegenRentalsPage = (): JSX.Element => {
   );
 };
 
-export default DegenRentalsPage;
+export default DashboardDegensPage;
