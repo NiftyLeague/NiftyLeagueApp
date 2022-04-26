@@ -84,7 +84,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
         />
         <Chip
           chipcolor="success"
-          label={`${activeRentals} {Rentals}`}
+          label={`${activeRentals} Rentals`}
           sx={chipStyles}
           variant="outlined"
           size="small"
