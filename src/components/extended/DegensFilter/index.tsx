@@ -11,6 +11,7 @@ import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import { updateFilterValue } from './utils';
 import { useSearchParams } from 'react-router-dom';
 import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
@@ -39,19 +40,19 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
 
   // Filter states
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
-    defaultFilterValues().prices,
+    defaultFilterValues.prices,
   );
   const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
-    defaultFilterValues().multipliers,
+    defaultFilterValues.multipliers,
   );
   const [rentalsRangeValue, setRentalsRangeValue] = useState<number[]>(
-    defaultFilterValues().rentals,
+    defaultFilterValues.rentals,
   );
   const [tribesValue, setTribesValue] = useState<string[]>(
-    defaultFilterValues().tribes,
+    defaultFilterValues.tribes,
   );
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
-    defaultFilterValues().backgrounds,
+    defaultFilterValues.backgrounds,
   );
 
   // For checkbox filter
@@ -113,44 +114,24 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
 
   const handleReset = () => {
     if (isParamsEmpty) return;
-    setPricesRangeValue(defaultFilterValues().prices);
-    setMultipliersRangeValue(defaultFilterValues().multipliers);
-    setRentalsRangeValue(defaultFilterValues().rentals);
-    setTribesValue(defaultFilterValues().tribes);
-    setBackgroundsValue(defaultFilterValues().backgrounds);
+    setPricesRangeValue(defaultFilterValues.prices);
+    setMultipliersRangeValue(defaultFilterValues.multipliers);
+    setRentalsRangeValue(defaultFilterValues.rentals);
+    setTribesValue(defaultFilterValues.tribes);
+    setBackgroundsValue(defaultFilterValues.backgrounds);
     setSearchParams({});
   };
 
   // Update local state on mounted
   useEffect(() => {
-    if (params.prices && params.prices.split('-').length === 2) {
-      setPricesRangeValue(
-        params.prices.split('-').map(Number) || defaultFilterValues().prices,
-      );
-    }
-    if (params.multipliers && params.multipliers.split('-').length === 2) {
-      setMultipliersRangeValue(
-        params.multipliers.split('-').map(Number) ||
-          defaultFilterValues().multipliers,
-      );
-    }
-    if (params.rentals && params.rentals.split('-').length === 2) {
-      setRentalsRangeValue(
-        params.rentals.split('-').map(Number) || defaultFilterValues().rentals,
-      );
-    }
-    if (params.tribes && params.tribes.split('-').length <= tribes.length) {
-      setTribesValue(params.tribes.split('-') || defaultFilterValues().tribes);
-    }
-    if (
-      params.backgrounds &&
-      params.backgrounds.split('-').length <= backgrounds.length
-    ) {
-      setBackgroundsValue(
-        params.backgrounds.split('-') || defaultFilterValues().backgrounds,
-      );
-    }
-
+    const actions = {
+      prices: setPricesRangeValue,
+      multipliers: setMultipliersRangeValue,
+      rentals: setRentalsRangeValue,
+      tribes: setTribesValue,
+      backgrounds: setBackgroundsValue,
+    };
+    updateFilterValue(params, actions);
     handleFilter({
       prices: pricesRangeValue,
       multipliers: multipliersRangeValue,
