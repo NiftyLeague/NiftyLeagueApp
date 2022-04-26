@@ -85,7 +85,8 @@ const GameCard: React.FC<GameCardProps> = ({
             >
               <Button
                 variant="contained"
-                sx={{ minWidth: 138, flex: 1 }}
+                fullWidth
+                sx={{ minWidth: 80, flex: 1 }}
                 onClick={onPlayOnDesktopClick}
               >
                 Play on Desktop
@@ -93,7 +94,8 @@ const GameCard: React.FC<GameCardProps> = ({
               <Button
                 variant="outlined"
                 color="primary"
-                sx={{ minWidth: 138, flex: 1 }}
+                fullWidth
+                sx={{ minWidth: 80, flex: 1 }}
                 onClick={onPlayOnWebClick}
               >
                 Play on Web
