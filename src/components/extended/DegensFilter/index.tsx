@@ -54,6 +54,13 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
     defaultFilterValues.backgrounds,
   );
+  const actions = {
+    prices: setPricesRangeValue,
+    multipliers: setMultipliersRangeValue,
+    rentals: setRentalsRangeValue,
+    tribes: setTribesValue,
+    backgrounds: setBackgroundsValue,
+  };
 
   // For checkbox filter
   const handleCheckboxChange = (
@@ -124,13 +131,6 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
 
   // Update local state on mounted
   useEffect(() => {
-    const actions = {
-      prices: setPricesRangeValue,
-      multipliers: setMultipliersRangeValue,
-      rentals: setRentalsRangeValue,
-      tribes: setTribesValue,
-      backgrounds: setBackgroundsValue,
-    };
     updateFilterValue(params, actions);
     handleFilter({
       prices: pricesRangeValue,
