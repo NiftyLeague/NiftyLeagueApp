@@ -24,8 +24,23 @@ const RentalsTableSimple = ({
   const { palette } = useTheme();
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+    <Paper
+      sx={{
+        width: '100%',
+        overflow: 'hidden',
+        backgroundColor: 'transparent',
+        borderRadius: 0,
+      }}
+    >
+      <TableContainer
+        sx={{
+          maxHeight: 422,
+          backgroundColor: palette.background.default,
+          borderRadius: 2,
+          border: '1px solid',
+          borderColor: '#2f2f2f',
+        }}
+      >
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>

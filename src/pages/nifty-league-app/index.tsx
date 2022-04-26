@@ -14,7 +14,7 @@ const NiftyLeagueAppPage = () => (
     >
       {games.map((game) => (
         <Box paddingRight={2}>
-          <GameCard key={game.image} {...game} sx={{ minHeight: 478 }} />
+          <GameCard key={game.image} {...game} />
         </Box>
       ))}
     </SectionSlider>
