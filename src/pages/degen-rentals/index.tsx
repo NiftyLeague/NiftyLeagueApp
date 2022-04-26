@@ -1,82 +1,59 @@
 import { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
+import { useSearchParams } from 'react-router-dom';
+
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Button, Grid, IconButton, Pagination, Stack } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
-import axios from 'utils/axios';
-import { useSearchParams } from 'react-router-dom';
-import { isEmpty } from 'lodash';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import DegenCard from 'components/cards/DegenCard';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
+import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import {
+  tranformDataByFilter,
+  updateFilterValue,
+} from 'components/extended/DegensFilter/utils';
+import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
-import SortButton from 'components/extended/SortButton';
 import DegenSortOptions from 'constants/sort';
-import { Degen } from 'types/degens';
-import usePagination from 'hooks/usePagination';
-import tranformDataByFilter from 'components/extended/DegensFilter/ultils';
 import { DEGEN_BASE_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
-import defaultFilterValues from 'components/extended/DegensFilter/constants';
-import { backgrounds, tribes } from 'constants/filters';
+import { Degen } from 'types/degens';
 
 const PER_PAGE: number = 8;
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
-  const [isFetchingDegens, setFetchingDegens] = useState<boolean>(true);
   const [searchParams] = useSearchParams();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
+  const { data } = useFetch<Degen[]>(
+    `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
+  );
 
   useEffect(() => {
-    fetchDegens();
-    return () => {
-      setDegens([]);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchDegens = async () => {
-    try {
-      const { data } = await axios.get(
-        `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
-      );
+    if (data) {
       const originalDegens: Degen[] = Object.values(data);
       setDegens(originalDegens);
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
-
       if (!isEmpty(params)) {
-        const newFilter: DegenFilter = defaultFilterValues();
-        if (params.prices && params.prices.split('-').length === 2) {
-          newFilter.prices = params.prices.split('-').map(Number);
-        }
-        if (params.multipliers && params.multipliers.split('-').length === 2) {
-          newFilter.multipliers = params.multipliers.split('-').map(Number);
-        }
-        if (params.rentals && params.rentals.split('-').length === 2) {
-          newFilter.rentals = params.rentals.split('-').map(Number);
-        }
-        if (params.tribes && params.tribes.split('-').length <= tribes.length) {
-          newFilter.tribes = params.tribes.split('-');
-        }
-        if (
-          params.backgrounds &&
-          params.backgrounds.split('-').length <= backgrounds.length
-        ) {
-          newFilter.backgrounds = params.backgrounds.split('-');
-        }
-        newDegens = tranformDataByFilter(originalDegens, newFilter);
+        newDegens = tranformDataByFilter(
+          originalDegens,
+          updateFilterValue(params) || defaultFilterValues,
+        );
       }
-
       updateNewData(newDegens);
-      setFetchingDegens(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log('Can not get the rentables', error);
     }
-  };
+    return () => {
+      setDegens([]);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const handleFilter = (filter: DegenFilter) => {
     const result = tranformDataByFilter(degens, filter);
@@ -117,7 +94,7 @@ const DegenRentalsPage = (): JSX.Element => {
           </SectionTitle>
           {/* Main grid content */}
           <Grid container spacing={2}>
-            {isFetchingDegens
+            {!data
               ? [...Array(8)].map(() => (
                   <Grid item xs={12} sm={6} md={6} lg={6} xl={3}>
                     <SkeletonDegenPlaceholder />
