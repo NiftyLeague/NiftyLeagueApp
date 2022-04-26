@@ -21,7 +21,7 @@ import RenameDegenDialogContent from './dialogs/RenamDegenDialogContent';
 import EnableDisableDegenDialogContent from './dialogs/EnableDegenDialogContent';
 
 const DashboardDegensPage = (): JSX.Element => {
-  const [_degens, setDegens] = useState<Degen[]>(degens);
+  const [_degens] = useState<Degen[]>(degens);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -42,9 +42,7 @@ const DashboardDegensPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => (
-          <DegensFilter degens={_degens} setDegens={setDegens} />
-        )}
+        renderDrawer={() => <DegensFilter handleFilter={() => null} />}
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>

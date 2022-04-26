@@ -7,14 +7,16 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import { updateFilterValue } from './utils';
 import { useSearchParams } from 'react-router-dom';
-import { Degen } from 'types/degens';
 import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
+import { DegenFilter } from 'types/degenFilter';
 
 type FilterSource =
   | 'prices'
@@ -22,32 +24,43 @@ type FilterSource =
   | 'rentals'
   | 'tribes'
   | 'backgrounds';
-interface Props {
-  degens: Degen[];
-  setDegens: React.Dispatch<SetStateAction<Degen[]>>;
+
+interface DegensFilterProps {
+  handleFilter: (filter: DegenFilter) => void;
 }
 
-const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
+const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const params = Object.fromEntries(searchParams.entries()) as {
+    [key in FilterSource]?: string;
+  };
+  const isParamsEmpty = isEmpty(params);
 
   // Filter states
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
-    defaultFilterValues().prices,
+    defaultFilterValues.prices,
   );
   const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
-    defaultFilterValues().multipliers,
+    defaultFilterValues.multipliers,
   );
   const [rentalsRangeValue, setRentalsRangeValue] = useState<number[]>(
-    defaultFilterValues().rentals,
+    defaultFilterValues.rentals,
   );
   const [tribesValue, setTribesValue] = useState<string[]>(
-    defaultFilterValues().tribes,
+    defaultFilterValues.tribes,
   );
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
-    defaultFilterValues().backgrounds,
+    defaultFilterValues.backgrounds,
   );
+  const actions = {
+    prices: setPricesRangeValue,
+    multipliers: setMultipliersRangeValue,
+    rentals: setRentalsRangeValue,
+    tribes: setTribesValue,
+    backgrounds: setBackgroundsValue,
+  };
 
   // For checkbox filter
   const handleCheckboxChange = (
@@ -96,59 +109,37 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
         keyValue = { backgrounds: value };
         break;
     }
-    const params = {
-      ...(Object.fromEntries(searchParams.entries()) as {
-        [key in FilterSource]?: string;
-      }),
+    const newParams = {
+      ...params,
       ...keyValue,
     };
     if (value?.length === 0) {
-      delete params[source];
+      delete newParams[source];
     }
-    setSearchParams(params);
+    setSearchParams(newParams);
   };
 
   const handleReset = () => {
-    setPricesRangeValue(defaultFilterValues().prices);
-    setMultipliersRangeValue(defaultFilterValues().multipliers);
-    setRentalsRangeValue(defaultFilterValues().rentals);
-    setTribesValue(defaultFilterValues().tribes);
-    setBackgroundsValue(defaultFilterValues().backgrounds);
+    if (isParamsEmpty) return;
+    setPricesRangeValue(defaultFilterValues.prices);
+    setMultipliersRangeValue(defaultFilterValues.multipliers);
+    setRentalsRangeValue(defaultFilterValues.rentals);
+    setTribesValue(defaultFilterValues.tribes);
+    setBackgroundsValue(defaultFilterValues.backgrounds);
     setSearchParams({});
   };
 
   // Update local state on mounted
   useEffect(() => {
-    const params = Object.fromEntries(searchParams.entries()) as {
-      [key in FilterSource]?: string;
-    };
-    if (params.prices && params.prices.split('-').length === 2) {
-      setPricesRangeValue(
-        params.prices.split('-').map(Number) || defaultFilterValues().prices,
-      );
-    }
-    if (params.multipliers && params.multipliers.split('-').length === 2) {
-      setMultipliersRangeValue(
-        params.multipliers.split('-').map(Number) ||
-          defaultFilterValues().multipliers,
-      );
-    }
-    if (params.rentals && params.rentals.split('-').length === 2) {
-      setRentalsRangeValue(
-        params.rentals.split('-').map(Number) || defaultFilterValues().rentals,
-      );
-    }
-    if (params.tribes && params.tribes.split('-').length <= tribes.length) {
-      setTribesValue(params.tribes.split('-') || defaultFilterValues().tribes);
-    }
-    if (
-      params.backgrounds &&
-      params.backgrounds.split('-').length <= backgrounds.length
-    ) {
-      setBackgroundsValue(
-        params.backgrounds.split('-') || defaultFilterValues().backgrounds,
-      );
-    }
+    updateFilterValue(params, actions);
+    handleFilter({
+      prices: pricesRangeValue,
+      multipliers: multipliersRangeValue,
+      rentals: rentalsRangeValue,
+      tribes: tribesValue,
+      backgrounds: backgroundsValue,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
@@ -161,7 +152,11 @@ const DegensFilter = ({ degens, setDegens }: Props): JSX.Element => {
       >
         <Typography variant="h4">Filter Rentals</Typography>
         <Stack direction="row" gap={2}>
-          <Button variant="outlined" onClick={handleReset}>
+          <Button
+            variant="outlined"
+            disabled={isParamsEmpty}
+            onClick={handleReset}
+          >
             Reset
           </Button>
         </Stack>
