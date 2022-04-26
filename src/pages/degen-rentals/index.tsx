@@ -1,59 +1,69 @@
 import { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
+import { useSearchParams } from 'react-router-dom';
+
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Button, Grid, IconButton, Pagination, Stack } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
-import axios from 'utils/axios';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import DegenCard from 'components/cards/DegenCard';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
+import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import {
+  tranformDataByFilter,
+  updateFilterValue,
+} from 'components/extended/DegensFilter/utils';
+import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
-import SortButton from 'components/extended/SortButton';
 import DegenSortOptions from 'constants/sort';
-import { Degen } from 'types/degens';
-import usePagination from 'hooks/usePagination';
 import { DEGEN_BASE_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import usePagination from 'hooks/usePagination';
+import { DegenFilter } from 'types/degenFilter';
+import { Degen } from 'types/degens';
 
 const PER_PAGE: number = 8;
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
-  const [isFetchingDegens, setFetchingDegens] = useState<boolean>(true);
-  const [page, setPage] = useState(1);
-  const count = Math.ceil(degens?.length / PER_PAGE);
-  const newDegens = usePagination(degens, PER_PAGE);
+  const [searchParams] = useSearchParams();
+  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
+    usePagination(degens, PER_PAGE);
+  const { data } = useFetch<Degen[]>(
+    `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
+  );
 
   useEffect(() => {
-    fetchDegens();
+    if (data) {
+      const originalDegens: Degen[] = Object.values(data);
+      setDegens(originalDegens);
+      const params = Object.fromEntries(searchParams.entries());
+      let newDegens = originalDegens;
+      if (!isEmpty(params)) {
+        newDegens = tranformDataByFilter(
+          originalDegens,
+          updateFilterValue(params) || defaultFilterValues,
+        );
+      }
+      updateNewData(newDegens);
+    }
     return () => {
       setDegens([]);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
-  const fetchDegens = async () => {
-    try {
-      const { data } = await axios.get(
-        `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
-      );
-      setDegens(Object.values(data));
-      setFetchingDegens(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log('Can not get the rentables', error);
-    }
-  };
-
-  const handleChangePagination = (e: React.ChangeEvent<unknown>, p: number) => {
-    setPage(p);
-    newDegens.jump(p);
+  const handleFilter = (filter: DegenFilter) => {
+    const result = tranformDataByFilter(degens, filter);
+    updateNewData(result);
   };
 
   return (
     <CollapsibleSidebarLayout
       // Filter drawer
-      renderDrawer={() => (
-        <DegensFilter degens={degens} setDegens={setDegens} />
-      )}
+      renderDrawer={() => <DegensFilter handleFilter={handleFilter} />}
       // Main grid
       renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
         <Stack gap={2}>
@@ -79,18 +89,18 @@ const DegenRentalsPage = (): JSX.Element => {
               >
                 {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
               </IconButton>
-              {degens.length} Degens
+              {newData.length} Degens
             </Stack>
           </SectionTitle>
           {/* Main grid content */}
           <Grid container spacing={2}>
-            {isFetchingDegens
+            {!data
               ? [...Array(8)].map(() => (
                   <Grid item xs={12} sm={6} md={6} lg={6} xl={3}>
                     <SkeletonDegenPlaceholder />
                   </Grid>
                 ))
-              : newDegens.currentData().map((degen: Degen) => (
+              : currentData().map((degen: Degen) => (
                   <Grid
                     key={degen.id}
                     item
@@ -113,11 +123,11 @@ const DegenRentalsPage = (): JSX.Element => {
                 ))}
           </Grid>
           <Pagination
-            count={count}
-            page={page}
+            count={maxPage}
+            page={currentPage}
             color="primary"
             sx={{ margin: '0 auto' }}
-            onChange={handleChangePagination}
+            onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
           />
         </Stack>
       )}
