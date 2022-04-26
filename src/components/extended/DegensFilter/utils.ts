@@ -49,7 +49,7 @@ export const updateFilterValue = (
     [key: string]: React.Dispatch<SetStateAction<any[]>>;
   },
 ) => {
-  const newFilter: any = defaultFilterValues;
+  const newFilter: any = { ...defaultFilterValues };
   // eslint-disable-next-line guard-for-in
   for (const key in params) {
     const value = params[key as keyof DegenFilter];
