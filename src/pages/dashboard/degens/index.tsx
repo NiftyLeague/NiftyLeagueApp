@@ -1,120 +1,138 @@
-import {
-  Button,
-  Dialog,
-  Grid,
-  IconButton,
-  Pagination,
-  Stack,
-} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
+import { useSearchParams } from 'react-router-dom';
+
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Button, Grid, IconButton, Pagination, Stack } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
+
 import DegenCard from 'components/cards/DegenCard';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
+import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import {
+  tranformDataByFilter,
+  updateFilterValue,
+} from 'components/extended/DegensFilter/utils';
+import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import degens from 'constants/degens';
-import { useState } from 'react';
-import { Degen } from 'types/degens';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SortButton from 'components/extended/SortButton';
 import DegenSortOptions from 'constants/sort';
-import RenameDegenDialogContent from './dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from './dialogs/EnableDegenDialogContent';
+import { DEGEN_BASE_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import usePagination from 'hooks/usePagination';
+import { DegenFilter } from 'types/degenFilter';
+import { Degen } from 'types/degens';
 
-const DashboardDegensPage = (): JSX.Element => {
-  const [_degens] = useState<Degen[]>(degens);
-  const [selectedDegen, setSelectedDegen] = useState<Degen>();
-  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
-    useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
-    useState<boolean>(false);
+const PER_PAGE: number = 8;
 
-  const handleClickCard = (degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsEnableDisableDegenModalOpen(true);
-  };
+const DegenRentalsPage = (): JSX.Element => {
+  const [degens, setDegens] = useState<Degen[]>([]);
+  const [searchParams] = useSearchParams();
+  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
+    usePagination(degens, PER_PAGE);
+  const { data } = useFetch<Degen[]>(
+    `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
+  );
 
-  const handleClickEditName = (degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsRenameDegenModalOpen(true);
+  useEffect(() => {
+    if (data) {
+      const originalDegens: Degen[] = Object.values(data);
+      setDegens(originalDegens);
+      const params = Object.fromEntries(searchParams.entries());
+      let newDegens = originalDegens;
+      if (!isEmpty(params)) {
+        newDegens = tranformDataByFilter(
+          originalDegens,
+          updateFilterValue(params) || defaultFilterValues,
+        );
+      }
+      updateNewData(newDegens);
+    }
+    return () => {
+      setDegens([]);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const handleFilter = (filter: DegenFilter) => {
+    const result = tranformDataByFilter(degens, filter);
+    updateNewData(result);
   };
 
   return (
-    <>
-      <CollapsibleSidebarLayout
-        // Filter drawer
-        renderDrawer={() => <DegensFilter handleFilter={() => null} />}
-        // Main grid
-        renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
-          <Stack gap={2}>
-            {/* Main Grid title */}
-            <SectionTitle
-              firstSection
-              actions={
-                <SortButton sortOptions={DegenSortOptions}>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  />
-                </SortButton>
-              }
-            >
-              <Stack direction="row" alignItems="center" gap={1}>
-                <IconButton
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                  size="large"
-                >
-                  {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
-                </IconButton>
-                {_degens.length} Degens
-              </Stack>
-            </SectionTitle>
-            {/* Main grid content */}
-            <Grid container spacing={2}>
-              {_degens.map((degen) => (
-                <Grid
-                  key={degen.id}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={isDrawerOpen ? 6 : 4}
-                  lg={isDrawerOpen ? 6 : 4}
-                  xl={3}
-                >
-                  <DegenCard
-                    id={degen.id}
-                    name={degen.name}
-                    multiplier={degen.multiplier}
-                    owner={degen.owner}
-                    price={degen.price}
-                    background={degen.background}
-                    activeRentals={degen.rental_count}
-                    onClick={() => handleClickCard(degen)}
-                    onClickEditName={() => handleClickEditName(degen)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            <Pagination count={10} color="primary" sx={{ margin: '0 auto' }} />
-          </Stack>
-        )}
-      />
-      <Dialog
-        open={isRenameDegenModalOpen}
-        onClose={() => setIsRenameDegenModalOpen(false)}
-      >
-        <RenameDegenDialogContent degen={selectedDegen} />
-      </Dialog>
-      <Dialog
-        open={isEnableDisableDegenModalOpen}
-        onClose={() => setIsEnableDisableDegenModalOpen(false)}
-      >
-        <EnableDisableDegenDialogContent degen={selectedDegen} isEnabled />
-      </Dialog>
-    </>
+    <CollapsibleSidebarLayout
+      // Filter drawer
+      renderDrawer={() => <DegensFilter handleFilter={handleFilter} />}
+      // Main grid
+      renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
+        <Stack gap={2}>
+          {/* Main Grid title */}
+          <SectionTitle
+            firstSection
+            actions={
+              <SortButton sortOptions={DegenSortOptions}>
+                <Button
+                  id="demo-positioned-button"
+                  aria-controls="demo-positioned-menu"
+                  aria-haspopup="true"
+                  sx={{ color: 'grey.500', fontWeight: 400 }}
+                  endIcon={<KeyboardArrowDownIcon />}
+                />
+              </SortButton>
+            }
+          >
+            <Stack direction="row" alignItems="center" gap={1}>
+              <IconButton
+                onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                size="large"
+              >
+                {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
+              </IconButton>
+              {newData.length} Degens
+            </Stack>
+          </SectionTitle>
+          {/* Main grid content */}
+          <Grid container spacing={2}>
+            {!data
+              ? [...Array(8)].map(() => (
+                  <Grid item xs={12} sm={6} md={6} lg={6} xl={3}>
+                    <SkeletonDegenPlaceholder />
+                  </Grid>
+                ))
+              : currentData().map((degen: Degen) => (
+                  <Grid
+                    key={degen.id}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={isDrawerOpen ? 6 : 4}
+                    lg={isDrawerOpen ? 6 : 4}
+                    xl={3}
+                  >
+                    <DegenCard
+                      id={degen.id}
+                      name={degen.name}
+                      multiplier={degen.multiplier}
+                      owner={degen.owner}
+                      price={degen.price}
+                      background={degen.background}
+                      activeRentals={degen.rental_count}
+                    />
+                  </Grid>
+                ))}
+          </Grid>
+          <Pagination
+            count={maxPage}
+            page={currentPage}
+            color="primary"
+            sx={{ margin: '0 auto' }}
+            onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+          />
+        </Stack>
+      )}
+    />
   );
 };
 
-export default DashboardDegensPage;
+export default DegenRentalsPage;
