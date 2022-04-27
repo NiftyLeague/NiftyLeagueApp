@@ -8,6 +8,8 @@ import {
   ThemeProvider,
   Theme,
 } from '@mui/material/styles';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // project import
 import useConfig from 'hooks/useConfig';
@@ -80,6 +82,7 @@ export default function ThemeCustomization({ children }: Props) {
       <ThemeProvider theme={themes}>
         <CssBaseline />
         {children}
+        <ToastContainer />
       </ThemeProvider>
     </StyledEngineProvider>
   );
