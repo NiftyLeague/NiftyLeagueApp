@@ -10,16 +10,19 @@ import Snackbar from 'components/extended/Snackbar';
 
 // auth provider
 import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
+import NetworkProvider from 'NetworkProvider';
 
 const App = () => (
   <Locales>
     <NavigationScroll>
-      <AuthProvider>
-        <>
-          <Routes />
-          <Snackbar />
-        </>
-      </AuthProvider>
+      <NetworkProvider>
+        <AuthProvider>
+          <>
+            <Routes />
+            <Snackbar />
+          </>
+        </AuthProvider>
+      </NetworkProvider>
     </NavigationScroll>
   </Locales>
 );

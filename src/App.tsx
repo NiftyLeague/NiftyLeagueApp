@@ -9,9 +9,7 @@ import ThemeCustomization from 'themes';
 
 // auth provider
 import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
-// import { AWSCognitoProvider as AuthProvider } from 'contexts/AWSCognitoContext';
-// import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
-// import { Auth0Provider as AuthProvider } from 'contexts/Auth0Context';
+import NetworkProvider from './NetworkProvider';
 
 // ==============================|| APP ||============================== //
 
@@ -19,12 +17,14 @@ const App = () => (
   <ThemeCustomization>
     <Locales>
       <NavigationScroll>
-        <AuthProvider>
-          <>
-            <Routes />
-            <Snackbar />
-          </>
-        </AuthProvider>
+        <NetworkProvider>
+          <AuthProvider>
+            <>
+              <Routes />
+              <Snackbar />
+            </>
+          </AuthProvider>
+        </NetworkProvider>
       </NavigationScroll>
     </Locales>
   </ThemeCustomization>
