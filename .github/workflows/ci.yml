@@ -20,10 +20,6 @@ jobs:
         uses: borales/actions-yarn@v2.3.0
         with:
           cmd: lint
-      - name: Run test
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: test
       - name: Build the project
         uses: borales/actions-yarn@v2.3.0
         with:
