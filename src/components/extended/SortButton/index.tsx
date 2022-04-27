@@ -2,19 +2,21 @@ import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { Children, cloneElement, ReactElement, useState } from 'react';
 import { MenuItemBaseProps } from 'types';
 import { callAll } from 'utils';
+import DegenSortOptions from 'constants/sort';
 
+const sortOptions: MenuItemBaseProps[] = DegenSortOptions;
 interface Props {
   children: ReactElement;
-  sortOptions: MenuItemBaseProps[];
   defaultSelectedItemValue?: string | null;
   label?: string;
+  handleSort: (sortOptions: string) => void;
 }
 
 const SortButton = ({
   children,
-  sortOptions,
   defaultSelectedItemValue = null,
   label = 'Sort by: ',
+  handleSort,
 }: Props): JSX.Element => {
   if (!Children.only(children))
     console.error('SortButton only accepts one child');
@@ -37,8 +39,10 @@ const SortButton = ({
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
     value: string,
+    options: MenuItemBaseProps,
   ) => {
     setSelectedSort(value);
+    handleSort(value);
     handleCloseSortMenu();
   };
 
@@ -80,7 +84,9 @@ const SortButton = ({
             sx={{ p: 1.5 }}
             key={option.value}
             selected={option.value === selectedSort}
-            onClick={(event) => handleMenuItemClick(event, option.value)}
+            onClick={(event) =>
+              handleMenuItemClick(event, option.value, option)
+            }
           >
             {option.label}
           </MenuItem>

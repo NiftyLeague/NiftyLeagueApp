@@ -4,4 +4,5 @@ export interface DegenFilter {
   rentals: number[];
   tribes: string[];
   backgrounds: string[];
+  sort?: string;
 }
