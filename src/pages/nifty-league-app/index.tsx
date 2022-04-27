@@ -24,7 +24,7 @@ const NiftyLeagueAppPage = () => {
       const degensArray = Object.values(data);
       const sortDegens = degensArray
         .filter((degen) => degen.rental_count > 0)
-        .sort();
+        .sort((degenA, degenB) => degenB.rental_count - degenA.rental_count);
       setDegens(sortDegens);
     }
     return () => {
