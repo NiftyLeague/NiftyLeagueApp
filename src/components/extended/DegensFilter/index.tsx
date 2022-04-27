@@ -168,7 +168,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
           <Stack gap={4}>
             <FilterRangeSlider
               value={pricesRangeValue}
-              max={2000}
+              max={3000}
               unit=" NFTL"
               label="Price"
               onChange={(_, value) => setPricesRangeValue(value as number[])}

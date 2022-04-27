@@ -26,7 +26,6 @@ import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/Enab
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import DegenSortOptions from 'constants/sort';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
@@ -37,6 +36,7 @@ const PER_PAGE: number = 8;
 
 const DashboardDegensPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
+  const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -56,10 +56,10 @@ const DashboardDegensPage = (): JSX.Element => {
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
       if (!isEmpty(params)) {
-        newDegens = tranformDataByFilter(
-          originalDegens,
-          updateFilterValue(params) || defaultFilterValues,
-        );
+        const newFilterOptions =
+          updateFilterValue(params) || defaultFilterValues;
+        setFilters(newFilterOptions);
+        newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
       updateNewData(newDegens);
     }
@@ -70,8 +70,16 @@ const DashboardDegensPage = (): JSX.Element => {
   }, [data]);
 
   const handleFilter = (filter: DegenFilter) => {
-    const result = tranformDataByFilter(degens, filter);
+    const newFilters = { ...filter, sort: filters.sort };
+    const result = tranformDataByFilter(degens, newFilters);
+    setFilters(newFilters);
     updateNewData(result);
+  };
+
+  const handleSort = (sort: string) => {
+    const newSort = { ...filters, sort };
+    setFilters(newSort);
+    updateNewData(tranformDataByFilter(degens, newSort));
   };
 
   const handleClickCard = (degen: Degen): void => {
@@ -96,7 +104,7 @@ const DashboardDegensPage = (): JSX.Element => {
             <SectionTitle
               firstSection
               actions={
-                <SortButton sortOptions={DegenSortOptions}>
+                <SortButton handleSort={handleSort}>
                   <Button
                     id="demo-positioned-button"
                     aria-controls="demo-positioned-menu"
