@@ -14,7 +14,7 @@
     "lint:script": "eslint --ignore-path .eslintignore ./src --ext .ts,.tsx,.js,.jsx",
     "format": "prettier --write './src/**/*.{ts,tsx,js,jsx,json}'",
     "check-types": "tsc",
-    "validate": "npm-run-all format lint check-types test build"
+    "validate": "npm-run-all format lint check-types build"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.4",
