@@ -16,6 +16,7 @@ import { NETWORK_NAME } from 'constants/networks';
 import NiftySmashers from 'assets/images/gifs/nifty-smashers.gif';
 import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import Downloader from './Downloader';
+import useVersion from 'hooks/useVersion';
 
 const baseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
 const buildVersion = process.env
@@ -153,73 +154,86 @@ const GameWithAuth = withVerification(
   (props: { auth: string; unityContext: UnityContext }) => Game(props),
 );
 
-const GamesPage = () => (
-  <SectionSlider
-    firstSection
-    isSlider={false}
-    title="Games"
-    actions={<Button variant="outlined">Download Desktop App</Button>}
-  >
-    <Grid container flexDirection="row" flexWrap="wrap" spacing={cardSpacing}>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
-        <GameCard
-          title="Nifty Smashers"
-          description="The first NFT brawler on the Ethereum blockchain!"
-          image={NiftySmashers}
-          onlineCounter={200}
-          onPlayOnDesktopClick={() => setSelectedGame('nifty-league-desktop')}
-          actions={
-            <>
-              <Dialog>
-                <DialogTrigger>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    sx={{ minWidth: 80, flex: 1 }}
+const GamesPage = () => {
+  const { isWindows, downloadURL, version } = useVersion();
+  return (
+    <SectionSlider
+      firstSection
+      isSlider={false}
+      title="Games"
+      actions={
+        <Button
+          href={downloadURL}
+          disabled={!isWindows || !version}
+          variant="outlined"
+        >
+          {!version && isWindows
+            ? 'Fetching installer version...'
+            : `Download for ${
+                isWindows ? 'Windows' : 'Mac OS will be added soon!'
+              }`}
+        </Button>
+      }
+    >
+      <Grid container flexDirection="row" flexWrap="wrap" spacing={cardSpacing}>
+        <Grid item sm={12} md={6} lg={4} xl={3}>
+          <GameCard
+            title="Nifty Smashers"
+            description="The first NFT brawler on the Ethereum blockchain!"
+            image={NiftySmashers}
+            onlineCounter={200}
+            actions={
+              <>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      sx={{ minWidth: 80, flex: 1 }}
+                    >
+                      Play on Desktop
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent
+                    aria-labelledby="customized-dialog-title"
+                    dialogTitle="Nifty League Desktop"
                   >
-                    Play on Desktop
-                  </Button>
-                </DialogTrigger>
-                <DialogContent
-                  aria-labelledby="customized-dialog-title"
-                  dialogTitle="Authencation"
-                >
-                  <GameWithAuth unityContext={smashersContext} />
-                </DialogContent>
-              </Dialog>
-              <Dialog>
-                <DialogTrigger>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    sx={{ minWidth: 80, flex: 1 }}
+                    <Downloader />
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      fullWidth
+                      sx={{ minWidth: 80, flex: 1 }}
+                    >
+                      Play on Web
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent
+                    aria-labelledby="customized-dialog-title"
+                    dialogTitle="Nifty League Web"
                   >
-                    Play on Web
-                  </Button>
-                </DialogTrigger>
-                <DialogContent
-                  aria-labelledby="customized-dialog-title"
-                  dialogTitle="Nifty League Desktop"
-                >
-                  <Downloader />
-                </DialogContent>
-              </Dialog>
-            </>
-          }
-        />
+                    <GameWithAuth unityContext={smashersContext} />
+                  </DialogContent>
+                </Dialog>
+              </>
+            }
+          />
+        </Grid>
+        <Grid item sm={12} md={6} lg={4} xl={3}>
+          <GameCard
+            title="Nifty Smashers WebGL"
+            description="The first ever NFT tennis game on the Ethereum blockchain"
+            isComingSoon
+            image={NiftySmashers}
+          />
+        </Grid>
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
-        <GameCard
-          title="Nifty Smashers WebGL"
-          description="The first ever NFT tennis game on the Ethereum blockchain"
-          isComingSoon
-          image={NiftySmashers}
-          onPlayOnDesktopClick={() => setSelectedGame('nifty-league-desktop')}
-        />
-      </Grid>
-    </Grid>
-  </SectionSlider>
-);
+    </SectionSlider>
+  );
+};
 
 export default GamesPage;

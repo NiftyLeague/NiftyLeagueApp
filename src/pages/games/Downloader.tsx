@@ -1,42 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import React, { useContext, useEffect, useState } from 'react';
-import { isWindows } from 'react-device-detect';
 import { Container, Button, Typography } from '@mui/material';
 import { GetApp } from '@mui/icons-material';
-
-import { NetworkContext } from 'NetworkProvider';
+import useVersion from 'hooks/useVersion';
 
 const Downloader = (): JSX.Element => {
-  const { targetNetwork } = useContext(NetworkContext);
-  const [version, setVersion] = useState('');
-  const env = targetNetwork.chainId === 1 ? 'prod' : 'stage';
-  const os = isWindows ? 'win' : 'osx';
-  const fileName = `NiftyLauncher-setup-${version.substring(
-    0,
-    version.indexOf('-'),
-  )}.exe`;
-  const downloadURL = `https://d7ct17ettlkln.cloudfront.net/launcher/${env}/${os}/${version}/${fileName}`;
-
-  useEffect(() => {
-    const fetchVersion = async () => {
-      const v: string = await fetch(
-        `https://nifty-league.s3.amazonaws.com/launcher/${env}/${os}/version.bin?t=${Date.now()}`,
-      )
-        .then((res) => {
-          if (res.status >= 400) {
-            console.error(res.text());
-            return '';
-          }
-          return res.text();
-        })
-        .catch((e) => {
-          console.error(e);
-          return '';
-        });
-      setVersion(v);
-    };
-    fetchVersion();
-  }, [env, os]);
+  const { isWindows, downloadURL, version } = useVersion();
 
   return (
     <Container style={{ textAlign: 'left', padding: '40px' }}>
