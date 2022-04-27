@@ -10,13 +10,18 @@ import { ReactNode } from 'react';
 interface Props {
   summary: ReactNode;
   children: ReactNode;
+  expanded?: boolean;
 }
 
-const FilterAccordion = ({ summary, children }: Props): JSX.Element => {
+const FilterAccordion = ({
+  summary,
+  children,
+  expanded = true,
+}: Props): JSX.Element => {
   const theme = useTheme();
   return (
     <Accordion
-      defaultExpanded
+      defaultExpanded={expanded}
       sx={{
         backgroundColor: `${theme.palette.grey[800]}3d`,
         '&:not(:last-child)': {

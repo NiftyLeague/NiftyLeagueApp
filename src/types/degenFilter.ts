@@ -5,4 +5,5 @@ export interface DegenFilter {
   tribes: string[];
   backgrounds: string[];
   sort?: string;
+  cosmetics: string[];
 }
