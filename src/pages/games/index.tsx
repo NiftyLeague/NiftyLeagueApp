@@ -225,7 +225,7 @@ const GamesPage = () => {
         </Grid>
         <Grid item sm={12} md={6} lg={4} xl={3}>
           <GameCard
-            title="Nifty Smashers WebGL"
+            title="Nifty Tennis"
             description="The first ever NFT tennis game on the Ethereum blockchain"
             isComingSoon
             image={NiftySmashers}
