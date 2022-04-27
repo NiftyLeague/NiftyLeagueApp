@@ -3,12 +3,11 @@
     "target": "es5",
     "module": "esnext",
     "jsx": "react-jsx",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
     "noUnusedLocals": false,
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
@@ -16,12 +15,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitThis": true,
+    "noImplicitReturns": true,
     "strictNullChecks": true,
     "types": ["node", "webpack-env", "@types/jest"],
     "typeRoots": ["./types"],
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "allowJs": true,
+    "checkJs": true,
+    "downlevelIteration": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "./src/contracts/**/*"]
 }
