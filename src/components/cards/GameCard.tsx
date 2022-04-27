@@ -20,6 +20,7 @@ export interface GameCardProps {
   sx?: SxProps<Theme>;
   onPlayOnDesktopClick?: React.MouseEventHandler<HTMLButtonElement>;
   onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
+  actions?: React.ReactNode;
 }
 
 const GameCard: React.FC<GameCardProps> = ({
@@ -31,6 +32,7 @@ const GameCard: React.FC<GameCardProps> = ({
   sx,
   onPlayOnDesktopClick,
   onPlayOnWebClick,
+  actions,
 }) => {
   const theme = useTheme();
 
@@ -46,9 +48,9 @@ const GameCard: React.FC<GameCardProps> = ({
         ...sx,
       }}
     >
-      <CardMedia component="img" height="200" image={image} alt={title} />
+      <CardMedia component="img" height="auto" image={image} alt={title} />
       <Stack justifyContent="space-between" flexGrow={1}>
-        <CardContent>
+        <CardContent sx={{ padding: '24px 24px 0' }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography gutterBottom variant="h3" component="div">
               {title}
@@ -83,23 +85,27 @@ const GameCard: React.FC<GameCardProps> = ({
               rowGap={2}
               width="100%"
             >
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{ minWidth: 80, flex: 1 }}
-                onClick={onPlayOnDesktopClick}
-              >
-                Play on Desktop
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                fullWidth
-                sx={{ minWidth: 80, flex: 1 }}
-                onClick={onPlayOnWebClick}
-              >
-                Play on Web
-              </Button>
+              {actions || (
+                <>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    sx={{ minWidth: 80, flex: 1 }}
+                    onClick={onPlayOnDesktopClick}
+                  >
+                    Play on Desktop
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ minWidth: 80, flex: 1 }}
+                    onClick={onPlayOnWebClick}
+                  >
+                    Play on Web
+                  </Button>
+                </>
+              )}
             </Stack>
           )}
         </CardActions>
