@@ -7,6 +7,7 @@ const defaultFilterValues: DegenFilter = {
   tribes: [],
   backgrounds: [],
   sort: 'name',
+  cosmetics: [],
 };
 
 export default defaultFilterValues;
