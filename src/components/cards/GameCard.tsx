@@ -48,9 +48,9 @@ const GameCard: React.FC<GameCardProps> = ({
         ...sx,
       }}
     >
-      <CardMedia component="img" height="330" image={image} alt={title} />
+      <CardMedia component="img" height="auto" image={image} alt={title} />
       <Stack justifyContent="space-between" flexGrow={1}>
-        <CardContent>
+        <CardContent sx={{ padding: '24px 24px 0' }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography gutterBottom variant="h3" component="div">
               {title}
