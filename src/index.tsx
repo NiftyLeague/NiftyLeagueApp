@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 // project imports
 import App from 'App';
@@ -12,22 +13,30 @@ import { store, persister } from 'store';
 import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
+import { SUBGRAPH_URI } from './constants';
 
 // style + assets
 import 'assets/scss/style.scss';
 
 // ==============================|| REACT DOM RENDER  ||============================== //
 
+const client = new ApolloClient({
+  uri: SUBGRAPH_URI,
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persister}>
-      <ConfigProvider>
-        <BrowserRouter basename={BASE_PATH}>
-          <App />
-        </BrowserRouter>
-      </ConfigProvider>
-    </PersistGate>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persister}>
+        <ConfigProvider>
+          <BrowserRouter basename={BASE_PATH}>
+            <App />
+          </BrowserRouter>
+        </ConfigProvider>
+      </PersistGate>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root'),
 );
 

@@ -2,18 +2,75 @@ import {
   Avatar,
   Box,
   Button,
+  Skeleton,
   Stack,
   Typography,
   useTheme,
 } from '@mui/material';
-import useAuth from 'hooks/useAuth';
-import { IconUser } from '@tabler/icons';
+import Blockies from 'react-blockies';
+import { NetworkContext } from 'NetworkProvider';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { Owner } from 'types/graph';
+import { OWNER_QUERY } from './query';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../../../constants';
+import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import { NFTL_CONTRACT } from 'constants/contracts';
 
 export interface UserProfileProps {}
 
 const UserProfile: React.FC<UserProfileProps> = () => {
-  const { isLoggedIn } = useAuth();
   const { palette } = useTheme();
+  const { address, loadWeb3Modal, web3Modal, writeContracts, tx } =
+    useContext(NetworkContext);
+
+  const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
+    useQuery(OWNER_QUERY, {
+      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
+      variables: { address: address?.toLowerCase() },
+      skip: !address,
+    });
+
+  const characters = useMemo(() => {
+    const characterList = data?.owner?.characters
+      ? [...data.owner.characters]
+      : [];
+    return characterList.sort(
+      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
+    );
+  }, [data]);
+
+  const tokenIndices = useMemo(
+    () => characters.map((char) => parseInt(char.id, 10)),
+    [characters],
+  );
+
+  const [mockAccumulated, setMockAccumulated] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const totalAccumulated = useClaimableNFTL(
+    writeContracts,
+    tokenIndices,
+    refreshKey,
+  );
+
+  useEffect(() => {
+    if (totalAccumulated) setMockAccumulated(totalAccumulated);
+  }, [totalAccumulated]);
+
+  const amountParsed = mockAccumulated.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const handleClaimNFTL = useCallback(async () => {
+    // eslint-disable-next-line no-console
+    if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
+    setMockAccumulated(0);
+    setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenIndices, totalAccumulated, tx, writeContracts]);
 
   return (
     <Box
@@ -26,22 +83,34 @@ const UserProfile: React.FC<UserProfileProps> = () => {
       sx={{ border: `1px solid ${palette.grey[800]}` }}
     >
       <Avatar alt="avatar" sx={{ height: 80, width: 80 }}>
-        <IconUser color={palette.grey[800]} height={40} width={40} />
+        <Blockies seed={address.toLowerCase()} size={80} className="blockies" />
       </Avatar>
       <Stack direction="column" alignItems="center" marginY={2}>
-        <Typography variant="h4">Unkown</Typography>
-        <Typography>0xunkown</Typography>
+        {/* Hidden the name */}
+        {/* <Typography variant="h4">Unkown</Typography> */}
+        <Typography>{address.substring(0, 6)}</Typography>
       </Stack>
       <Stack direction="column" alignItems="center" marginY={2}>
-        <Typography variant="h4">{isLoggedIn ? '387' : '0'} NFTL</Typography>
+        {loading ? (
+          <Skeleton variant="text" animation="wave" width={80} />
+        ) : (
+          <Typography variant="h4">
+            {mockAccumulated ? amountParsed : '0'} NFTL
+          </Typography>
+        )}
         <Typography>Available to Claim</Typography>
       </Stack>
-      {isLoggedIn ? (
-        <Button variant="contained" fullWidth>
+      {web3Modal.cachedProvider ? (
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
+          onClick={handleClaimNFTL}
+        >
           Claim NFTL
         </Button>
       ) : (
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth onClick={loadWeb3Modal}>
           Connect Wallet
         </Button>
       )}
