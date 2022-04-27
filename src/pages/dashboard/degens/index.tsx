@@ -90,7 +90,7 @@ const DashboardDegensPage = (): JSX.Element => {
                     owner={degen.owner}
                     price={degen.price}
                     background={degen.background}
-                    isDashboardDegen="Claim NFTL"
+                    isDashboardDegen
                     activeRentals={degen.rental_count}
                     onClick={() => handleClickCard(degen)}
                     onClickEditName={() => handleClickEditName(degen)}
