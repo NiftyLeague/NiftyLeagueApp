@@ -17,13 +17,15 @@ import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 import { DegenFilter } from 'types/degenFilter';
+import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 
 type FilterSource =
   | 'prices'
   | 'multipliers'
   | 'rentals'
   | 'tribes'
-  | 'backgrounds';
+  | 'backgrounds'
+  | 'cosmetics';
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
@@ -54,12 +56,16 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
     defaultFilterValues.backgrounds,
   );
+  const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
+    defaultFilterValues.cosmetics,
+  );
   const actions = {
     prices: setPricesRangeValue,
     multipliers: setMultipliersRangeValue,
     rentals: setRentalsRangeValue,
     tribes: setTribesValue,
     backgrounds: setBackgroundsValue,
+    cosmetics: setCosmeticsValue,
   };
 
   // For checkbox filter
@@ -108,6 +114,9 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       case 'backgrounds':
         keyValue = { backgrounds: value };
         break;
+      case 'cosmetics':
+        keyValue = { cosmetics: value };
+        break;
     }
     const newParams = {
       ...params,
@@ -126,6 +135,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(defaultFilterValues.backgrounds);
+    setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchParams({});
   };
 
@@ -138,12 +148,18 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       rentals: rentalsRangeValue,
       tribes: tribesValue,
       backgrounds: backgroundsValue,
+      cosmetics: cosmeticsValue,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
-    <Stack gap={1}>
+    <Stack
+      gap={1}
+      sx={{
+        overflowX: 'hidden',
+      }}
+    >
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -164,6 +180,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       <Stack>
         <FilterAccordion
           summary={<Typography variant="h5">Overview</Typography>}
+          expanded
         >
           <Stack gap={4}>
             <FilterRangeSlider
@@ -193,7 +210,10 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
             />
           </Stack>
         </FilterAccordion>
-        <FilterAccordion summary={<Typography variant="h5">Tribe</Typography>}>
+        <FilterAccordion
+          summary={<Typography variant="h5">Tribe</Typography>}
+          expanded
+        >
           <FormGroup sx={{ flexDirection: 'row' }}>
             {tribes.map((tribe) => (
               <FormControlLabel
@@ -220,6 +240,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
         </FilterAccordion>
         <FilterAccordion
           summary={<Typography variant="h5">Background</Typography>}
+          expanded
         >
           <FormGroup sx={{ flexDirection: 'row' }}>
             {backgrounds.map((background) => (
@@ -244,6 +265,59 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
               />
             ))}
           </FormGroup>
+        </FilterAccordion>
+        <FilterAccordion
+          summary={<Typography variant="h5">Cosmetics</Typography>}
+          expanded={false}
+        >
+          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((key) => {
+            const traitGroup = Object.keys(
+              CosmeticsFilter.TRAIT_VALUE_MAP[key],
+            );
+            return (
+              <FormGroup key={key} sx={{ flexDirection: 'row' }}>
+                <FilterAccordion
+                  summary={
+                    <Typography variant="h5">
+                      {key} ({traitGroup.length})
+                    </Typography>
+                  }
+                  /* eslint-disable */
+                  expanded={false}
+                >
+                  <>
+                    <FormGroup sx={{ flexDirection: 'row' }}>
+                      {traitGroup.map((traitKey) => {
+                        const traitValue =
+                          CosmeticsFilter.TRAIT_VALUE_MAP[key][traitKey];
+                        return (
+                          <FormControlLabel
+                            key={`${key}_${traitKey}`}
+                            control={
+                              <Checkbox
+                                name={traitValue}
+                                value={traitKey}
+                                checked={cosmeticsValue.includes(traitKey)}
+                                onChange={(e) =>
+                                  handleCheckboxChange(
+                                    e,
+                                    'cosmetics',
+                                    cosmeticsValue,
+                                    setCosmeticsValue,
+                                  )
+                                }
+                              />
+                            }
+                            label={traitValue}
+                          />
+                        );
+                      })}
+                    </FormGroup>
+                  </>
+                </FilterAccordion>
+              </FormGroup>
+            );
+          })}
         </FilterAccordion>
       </Stack>
     </Stack>
