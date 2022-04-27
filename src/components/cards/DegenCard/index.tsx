@@ -35,7 +35,7 @@ export interface DegenCardProps {
   owner?: string;
   price?: number;
   background?: string;
-  isDashboardDegen?: string;
+  isDashboardDegen?: boolean;
   sx?: SxProps<Theme>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
@@ -51,7 +51,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
   owner,
   price,
   background,
-  isDashboardDegen,
+  isDashboardDegen = false,
   sx,
   onClick,
   onClickEditName,
@@ -114,7 +114,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           <Typography gutterBottom variant="h3">
             {name || 'No Name Degen'}
           </Typography>
-          {name && (
+          {isDashboardDegen && (
             <EditIcon
               sx={{ cursor: 'pointer', display: 'none' }}
               onClick={onClickEditName}
@@ -169,9 +169,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
       </CardContent>
       <CardActions>
         <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
-          {typeof isDashboardDegen !== 'undefined'
-            ? isDashboardDegen
-            : 'Rent Now'}
+          {isDashboardDegen ? 'Claim NFTL' : 'Rent Now'}
         </Button>
         <Button
           variant="outlined"
