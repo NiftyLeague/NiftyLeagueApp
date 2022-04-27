@@ -70,7 +70,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
     setState: React.Dispatch<SetStateAction<string[]>>,
   ) => {
     const { checked, value } = e.target;
-    let newState = null;
+    let newState: string[] = [];
     if (checked) {
       newState = [...state, value];
     } else {
