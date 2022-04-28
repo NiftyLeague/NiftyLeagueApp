@@ -5,11 +5,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button, CircularProgress } from '@mui/material';
+import { Button } from '@mui/material';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { NetworkContext } from 'NetworkProvider';
 import withVerification from 'components/Authentication';
 import { NETWORK_NAME } from 'constants/networks';
+import Preloader from './Preloader';
+import { DEBUG } from 'constants/index';
 
 const baseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
 const buildVersion = process.env
@@ -124,8 +126,7 @@ const Game = ({
 
   return (
     <>
-      <div>{progress && '....Loading...'}</div>
-      {progress && <CircularProgress />}
+      <Preloader ready={isLoaded} progress={progress} />
       <Unity
         className="game-canvas"
         unityContext={unityContext}

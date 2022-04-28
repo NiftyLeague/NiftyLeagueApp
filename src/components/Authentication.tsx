@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
-import Container from '@mui/material/Container';
+import { Button, Typography, Container } from '@mui/material';
 
 import { NetworkContext } from 'NetworkProvider';
 import { getProviderAndSigner } from 'helpers';
@@ -13,7 +13,7 @@ const ProfileVerification = ({
   setAuth?: any;
   setSuccess?: any;
 }): JSX.Element => {
-  const { address, userProvider } = useContext(NetworkContext);
+  const { address, userProvider, loadWeb3Modal } = useContext(NetworkContext);
   const [msgSent, setMsgSent] = useState(false);
   const [error, setError] = useState(false);
   const nonce = `0x${crypto.randomBytes(4).toString('hex')}`;
@@ -76,9 +76,16 @@ const ProfileVerification = ({
         'Error signing message'
       ) : (
         <>
-          {address
-            ? 'Please sign message to verify address ownership'
-            : 'Please connect your wallet'}
+          {address ? (
+            'Please sign message to verify address ownership'
+          ) : (
+            <>
+              <Typography mb={2}>Please connect your wallet</Typography>
+              <Button variant="contained" onClick={loadWeb3Modal}>
+                Connect Wallet
+              </Button>
+            </>
+          )}
         </>
       )}
     </Container>
