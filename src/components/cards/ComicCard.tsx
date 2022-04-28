@@ -72,10 +72,15 @@ const ComicCard: React.FC<ComicCardProps> = ({
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth onClick={onViewComic}>
           View Comic
         </Button>
-        <Button variant="contained" color="secondary" fullWidth>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          onClick={onBurnComic}
+        >
           Burn Comic
         </Button>
       </CardActions>
