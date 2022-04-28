@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useContext } from 'react';
 
 // material-ui
 import { Typography } from '@mui/material';
@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 // project imports
 import NavGroup from './NavGroup';
 import { PublicItems, PrivateItems } from 'constants/menu-items';
-import useAuth from 'hooks/useAuth';
+import { NetworkContext } from 'NetworkProvider';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
@@ -19,9 +19,11 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 };
 
 const MenuList = () => {
-  const { isLoggedIn } = useAuth();
+  const { web3Modal } = useContext(NetworkContext);
 
-  const navItems = getMenuItemsByLoginStatus(isLoggedIn).items.map((item) => {
+  const navItems = getMenuItemsByLoginStatus(
+    Boolean(web3Modal.cachedProvider),
+  ).items.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;
