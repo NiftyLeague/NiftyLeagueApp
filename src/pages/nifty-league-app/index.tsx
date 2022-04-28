@@ -13,6 +13,7 @@ import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
+import { v4 as uuidv4 } from 'uuid';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);
@@ -134,14 +135,13 @@ const NiftyLeagueAppPage = () => {
       >
         {!data
           ? [...Array(4)].map(() => (
-              <Box paddingRight={2}>
+              <Box paddingRight={2} key={uuidv4()}>
                 <SkeletonDegenPlaceholder />
               </Box>
             ))
           : degens.map((degen) => (
-              <Box paddingRight={2}>
+              <Box paddingRight={2} key={degen.id}>
                 <DegenCard
-                  key={degen.id}
                   id={degen.id}
                   name={degen.name}
                   multiplier={degen.multiplier}
