@@ -12,10 +12,10 @@ import { NetworkContext } from 'NetworkProvider';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Owner } from 'types/graph';
-import { OWNER_QUERY } from './query';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../../../constants';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
+import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 
 export interface UserProfileProps {}
 
@@ -95,7 +95,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
           <Skeleton variant="text" animation="wave" width={80} />
         ) : (
           <Typography variant="h4">
-            {mockAccumulated ? amountParsed : '0'} NFTL
+            {mockAccumulated ? amountParsed : '0.00'} NFTL
           </Typography>
         )}
         <Typography>Available to Claim</Typography>
