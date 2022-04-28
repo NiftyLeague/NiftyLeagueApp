@@ -1,4 +1,4 @@
-export interface Rental {
+export interface RentalDataGrid {
   id?: string | number;
   renter?: string;
   degenId?: string;
