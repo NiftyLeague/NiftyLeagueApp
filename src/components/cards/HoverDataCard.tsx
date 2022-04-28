@@ -1,5 +1,5 @@
 // material-ui
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { GenericCardProps } from 'types';
 // project imports
 import MainCard from './MainCard';
@@ -9,6 +9,7 @@ import MainCard from './MainCard';
 interface HoverDataCardProps extends GenericCardProps {
   customStyle?: React.CSSProperties;
   actions?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 const HoverDataCard = ({
@@ -17,6 +18,7 @@ const HoverDataCard = ({
   secondary,
   customStyle,
   actions,
+  isLoading,
 }: HoverDataCardProps) => (
   <MainCard sx={customStyle}>
     <Grid
@@ -26,9 +28,13 @@ const HoverDataCard = ({
       alignItems="center"
     >
       <Grid item sm={12}>
-        <Typography variant="h5" color="inherit" textAlign="center">
-          {title}
-        </Typography>
+        {isLoading ? (
+          <Skeleton variant="text" animation="wave" width={80} />
+        ) : (
+          <Typography variant="h5" color="inherit" textAlign="center">
+            {title}
+          </Typography>
+        )}
       </Grid>
       <Grid item sm={12}>
         <Stack
@@ -37,14 +43,22 @@ const HoverDataCard = ({
           spacing={0.5}
           sx={{ mt: 1.75, mx: 'auto' }}
         >
-          <Typography variant="h3">{primary}</Typography>
+          {isLoading ? (
+            <Skeleton variant="text" animation="wave" width={80} />
+          ) : (
+            <Typography variant="h3">{primary}</Typography>
+          )}
         </Stack>
       </Grid>
       {secondary && (
-        <Grid item sm={12}>
-          <Typography sx={{ mb: 1.75 }} variant="body2" color="textSecondary">
-            {secondary}
-          </Typography>
+        <Grid item sm={12} sx={{ mb: 1.75 }}>
+          {isLoading ? (
+            <Skeleton variant="text" animation="wave" width={120} />
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              {secondary}
+            </Typography>
+          )}
         </Grid>
       )}
       {actions}
