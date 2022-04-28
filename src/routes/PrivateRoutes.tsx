@@ -1,5 +1,6 @@
 // project imports
 import MainLayout from 'components/layout/MainLayout';
+import MinimalLayout from 'components/layout/MinimalLayout';
 import Loadable from 'components/Loadable';
 import { lazy } from 'react';
 import AuthGuard from 'utils/route-guard/AuthGuard';
@@ -18,9 +19,11 @@ const DashboardDegensPage = Loadable(
   lazy(() => import('pages/dashboard/degens')),
 );
 
+const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
-const PrivateRoutes = {
+const PrivateDashBoardRoutes = {
   path: '/dashboard',
   element: (
     <AuthGuard>
@@ -45,6 +48,20 @@ const PrivateRoutes = {
       element: <DashboardDegensPage />,
     },
   ],
+};
+const PrivatePlayOnGameRoutes = {
+  path: '/play-on-game',
+  element: <MinimalLayout />,
+  children: [
+    {
+      path: '',
+      element: <PlayOnGamePage />,
+    },
+  ],
+};
+const PrivateRoutes = {
+  ...PrivateDashBoardRoutes,
+  ...PrivatePlayOnGameRoutes,
 };
 
 export default PrivateRoutes;
