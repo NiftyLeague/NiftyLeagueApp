@@ -9,11 +9,11 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { Rental } from 'types/rental';
+import { RentalDataGrid } from 'types/rentalDataGrid';
 import { ColumnType } from '.';
 
 interface RentalsTableSimpleProps {
-  rentals: Rental[];
+  rentals: RentalDataGrid[];
   columns: ColumnType[];
 }
 

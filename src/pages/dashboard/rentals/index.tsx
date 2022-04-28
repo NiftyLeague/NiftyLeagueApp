@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   FormControl,
   FormControlLabel,
@@ -8,28 +9,65 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { format } from 'date-fns';
 import { Box } from '@mui/system';
-import { GridRowsProp } from '@mui/x-data-grid';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
+import { MY_RENTAL_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import { RentalDataGrid } from 'types/rentalDataGrid';
+import { Rentals } from 'types/rentals';
 
 const DashboardRentalPage = (): JSX.Element => {
-  const rows: GridRowsProp = [
-    {
-      id: 1,
-      renter: 'SEIYA',
-      degenId: '3743',
-      multiplier: '12x',
-      winLoss: '98%',
-      timePlayed: '22:03:17',
-      totalEarnings: '187,325',
-      yourEarnings: '187,325',
-      costs: '187,325',
-      profits: '187,325',
-      roi: 200,
-      rentalRenewsIn: '17:03:17',
-      actions: 1,
-    },
-  ];
+  const authToken = window.localStorage.getItem('authentication-token');
+
+  let headers;
+  if (authToken) {
+    headers = {
+      authorizationToken: authToken,
+    };
+  }
+  const { data } = useFetch<Rentals[]>(MY_RENTAL_API_URL, {
+    headers,
+  });
+  const [rentails, setRentails] = useState<RentalDataGrid[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const tranformRentails: any = data.map(
+        ({
+          renter_id,
+          degen_id,
+          degen: { multiplier },
+          earning_cap,
+          earning_cap_daily,
+          stats: { matches_won, matches_total, earnings, charges, time_played },
+          next_charge_at,
+        }) => ({
+          id: degen_id,
+          renter: renter_id,
+          degenId: degen_id,
+          multiplier,
+          winLoss:
+            matches_won > 0 && matches_total > 0
+              ? Number(matches_won) / Number(matches_total)
+              : 0,
+          timePlayed: time_played
+            ? format(new Date(time_played), 'HH:mm:ss')
+            : 'N/A',
+          totalEarnings: earning_cap,
+          yourEarnings: earning_cap_daily,
+          costs: charges,
+          profits: earnings,
+          roi: Number(earnings) / Number(charges),
+          rentalRenewsIn: next_charge_at
+            ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
+            : 'N/A',
+          actions: 1,
+        }),
+      );
+      setRentails(tranformRentails);
+    }
+  }, [data]);
 
   return (
     <Stack spacing={3}>
@@ -81,10 +119,8 @@ const DashboardRentalPage = (): JSX.Element => {
         </Stack>
       </Stack>
 
-      {/* Data grid */}
-      {/* Data grid requires container with height set */}
       <Box height={700}>
-        <MyRentalsDataGrid rows={rows} />
+        <MyRentalsDataGrid loading={!data} rows={rentails} />
       </Box>
     </Stack>
   );

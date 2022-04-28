@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { NetworkContext } from 'NetworkProvider';
 import { isWindows } from 'react-device-detect';
+import { DEGEN_BASE_API_URL } from 'constants/url';
 
 const useVersion = () => {
   const { targetNetwork } = useContext(NetworkContext);
@@ -16,7 +17,7 @@ const useVersion = () => {
   useEffect(() => {
     const fetchVersion = async () => {
       const v: string = await fetch(
-        `https://nifty-league.s3.amazonaws.com/launcher/${env}/${os}/version.bin?t=${Date.now()}`,
+        `${DEGEN_BASE_API_URL}/launcher/${env}/${os}/version.bin?t=${Date.now()}`,
       )
         .then((res) => {
           if (res.status >= 400) {

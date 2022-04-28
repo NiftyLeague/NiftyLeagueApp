@@ -12,10 +12,10 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import { Rental } from 'types/rental';
+import { RentalDataGrid } from 'types/rentalDataGrid';
 
 interface Props {
-  rental: Rental | null;
+  rental: RentalDataGrid | null;
 }
 
 const RenameRentalDialogContent = ({ rental }: Props): JSX.Element => {

@@ -6,27 +6,23 @@ import {
   IconButton,
   Dialog,
 } from '@mui/material';
-import {
-  GridColDef,
-  DataGrid,
-  GridRowsProp,
-  GridRenderCellParams,
-} from '@mui/x-data-grid';
+import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import { Rental } from 'types/rental';
+import { RentalDataGrid } from 'types/rentalDataGrid';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 
 interface Props {
-  rows: GridRowsProp<Rental>;
+  rows: RentalDataGrid[];
+  loading: boolean;
 }
 
-const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
+const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [selectedRowForEditing, setSelectedRowForEditing] =
-    useState<Rental | null>(null);
+    useState<RentalDataGrid | null>(null);
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   const handleRowMouseEnter = (event: Event) => {
@@ -117,7 +113,7 @@ const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
       ...commonColumnProp,
       renderCell: (params) => (
         <Button variant="outlined" color="secondary">
-          Terminate Rental ID:{params.value}
+          Terminate
         </Button>
       ),
     },
@@ -126,6 +122,7 @@ const MyRentalsDataGrid = ({ rows }: Props): JSX.Element => {
   return (
     <>
       <DataGrid
+        loading={loading}
         rows={rows}
         columns={columns}
         autoPageSize
