@@ -1095,7 +1095,7 @@ export const RIGHT_ITEMS = {
 };
 
 export const TRAIT_VALUE_MAP = {
-  Tribes: TRIBES,
+  // Tribes: TRIBES,
   'Skin Colors': SKIN_COLORS,
   'Fur Colors': FUR_COLORS,
   'Eye Color': EYE_COLORS,
