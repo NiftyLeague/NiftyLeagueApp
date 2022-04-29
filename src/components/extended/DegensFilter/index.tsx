@@ -24,6 +24,7 @@ import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 import { DegenFilter } from 'types/degenFilter';
 import * as CosmeticsFilter from 'constants/cosmeticsFilters';
+import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
 type FilterSource =
   | 'prices'
@@ -285,50 +286,27 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
           summary={<Typography variant="h5">Cosmetics</Typography>}
           expanded={false}
         >
-          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((key) => {
+          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((categoryKey) => {
             const traitGroup = Object.keys(
-              CosmeticsFilter.TRAIT_VALUE_MAP[key],
+              CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
             );
             return (
-              <FormGroup key={key} sx={{ flexDirection: 'row' }}>
+              <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
                 <FilterAccordion
                   summary={
                     <Typography variant="h5">
-                      {key} ({traitGroup.length})
+                      {categoryKey} ({traitGroup.length})
                     </Typography>
                   }
-                  /* eslint-disable */
                   expanded={false}
                 >
-                  <>
-                    <FormGroup sx={{ flexDirection: 'row' }}>
-                      {traitGroup.map((traitKey) => {
-                        const traitValue =
-                          CosmeticsFilter.TRAIT_VALUE_MAP[key][traitKey];
-                        return (
-                          <FormControlLabel
-                            key={`${key}_${traitKey}`}
-                            control={
-                              <Checkbox
-                                name={traitValue}
-                                value={traitKey}
-                                checked={cosmeticsValue.includes(traitKey)}
-                                onChange={(e) =>
-                                  handleCheckboxChange(
-                                    e,
-                                    'cosmetics',
-                                    cosmeticsValue,
-                                    setCosmeticsValue,
-                                  )
-                                }
-                              />
-                            }
-                            label={traitValue}
-                          />
-                        );
-                      })}
-                    </FormGroup>
-                  </>
+                  <FilterAllTraitCheckboxes
+                    traitGroup={traitGroup}
+                    categoryKey={categoryKey}
+                    cosmeticsValue={cosmeticsValue}
+                    handleCheckboxChange={handleCheckboxChange}
+                    setCosmeticsValue={setCosmeticsValue}
+                  />
                 </FilterAccordion>
               </FormGroup>
             );
