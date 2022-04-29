@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import { ColumnType } from '.';
+import { v4 as uuidv4 } from 'uuid';
 
 interface RentalsTableSimpleProps {
   rentals: RentalDataGrid[];
@@ -57,7 +58,7 @@ const RentalsTableSimple = ({
           </TableHead>
           <TableBody>
             {rentals.map((rental) => (
-              <TableRow hover key={rental.id}>
+              <TableRow hover key={uuidv4()}>
                 {columns.map((column: ColumnType) => {
                   const value = rental[column.id];
                   if (column.id === 'roi') {

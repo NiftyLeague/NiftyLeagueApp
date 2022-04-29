@@ -23,7 +23,7 @@ const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
-const PrivateDashBoardRoutes = {
+export const PrivateDashBoardRoutes = {
   path: '/dashboard',
   element: (
     <AuthGuard>
@@ -49,7 +49,8 @@ const PrivateDashBoardRoutes = {
     },
   ],
 };
-const PrivatePlayOnGameRoutes = {
+
+export const PrivatePlayOnGameRoutes = {
   path: '/play-on-game',
   element: <MinimalLayout />,
   children: [
@@ -59,9 +60,3 @@ const PrivatePlayOnGameRoutes = {
     },
   ],
 };
-const PrivateRoutes = {
-  ...PrivateDashBoardRoutes,
-  ...PrivatePlayOnGameRoutes,
-};
-
-export default PrivateRoutes;

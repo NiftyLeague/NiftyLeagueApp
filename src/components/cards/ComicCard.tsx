@@ -10,24 +10,17 @@ import {
   Theme,
   SxProps,
 } from '@mui/material';
+import { Comic } from 'types/comic';
 
 export interface ComicCardProps {
-  id?: number;
-  title?: string;
-  multiplier?: number;
-  wearableName?: string;
-  image?: string;
+  comic: Comic;
   sx?: SxProps<Theme>;
   onViewComic?: React.MouseEventHandler<HTMLButtonElement>;
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const ComicCard: React.FC<ComicCardProps> = ({
-  id,
-  title,
-  multiplier,
-  wearableName,
-  image,
+  comic,
   onViewComic,
   onBurnComic,
   sx,
@@ -44,13 +37,18 @@ const ComicCard: React.FC<ComicCardProps> = ({
         ...sx,
       }}
     >
-      <CardMedia component="img" height="200" image={image} alt={title} />
+      <CardMedia
+        component="img"
+        height="200"
+        image={comic.image}
+        alt={comic.title}
+      />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
           <Typography gutterBottom variant="h3" component="div">
-            {`${title} #${id}`}
+            {`${comic.title} #${comic.id}`}
           </Typography>
-          <Typography
+          {/* <Typography
             gutterBottom
             variant="body2"
             component="div"
@@ -58,17 +56,17 @@ const ComicCard: React.FC<ComicCardProps> = ({
               color: theme.palette.warning.main,
             }}
           >
-            {`${multiplier}x Multiplier`}
-          </Typography>
+            {`${comic.multiplier}x Multiplier`}
+          </Typography> */}
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">Wearable Name</Typography>
-          <Typography
+          <Typography variant="body2">{comic.wearableName}</Typography>
+          {/* <Typography
             variant="body2"
             sx={{ color: theme.palette.success.main }}
           >
-            {wearableName}
-          </Typography>
+            {comic.viewsCount}
+          </Typography> */}
         </Stack>
       </CardContent>
       <CardActions>
@@ -80,6 +78,7 @@ const ComicCard: React.FC<ComicCardProps> = ({
           color="secondary"
           fullWidth
           onClick={onBurnComic}
+          disabled
         >
           Burn Comic
         </Button>

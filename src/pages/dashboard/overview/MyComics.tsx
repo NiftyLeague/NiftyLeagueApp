@@ -2,6 +2,9 @@ import { Box, Button } from '@mui/material';
 import ComicCard from 'components/cards/ComicCard';
 import comics from 'constants/comics';
 import SectionSlider from 'components/sections/SectionSlider';
+import { useState } from 'react';
+import { Comic } from 'types/comic';
+import ViewComicDialog from 'components/dialog/ViewComicDialog';
 
 interface MyComicsProps {
   onViewAllComics?: React.MouseEventHandler<HTMLButtonElement>;
@@ -27,6 +30,16 @@ const BoxComicStyles = {
   },
 };
 const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
+  const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
+
+  const handleViewComic = (comic: Comic) => {
+    setSelectedComic(comic);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedComic(null);
+  };
+
   const settings = {
     slidesToShow: 2,
     responsive: [
@@ -58,22 +71,32 @@ const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
   };
 
   return (
-    <SectionSlider
-      firstSection
-      title="My Comics"
-      sliderSettingsOverride={settings}
-      actions={
-        <Button variant="outlined" onClick={onViewAllComics}>
-          View All Comics
-        </Button>
-      }
-    >
-      {comics.map((comic) => (
-        <Box sx={BoxComicStyles}>
-          <ComicCard key={comic.title} {...comic} />
-        </Box>
-      ))}
-    </SectionSlider>
+    <>
+      <SectionSlider
+        firstSection
+        title="My Comics"
+        sliderSettingsOverride={settings}
+        actions={
+          <Button variant="outlined" onClick={onViewAllComics}>
+            View All Comics
+          </Button>
+        }
+      >
+        {comics.map((comic) => (
+          <Box sx={BoxComicStyles} key={comic.wearableName}>
+            <ComicCard
+              comic={comic}
+              onViewComic={() => handleViewComic(comic)}
+            />
+          </Box>
+        ))}
+      </SectionSlider>
+      <ViewComicDialog
+        comic={selectedComic}
+        open={Boolean(selectedComic)}
+        onClose={handleCloseDialog}
+      />
+    </>
   );
 };
 

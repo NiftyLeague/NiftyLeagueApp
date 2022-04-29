@@ -3,5 +3,6 @@ export interface Comic {
   title: string;
   multiplier: number;
   wearableName: string;
+  viewsCount: number;
   image: string;
 }
