@@ -20,7 +20,7 @@ import { BigNumber, BigNumberish, utils } from 'ethers';
 import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
-import RenameStepper from './RenameStepper';
+// import RenameStepper from './RenameStepper';
 
 interface Props {
   degen?: Degen;
@@ -34,7 +34,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const [error, setError] = useState('');
   const [agreement, setAgreement] = useState(false);
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
-  const [renameSuccess, setRenameSuccess] = useState(false);
+  // const [renameSuccess, setRenameSuccess] = useState(false);
   const insufficientAllowance = allowance < 1000;
   const insufficientBalance = userNFTLBalance < 1000;
 
@@ -50,7 +50,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
       )) as BigNumberish;
       setAllowance(allowanceBN);
     };
-    setRenameSuccess(false);
+    // setRenameSuccess(false);
     if (
       writeContracts &&
       writeContracts[NFTL_CONTRACT] &&
@@ -101,7 +101,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
         args,
       );
       if (result) {
-        setRenameSuccess(true);
+        // setRenameSuccess(true);
         onSuccess?.();
       }
     }
@@ -146,11 +146,11 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             disabled={insufficientBalance}
             onChange={handleChange}
           />
-          <RenameStepper
+          {/* <RenameStepper
             insufficientAllowance={insufficientAllowance}
             renameSuccess={renameSuccess}
             insufficientBalance={insufficientBalance}
-          />
+          /> */}
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">Renaming Fee</Typography>
             <Typography>1,000 NFTL</Typography>
