@@ -31,6 +31,7 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
+import { v4 as uuidv4 } from 'uuid';
 
 const PER_PAGE: number = 8;
 
@@ -82,7 +83,7 @@ const DashboardDegensPage = (): JSX.Element => {
     updateNewData(tranformDataByFilter(degens, newSort));
   };
 
-  const handleClickCard = (degen: Degen): void => {
+  const handleEnableDisable = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsEnableDisableDegenModalOpen(true);
   };
@@ -129,7 +130,15 @@ const DashboardDegensPage = (): JSX.Element => {
             <Grid container spacing={2}>
               {!data
                 ? [...Array(8)].map(() => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} xl={3}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      xl={3}
+                      key={uuidv4()}
+                    >
                       <SkeletonDegenPlaceholder />
                     </Grid>
                   ))
@@ -151,7 +160,8 @@ const DashboardDegensPage = (): JSX.Element => {
                         price={degen.price}
                         background={degen.background}
                         activeRentals={degen.rental_count}
-                        onClick={() => handleClickCard(degen)}
+                        onEnableDisable={() => handleEnableDisable(degen)}
+                        isDashboardDegen
                         onClickEditName={() => handleClickEditName(degen)}
                       />
                     </Grid>
@@ -171,13 +181,19 @@ const DashboardDegensPage = (): JSX.Element => {
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
-        <RenameDegenDialogContent degen={selectedDegen} />
+        <RenameDegenDialogContent
+          degen={selectedDegen}
+          onSuccess={() => setIsRenameDegenModalOpen(false)}
+        />
       </Dialog>
       <Dialog
         open={isEnableDisableDegenModalOpen}
         onClose={() => setIsEnableDisableDegenModalOpen(false)}
       >
-        <EnableDisableDegenDialogContent degen={selectedDegen} isEnabled />
+        <EnableDisableDegenDialogContent
+          degen={selectedDegen}
+          isEnabled={selectedDegen?.is_active}
+        />
       </Dialog>
     </>
   );

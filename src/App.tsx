@@ -8,7 +8,7 @@ import Snackbar from 'components/extended/Snackbar';
 import ThemeCustomization from 'themes';
 
 // auth provider
-import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
+import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
 import NetworkProvider from './NetworkProvider';
 
 // ==============================|| APP ||============================== //

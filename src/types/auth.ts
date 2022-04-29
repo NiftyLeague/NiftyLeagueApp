@@ -53,6 +53,13 @@ export type JWTContextType = {
   updateProfile: VoidFunction;
 };
 
+export type TokenContextType = {
+  isLoggedIn: boolean;
+  isInitialized?: boolean;
+  user?: UserProfile | null | undefined;
+  logout: () => void;
+};
+
 export type AWSCognitoContextType = {
   isLoggedIn: boolean;
   isInitialized?: boolean;

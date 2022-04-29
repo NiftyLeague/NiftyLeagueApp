@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Box,
-  Dialog,
-  DialogContent,
-  useMediaQuery,
-  DialogActions,
-  Button,
-} from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import comics from 'constants/comics';
 import ComicCard from 'components/cards/ComicCard';
@@ -14,11 +6,11 @@ import EmptyState from 'components/EmptyState';
 import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
 import { useState } from 'react';
+import ViewComicDialog from 'components/dialog/ViewComicDialog';
 
 const DashboardComicsPage = (): JSX.Element => {
   const theme = useTheme();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleViewComic = (comic: Comic) => {
     setSelectedComic(comic);
@@ -58,7 +50,7 @@ const DashboardComicsPage = (): JSX.Element => {
             {comics.map((comic) => (
               <Grid key={comic.id} item xs={12} sm={6} md={6} lg={6} xl={4}>
                 <ComicCard
-                  {...comic}
+                  comic={comic}
                   onViewComic={() => handleViewComic(comic)}
                 />
               </Grid>
@@ -76,30 +68,15 @@ const DashboardComicsPage = (): JSX.Element => {
               background: theme.palette.primary.light,
             }}
           >
-            Burn Animation area?
+            Burn Animation Area
           </Box>
         </Grid>
       </Grid>
-      <Dialog
-        maxWidth="lg"
+      <ViewComicDialog
+        comic={selectedComic}
         open={Boolean(selectedComic)}
         onClose={handleCloseDialog}
-        fullScreen={fullScreen}
-      >
-        <DialogContent>
-          <img
-            src={selectedComic?.image}
-            alt={selectedComic?.title}
-            style={{
-              width: fullScreen ? '100%' : 500,
-              height: 'auto',
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Close</Button>
-        </DialogActions>
-      </Dialog>
+      />
     </>
   );
 };

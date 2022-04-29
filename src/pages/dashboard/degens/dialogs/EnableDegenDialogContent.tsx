@@ -11,23 +11,55 @@ import {
   Button,
   Link,
 } from '@mui/material';
+import { useState } from 'react';
 import { Degen } from 'types/degens';
+import { DISABLE_RENT_API_URL } from 'constants/url';
+import { toast } from 'react-toastify';
 
 interface Props {
   degen?: Degen;
   isEnabled?: boolean;
+  onSuccess?: () => void;
 }
 
 const EnableDisableDegenDialogContent = ({
   degen,
-  isEnabled = false,
+  isEnabled,
+  onSuccess,
 }: Props): JSX.Element => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const id = degen?.id;
+  const auth = window.localStorage.getItem('authentication-token');
+  const [agreement, setAgreement] = useState(false);
+
+  const handleButtonClick = async () => {
+    if (auth && degen) {
+      const res = await fetch(
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        `${DISABLE_RENT_API_URL}${
+          degen.is_active ? 'deactivate' : 'activate'
+        }?degen_id=${degen.id}`,
+        {
+          method: 'POST',
+          headers: { authorizationToken: auth },
+        },
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const json = await res.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (json.statusCode) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        toast.error(json.body);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
+        onSuccess?.();
+      }
+    }
+  };
+
   return (
     <>
       <DialogTitle sx={{ textAlign: 'center' }}>
-        {isEnabled ? 'Disable' : 'Enable'} Degen #{id} Rentals
+        {isEnabled ? 'Disable' : 'Enable'} Degen #{degen?.id} Rentals
       </DialogTitle>
       <DialogContent dividers sx={{ maxWidth: '320px' }}>
         <Stack rowGap={2}>
@@ -69,14 +101,24 @@ const EnableDisableDegenDialogContent = ({
                   regarding disabling a rental
                 </Typography>
               }
-              control={<Checkbox />}
+              control={
+                <Checkbox
+                  value={agreement}
+                  onChange={(event) => setAgreement(event.target.checked)}
+                />
+              }
             />
           </FormControl>
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" fullWidth>
-          {isEnabled ? 'Disable' : 'Enable'} Degen #{id} Rentals
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={!agreement}
+          onClick={handleButtonClick}
+        >
+          {isEnabled ? 'Disable' : 'Enable'} Degen #{degen?.id} Rentals
         </Button>
       </DialogActions>
     </>

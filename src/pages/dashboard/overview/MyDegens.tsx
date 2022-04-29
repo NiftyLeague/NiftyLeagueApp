@@ -63,9 +63,8 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
       }
     >
       {degens.map((degen) => (
-        <Box sx={BoxDegenStyles}>
+        <Box sx={BoxDegenStyles} key={degen.id}>
           <DegenCard
-            key={degen.id}
             id={degen.id}
             name={degen.name}
             multiplier={degen.multiplier}
