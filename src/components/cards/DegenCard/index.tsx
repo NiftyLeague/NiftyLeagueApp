@@ -143,7 +143,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             {`Owned by ${owner?.substring(0, 5)}`}
           </Link>
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justifyContent="center" sx={{ pt: 2 }}>
           {isDashboardDegen && (
             <Link
               href="#"
@@ -154,16 +154,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
             >
               {`${id} NFTL Available`}
             </Link>
-          )}
-          {isDashboardDegen && (
-            <Typography
-              variant="body2"
-              color={palette.grey[700]}
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-              onClick={onEnableDisable}
-            >
-              {isActive ? 'Disable' : 'Enable'} Rentals
-            </Typography>
           )}
         </Stack>
       </CardContent>
@@ -180,6 +170,18 @@ const DegenCard: React.FC<DegenCardProps> = ({
           View Traits
         </Button>
       </CardActions>
+      <Stack direction="row" justifyContent="center" sx={{ pb: 2 }}>
+        {isDashboardDegen && (
+          <Typography
+            variant="body2"
+            color={palette.grey[700]}
+            sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+            onClick={onEnableDisable}
+          >
+            {isActive ? 'Disable' : 'Enable'} Rentals
+          </Typography>
+        )}
+      </Stack>
     </Card>
   );
 };
