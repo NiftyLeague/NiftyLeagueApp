@@ -10,7 +10,13 @@ import {
 import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
-import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { updateFilterValue } from './utils';
 import { useSearchParams } from 'react-router-dom';
 import defaultFilterValues from './constants';
@@ -68,65 +74,74 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
     cosmetics: setCosmeticsValue,
   };
 
-  // For checkbox filter
-  const handleCheckboxChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    source: FilterSource,
-    state: string[],
-    setState: React.Dispatch<SetStateAction<string[]>>,
-  ) => {
-    const { checked, value } = e.target;
-    let newState: string[] = [];
-    if (checked) {
-      newState = [...state, value];
-    } else {
-      newState = state.filter((item) => item !== value);
-    }
-    setState(newState);
-    handleChangeCommitted(
-      source,
-      newState.length > 0 ? newState.join('-') : '',
-    );
-  };
-
   // Set search params from filter values
   // Use value to manually set the source's value
   // Useful for checkbox filters since using setState won't update the value fast enough
   // Previously tried useEffect but it was unreliable since tribe and backgrounds will overwrite each other
-  const handleChangeCommitted = (
-    source: FilterSource,
-    value: string | null = null,
-  ) => {
-    let keyValue = {};
-    switch (source) {
-      case 'prices':
-        keyValue = { prices: pricesRangeValue.join('-') };
-        break;
-      case 'multipliers':
-        keyValue = { multipliers: multipliersRangeValue.join('-') };
-        break;
-      case 'rentals':
-        keyValue = { rentals: rentalsRangeValue.join('-') };
-        break;
-      case 'tribes':
-        keyValue = { tribes: value };
-        break;
-      case 'backgrounds':
-        keyValue = { backgrounds: value };
-        break;
-      case 'cosmetics':
-        keyValue = { cosmetics: value };
-        break;
-    }
-    const newParams = {
-      ...params,
-      ...keyValue,
-    };
-    if (value?.length === 0) {
-      delete newParams[source];
-    }
-    setSearchParams(newParams);
-  };
+  const handleChangeCommitted = useCallback(
+    (source: FilterSource, value: string | null = null) => {
+      let keyValue = {};
+      switch (source) {
+        case 'prices':
+          keyValue = { prices: pricesRangeValue.join('-') };
+          break;
+        case 'multipliers':
+          keyValue = { multipliers: multipliersRangeValue.join('-') };
+          break;
+        case 'rentals':
+          keyValue = { rentals: rentalsRangeValue.join('-') };
+          break;
+        case 'tribes':
+          keyValue = { tribes: value };
+          break;
+        case 'backgrounds':
+          keyValue = { backgrounds: value };
+          break;
+        case 'cosmetics':
+          keyValue = { cosmetics: value };
+          break;
+      }
+      const newParams = {
+        ...params,
+        ...keyValue,
+      };
+      if (value?.length === 0) {
+        delete newParams[source];
+      }
+      setSearchParams(newParams);
+    },
+    [
+      multipliersRangeValue,
+      params,
+      pricesRangeValue,
+      rentalsRangeValue,
+      setSearchParams,
+    ],
+  );
+
+  // For checkbox filter
+  const handleCheckboxChange = useCallback(
+    (
+      e: ChangeEvent<HTMLInputElement>,
+      source: FilterSource,
+      state: string[],
+      setState: React.Dispatch<SetStateAction<string[]>>,
+    ) => {
+      const { checked, value } = e.target;
+      let newState: string[] = [];
+      if (checked) {
+        newState = [...state, value];
+      } else {
+        newState = state.filter((item) => item !== value);
+      }
+      setState(newState);
+      handleChangeCommitted(
+        source,
+        newState.length > 0 ? newState.join('-') : '',
+      );
+    },
+    [handleChangeCommitted],
+  );
 
   const handleReset = () => {
     if (isParamsEmpty) return;
