@@ -5,7 +5,15 @@ import defaultFilterValues from './constants';
 
 export const tranformDataByFilter = (
   degens: Degen[],
-  { prices, multipliers, rentals, tribes, backgrounds, sort }: DegenFilter,
+  {
+    prices,
+    multipliers,
+    rentals,
+    tribes,
+    backgrounds,
+    cosmetics,
+    sort,
+  }: DegenFilter,
 ): Degen[] => {
   if (sort === 'name') {
     degens.sort((a, b) => a.name.localeCompare(b.name));
@@ -43,12 +51,19 @@ export const tranformDataByFilter = (
               degen.background === background.toLocaleLowerCase(),
           )
         : true;
+    const cosmeticsMatches =
+      cosmetics.length > 0
+        ? cosmetics.some((cosmetic) =>
+            degen.traits_string.split(',').includes(cosmetic),
+          )
+        : true;
     return (
       priceMatches &&
       multipliersMatches &&
       rentalsMatches &&
       tribesMatches &&
-      backgroundsMatches
+      backgroundsMatches &&
+      cosmeticsMatches
     );
   });
   return result;
