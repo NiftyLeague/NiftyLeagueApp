@@ -57,7 +57,7 @@ const RentalsTableSimple = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rentals.map((rental) => (
+            {rentals.map((rental: any) => (
               <TableRow hover key={uuidv4()}>
                 {columns.map((column: ColumnType) => {
                   const value = rental[column.id];

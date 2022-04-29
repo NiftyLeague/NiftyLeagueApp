@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Stack,
   Typography,
@@ -9,15 +10,22 @@ import {
 import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import { Rentals } from 'types/rentals';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
+import { format } from 'date-fns';
 
 interface Props {
-  rows: RentalDataGrid[];
+  rows: Rentals[];
   loading: boolean;
+  handleTerminalRental: (rentalId: string) => void;
 }
 
-const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
+const MyRentalsDataGrid = ({
+  rows,
+  loading,
+  handleTerminalRental,
+}: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -25,15 +33,50 @@ const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
     useState<RentalDataGrid | null>(null);
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
-  const handleRowMouseEnter = (event: Event) => {
-    event.preventDefault();
-    const htmlRow = event.currentTarget as HTMLDivElement;
-    setSelectedRowId(htmlRow?.getAttribute('data-id'));
-  };
+  const tranformRentails: any = rows.map(
+    ({
+      id,
+      renter_id,
+      degen_id,
+      degen: { multiplier },
+      earning_cap,
+      earning_cap_daily,
+      stats: { matches_won, matches_total, earnings, charges, time_played },
+      next_charge_at,
+      is_terminated,
+    }) => ({
+      id,
+      renter: renter_id,
+      degenId: degen_id,
+      multiplier,
+      winLoss:
+        matches_won > 0 && matches_total > 0
+          ? Number(matches_won) / Number(matches_total)
+          : 0,
+      timePlayed: time_played
+        ? format(new Date(time_played), 'HH:mm:ss')
+        : 'N/A',
+      totalEarnings: earning_cap,
+      yourEarnings: earning_cap_daily,
+      costs: charges,
+      profits: earnings,
+      roi: earnings > 0 && charges > 0 ? Number(earnings) / Number(charges) : 0,
+      rentalRenewsIn: next_charge_at
+        ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
+        : 'N/A',
+      action: is_terminated,
+    }),
+  );
 
-  const handleRowMouseLeave = () => {
-    setSelectedRowId(null);
-  };
+  // const handleRowMouseEnter = (event: Event) => {
+  //   event.preventDefault();
+  //   const htmlRow = event.currentTarget as HTMLDivElement;
+  //   setSelectedRowId(htmlRow?.getAttribute('data-id'));
+  // };
+
+  // const handleRowMouseLeave = () => {
+  //   setSelectedRowId(null);
+  // };
 
   const handleRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -49,21 +92,21 @@ const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
       field: 'renter',
       headerName: 'Renter',
       width: 150,
-      renderCell: (params) => (
-        <Stack direction="row" columnGap={1} alignItems="center">
-          {selectedRowId && +params.row.id === +selectedRowId && (
-            <IconButton
-              aria-label="edit"
-              onClick={() => handleRenameDegen(params)}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          )}
-          <Typography>
-            {params.value} {selectedRowId}
-          </Typography>
-        </Stack>
-      ),
+      // renderCell: (params) => (
+      //   <Stack direction="row" columnGap={1} alignItems="center">
+      //     {selectedRowId && +params.row.id === +selectedRowId && (
+      //       <IconButton
+      //         aria-label="edit"
+      //         onClick={() => handleRenameDegen(params)}
+      //       >
+      //         <EditIcon fontSize="small" />
+      //       </IconButton>
+      //     )}
+      //     <Typography>
+      //       {params.value} {selectedRowId}
+      //     </Typography>
+      //   </Stack>
+      // ),
     },
     { field: 'degenId', headerName: 'Degen ID' },
     { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
@@ -107,13 +150,18 @@ const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
       width: 150,
     },
     {
-      field: 'actions',
+      field: 'action',
       headerName: 'Actions',
       width: 200,
       ...commonColumnProp,
       renderCell: (params) => (
-        <Button variant="outlined" color="secondary">
-          Terminate
+        <Button
+          onClick={() => handleTerminalRental(params.row.id)}
+          variant="outlined"
+          color="secondary"
+          disabled={params.value}
+        >
+          {params.value ? 'Terminated' : 'Terminate'}
         </Button>
       ),
     },
@@ -123,27 +171,27 @@ const MyRentalsDataGrid = ({ rows, loading }: Props): JSX.Element => {
     <>
       <DataGrid
         loading={loading}
-        rows={rows}
+        rows={tranformRentails}
         columns={columns}
         autoPageSize
         rowsPerPageOptions={[10, 25, 100]}
         // Page size and handler required to set default to 10
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        componentsProps={{
-          row: {
-            onMouseEnter: handleRowMouseEnter,
-            onMouseLeave: handleRowMouseLeave,
-          },
-        }}
+        // componentsProps={{
+        //   row: {
+        //     onMouseEnter: handleRowMouseEnter,
+        //     onMouseLeave: handleRowMouseLeave,
+        //   },
+        // }}
       />
       {/* Rename Degen Dialog */}
-      <Dialog
+      {/* <Dialog
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
         <RenameRentalDialogContent rental={selectedRowForEditing} />
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };

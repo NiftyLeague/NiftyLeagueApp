@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
+  // FormControl,
+  // FormControlLabel,
+  // FormLabel,
+  // Radio,
+  // RadioGroup,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material';
-import { format } from 'date-fns';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
-import { MY_RENTAL_API_URL } from 'constants/url';
+import { MY_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
-import { RentalDataGrid } from 'types/rentalDataGrid';
 import { Rentals } from 'types/rentals';
+import { useDispatch } from 'store';
+import { openSnackbar } from 'store/slices/snackbar';
+import SearchRental from './SearchRental';
 
 const DashboardRentalPage = (): JSX.Element => {
+  const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
 
   let headers;
@@ -29,45 +30,84 @@ const DashboardRentalPage = (): JSX.Element => {
   const { data } = useFetch<Rentals[]>(MY_RENTAL_API_URL, {
     headers,
   });
-  const [rentails, setRentails] = useState<RentalDataGrid[]>([]);
+  const [rentails, setRentails] = useState<Rentals[] | any>([]);
 
   useEffect(() => {
     if (data) {
-      const tranformRentails: any = data.map(
-        ({
-          renter_id,
-          degen_id,
-          degen: { multiplier },
-          earning_cap,
-          earning_cap_daily,
-          stats: { matches_won, matches_total, earnings, charges, time_played },
-          next_charge_at,
-        }) => ({
-          id: degen_id,
-          renter: renter_id,
-          degenId: degen_id,
-          multiplier,
-          winLoss:
-            matches_won > 0 && matches_total > 0
-              ? Number(matches_won) / Number(matches_total)
-              : 0,
-          timePlayed: time_played
-            ? format(new Date(time_played), 'HH:mm:ss')
-            : 'N/A',
-          totalEarnings: earning_cap,
-          yourEarnings: earning_cap_daily,
-          costs: charges,
-          profits: earnings,
-          roi: Number(earnings) / Number(charges),
-          rentalRenewsIn: next_charge_at
-            ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
-            : 'N/A',
-          actions: 1,
-        }),
-      );
-      setRentails(tranformRentails);
+      setRentails(data);
     }
   }, [data]);
+
+  const terminalRentalById = async (rentalId: string) => {
+    try {
+      const result: any = await fetch(
+        `${TERMINAL_RENTAL_API_URL}?${new URLSearchParams({
+          id: rentalId,
+        })}`,
+        {
+          method: 'POST',
+          headers,
+        },
+      );
+      const res = await result.json();
+      if (res.statusCode === 400) {
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: res.body,
+            variant: 'alert',
+            alert: {
+              color: 'error',
+            },
+            close: false,
+          }),
+        );
+        return;
+      }
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Terminated success!',
+          variant: 'alert',
+          alert: {
+            color: 'success',
+          },
+          close: false,
+        }),
+      );
+      const newRentails = rentails.find((ren) => ren.id === res.id);
+      const rentalIndex = rentails.findIndex((ren) => ren.id === res.id);
+
+      setRentails([
+        ...rentails.slice(0, rentalIndex),
+        newRentails,
+        ...rentails.slice(rentalIndex + 1),
+      ]);
+    } catch (error) {
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: error,
+          variant: 'alert',
+          alert: {
+            color: 'error',
+          },
+          close: false,
+        }),
+      );
+    }
+  };
+
+  const handleSearch = (currentValue: string) => {
+    if (currentValue?.trim() === '') {
+      setRentails(data);
+      return;
+    }
+    const newRental: any = data?.filter((rental: any) =>
+      rental.renter_id.toLowerCase().includes(currentValue),
+    );
+    setRentails(newRental);
+  };
 
   return (
     <Stack spacing={3}>
@@ -90,7 +130,7 @@ const DashboardRentalPage = (): JSX.Element => {
           columnGap={2}
           flexWrap="wrap"
         >
-          <FormControl sx={{ flexDirection: 'row' }}>
+          {/* <FormControl sx={{ flexDirection: 'row' }}>
             <FormLabel
               component="legend"
               sx={{
@@ -106,21 +146,17 @@ const DashboardRentalPage = (): JSX.Element => {
               <FormControlLabel control={<Radio value="yes" />} label="Yes" />
               <FormControlLabel control={<Radio value="no" />} label="No" />
             </RadioGroup>
-          </FormControl>
-          <FormControl>
-            <TextField
-              placeholder="Search players by name or email address"
-              name="search"
-              variant="outlined"
-              fullWidth
-              sx={{ minWidth: '480px' }}
-            />
-          </FormControl>
+          </FormControl> */}
+          <SearchRental handleSearch={handleSearch} />
         </Stack>
       </Stack>
 
       <Box height={700}>
-        <MyRentalsDataGrid loading={!data} rows={rentails} />
+        <MyRentalsDataGrid
+          loading={!data}
+          rows={rentails}
+          handleTerminalRental={terminalRentalById}
+        />
       </Box>
     </Stack>
   );

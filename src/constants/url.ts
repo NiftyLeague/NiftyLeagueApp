@@ -10,3 +10,4 @@ export const DEGEN_BASE_IMAGE_URL = `${DEGEN_BASE_API_URL}/degens`;
 export const DISABLE_RENT_API_URL = `${BASE_API_URL}rentals/rentable/`;
 export const DEGEN_ASSETS_DOWNLOAD_URL = `${BASE_API_URL}assets/degen`;
 export const MY_RENTAL_API_URL = `${BASE_API_URL}/rentals/my-rentals?active=true`;
+export const TERMINAL_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/terminate`;

@@ -9,6 +9,7 @@ export interface RentalDataGrid {
   yourEarnings?: string;
   costs?: string;
   profits?: string;
-  roi: number;
-  rentalRenewsIn: string;
+  roi?: number;
+  rentalRenewsIn?: string;
+  action?: any;
 }
