@@ -83,10 +83,10 @@ const DegenRentalsPage = (): JSX.Element => {
     updateNewData(tranformDataByFilter(degens, newSort));
   };
 
-  const handleClickCard = (degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsEnableDisableDegenModalOpen(true);
-  };
+  // const handleClickCard = (degen: Degen): void => {
+  //   setSelectedDegen(degen);
+  //   setIsEnableDisableDegenModalOpen(true);
+  // };
 
   const handleClickEditName = (degen: Degen): void => {
     setSelectedDegen(degen);
@@ -160,7 +160,6 @@ const DegenRentalsPage = (): JSX.Element => {
                         price={degen.price}
                         background={degen.background}
                         activeRentals={degen.rental_count}
-                        onClick={() => handleClickCard(degen)}
                         onClickEditName={() => handleClickEditName(degen)}
                       />
                     </Grid>
@@ -186,7 +185,10 @@ const DegenRentalsPage = (): JSX.Element => {
         open={isEnableDisableDegenModalOpen}
         onClose={() => setIsEnableDisableDegenModalOpen(false)}
       >
-        <EnableDisableDegenDialogContent degen={selectedDegen} isEnabled />
+        <EnableDisableDegenDialogContent
+          degen={selectedDegen}
+          isEnabled={selectedDegen?.is_active}
+        />
       </Dialog>
     </>
   );

@@ -36,8 +36,9 @@ export interface DegenCardProps {
   price?: number;
   background?: string;
   isDashboardDegen?: boolean;
+  isActive?: boolean;
   sx?: SxProps<Theme>;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
@@ -52,8 +53,9 @@ const DegenCard: React.FC<DegenCardProps> = ({
   price,
   background,
   isDashboardDegen = false,
+  isActive,
   sx,
-  onClick,
+  onEnableDisable,
   onClickEditName,
   onClickRent,
   onClickDetail,
@@ -154,15 +156,14 @@ const DegenCard: React.FC<DegenCardProps> = ({
             </Link>
           )}
           {isDashboardDegen && (
-            <Link
-              href="#"
-              target="_blank"
-              rel="nofollow"
+            <Typography
               variant="body2"
               color={palette.grey[700]}
+              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+              onClick={onEnableDisable}
             >
-              Disable Rentals
-            </Link>
+              {isActive ? 'Disable' : 'Enable'} Rentals
+            </Typography>
           )}
         </Stack>
       </CardContent>

@@ -83,7 +83,7 @@ const DashboardDegensPage = (): JSX.Element => {
     updateNewData(tranformDataByFilter(degens, newSort));
   };
 
-  const handleClickCard = (degen: Degen): void => {
+  const handleEnableDisable = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsEnableDisableDegenModalOpen(true);
   };
@@ -160,7 +160,7 @@ const DashboardDegensPage = (): JSX.Element => {
                         price={degen.price}
                         background={degen.background}
                         activeRentals={degen.rental_count}
-                        onClick={() => handleClickCard(degen)}
+                        onEnableDisable={() => handleEnableDisable(degen)}
                         isDashboardDegen
                         onClickEditName={() => handleClickEditName(degen)}
                       />
@@ -190,7 +190,10 @@ const DashboardDegensPage = (): JSX.Element => {
         open={isEnableDisableDegenModalOpen}
         onClose={() => setIsEnableDisableDegenModalOpen(false)}
       >
-        <EnableDisableDegenDialogContent degen={selectedDegen} isEnabled />
+        <EnableDisableDegenDialogContent
+          degen={selectedDegen}
+          isEnabled={selectedDegen?.is_active}
+        />
       </Dialog>
     </>
   );
