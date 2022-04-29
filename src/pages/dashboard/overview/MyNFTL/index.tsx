@@ -106,7 +106,12 @@ const MyNFTL = ({
         maximumFractionDigits: 2,
       })
     : 0;
-  const totalNFTL = amountParsed + gameBal;
+
+  const totalNFTL = account?.balance || 0 + mockAccumulated;
+  const totalNFTLFormatted = totalNFTL.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   const handleClaimNFTL = useCallback(async () => {
     // eslint-disable-next-line no-console
@@ -134,7 +139,7 @@ const MyNFTL = ({
                 />
               ) : (
                 <Button variant="outlined" onClick={onClaimAll}>
-                  Claim All {totalNFTL} NFTL
+                  Claim All {totalNFTLFormatted} NFTL
                 </Button>
               )}
             </Stack>

@@ -69,7 +69,6 @@ const DegenCard: React.FC<DegenCardProps> = ({
         backgroundColor: palette.background.default,
         ...sx,
       }}
-      onClick={onClick}
     >
       <DegenImage tokenId={id} />
       <Stack

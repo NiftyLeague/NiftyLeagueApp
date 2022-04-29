@@ -31,6 +31,7 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
+import { v4 as uuidv4 } from 'uuid';
 
 const PER_PAGE: number = 8;
 
@@ -129,7 +130,15 @@ const DegenRentalsPage = (): JSX.Element => {
             <Grid container spacing={2}>
               {!data
                 ? [...Array(8)].map(() => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} xl={3}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      xl={3}
+                      key={uuidv4()}
+                    >
                       <SkeletonDegenPlaceholder />
                     </Grid>
                   ))
