@@ -1,4 +1,5 @@
 import { Slider, SliderProps, Stack, Typography } from '@mui/material';
+import { memo } from 'react';
 
 interface Props extends Omit<SliderProps, 'value'> {
   value: number[];
@@ -33,4 +34,7 @@ const FilterRangeSlider = ({
   </Stack>
 );
 
-export default FilterRangeSlider;
+export default memo(
+  FilterRangeSlider,
+  (prevProps, nextProps) => prevProps.value === nextProps.value,
+);
