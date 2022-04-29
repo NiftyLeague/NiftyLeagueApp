@@ -1,7 +1,10 @@
 import { useRoutes } from 'react-router-dom';
 
 // routes
-import PrivateRoutes from './PrivateRoutes';
+import {
+  PrivateDashBoardRoutes,
+  PrivatePlayOnGameRoutes,
+} from './PrivateRoutes';
 import PublicRoutes from './PublicRoutes';
 import MaintenanceRoutes from './MaintenanceRoutes';
 
@@ -12,5 +15,10 @@ import useGoogleAnalytics from 'hooks/useGoogleAnalytics';
 
 export default function ThemeRoutes() {
   useGoogleAnalytics();
-  return useRoutes([PublicRoutes, PrivateRoutes, MaintenanceRoutes]);
+  return useRoutes([
+    PublicRoutes,
+    PrivateDashBoardRoutes,
+    PrivatePlayOnGameRoutes,
+    MaintenanceRoutes,
+  ]);
 }
