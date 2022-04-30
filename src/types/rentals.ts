@@ -32,4 +32,5 @@ export interface Rentals {
     owner: number;
     player: number;
   };
+  name?: string;
 }

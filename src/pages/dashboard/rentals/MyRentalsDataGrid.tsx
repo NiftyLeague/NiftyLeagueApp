@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Stack,
   Typography,
@@ -11,7 +10,6 @@ import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Rentals } from 'types/rentals';
-import { RentalDataGrid } from 'types/rentalDataGrid';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { format } from 'date-fns';
 
@@ -19,18 +17,18 @@ interface Props {
   rows: Rentals[];
   loading: boolean;
   handleTerminalRental: (rentalId: string) => void;
+  updateRentalName: (name: string, id: string) => void;
 }
 
 const MyRentalsDataGrid = ({
   rows,
   loading,
   handleTerminalRental,
+  updateRentalName,
 }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
-  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
-  const [selectedRowForEditing, setSelectedRowForEditing] =
-    useState<RentalDataGrid | null>(null);
+  const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   const tranformRentails: any = rows.map(
@@ -44,9 +42,10 @@ const MyRentalsDataGrid = ({
       stats: { matches_won, matches_total, earnings, charges, time_played },
       next_charge_at,
       is_terminated,
+      name,
     }) => ({
       id,
-      renter: renter_id,
+      renter: name || `Rental #${degen_id}`,
       degenId: degen_id,
       multiplier,
       winLoss:
@@ -68,19 +67,14 @@ const MyRentalsDataGrid = ({
     }),
   );
 
-  // const handleRowMouseEnter = (event: Event) => {
-  //   event.preventDefault();
-  //   const htmlRow = event.currentTarget as HTMLDivElement;
-  //   setSelectedRowId(htmlRow?.getAttribute('data-id'));
-  // };
-
-  // const handleRowMouseLeave = () => {
-  //   setSelectedRowId(null);
-  // };
-
-  const handleRenameDegen = (params: GridRenderCellParams) => {
+  const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
     setIsRenameDegenModalOpen(true);
+  };
+
+  const handleUpdateRentalName = (name: string, id: string) => {
+    updateRentalName(name, id);
+    setIsRenameDegenModalOpen(false);
   };
 
   const commonColumnProp = {
@@ -91,22 +85,21 @@ const MyRentalsDataGrid = ({
     {
       field: 'renter',
       headerName: 'Renter',
-      width: 150,
-      // renderCell: (params) => (
-      //   <Stack direction="row" columnGap={1} alignItems="center">
-      //     {selectedRowId && +params.row.id === +selectedRowId && (
-      //       <IconButton
-      //         aria-label="edit"
-      //         onClick={() => handleRenameDegen(params)}
-      //       >
-      //         <EditIcon fontSize="small" />
-      //       </IconButton>
-      //     )}
-      //     <Typography>
-      //       {params.value} {selectedRowId}
-      //     </Typography>
-      //   </Stack>
-      // ),
+      width: 180,
+      renderCell: (params) => (
+        <Stack direction="row" columnGap={1} alignItems="center">
+          <Typography>{params.value}</Typography>
+          {!params.row.action && (
+            <IconButton
+              aria-label="edit"
+              onClick={() => handleOpenRenameDegen(params)}
+              sx={{ display: 'none' }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+          )}
+        </Stack>
+      ),
     },
     { field: 'degenId', headerName: 'Degen ID' },
     { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
@@ -178,20 +171,24 @@ const MyRentalsDataGrid = ({
         // Page size and handler required to set default to 10
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        // componentsProps={{
-        //   row: {
-        //     onMouseEnter: handleRowMouseEnter,
-        //     onMouseLeave: handleRowMouseLeave,
-        //   },
-        // }}
+        sx={{
+          '& .MuiDataGrid-row:hover': {
+            '& button': {
+              display: 'block',
+            },
+          },
+        }}
       />
       {/* Rename Degen Dialog */}
-      {/* <Dialog
+      <Dialog
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
-        <RenameRentalDialogContent rental={selectedRowForEditing} />
-      </Dialog> */}
+        <RenameRentalDialogContent
+          updateRentalName={handleUpdateRentalName}
+          rental={selectedRowForEditing}
+        />
+      </Dialog>
     </>
   );
 };
