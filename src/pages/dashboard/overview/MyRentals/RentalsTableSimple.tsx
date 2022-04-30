@@ -31,6 +31,7 @@ const RentalsTableSimple = ({
         overflow: 'hidden',
         backgroundColor: 'transparent',
         borderRadius: 0,
+        height: '100%',
       }}
     >
       <TableContainer
@@ -40,6 +41,7 @@ const RentalsTableSimple = ({
           borderRadius: 2,
           border: '1px solid',
           borderColor: '#2f2f2f',
+          height: '100%',
         }}
       >
         <Table stickyHeader aria-label="simple table">
@@ -57,29 +59,39 @@ const RentalsTableSimple = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rentals.map((rental: any) => (
-              <TableRow hover key={uuidv4()}>
-                {columns.map((column: ColumnType) => {
-                  const value = rental[column.id];
-                  if (column.id === 'roi') {
-                    let color;
-                    if (rental.roi === 0) color = palette.text.primary;
-                    if (rental.roi > 0) color = palette.success.main;
-                    if (rental.roi < 0) color = palette.error.main;
+            {rentals?.length > 0 ? (
+              rentals.map((rental: any) => (
+                <TableRow hover key={uuidv4()}>
+                  {columns.map((column: ColumnType) => {
+                    const value = rental[column.id];
+                    if (column.id === 'roi') {
+                      let color;
+                      if (rental.roi === 0) color = palette.text.primary;
+                      if (rental.roi > 0) color = palette.success.main;
+                      if (rental.roi < 0) color = palette.error.main;
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <Typography color={color}>{value}%</Typography>
+                        </TableCell>
+                      );
+                    }
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        <Typography color={color}>{value}%</Typography>
+                        {value}
                       </TableCell>
                     );
-                  }
-                  return (
-                    <TableCell key={column.id} align={column.align}>
-                      {value}
-                    </TableCell>
-                  );
-                })}
+                  })}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} sx={{ height: '100%' }}>
+                  <Typography color={palette.grey[500]}>
+                    You don&apos;t have any rentals yet
+                  </Typography>
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
