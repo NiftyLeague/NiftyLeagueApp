@@ -39,7 +39,7 @@ const ComicCard: React.FC<ComicCardProps> = ({
     >
       <CardMedia
         component="img"
-        height="200"
+        height="auto"
         image={comic.image}
         alt={comic.title}
       />

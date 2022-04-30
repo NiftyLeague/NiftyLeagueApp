@@ -13,6 +13,7 @@ import { store, persister } from 'store';
 import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
+import NetworkProvider from './NetworkProvider';
 import { SUBGRAPH_URI } from './constants';
 
 // style + assets
@@ -27,15 +28,17 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persister}>
-        <ConfigProvider>
-          <BrowserRouter basename={BASE_PATH}>
-            <App />
-          </BrowserRouter>
-        </ConfigProvider>
-      </PersistGate>
-    </Provider>
+    <NetworkProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persister}>
+          <ConfigProvider>
+            <BrowserRouter basename={BASE_PATH}>
+              <App />
+            </BrowserRouter>
+          </ConfigProvider>
+        </PersistGate>
+      </Provider>
+    </NetworkProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 );

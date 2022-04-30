@@ -10,20 +10,29 @@ import {
 import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
-import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { updateFilterValue } from './utils';
 import { useSearchParams } from 'react-router-dom';
 import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 import { DegenFilter } from 'types/degenFilter';
+import * as CosmeticsFilter from 'constants/cosmeticsFilters';
+import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
 type FilterSource =
   | 'prices'
   | 'multipliers'
   | 'rentals'
   | 'tribes'
-  | 'backgrounds';
+  | 'backgrounds'
+  | 'cosmetics';
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
@@ -54,70 +63,86 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
     defaultFilterValues.backgrounds,
   );
+  const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
+    defaultFilterValues.cosmetics,
+  );
   const actions = {
     prices: setPricesRangeValue,
     multipliers: setMultipliersRangeValue,
     rentals: setRentalsRangeValue,
     tribes: setTribesValue,
     backgrounds: setBackgroundsValue,
-  };
-
-  // For checkbox filter
-  const handleCheckboxChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    source: FilterSource,
-    state: string[],
-    setState: React.Dispatch<SetStateAction<string[]>>,
-  ) => {
-    const { checked, value } = e.target;
-    let newState: string[] = [];
-    if (checked) {
-      newState = [...state, value];
-    } else {
-      newState = state.filter((item) => item !== value);
-    }
-    setState(newState);
-    handleChangeCommitted(
-      source,
-      newState.length > 0 ? newState.join('-') : '',
-    );
+    cosmetics: setCosmeticsValue,
   };
 
   // Set search params from filter values
   // Use value to manually set the source's value
   // Useful for checkbox filters since using setState won't update the value fast enough
   // Previously tried useEffect but it was unreliable since tribe and backgrounds will overwrite each other
-  const handleChangeCommitted = (
-    source: FilterSource,
-    value: string | null = null,
-  ) => {
-    let keyValue = {};
-    switch (source) {
-      case 'prices':
-        keyValue = { prices: pricesRangeValue.join('-') };
-        break;
-      case 'multipliers':
-        keyValue = { multipliers: multipliersRangeValue.join('-') };
-        break;
-      case 'rentals':
-        keyValue = { rentals: rentalsRangeValue.join('-') };
-        break;
-      case 'tribes':
-        keyValue = { tribes: value };
-        break;
-      case 'backgrounds':
-        keyValue = { backgrounds: value };
-        break;
-    }
-    const newParams = {
-      ...params,
-      ...keyValue,
-    };
-    if (value?.length === 0) {
-      delete newParams[source];
-    }
-    setSearchParams(newParams);
-  };
+  const handleChangeCommitted = useCallback(
+    (source: FilterSource, value: string | null = null) => {
+      let keyValue = {};
+      switch (source) {
+        case 'prices':
+          keyValue = { prices: pricesRangeValue.join('-') };
+          break;
+        case 'multipliers':
+          keyValue = { multipliers: multipliersRangeValue.join('-') };
+          break;
+        case 'rentals':
+          keyValue = { rentals: rentalsRangeValue.join('-') };
+          break;
+        case 'tribes':
+          keyValue = { tribes: value };
+          break;
+        case 'backgrounds':
+          keyValue = { backgrounds: value };
+          break;
+        case 'cosmetics':
+          keyValue = { cosmetics: value };
+          break;
+      }
+      const newParams = {
+        ...params,
+        ...keyValue,
+      };
+      if (value?.length === 0) {
+        delete newParams[source];
+      }
+      setSearchParams(newParams);
+    },
+    [
+      multipliersRangeValue,
+      params,
+      pricesRangeValue,
+      rentalsRangeValue,
+      setSearchParams,
+    ],
+  );
+
+  // For checkbox filter
+  const handleCheckboxChange = useCallback(
+    (
+      e: ChangeEvent<HTMLInputElement>,
+      source: FilterSource,
+      state: string[],
+      setState: React.Dispatch<SetStateAction<string[]>>,
+    ) => {
+      const { checked, value } = e.target;
+      let newState: string[] = [];
+      if (checked) {
+        newState = [...state, value];
+      } else {
+        newState = state.filter((item) => item !== value);
+      }
+      setState(newState);
+      handleChangeCommitted(
+        source,
+        newState.length > 0 ? newState.join('-') : '',
+      );
+    },
+    [handleChangeCommitted],
+  );
 
   const handleReset = () => {
     if (isParamsEmpty) return;
@@ -126,6 +151,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(defaultFilterValues.backgrounds);
+    setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchParams({});
   };
 
@@ -138,12 +164,18 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       rentals: rentalsRangeValue,
       tribes: tribesValue,
       backgrounds: backgroundsValue,
+      cosmetics: cosmeticsValue,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
-    <Stack gap={1}>
+    <Stack
+      gap={1}
+      sx={{
+        overflowX: 'hidden',
+      }}
+    >
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -164,6 +196,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       <Stack>
         <FilterAccordion
           summary={<Typography variant="h5">Overview</Typography>}
+          expanded
         >
           <Stack gap={4}>
             <FilterRangeSlider
@@ -193,7 +226,10 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
             />
           </Stack>
         </FilterAccordion>
-        <FilterAccordion summary={<Typography variant="h5">Tribe</Typography>}>
+        <FilterAccordion
+          summary={<Typography variant="h5">Tribe</Typography>}
+          expanded
+        >
           <FormGroup sx={{ flexDirection: 'row' }}>
             {tribes.map((tribe) => (
               <FormControlLabel
@@ -220,6 +256,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
         </FilterAccordion>
         <FilterAccordion
           summary={<Typography variant="h5">Background</Typography>}
+          expanded
         >
           <FormGroup sx={{ flexDirection: 'row' }}>
             {backgrounds.map((background) => (
@@ -244,6 +281,36 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
               />
             ))}
           </FormGroup>
+        </FilterAccordion>
+        <FilterAccordion
+          summary={<Typography variant="h5">Cosmetics</Typography>}
+          expanded={false}
+        >
+          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((categoryKey) => {
+            const traitGroup = Object.keys(
+              CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
+            );
+            return (
+              <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
+                <FilterAccordion
+                  summary={
+                    <Typography variant="h5">
+                      {categoryKey} ({traitGroup.length})
+                    </Typography>
+                  }
+                  expanded={false}
+                >
+                  <FilterAllTraitCheckboxes
+                    traitGroup={traitGroup}
+                    categoryKey={categoryKey}
+                    cosmeticsValue={cosmeticsValue}
+                    handleCheckboxChange={handleCheckboxChange}
+                    setCosmeticsValue={setCosmeticsValue}
+                  />
+                </FilterAccordion>
+              </FormGroup>
+            );
+          })}
         </FilterAccordion>
       </Stack>
     </Stack>
