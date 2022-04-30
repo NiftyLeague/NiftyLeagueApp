@@ -2,10 +2,12 @@ import { Button, Grid, Stack } from '@mui/material';
 import SectionTitle from 'components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
 import { sectionSpacing } from 'store/constant';
-
-interface MyRentalsProps {
-  onViewAllRentals?: React.MouseEventHandler<HTMLButtonElement>;
-}
+import { MY_RENTAL_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import { useState, useEffect } from 'react';
+import { Rentals } from 'types/rentals';
+import { transformRentals } from 'pages/dashboard/utils';
+import { Link } from 'react-router-dom';
 
 export interface ColumnType {
   id:
@@ -41,60 +43,53 @@ const columns: ColumnType[] = [
   },
 ];
 
-const createRental = (
-  renter: string,
-  degenId: string,
-  multiplier: string,
-  winLoss: string,
-  totalEarnings: string,
-  roi: number,
-  rentalRenewsIn: string,
-) => ({
-  renter,
-  degenId,
-  multiplier,
-  winLoss,
-  totalEarnings,
-  roi,
-  rentalRenewsIn,
-});
+const MyRentals = (): JSX.Element => {
+  const authToken = window.localStorage.getItem('authentication-token');
 
-const rentals = [
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 200, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 100, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', -200, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 100, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-  createRental('SEIYA', '3743', '12x', '98%', '187,325', 0, '17:03:17'),
-];
+  let headers;
+  if (authToken) {
+    headers = {
+      authorizationToken: authToken,
+    };
+  }
+  const { data } = useFetch<Rentals[]>(MY_RENTAL_API_URL, {
+    headers,
+  });
+  const [rentals, setRentals] = useState<Rentals[] | any>([]);
 
-const MyRentals = ({ onViewAllRentals }: MyRentalsProps): JSX.Element => (
-  <Grid container spacing={sectionSpacing}>
-    <Grid item xs={12}>
-      <SectionTitle
-        firstSection
-        actions={
-          <Stack direction="row" gap={2}>
-            <Button variant="outlined" onClick={onViewAllRentals}>
-              View All Rentals
-            </Button>
-          </Stack>
-        }
-      >
-        My Rentals
-      </SectionTitle>
+  useEffect(() => {
+    if (data) {
+      setRentals(data);
+    }
+  }, [data]);
+
+  const rows = transformRentals(rentals);
+
+  return (
+    <Grid container spacing={sectionSpacing} sx={{ height: '100%' }}>
+      <Grid item xs={12}>
+        <SectionTitle
+          firstSection
+          actions={
+            <Stack direction="row" gap={2}>
+              <Button
+                variant="outlined"
+                component={Link}
+                to="/dashboard/rentals"
+              >
+                View All Rentals
+              </Button>
+            </Stack>
+          }
+        >
+          My Rentals
+        </SectionTitle>
+      </Grid>
+      <Grid item xs={12} sx={{ height: '100%' }}>
+        <RentalsTableSimple rentals={rows} columns={columns} />
+      </Grid>
     </Grid>
-    <Grid item xs={12}>
-      <RentalsTableSimple rentals={rentals} columns={columns} />
-    </Grid>
-  </Grid>
-);
+  );
+};
 
 export default MyRentals;
