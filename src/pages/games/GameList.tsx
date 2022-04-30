@@ -1,7 +1,8 @@
 import { Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import GameCard from 'components/cards/GameCard';
-import NiftySmashers from 'assets/images/gifs/nifty-smashers.gif';
+import NiftySmashers from 'assets/images/games/nifty-smashers.gif';
+import NiftyTennis from 'assets/images/games/nifty-tennis.jpeg';
 import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import Downloader from './Downloader';
 
@@ -57,7 +58,7 @@ const GameList = () => {
           title="Nifty Tennis"
           description="The first ever NFT tennis game on the Ethereum blockchain"
           isComingSoon
-          image={NiftySmashers}
+          image={NiftyTennis}
         />
       </Grid>
     </>

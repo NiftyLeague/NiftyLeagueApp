@@ -9,7 +9,6 @@ import ThemeCustomization from 'themes';
 
 // auth provider
 import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
-import NetworkProvider from './NetworkProvider';
 
 // ==============================|| APP ||============================== //
 
@@ -17,14 +16,12 @@ const App = () => (
   <ThemeCustomization>
     <Locales>
       <NavigationScroll>
-        <NetworkProvider>
-          <AuthProvider>
-            <>
-              <Routes />
-              <Snackbar />
-            </>
-          </AuthProvider>
-        </NetworkProvider>
+        <AuthProvider>
+          <>
+            <Routes />
+            <Snackbar />
+          </>
+        </AuthProvider>
       </NavigationScroll>
     </Locales>
   </ThemeCustomization>
