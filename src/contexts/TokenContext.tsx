@@ -4,15 +4,13 @@ import React, { createContext, useEffect, useReducer, useContext } from 'react';
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
-// project imports
-import Loader from 'components/Loader';
-
 // types
 import { InitialLoginContextProps, TokenContextType } from 'types/auth';
 import { NetworkContext } from 'NetworkProvider';
 import { getProviderAndSigner } from 'helpers';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
+import { BASE_API_URL } from 'constants/url';
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -34,12 +32,40 @@ export const TokenProvider = ({
 
   const nonce = `0x${crypto.randomBytes(4).toString('hex')}`;
   const token = `${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}`;
+  const prevAuth = window.localStorage.getItem('authentication-token');
 
   useEffect(() => {
+    const checkAddress = async () => {
+      if (prevAuth) {
+        const result = await fetch(`${BASE_API_URL}/verification/address`, {
+          headers: { authorizationToken: prevAuth },
+        })
+          .then((res) => {
+            if (res.status === 404) return null;
+            return res.text();
+          })
+          .catch(() => null);
+        if (result && result.slice(1, -1) === address.toLowerCase()) {
+          dispatch({
+            type: LOGIN,
+            payload: {
+              isLoggedIn: true,
+            },
+          });
+          return true;
+        }
+        window.localStorage.removeItem('authentication-token');
+        window.localStorage.removeItem('uuid-token');
+        window.localStorage.removeItem('nonce');
+        return false;
+      }
+      return false;
+    };
     // eslint-disable-next-line consistent-return
     const init = async () => {
       try {
-        if (address && userProvider && nonce && token) {
+        const initialized = await checkAddress();
+        if (!initialized && address && userProvider && nonce && token) {
           const { signer } = getProviderAndSigner(userProvider);
           if (signer) {
             const addressToLower = address.toLowerCase();
@@ -54,18 +80,15 @@ export const TokenProvider = ({
               }`,
             );
 
-            const result = await fetch(
-              'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/verification',
-              {
-                method: 'POST',
-                body: JSON.stringify({
-                  token,
-                  nonce,
-                  verification,
-                  address: addressToLower,
-                }),
-              },
-            )
+            const result = await fetch(`${BASE_API_URL}/verification`, {
+              method: 'POST',
+              body: JSON.stringify({
+                token,
+                nonce,
+                verification,
+                address: addressToLower,
+              }),
+            })
               .then((res) => {
                 if (res.status === 404) {
                   dispatch({
@@ -112,17 +135,13 @@ export const TokenProvider = ({
       }
     };
 
-    init();
+    if (address) init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   const logout = () => {
     dispatch({ type: LOGOUT });
   };
-
-  if (state.isInitialized !== undefined && !state.isInitialized) {
-    return <Loader />;
-  }
 
   return (
     <TokenContext.Provider
