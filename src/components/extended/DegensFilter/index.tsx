@@ -147,7 +147,6 @@ const DegensFilter = ({
 
   useEffect(() => {
     setPricesRangeValue(getPriceRangeFromData(data));
-    console.log('[useEffect] priceRange:', pricesRangeValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
