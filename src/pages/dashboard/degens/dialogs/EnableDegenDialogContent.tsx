@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Degen } from 'types/degens';
-import { DISABLE_RENT_API_URL } from 'constants/url';
+import { DEGEN_BASE_IMAGE_URL, DISABLE_RENT_API_URL } from 'constants/url';
 import { toast } from 'react-toastify';
 
 interface Props {
@@ -66,7 +66,7 @@ const EnableDisableDegenDialogContent = ({
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image="https://nifty-league.s3.amazonaws.com/degens/mainnet/images/108.png"
+              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
             />
@@ -81,10 +81,11 @@ const EnableDisableDegenDialogContent = ({
           <Stack direction="row" justifyContent="center" mb={1}>
             {isEnabled ? (
               <Typography align="center">
-                Disabling your renal allows you to rent your rental to only
-                specific wallets (by using our rent for someone system) and
-                avoid the rental price curve. Keep in mind that enabling your
-                degen for rentals incurs a 1000 NFTL fee.
+                Disabling your rental allows you to create your own private
+                rental queue. This feature is best for guild owners and those
+                who have specific recruits they would like to sponsor. Keep in
+                mind that enabling your degen for rentals incurs a 1,000 NFTL
+                fee.
               </Typography>
             ) : (
               <Typography align="center">
