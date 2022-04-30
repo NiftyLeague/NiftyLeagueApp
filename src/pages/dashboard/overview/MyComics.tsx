@@ -14,7 +14,7 @@ const BoxComicStyles = {
   px: 1,
   '& .MuiPaper-root': {
     maxWidth: 345,
-    height: 356,
+    height: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
