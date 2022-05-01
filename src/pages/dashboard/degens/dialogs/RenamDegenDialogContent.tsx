@@ -20,6 +20,7 @@ import { BigNumber, BigNumberish, utils } from 'ethers';
 import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
+import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 // import RenameStepper from './RenameStepper';
 
 interface Props {
@@ -124,7 +125,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image="https://nifty-league.s3.amazonaws.com/degens/mainnet/images/108.png"
+              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
             />
