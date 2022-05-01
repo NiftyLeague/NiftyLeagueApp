@@ -1,7 +1,19 @@
-import { Box, Button } from '@mui/material';
+/* eslint-disable no-nested-ternary */
+import { Box, Button, Grid } from '@mui/material';
 import DegenCard from 'components/cards/DegenCard';
-import degens from 'constants/degens';
+// import dummyData from 'constants/degens';
 import SectionSlider from 'components/sections/SectionSlider';
+import { useContext, useMemo } from 'react';
+import { NetworkContext } from 'NetworkProvider';
+import { Owner } from 'types/graph';
+import { OWNER_QUERY } from 'queries/OWNER_QUERY';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import useFetch from 'hooks/useFetch';
+import { Degen } from 'types/degens';
+import { DEGEN_BASE_API_URL } from 'constants/url';
+import { useQuery } from '@apollo/client';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
+import { v4 as uuidv4 } from 'uuid';
 
 interface MyDegensProps {
   onViewAllDegens?: React.MouseEventHandler<HTMLButtonElement>;
@@ -21,6 +33,38 @@ const BoxDegenStyles = {
 };
 
 const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
+  const { address } = useContext(NetworkContext);
+
+  const {
+    loading,
+    data: userDegens,
+  }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
+    pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
+    variables: { address: address?.toLowerCase() },
+    skip: !address,
+  });
+
+  const { data: degensData } = useFetch<Degen[]>(
+    `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
+  );
+
+  const characters = useMemo(() => {
+    const characterList = userDegens?.owner?.characters
+      ? [...userDegens.owner.characters]
+      : [];
+    return characterList.sort(
+      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
+    );
+  }, [userDegens]);
+
+  const degens = useMemo(() => {
+    if (characters.length && degensData) {
+      const mapDegens = characters.map((character) => degensData[character.id]);
+      return mapDegens;
+    }
+    return [];
+  }, [characters, degensData]);
+
   const settings = {
     slidesToShow: 3,
     responsive: [
@@ -62,19 +106,32 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
         </Button>
       }
     >
-      {degens.map((degen) => (
-        <Box sx={BoxDegenStyles} key={degen.id}>
-          <DegenCard
-            id={degen.id}
-            name={degen.name}
-            multiplier={degen.multiplier}
-            owner={degen.owner}
-            price={degen.price}
-            background={degen.background}
-            activeRentals={degen.rental_count}
-          />
-        </Box>
-      ))}
+      {loading ? (
+        [...Array(8)].map(() => (
+          <Grid item xs={12} sm={11} md={11} lg={11} xl={11} key={uuidv4()}>
+            <SkeletonDegenPlaceholder />
+          </Grid>
+        ))
+      ) : degens.length && characters.length ? (
+        degens.map((degen) => (
+          <Box sx={BoxDegenStyles} key={degen.id}>
+            <DegenCard
+              id={degen.id}
+              name={degen.name}
+              multiplier={degen.multiplier}
+              owner={degen.owner}
+              price={degen.price}
+              background={degen.background}
+              activeRentals={degen.rental_count}
+            />
+          </Box>
+        ))
+      ) : (
+        <p>
+          No Degens found. Please check your address or go mint if you have not
+          done so already!
+        </p>
+      )}
     </SectionSlider>
   );
 };
