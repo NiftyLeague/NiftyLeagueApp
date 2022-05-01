@@ -30,6 +30,41 @@ const NiftyLeagueAppPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  const settings = {
+    slidesToShow: 5,
+    responsive: [
+      {
+        breakpoint: 1600,
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 400,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
   return (
     <>
       <SectionSlider
@@ -74,6 +109,7 @@ const NiftyLeagueAppPage = () => {
             </Link>
           </Box>
         }
+        sliderSettingsOverride={settings}
       >
         {!data
           ? [...Array(4)].map(() => (

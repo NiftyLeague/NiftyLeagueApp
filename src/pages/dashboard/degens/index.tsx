@@ -64,9 +64,11 @@ const DashboardDegensPage = (): JSX.Element => {
       }
       updateNewData(newDegens);
     }
+
     return () => {
       setDegens([]);
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -97,7 +99,9 @@ const DashboardDegensPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => <DegensFilter handleFilter={handleFilter} />}
+        renderDrawer={() => (
+          <DegensFilter handleFilter={handleFilter} data={degens} />
+        )}
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
@@ -136,7 +140,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       sm={6}
                       md={6}
                       lg={6}
-                      xl={3}
+                      xl={2.4}
                       key={uuidv4()}
                     >
                       <SkeletonDegenPlaceholder />
@@ -150,7 +154,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       sm={6}
                       md={isDrawerOpen ? 6 : 4}
                       lg={isDrawerOpen ? 6 : 4}
-                      xl={3}
+                      xl={2.4}
                     >
                       <DegenCard
                         id={degen.id}
