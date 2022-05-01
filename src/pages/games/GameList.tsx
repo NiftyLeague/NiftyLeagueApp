@@ -30,7 +30,7 @@ const GameList = () => {
                     fullWidth
                     sx={{ minWidth: 80, flex: 1 }}
                   >
-                    Play on Desktop
+                    Desktop App
                   </Button>
                 </DialogTrigger>
                 <DialogContent
@@ -47,7 +47,7 @@ const GameList = () => {
                 sx={{ minWidth: 80, flex: 1 }}
                 onClick={goToPlayOnGame}
               >
-                Play on Web
+                Play in Browser
               </Button>
             </>
           }
@@ -56,7 +56,7 @@ const GameList = () => {
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
           title="Nifty Tennis"
-          description="The first ever NFT tennis game on the Ethereum blockchain"
+          description="The first NFT tennis game on the Ethereum blockchain!"
           isComingSoon
           image={NiftyTennis}
         />
