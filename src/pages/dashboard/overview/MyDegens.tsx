@@ -101,7 +101,11 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
       title="My Degens"
       sliderSettingsOverride={settings}
       actions={
-        <Button variant="outlined" onClick={onViewAllDegens}>
+        <Button
+          variant="outlined"
+          onClick={onViewAllDegens}
+          href="/dashboard/degens"
+        >
           View All Degens
         </Button>
       }
