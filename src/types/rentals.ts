@@ -1,11 +1,11 @@
 export interface Rentals {
   stats: {
-    charges: number;
-    earnings: number;
-    time_played: number;
     total: {
       wins: number;
       matches: number;
+      charges: number;
+      earnings: number;
+      time_played: number;
     };
   };
   next_charge_at: number;

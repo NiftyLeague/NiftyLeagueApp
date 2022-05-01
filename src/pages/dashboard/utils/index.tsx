@@ -12,10 +12,7 @@ export const transformRentals = (rows: Rentals[]) =>
       earning_cap,
       earning_cap_daily,
       stats: {
-        total: { wins, matches },
-        earnings,
-        charges,
-        time_played,
+        total: { wins, matches, earnings, charges, time_played },
       },
       next_charge_at,
       is_terminated,
