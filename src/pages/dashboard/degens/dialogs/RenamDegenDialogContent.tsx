@@ -10,7 +10,6 @@ import {
   Checkbox,
   DialogActions,
   Button,
-  Link,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen } from 'types/degens';
@@ -160,9 +159,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             <FormControlLabel
               label={
                 <Typography variant="caption">
-                  I have read the{' '}
-                  <Link href="https://example.com">terms & conditions</Link>{' '}
-                  regarding renaming a rental
+                  I understand and agree the terms above.
                 </Typography>
               }
               control={
