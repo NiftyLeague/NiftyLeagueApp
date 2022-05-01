@@ -9,6 +9,7 @@ const NiftyLeagueAppPage = Loadable(
   lazy(() => import('pages/nifty-league-app')),
 );
 const GamesPage = Loadable(lazy(() => import('pages/games')));
+const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -32,6 +33,10 @@ const PublicRoutes = {
     {
       path: '/games',
       element: <GamesPage />,
+    },
+    {
+      path: '/games/play-on-game',
+      element: <PlayOnGamePage />,
     },
   ],
 };
