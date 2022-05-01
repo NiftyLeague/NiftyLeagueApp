@@ -158,14 +158,26 @@ const DegenCard: React.FC<DegenCardProps> = ({
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
-          {isDashboardDegen ? 'Claim NFTL' : 'Rent Now'}
-        </Button>
+        {isDashboardDegen ? (
+          <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
+            Claim MyNFTL
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ minWidth: 80 }}
+            onClick={onClickRent}
+          >
+            Rent Now
+          </Button>
+        )}
         <Button
           variant="outlined"
           color="primary"
           fullWidth
           sx={{ minWidth: 80 }}
+          onClick={onClickDetail}
         >
           View Traits
         </Button>
