@@ -33,6 +33,7 @@ import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
+import DegenDialog from 'components/dialog/DegenDialog';
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
@@ -42,6 +43,8 @@ const DegenRentalsPage = (): JSX.Element => {
     useState<boolean>(false);
   const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
+  const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
+  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -111,6 +114,18 @@ const DegenRentalsPage = (): JSX.Element => {
   const handleClickEditName = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
+  };
+
+  const handleViewTraits = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(false);
+    setIsDegenModalOpen(true);
+  };
+
+  const handleRentDegen = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(true);
+    setIsDegenModalOpen(true);
   };
 
   return (
@@ -183,6 +198,8 @@ const DegenRentalsPage = (): JSX.Element => {
                         background={degen.background}
                         activeRentals={degen.rental_count}
                         onClickEditName={() => handleClickEditName(degen)}
+                        onClickDetail={() => handleViewTraits(degen)}
+                        onClickRent={() => handleRentDegen(degen)}
                       />
                     </Grid>
                   ))}
@@ -196,6 +213,13 @@ const DegenRentalsPage = (): JSX.Element => {
             />
           </Stack>
         )}
+      />
+      <DegenDialog
+        open={isDegenModalOpen}
+        degen={selectedDegen}
+        isRent={isRentDialog}
+        setIsRent={setIsRentDialog}
+        onClose={() => setIsDegenModalOpen(false)}
       />
       <Dialog
         open={isRenameDegenModalOpen}
