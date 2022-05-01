@@ -33,7 +33,24 @@ import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 
-const PER_PAGE: number = 8;
+const getPageLimit = (): number => {
+  const breakpoint = Math.max(window.innerWidth, window.innerHeight);
+  if (breakpoint >= 1536) {
+    return 10;
+  }
+  if (breakpoint >= 1200) {
+    return 6;
+  }
+  if (breakpoint >= 900) {
+    return 6;
+  }
+  if (breakpoint >= 600) {
+    return 4;
+  }
+  return 2;
+};
+
+const PER_PAGE: number = getPageLimit();
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
