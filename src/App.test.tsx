@@ -9,7 +9,7 @@ import NavigationScroll from 'components/layout/NavigationScroll';
 import Snackbar from 'components/extended/Snackbar';
 
 // auth provider
-import { FirebaseProvider as AuthProvider } from 'contexts/FirebaseContext';
+import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
 import NetworkProvider from 'NetworkProvider';
 
 const App = () => (
