@@ -204,6 +204,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       activeRentals={degen.rental_count}
                       onEnableDisable={() => handleEnableDisable(degen)}
                       isDashboardDegen
+                      isActive={degen.is_active}
                       onClickEditName={() => handleClickEditName(degen)}
                     />
                   </Grid>
