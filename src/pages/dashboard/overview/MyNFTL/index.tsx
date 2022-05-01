@@ -2,6 +2,7 @@ import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { Grid, Button, Stack, Skeleton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
+import { utils } from 'ethers';
 
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -20,11 +21,10 @@ import WithdrawForm from './WithdrawForm';
 import { MY_PROFILE_API_URL } from 'constants/url';
 
 interface MyNFTLProps {
-  onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
   onClaimAll?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
+const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const userNFTLBalance = useNFTLBalance(address);
@@ -150,9 +150,34 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('deposit', amount);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      await tx(writeContracts[GAME_ACCOUNT_CONTRACT].deposit(amount));
+      return tx(
+        writeContracts[GAME_ACCOUNT_CONTRACT].deposit(
+          utils.parseEther(`${amount}`),
+        ),
+      );
     },
     [tx, writeContracts],
+  );
+
+  const handleWithdrawNFTL = useCallback(
+    async (amount: number) => {
+      // eslint-disable-next-line no-console
+      if (DEBUG) console.log('withdraw', amount, utils.parseEther(`${amount}`));
+      const nonce = await tx(
+        writeContracts[GAME_ACCOUNT_CONTRACT].nonce(address),
+      );
+      console.log('nonce', nonce);
+      const signature = '0x4423kjhasdf9823e';
+      const res = await tx(
+        writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
+          utils.parseEther(`${amount}`),
+          nonce,
+          signature,
+        ),
+      );
+      console.log('res', res);
+    },
+    [address, tx, writeContracts],
   );
 
   return (
@@ -267,7 +292,10 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
                         },
                       }}
                     >
-                      <WithdrawForm balance={gameBal} />
+                      <WithdrawForm
+                        balance={gameBal}
+                        onWithdrawEarnings={handleWithdrawNFTL}
+                      />
                     </DialogContent>
                   </Dialog>
                   <Dialog>

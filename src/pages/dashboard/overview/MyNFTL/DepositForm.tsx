@@ -12,13 +12,13 @@ import {
 import { useEffect, useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
-import { BigNumber, BigNumberish, utils } from 'ethers';
+import { BigNumber, BigNumberish, providers, utils } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DialogContext } from 'components/dialog';
 
 interface DepositFormProps {
-  onDeposit: (amount: number) => Promise<void>;
+  onDeposit: (amount: number) => Promise<providers.TransactionResponse | null>;
   balance: number;
 }
 
@@ -87,8 +87,8 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
       });
       return;
     }
-    await onDeposit(balanceDeposit);
-    resetForm();
+    const res = await onDeposit(balanceDeposit);
+    if (res) resetForm();
   };
 
   const handleIncreaseAllowance = async () => {
