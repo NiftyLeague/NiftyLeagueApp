@@ -9,7 +9,6 @@ import {
   Checkbox,
   DialogActions,
   Button,
-  Link,
 } from '@mui/material';
 import { useState } from 'react';
 import { Degen } from 'types/degens';
@@ -97,9 +96,7 @@ const EnableDisableDegenDialogContent = ({
             <FormControlLabel
               label={
                 <Typography variant="caption">
-                  I have read the{' '}
-                  <Link href="https://example.com">terms & conditions</Link>{' '}
-                  regarding disabling a rental
+                  I understand and agree the terms above.
                 </Typography>
               }
               control={
