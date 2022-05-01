@@ -77,7 +77,11 @@ const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
         title="My Comics"
         sliderSettingsOverride={settings}
         actions={
-          <Button variant="outlined" onClick={onViewAllComics}>
+          <Button
+            variant="outlined"
+            onClick={onViewAllComics}
+            href="/dashboard/comics"
+          >
             View All Comics
           </Button>
         }
