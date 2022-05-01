@@ -140,7 +140,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       sm={6}
                       md={6}
                       lg={6}
-                      xl={3}
+                      xl={2.4}
                       key={uuidv4()}
                     >
                       <SkeletonDegenPlaceholder />
@@ -154,7 +154,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       sm={6}
                       md={isDrawerOpen ? 6 : 4}
                       lg={isDrawerOpen ? 6 : 4}
-                      xl={3}
+                      xl={2.4}
                     >
                       <DegenCard
                         id={degen.id}
