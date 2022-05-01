@@ -16,4 +16,12 @@ export interface Degen {
   };
   name: string;
   owner: string;
+  earning_cap: number;
+  earning_cap_daily: number;
+}
+
+export interface CharacterType {
+  name: string | null;
+  owner: string | null;
+  traitList: [];
 }
