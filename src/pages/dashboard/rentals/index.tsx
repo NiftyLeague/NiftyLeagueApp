@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  // FormControl,
-  // FormControlLabel,
-  // FormLabel,
-  // Radio,
-  // RadioGroup,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
 import { MY_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
@@ -98,6 +90,20 @@ const DashboardRentalPage = (): JSX.Element => {
     }
   };
 
+  const updateRentalName = (newName: string, id: string) => {
+    const newRentails = rentails.find((ren) => ren.id === id);
+    const rentalIndex = rentails.findIndex((ren) => ren.id === id);
+
+    setRentails([
+      ...rentails.slice(0, rentalIndex),
+      {
+        ...newRentails,
+        name: newName,
+      },
+      ...rentails.slice(rentalIndex + 1),
+    ]);
+  };
+
   const handleSearch = (currentValue: string) => {
     if (currentValue?.trim() === '') {
       setRentails(data);
@@ -130,23 +136,6 @@ const DashboardRentalPage = (): JSX.Element => {
           columnGap={2}
           flexWrap="wrap"
         >
-          {/* <FormControl sx={{ flexDirection: 'row' }}>
-            <FormLabel
-              component="legend"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: '12px',
-              }}
-              focused={false}
-            >
-              Show Scholars Only?
-            </FormLabel>
-            <RadioGroup name="scholars-only" row>
-              <FormControlLabel control={<Radio value="yes" />} label="Yes" />
-              <FormControlLabel control={<Radio value="no" />} label="No" />
-            </RadioGroup>
-          </FormControl> */}
           <SearchRental handleSearch={handleSearch} />
         </Stack>
       </Stack>
@@ -156,6 +145,7 @@ const DashboardRentalPage = (): JSX.Element => {
           loading={!data}
           rows={rentails}
           handleTerminalRental={terminalRentalById}
+          updateRentalName={updateRentalName}
         />
       </Box>
     </Stack>

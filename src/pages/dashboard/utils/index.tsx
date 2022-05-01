@@ -11,17 +11,20 @@ export const transformRentals = (rows: Rentals[]) =>
       degen: { multiplier },
       earning_cap,
       earning_cap_daily,
-      stats: { matches_won, matches_total, earnings, charges, time_played },
+      stats: {
+        total: { wins, matches, earnings, charges, time_played },
+      },
       next_charge_at,
       is_terminated,
+      name,
     }) => ({
       id,
-      renter: renter_id,
+      renter: name || `Rental #${degen_id}`,
       degenId: degen_id,
       multiplier,
       winLoss:
-        matches_won > 0 && matches_total > 0
-          ? Number(matches_won) / Number(matches_total)
+        Number(wins) > 0 && Number(matches) > 0
+          ? Number(wins) / Number(matches)
           : 0,
       timePlayed: time_played
         ? format(new Date(time_played), 'HH:mm:ss')
@@ -30,7 +33,10 @@ export const transformRentals = (rows: Rentals[]) =>
       yourEarnings: earning_cap_daily,
       costs: charges,
       profits: earnings,
-      roi: earnings > 0 && charges > 0 ? Number(earnings) / Number(charges) : 0,
+      roi:
+        Number(earnings) > 0 && Number(charges) > 0
+          ? Number(earnings) / Number(charges)
+          : 0,
       rentalRenewsIn: next_charge_at
         ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
         : 'N/A',
