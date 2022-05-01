@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
@@ -33,8 +34,16 @@ import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
+import { NetworkContext } from 'NetworkProvider';
+import { Owner } from 'types/graph';
+import { useQuery } from '@apollo/client';
+import { OWNER_QUERY } from 'queries/OWNER_QUERY';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import EmptyState from 'components/EmptyState';
 
 const DashboardDegensPage = (): JSX.Element => {
+  const navigate = useNavigate();
+  const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
@@ -72,9 +81,38 @@ const DashboardDegensPage = (): JSX.Element => {
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
 
+  const {
+    loading,
+    data: userDegens,
+  }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
+    pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
+    variables: { address: address?.toLowerCase() },
+    skip: !address,
+  });
+
+  const characters = useMemo(() => {
+    const characterList = userDegens?.owner?.characters
+      ? [...userDegens.owner.characters]
+      : [];
+    return characterList.sort(
+      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
+    );
+  }, [userDegens]);
+
+  const filteredDegens = useMemo(() => {
+    if (characters.length && data) {
+      const mapDegens = characters.map((character) => data[character.id]);
+      return mapDegens;
+    }
+    return [];
+  }, [characters, data]);
+
+  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
+    usePagination(filteredDegens, PER_PAGE);
+
   useEffect(() => {
-    if (data) {
-      const originalDegens: Degen[] = Object.values(data);
+    if (filteredDegens) {
+      const originalDegens: Degen[] = Object.values(filteredDegens);
       setDegens(originalDegens);
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
@@ -92,7 +130,7 @@ const DashboardDegensPage = (): JSX.Element => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [filteredDegens]);
 
   const handleFilter = (filter: DegenFilter) => {
     const newFilters = { ...filter, sort: filters.sort };
@@ -154,44 +192,54 @@ const DashboardDegensPage = (): JSX.Element => {
             </SectionTitle>
             {/* Main grid content */}
             <Grid container spacing={2}>
-              {!data
-                ? [...Array(8)].map(() => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={6}
-                      lg={6}
-                      xl={2.4}
-                      key={uuidv4()}
-                    >
-                      <SkeletonDegenPlaceholder />
-                    </Grid>
-                  ))
-                : currentData().map((degen: Degen) => (
-                    <Grid
-                      key={degen.id}
-                      item
-                      xs={12}
-                      sm={6}
-                      md={isDrawerOpen ? 6 : 4}
-                      lg={isDrawerOpen ? 6 : 4}
-                      xl={2.4}
-                    >
-                      <DegenCard
-                        id={degen.id}
-                        name={degen.name}
-                        multiplier={degen.multiplier}
-                        owner={degen.owner}
-                        price={degen.price}
-                        background={degen.background}
-                        activeRentals={degen.rental_count}
-                        onEnableDisable={() => handleEnableDisable(degen)}
-                        isDashboardDegen
-                        onClickEditName={() => handleClickEditName(degen)}
-                      />
-                    </Grid>
-                  ))}
+              {loading ? (
+                [...Array(8)].map(() => (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    xl={2.4}
+                    key={uuidv4()}
+                  >
+                    <SkeletonDegenPlaceholder />
+                  </Grid>
+                ))
+              ) : filteredDegens.length && characters.length ? (
+                currentData().map((degen: Degen) => (
+                  <Grid
+                    key={degen.id}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={isDrawerOpen ? 6 : 4}
+                    lg={isDrawerOpen ? 6 : 4}
+                    xl={2.4}
+                  >
+                    <DegenCard
+                      id={degen.id}
+                      name={degen.name}
+                      multiplier={degen.multiplier}
+                      owner={degen.owner}
+                      price={degen.price}
+                      background={degen.background}
+                      activeRentals={degen.rental_count}
+                      onEnableDisable={() => handleEnableDisable(degen)}
+                      isDashboardDegen
+                      isActive={degen.is_active}
+                      onClickEditName={() => handleClickEditName(degen)}
+                    />
+                  </Grid>
+                ))
+              ) : (
+                <EmptyState
+                  message="No Degens found. Please check your address or go mint if you
+                  have not done so already!"
+                  buttonText="Go to Mint"
+                  onClick={() => navigate('/')}
+                />
+              )}
             </Grid>
             <Pagination
               count={maxPage}
