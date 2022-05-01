@@ -10,13 +10,14 @@ import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import { NetworkContext } from 'NetworkProvider';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
-import { Account } from 'types/account';
+import { Account, Profile } from 'types/account';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../constants';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
+import { MY_PROFILE_API_URL } from 'constants/url';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
@@ -27,6 +28,7 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const userNFTLBalance = useNFTLBalance(address);
+
   const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
     useQuery(OWNER_QUERY, {
       pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
@@ -73,6 +75,8 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
   const auth = window.localStorage.getItem('authentication-token');
   const [account, setAccount] = useState<Account>();
   const [accError, setAccError] = useState(false);
+  const [profile, setProfile] = useState<Profile>();
+  const [profileError, setProfileError] = useState(false);
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -93,8 +97,27 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
         if (result) setAccount(JSON.parse(result));
       }
     };
-    // eslint-disable-next-line no-void
-    if (auth) void fetchAccount();
+
+    const fetchProfile = async () => {
+      if (auth) {
+        const result = await fetch(MY_PROFILE_API_URL, {
+          headers: { authorizationToken: auth },
+        })
+          .then((res) => {
+            if (res.status === 404) setProfileError(true);
+            return res.text();
+          })
+          .catch(() => {
+            setProfileError(true);
+          });
+        if (result) setProfile(JSON.parse(result));
+      }
+    };
+
+    if (auth) {
+      fetchAccount();
+      fetchProfile();
+    }
   }, [auth]);
 
   const gameBal = account?.balance
@@ -147,7 +170,7 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
                   height={40}
                 />
               ) : (
-                <Button variant="outlined" onClick={onClaimAll}>
+                <Button variant="outlined" onClick={handleClaimNFTL}>
                   Claim All {totalNFTLFormatted} NFTL
                 </Button>
               )}
@@ -180,7 +203,7 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
               <Grid item xs={12}>
                 <HoverDataCard
                   title="All-Time Rental Earnings"
-                  primary="300,573"
+                  primary={!profileError ? profile?.stats?.total?.earnings : 0}
                   isLoading={loading}
                   customStyle={{
                     backgroundColor: theme.palette.background.default,
@@ -192,7 +215,9 @@ const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
               <Grid item xs={12}>
                 <HoverDataCard
                   title="All-Time Game Earnings"
-                  primary="300,573"
+                  primary={
+                    !profileError ? profile?.stats?.total?.rental_earnings : 0
+                  }
                   isLoading={loading}
                   customStyle={{
                     backgroundColor: theme.palette.background.default,
