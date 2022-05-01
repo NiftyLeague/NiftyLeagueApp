@@ -9,9 +9,12 @@ import {
   useTheme,
   Stack,
 } from '@mui/material';
-import { useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
+import { BigNumber, BigNumberish, utils } from 'ethers';
+import { NetworkContext } from 'NetworkProvider';
+import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DialogContext } from 'components/dialog';
 
 interface DepositFormProps {
@@ -28,6 +31,8 @@ const amountSelects: number[] = [25, 50, 75, 100];
 
 const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   const [balanceDeposit, setBalanceDeposit] = useState(0);
+  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const { address, tx, writeContracts } = useContext(NetworkContext);
   const [, setIsOpen] = useContext(DialogContext);
   const {
     handleSubmit,
@@ -47,6 +52,27 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   });
   const theme = useTheme();
 
+  useEffect(() => {
+    const getAllowance = async () => {
+      const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
+      const gameAccountAddress = gameAccountContract.address;
+      const nftl = writeContracts[NFTL_CONTRACT];
+      const allowanceBN = (await nftl.allowance(
+        address,
+        gameAccountAddress,
+      )) as BigNumberish;
+      setAllowance(allowanceBN);
+    };
+    if (
+      writeContracts &&
+      writeContracts[NFTL_CONTRACT] &&
+      writeContracts[GAME_ACCOUNT_CONTRACT]
+    ) {
+      // eslint-disable-next-line no-void
+      void getAllowance();
+    }
+  }, [address, writeContracts]);
+
   const resetForm = () => {
     reset();
     setBalanceDeposit(0);
@@ -63,6 +89,17 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
     }
     await onDeposit(balanceDeposit);
     resetForm();
+  };
+
+  const handleIncreaseAllowance = async () => {
+    const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
+    const gameAccountAddress = gameAccountContract.address;
+    const nftl = writeContracts[NFTL_CONTRACT];
+    const newAllowance = utils.parseEther(
+      `${Math.max(100000, Math.ceil(balance))}`,
+    );
+    await tx(nftl.increaseAllowance(gameAccountAddress, newAllowance));
+    setAllowance(newAllowance);
   };
 
   return (
@@ -125,7 +162,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
               <NumberFormat
                 {...field}
                 isAllowed={({ value }) => Number(value) <= Number(balance)}
-                label="Amount of NFTL to withdraw"
+                label="Amount of NFTL to deposit"
                 thousandSeparator
                 customInput={TextField}
                 onValueChange={(e) => {
@@ -153,15 +190,26 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
-        <Button
-          size="large"
-          type="submit"
-          variant="contained"
-          fullWidth
-          disabled={balanceDeposit === 0}
-        >
-          Deposit NFTL
-        </Button>
+        {parseFloat(utils.formatEther(allowance)) < balanceDeposit ? (
+          <Button
+            size="large"
+            variant="contained"
+            fullWidth
+            onClick={handleIncreaseAllowance}
+          >
+            Increase Allowance
+          </Button>
+        ) : (
+          <Button
+            size="large"
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={balanceDeposit === 0}
+          >
+            Deposit NFTL
+          </Button>
+        )}
       </Stack>
     </form>
   );
