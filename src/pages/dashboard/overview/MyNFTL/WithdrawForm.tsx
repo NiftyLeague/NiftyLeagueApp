@@ -21,7 +21,7 @@ import * as yup from 'yup';
 import { DialogContext } from 'components/dialog';
 
 interface WithdrawFormProps {
-  onWithdrawEarnings?: (b: number) => void;
+  onWithdrawEarnings: (amount: number) => void;
   balance: number;
 }
 
