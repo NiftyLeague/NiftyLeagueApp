@@ -163,7 +163,6 @@ const DegenRentalsPage = (): JSX.Element => {
                         background={degen.background}
                         activeRentals={degen.rental_count}
                         onClickEditName={() => handleClickEditName(degen)}
-                        isActive={degen.is_active}
                       />
                     </Grid>
                   ))}

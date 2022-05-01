@@ -35,7 +35,7 @@ const EnableDisableDegenDialogContent = ({
       const res = await fetch(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         `${DISABLE_RENT_API_URL}${
-          degen.is_active ? 'deactivate' : 'activate'
+          isEnabled ? 'deactivate' : 'activate'
         }?degen_id=${degen.id}`,
         {
           method: 'POST',
