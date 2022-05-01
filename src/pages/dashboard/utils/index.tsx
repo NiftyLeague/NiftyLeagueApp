@@ -11,7 +11,12 @@ export const transformRentals = (rows: Rentals[]) =>
       degen: { multiplier },
       earning_cap,
       earning_cap_daily,
-      stats: { matches_won, matches_total, earnings, charges, time_played },
+      stats: {
+        total: { wins, matches },
+        earnings,
+        charges,
+        time_played,
+      },
       next_charge_at,
       is_terminated,
       name,
@@ -21,8 +26,8 @@ export const transformRentals = (rows: Rentals[]) =>
       degenId: degen_id,
       multiplier,
       winLoss:
-        Number(matches_won) > 0 && Number(matches_total) > 0
-          ? Number(matches_won) / Number(matches_total)
+        Number(wins) > 0 && Number(matches) > 0
+          ? Number(wins) / Number(matches)
           : 0,
       timePlayed: time_played
         ? format(new Date(time_played), 'HH:mm:ss')
