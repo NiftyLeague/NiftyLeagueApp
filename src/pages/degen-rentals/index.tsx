@@ -10,6 +10,7 @@ import {
   Pagination,
   Stack,
   Dialog,
+  useMediaQuery,
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
@@ -33,8 +34,6 @@ import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 
-const PER_PAGE: number = 8;
-
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
@@ -44,12 +43,33 @@ const DegenRentalsPage = (): JSX.Element => {
   const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [searchParams] = useSearchParams();
-  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(degens, PER_PAGE);
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
+  const isMobile = useMediaQuery('(min-width:600px)');
+  const isTablet = useMediaQuery('(min-width:900px)');
+  const isMediumScreen = useMediaQuery('(min-width:1200px)');
+  const isLargeScreen = useMediaQuery('(min-width:1536px)');
+
+  const getPageLimit = (): number => {
+    if (isLargeScreen) {
+      return 10;
+    }
+    if (isMediumScreen) {
+      return 8;
+    }
+    if (isTablet) {
+      return 6;
+    }
+    if (isMobile) {
+      return 3;
+    }
+    return 2;
+  };
+  const PER_PAGE: number = getPageLimit();
+  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
+    usePagination(degens, PER_PAGE);
   useEffect(() => {
     if (data) {
       const originalDegens: Degen[] = Object.values(data);
