@@ -1,6 +1,8 @@
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
 
+export const MY_PROFILE_API_URL = `${BASE_API_URL}/stats/profile`;
+
 // Degen API url
 export const DEGEN_BASE_API_URL = 'https://nifty-league.s3.amazonaws.com';
 export const DEGEN_BASE_BACKGROUND_URL = 'https://api.nifty-league.com';
