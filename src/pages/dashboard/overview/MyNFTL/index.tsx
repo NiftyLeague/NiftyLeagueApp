@@ -1,32 +1,29 @@
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { Grid, Button, Stack, Skeleton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useQuery } from '@apollo/client';
+
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
 import HoverDataCard from 'components/cards/HoverDataCard';
-import WithdrawForm from './WithdrawForm';
 import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import { NetworkContext } from 'NetworkProvider';
-import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../../constants';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import { NFTL_CONTRACT } from 'constants/contracts';
-import useNFTLBalance from 'hooks/useNFTLBalance';
 import { Account } from 'types/account';
+import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import useNFTLBalance from 'hooks/useNFTLBalance';
+import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
+import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../constants';
+import DepositForm from './DepositForm';
+import WithdrawForm from './WithdrawForm';
 
 interface MyNFTLProps {
   onWithdraw?: React.MouseEventHandler<HTMLButtonElement>;
-  onDeposit?: React.MouseEventHandler<HTMLButtonElement>;
   onClaimAll?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const MyNFTL = ({
-  onWithdraw,
-  onDeposit,
-  onClaimAll,
-}: MyNFTLProps): JSX.Element => {
+const MyNFTL = ({ onWithdraw, onClaimAll }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const userNFTLBalance = useNFTLBalance(address);
@@ -101,10 +98,12 @@ const MyNFTL = ({
   }, [auth]);
 
   const gameBal = account?.balance
-    ? account.balance.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+    ? parseFloat(
+        account.balance.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+      )
     : 0;
 
   const totalNFTL = account?.balance || 0 + mockAccumulated;
@@ -122,6 +121,16 @@ const MyNFTL = ({
     setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccumulated, tx, writeContracts]);
+
+  const handleDepositNFTL = useCallback(
+    async (amount: number) => {
+      // eslint-disable-next-line no-console
+      if (DEBUG) console.log('deposit', amount);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      await tx(writeContracts[GAME_ACCOUNT_CONTRACT].deposit(amount));
+    },
+    [tx, writeContracts],
+  );
 
   return (
     <Grid container spacing={sectionSpacing}>
@@ -233,17 +242,33 @@ const MyNFTL = ({
                         },
                       }}
                     >
-                      <WithdrawForm balance={114893} />
+                      <WithdrawForm balance={gameBal} />
                     </DialogContent>
                   </Dialog>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    onClick={onDeposit}
-                  >
-                    Deposit
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button fullWidth variant="contained" color="secondary">
+                        Deposit
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent
+                      aria-labelledby="deposit-dialog"
+                      dialogTitle="Deposit into Game Account"
+                      sx={{
+                        '& h2': {
+                          textAlign: 'center',
+                        },
+                        '& .MuiDialogContent-root': {
+                          textAlign: 'center',
+                        },
+                      }}
+                    >
+                      <DepositForm
+                        balance={userNFTLBalance}
+                        onDeposit={handleDepositNFTL}
+                      />
+                    </DialogContent>
+                  </Dialog>
                 </Stack>
               }
             />
