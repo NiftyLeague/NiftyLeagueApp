@@ -51,7 +51,9 @@ export default function Preloader({
       className="preloader-overlay"
       style={
         ready
-          ? { transform: 'translateY(100%)' }
+          ? {
+              transform: 'translateY(100%)',
+            }
           : { transform: 'transform: translateY(0)' }
       }
     >
