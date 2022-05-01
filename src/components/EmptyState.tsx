@@ -18,10 +18,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
     <>
       <Card
         sx={{
-          position: 'relative',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          mx: 'auto',
           width: 400,
           bgcolor: theme.palette.dark.dark,
           border: `1px solid${theme.palette.primary.main}`,
