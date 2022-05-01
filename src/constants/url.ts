@@ -14,3 +14,7 @@ export const DEGEN_ASSETS_DOWNLOAD_URL = `${BASE_API_URL}assets/degen`;
 export const MY_RENTAL_API_URL = `${BASE_API_URL}/rentals/my-rentals?active=true`;
 export const TERMINAL_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/terminate`;
 export const RENAME_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/rename`;
+export const RENTAL_PASS_INVENTORY_URL = `${BASE_API_URL}/accounts/account/inventory?id=rental-pass-base`;
+export const RENTAL_RENAME_URL = (rentalId: string): string =>
+  `${BASE_API_URL}/rentals/rental/rename?id=${encodeURIComponent(rentalId)}`;
+export const RENT_URL = `${BASE_API_URL}/rentals/rent`;
