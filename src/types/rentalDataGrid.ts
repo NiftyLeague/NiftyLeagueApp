@@ -1,8 +1,8 @@
 export interface RentalDataGrid {
-  id?: string | number;
+  id: string;
   renter?: string;
-  degenId?: string;
-  multiplier?: number;
+  degenId: string;
+  multiplier: number;
   winLoss?: number;
   timePlayed?: string;
   totalEarnings?: number;

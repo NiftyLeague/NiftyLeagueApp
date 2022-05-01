@@ -25,6 +25,7 @@ import FilterRangeSlider from './FilterRangeSlider';
 import { DegenFilter } from 'types/degenFilter';
 import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
+import { Degen } from 'types/degens';
 
 type FilterSource =
   | 'prices'
@@ -36,9 +37,31 @@ type FilterSource =
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
+  data?: Degen[];
 }
 
-const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
+const getPriceRangeFromData = (data: Degen[] | undefined) => {
+  if (data && data.length) {
+    let min = data[0].price;
+    let max = data[0].price;
+
+    for (let i = 1; i < data.length; i += 1) {
+      const price = data[i].price;
+
+      min = price < min ? price : min;
+      max = price > max ? price : max;
+    }
+
+    return [min, max];
+  }
+
+  return defaultFilterValues.prices;
+};
+
+const DegensFilter = ({
+  handleFilter,
+  data,
+}: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
@@ -48,8 +71,9 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const isParamsEmpty = isEmpty(params);
 
   // Filter states
+  // TODO: do something here to specify the default range for prices based on real data
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
-    defaultFilterValues.prices,
+    getPriceRangeFromData(data),
   );
   const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
     defaultFilterValues.multipliers,
@@ -82,6 +106,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
   const handleChangeCommitted = useCallback(
     (source: FilterSource, value: string | null = null) => {
       let keyValue = {};
+
       switch (source) {
         case 'prices':
           keyValue = { prices: pricesRangeValue.join('-') };
@@ -119,6 +144,11 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
       setSearchParams,
     ],
   );
+
+  useEffect(() => {
+    setPricesRangeValue(getPriceRangeFromData(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   // For checkbox filter
   const handleCheckboxChange = useCallback(
@@ -201,7 +231,7 @@ const DegensFilter = ({ handleFilter }: DegensFilterProps): JSX.Element => {
           <Stack gap={4}>
             <FilterRangeSlider
               value={pricesRangeValue}
-              max={3000}
+              max={getPriceRangeFromData(data)[1]}
               unit=" NFTL"
               label="Price"
               onChange={(_, value) => setPricesRangeValue(value as number[])}
