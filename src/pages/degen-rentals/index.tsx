@@ -97,7 +97,9 @@ const DegenRentalsPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => <DegensFilter handleFilter={handleFilter} />}
+        renderDrawer={() => (
+          <DegensFilter handleFilter={handleFilter} data={degens} />
+        )}
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
