@@ -11,7 +11,7 @@ import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Rentals } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
-import { format } from 'date-fns';
+import { transformRentals } from 'pages/dashboard/utils';
 
 interface Props {
   rows: Rentals[];
@@ -31,41 +31,7 @@ const MyRentalsDataGrid = ({
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
-  const tranformRentails: any = rows.map(
-    ({
-      id,
-      renter_id,
-      degen_id,
-      degen: { multiplier },
-      earning_cap,
-      earning_cap_daily,
-      stats: { matches_won, matches_total, earnings, charges, time_played },
-      next_charge_at,
-      is_terminated,
-      name,
-    }) => ({
-      id,
-      renter: name || `Rental #${degen_id}`,
-      degenId: degen_id,
-      multiplier,
-      winLoss:
-        matches_won > 0 && matches_total > 0
-          ? Number(matches_won) / Number(matches_total)
-          : 0,
-      timePlayed: time_played
-        ? format(new Date(time_played), 'HH:mm:ss')
-        : 'N/A',
-      totalEarnings: earning_cap,
-      yourEarnings: earning_cap_daily,
-      costs: charges,
-      profits: earnings,
-      roi: earnings > 0 && charges > 0 ? Number(earnings) / Number(charges) : 0,
-      rentalRenewsIn: next_charge_at
-        ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
-        : 'N/A',
-      action: is_terminated,
-    }),
-  );
+  const newRows = transformRentals(rows);
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -164,7 +130,7 @@ const MyRentalsDataGrid = ({
     <>
       <DataGrid
         loading={loading}
-        rows={tranformRentails}
+        rows={newRows}
         columns={columns}
         autoPageSize
         rowsPerPageOptions={[10, 25, 100]}
