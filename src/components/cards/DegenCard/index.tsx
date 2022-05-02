@@ -79,21 +79,21 @@ const DegenCard: React.FC<DegenCardProps> = ({
         sx={{ m: 1, width: 'auto' }}
       >
         <Chip
-          chipcolor="error"
+          chipcolor="rgb(75, 7, 175)"
           label={`${price} NFTL`}
           sx={chipStyles}
           variant="outlined"
           size="small"
         />
         <Chip
-          chipcolor="success"
+          chipcolor="rgb(75, 7, 175)"
           label={`${activeRentals} Rentals`}
           sx={chipStyles}
           variant="outlined"
           size="small"
         />
         <Chip
-          chipcolor="warning"
+          chipcolor="rgb(75, 7, 175)"
           label={`${multiplier}x`}
           sx={chipStyles}
           variant="outlined"
