@@ -15,8 +15,12 @@ import { Comic } from 'types/comic';
   const yourBalance = useComicsBalance();
 */
 
-export default function useComicsBalance(): Comic[] {
-  const [comicsCount, setComicsCount] = useState<Comic[]>([]);
+export default function useComicsBalance(): {
+  comicsBalance: Comic[];
+  loading: boolean;
+} {
+  const [loading, setLoading] = useState(true);
+  const [comicsBalance, setComicsBal] = useState<Comic[]>([]);
   const { address, readContracts } = useContext(NetworkContext);
 
   useEffect(() => {
@@ -28,13 +32,14 @@ export default function useComicsBalance(): Comic[] {
         ownerArr,
         comicIds,
       );
-      setComicsCount(comicsData);
-      setComicsCount(
+      setComicsBal(comicsData);
+      setComicsBal(
         comicsData.map((c: BigNumber, i: number) => ({
           ...COMICS[i],
           balance: c.toNumber(),
         })),
       );
+      setLoading(false);
     }
     if (address && readContracts && readContracts[COMICS_CONTRACT]) {
       // eslint-disable-next-line no-void
@@ -42,5 +47,5 @@ export default function useComicsBalance(): Comic[] {
     }
   }, [address, readContracts]);
 
-  return comicsCount;
+  return { comicsBalance, loading };
 }
