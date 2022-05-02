@@ -20,9 +20,9 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         sx={{
           mx: 'auto',
           width: 400,
-          bgcolor: theme.palette.dark.dark,
+          bgcolor: 'transparent',
           border: `1px solid${theme.palette.primary.main}`,
-          boxShadow: 24,
+          boxShadow: 'none',
           p: 4,
           textAlign: 'center',
         }}
