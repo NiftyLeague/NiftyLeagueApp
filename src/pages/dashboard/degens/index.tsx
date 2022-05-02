@@ -85,10 +85,10 @@ const DashboardDegensPage = (): JSX.Element => {
     return [];
   }, [characters, data]);
 
-  const isMobile = useMediaQuery('(max-width:600px)');
-  const isTablet = useMediaQuery('(max-width:900px)');
-  const isMediumScreen = useMediaQuery('(max-width:1200px)');
-  const isLargeScreen = useMediaQuery('(max-width:1536px)');
+  const isMobile = useMediaQuery('(min-width:600px)');
+  const isTablet = useMediaQuery('(min-width:900px)');
+  const isMediumScreen = useMediaQuery('(min-width:1200px)');
+  const isLargeScreen = useMediaQuery('(min-width:1536px)');
 
   const getPageLimit = (): number => {
     if (isLargeScreen) {
@@ -98,12 +98,12 @@ const DashboardDegensPage = (): JSX.Element => {
       return 8;
     }
     if (isTablet) {
-      return 6;
+      return 8;
     }
     if (isMobile) {
       return 4;
     }
-    return 10;
+    return 2;
   };
 
   const PER_PAGE: number = getPageLimit();
