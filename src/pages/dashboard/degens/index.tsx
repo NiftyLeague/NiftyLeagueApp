@@ -22,6 +22,7 @@ import defaultFilterValues from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
+  getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
@@ -45,6 +46,8 @@ const DashboardDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] =
+    useState<DegenFilter>(defaultFilterValues);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -112,12 +115,12 @@ const DashboardDegensPage = (): JSX.Element => {
   useEffect(() => {
     if (filteredDegens) {
       const originalDegens: Degen[] = Object.values(filteredDegens);
+      setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
       if (!isEmpty(params)) {
-        const newFilterOptions =
-          updateFilterValue(params) || defaultFilterValues;
+        const newFilterOptions = updateFilterValue(params);
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
@@ -164,7 +167,12 @@ const DashboardDegensPage = (): JSX.Element => {
         // Filter drawer
         drawerWidth={hasData ? 320 : 0}
         renderDrawer={() =>
-          hasData && <DegensFilter handleFilter={handleFilter} data={degens} />
+          hasData && (
+            <DegensFilter
+              handleFilter={handleFilter}
+              defaultFilterValues={defaultValues}
+            />
+          )
         }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (

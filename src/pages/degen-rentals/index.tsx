@@ -21,6 +21,7 @@ import defaultFilterValues from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
+  getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
@@ -38,6 +39,8 @@ import DegenDialog from 'components/dialog/DegenDialog';
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] =
+    useState<DegenFilter>(defaultFilterValues);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -73,15 +76,16 @@ const DegenRentalsPage = (): JSX.Element => {
   const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
+
   useEffect(() => {
     if (data) {
       const originalDegens: Degen[] = Object.values(data);
+      setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
       if (!isEmpty(params)) {
-        const newFilterOptions =
-          updateFilterValue(params) || defaultFilterValues;
+        const newFilterOptions = updateFilterValue(params);
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
@@ -133,7 +137,10 @@ const DegenRentalsPage = (): JSX.Element => {
       <CollapsibleSidebarLayout
         // Filter drawer
         renderDrawer={() => (
-          <DegensFilter handleFilter={handleFilter} data={degens} />
+          <DegensFilter
+            handleFilter={handleFilter}
+            defaultFilterValues={defaultValues}
+          />
         )}
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
