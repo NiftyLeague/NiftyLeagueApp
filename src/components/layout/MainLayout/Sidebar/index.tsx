@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+import { Drawer, useMediaQuery, Stack, Box } from '@mui/material';
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -14,6 +14,7 @@ import { openDrawer } from 'store/slices/menu';
 import { useDispatch, useSelector } from 'store';
 import { drawerWidth } from 'store/constant';
 import UserProfile from './UserProfile';
+import LogoutButton from './LogoutButton';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -49,8 +50,13 @@ const Sidebar = ({ window }: SidebarProps) => {
           paddingRight: '16px',
         }}
       >
-        <UserProfile />
-        <MenuList />
+        <Stack justifyContent="space-between" height="100%">
+          <Box>
+            <UserProfile />
+            <MenuList />
+          </Box>
+          <LogoutButton sx={{ marginBottom: 1 }} />
+        </Stack>
       </PerfectScrollbar>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
