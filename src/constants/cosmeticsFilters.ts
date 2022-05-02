@@ -1118,3 +1118,28 @@ export const TRAIT_VALUE_MAP = {
   'Left Items': LEFT_ITEMS,
   'Right Items': RIGHT_ITEMS,
 };
+
+export const TRAIT_KEY_VALUE_MAP = {
+  ...TRIBES,
+  ...SKIN_COLORS,
+  ...FUR_COLORS,
+  ...EYE_COLORS,
+  ...PUPIL_COLORS,
+  ...HAIR,
+  ...MOUTHS,
+  ...BEARDS,
+  ...TOPS,
+  ...OUTERWEAR,
+  ...PRINTS,
+  ...BOTTOMS,
+  ...FOOTWEAR,
+  ...BELTS,
+  ...HATS,
+  ...EYEWEAR,
+  ...PIERCINGS,
+  ...WRISTS,
+  ...HANDS,
+  ...NECKWEAR,
+  ...LEFT_ITEMS,
+  ...RIGHT_ITEMS,
+};
