@@ -53,10 +53,10 @@ const DegenRentalsPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const isMobile = useMediaQuery('(min-width:600px)');
-  const isTablet = useMediaQuery('(min-width:900px)');
-  const isMediumScreen = useMediaQuery('(min-width:1200px)');
-  const isLargeScreen = useMediaQuery('(min-width:1536px)');
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(max-width:900px)');
+  const isMediumScreen = useMediaQuery('(max-width:1200px)');
+  const isLargeScreen = useMediaQuery('(max-width:1536px)');
 
   const getPageLimit = (): number => {
     if (isLargeScreen) {
@@ -69,10 +69,11 @@ const DegenRentalsPage = (): JSX.Element => {
       return 6;
     }
     if (isMobile) {
-      return 3;
+      return 4;
     }
-    return 2;
+    return 10;
   };
+
   const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
@@ -178,8 +179,8 @@ const DegenRentalsPage = (): JSX.Element => {
                       item
                       xs={12}
                       sm={6}
-                      md={6}
-                      lg={6}
+                      md={isDrawerOpen ? 6 : 3}
+                      lg={isDrawerOpen ? 6 : 3}
                       xl={2.4}
                       key={uuidv4()}
                     >
@@ -192,9 +193,9 @@ const DegenRentalsPage = (): JSX.Element => {
                       item
                       xs={12}
                       sm={6}
-                      md={isDrawerOpen ? 6 : 4}
-                      lg={isDrawerOpen ? 6 : 4}
-                      xl={isDrawerOpen ? 4 : 2.4}
+                      md={isDrawerOpen ? 6 : 3}
+                      lg={isDrawerOpen ? 6 : 3}
+                      xl={2.4}
                     >
                       <DegenCard
                         id={degen.id}
