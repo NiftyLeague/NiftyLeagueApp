@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Box, Button, Grid } from '@mui/material';
 import DegenCard from 'components/cards/DegenCard';
-// import dummyData from 'constants/degens';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo } from 'react';
 import { NetworkContext } from 'NetworkProvider';
@@ -14,6 +13,7 @@ import { DEGEN_BASE_API_URL } from 'constants/url';
 import { useQuery } from '@apollo/client';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
+import EmptyState from 'components/EmptyState';
 
 interface MyDegensProps {
   onViewAllDegens?: React.MouseEventHandler<HTMLButtonElement>;
@@ -95,6 +95,10 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
     ],
   };
 
+  const handleBuyDegen = () => {
+    window.open('https://opensea.io/collection/niftydegen', '_blank');
+  };
+
   return (
     <SectionSlider
       firstSection
@@ -131,10 +135,11 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
           </Box>
         ))
       ) : (
-        <p>
-          No Degens found. Please check your address or go mint if you have not
-          done so already!
-        </p>
+        <EmptyState
+          message="No Degens found. Please check your address or go purchase a degen if you have not done so already!"
+          buttonText="Buy a Degen"
+          onClick={handleBuyDegen}
+        />
       )}
     </SectionSlider>
   );
