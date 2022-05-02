@@ -12,7 +12,7 @@ import { NetworkContext } from 'NetworkProvider';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Owner } from 'types/graph';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
