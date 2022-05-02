@@ -9,8 +9,8 @@ export const DEGEN_BASE_BACKGROUND_URL = 'https://api.nifty-league.com';
 export const DEGEN_BASE_IMAGE_URL = `${DEGEN_BASE_API_URL}/degens`;
 
 // Rentals API url
-export const DISABLE_RENT_API_URL = `${BASE_API_URL}rentals/rentable/`;
-export const DEGEN_ASSETS_DOWNLOAD_URL = `${BASE_API_URL}assets/degen`;
+export const DISABLE_RENT_API_URL = `${BASE_API_URL}/rentals/rentable/`;
+export const DEGEN_ASSETS_DOWNLOAD_URL = `${BASE_API_URL}/assets/degen`;
 export const MY_RENTAL_API_URL = `${BASE_API_URL}/rentals/my-rentals?active=true`;
 export const TERMINAL_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/terminate`;
 export const RENAME_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/rename`;
@@ -18,3 +18,8 @@ export const RENTAL_PASS_INVENTORY_URL = `${BASE_API_URL}/accounts/account/inven
 export const RENTAL_RENAME_URL = (rentalId: string): string =>
   `${BASE_API_URL}/rentals/rental/rename?id=${encodeURIComponent(rentalId)}`;
 export const RENT_URL = `${BASE_API_URL}/rentals/rent`;
+
+// Gamer Account API
+export const GAMER_ACCOUNT_API = `${BASE_API_URL}/accounts/account`;
+export const WITHDRAW_NFTL_SIGN = `${BASE_API_URL}/accounts/withdraw/sign`;
+export const WITHDRAW_NFTL_CONFIRM = `${BASE_API_URL}/accounts/withdraw/confirm`;
