@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Button, Box } from '@mui/material';
+import { Grid, Button, Box, Dialog } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
 import DegenCard from 'components/cards/DegenCard';
@@ -10,9 +10,17 @@ import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
 import GameList from 'pages/games/GameList';
+import DegenDialog from 'components/dialog/DegenDialog';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);
+  const [selectedDegen, setSelectedDegen] = useState<Degen>();
+  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
+    useState<boolean>(false);
+  const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
+  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
@@ -30,35 +38,46 @@ const NiftyLeagueAppPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  const handleClickEditName = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRenameDegenModalOpen(true);
+  };
+
+  const handleViewTraits = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(false);
+    setIsDegenModalOpen(true);
+  };
+
+  const handleRentDegen = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(true);
+    setIsDegenModalOpen(true);
+  };
+
   const settings = {
     slidesToShow: 5,
     responsive: [
       {
-        breakpoint: 1600,
-        settings: {
-          slidesToShow: 5,
-        },
-      },
-      {
-        breakpoint: 1200,
+        breakpoint: 1800,
         settings: {
           slidesToShow: 4,
         },
       },
       {
-        breakpoint: 900,
+        breakpoint: 1500,
         settings: {
           slidesToShow: 3,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 900,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 400,
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
         },
@@ -127,10 +146,26 @@ const NiftyLeagueAppPage = () => {
                   price={degen.price}
                   background={degen.background}
                   activeRentals={degen.rental_count}
+                  onClickEditName={() => handleClickEditName(degen)}
+                  onClickDetail={() => handleViewTraits(degen)}
+                  onClickRent={() => handleRentDegen(degen)}
                 />
               </Box>
             ))}
       </SectionSlider>
+      <DegenDialog
+        open={isDegenModalOpen}
+        degen={selectedDegen}
+        isRent={isRentDialog}
+        setIsRent={setIsRentDialog}
+        onClose={() => setIsDegenModalOpen(false)}
+      />
+      <Dialog
+        open={isRenameDegenModalOpen}
+        onClose={() => setIsRenameDegenModalOpen(false)}
+      >
+        <RenameDegenDialogContent degen={selectedDegen} />
+      </Dialog>
     </>
   );
 };
