@@ -7,6 +7,8 @@ export const NFTL_CONTRACT = 'NFTLToken';
 
 export const GAME_ACCOUNT_CONTRACT = 'BalanceManager';
 
+export const COMICS_CONTRACT = 'NiftyLaunchComics';
+
 export const MERKLE_DISTRIBUTOR_ADDRESS = {
   [LOCAL_CHAIN_ID]: '0x998abeb3E57409262aE5b751f60747921B33613E',
   [ChainId.MAINNET]: '0x921c673a4d2f6a429551c0726316c1ad07571db5',
