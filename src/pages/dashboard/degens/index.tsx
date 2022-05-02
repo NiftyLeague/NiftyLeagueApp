@@ -107,7 +107,7 @@ const DashboardDegensPage = (): JSX.Element => {
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(filteredDegens, PER_PAGE);
 
-  const isShowing = currentData().length > 0;
+  const hasData = currentData().length > 0;
 
   useEffect(() => {
     if (filteredDegens) {
@@ -162,11 +162,9 @@ const DashboardDegensPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        drawerWidth={isShowing ? 320 : 0}
+        drawerWidth={hasData ? 320 : 0}
         renderDrawer={() =>
-          isShowing && (
-            <DegensFilter handleFilter={handleFilter} data={degens} />
-          )
+          hasData && <DegensFilter handleFilter={handleFilter} data={degens} />
         }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
@@ -175,7 +173,7 @@ const DashboardDegensPage = (): JSX.Element => {
             <SectionTitle
               firstSection
               actions={
-                isShowing && (
+                hasData && (
                   <SortButton handleSort={handleSort}>
                     <Button
                       id="demo-positioned-button"
@@ -189,12 +187,14 @@ const DashboardDegensPage = (): JSX.Element => {
               }
             >
               <Stack direction="row" alignItems="center" gap={1}>
-                <IconButton
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                  size="large"
-                >
-                  {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
-                </IconButton>
+                {hasData && (
+                  <IconButton
+                    onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                    size="large"
+                  >
+                    {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
+                  </IconButton>
+                )}
                 {newData.length} Degens
               </Stack>
             </SectionTitle>
@@ -247,7 +247,7 @@ const DashboardDegensPage = (): JSX.Element => {
                 />
               )}
             </Grid>
-            {isShowing && (
+            {hasData && (
               <Pagination
                 count={maxPage}
                 page={currentPage}
