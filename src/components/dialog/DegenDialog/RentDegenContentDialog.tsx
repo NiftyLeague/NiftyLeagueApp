@@ -296,14 +296,7 @@ const RentDegenContentDialog = ({
             }
           />
         </FormControl>
-        <Stack
-          direction="column"
-          gap={1}
-          width="100%"
-          position="absolute"
-          bottom={8}
-          sx={{ width: '90%' }}
-        >
+        <Stack direction="column" gap={1} width="100%" sx={{ mt: 2 }}>
           <LoadingButton
             variant="contained"
             fullWidth
