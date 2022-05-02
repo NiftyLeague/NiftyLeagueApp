@@ -80,11 +80,9 @@ const EnableDisableDegenDialogContent = ({
           <Stack direction="row" justifyContent="center" mb={1}>
             {isEnabled ? (
               <Typography align="center">
-                Disabling your rental allows you to create your own private
-                rental queue. This feature is best for guild owners and those
-                who have specific recruits they would like to sponsor. Keep in
-                mind that enabling your degen for rentals incurs a 1,000 NFTL
-                fee.
+                Disabling your rental makes your rental queue private. Note that
+                your queue will clear as existing rentals reach the already
+                paid-for expiration. Re-enabling fee is 1000 NFTL.
               </Typography>
             ) : (
               <Typography align="center">
