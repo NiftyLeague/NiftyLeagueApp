@@ -23,7 +23,19 @@ import { IconMenu2 } from '@tabler/icons';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
-const pages = ['Home', 'Ecosystem', 'Team', 'Roadmap', 'Docs'];
+const pages = [
+  {
+    name: 'Website',
+    link: 'https://niftyleague.com/',
+  },
+  {
+    name: 'Docs',
+    link: 'https://niftyleague.com/docs',
+  },
+] as {
+  name: string;
+  link: string;
+}[];
 
 const Header = () => {
   const theme = useTheme();
@@ -89,8 +101,8 @@ const Header = () => {
       <Box>
         <Menu open={false}>
           {pages.map((page) => (
-            <MenuItem key={page}>
-              <Typography textAlign="center">{page}</Typography>
+            <MenuItem key={page.name}>
+              <Typography textAlign="center">{page.name}</Typography>
             </MenuItem>
           ))}
         </Menu>
@@ -104,8 +116,14 @@ const Header = () => {
         }}
       >
         {pages.map((page) => (
-          <Link key={page} href="#" color="inherit" underline="hover">
-            {page}
+          <Link
+            key={page.name}
+            href={page.link}
+            target="_blank"
+            color="inherit"
+            underline="hover"
+          >
+            {page.name}
           </Link>
         ))}
       </Box>

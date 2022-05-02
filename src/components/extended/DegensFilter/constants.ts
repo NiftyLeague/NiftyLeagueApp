@@ -1,9 +1,9 @@
 import { DegenFilter } from 'types/degenFilter';
 
 const defaultFilterValues: DegenFilter = {
-  prices: [0, 3000],
-  multipliers: [0, 15],
-  rentals: [0, 40],
+  prices: [100, 3500],
+  multipliers: [1, 10],
+  rentals: [0, 10],
   tribes: [],
   backgrounds: [],
   sort: 'name',

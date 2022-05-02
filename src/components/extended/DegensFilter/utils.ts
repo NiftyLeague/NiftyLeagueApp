@@ -98,3 +98,41 @@ export const updateFilterValue = (
   // eslint-disable-next-line consistent-return
   return newFilter;
 };
+
+export const getDefaultFilterValueFromData = (degens: Degen[] | undefined) => {
+  if (!degens?.length) {
+    return {
+      ...defaultFilterValues,
+      prices: defaultFilterValues.prices,
+      multipliers: defaultFilterValues.multipliers,
+      rentals: defaultFilterValues.rentals,
+    };
+  }
+  let minPrice = degens[0].price;
+  let maxPrice = degens[0].price;
+  let minMultiplier = degens[0].multiplier;
+  let maxMultiplier = degens[0].multiplier;
+  let minRental = degens[0].rental_count;
+  let maxRental = degens[0].rental_count;
+
+  let defaultValue;
+  degens.reduce((prev, current) => {
+    const { price, multiplier, rental_count } = current;
+    minPrice = price < minPrice ? price : minPrice;
+    maxPrice = price > maxPrice ? price : maxPrice;
+    minMultiplier = multiplier < minMultiplier ? multiplier : minMultiplier;
+    maxMultiplier = multiplier > maxMultiplier ? multiplier : maxMultiplier;
+    minRental = rental_count < minRental ? rental_count : minRental;
+    maxRental = rental_count > maxRental ? rental_count : maxRental;
+    defaultValue = {
+      prices: [minPrice, maxPrice],
+      multipliers: [minMultiplier, maxMultiplier],
+      rentals: [minRental, maxRental],
+    };
+    return current;
+  });
+  return {
+    ...defaultFilterValues,
+    ...defaultValue,
+  };
+};
