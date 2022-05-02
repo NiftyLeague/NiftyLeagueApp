@@ -19,13 +19,11 @@ import React, {
 } from 'react';
 import { updateFilterValue } from './utils';
 import { useSearchParams } from 'react-router-dom';
-import defaultFilterValues from './constants';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 import { DegenFilter } from 'types/degenFilter';
 import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
-import { Degen } from 'types/degens';
 
 type FilterSource =
   | 'prices'
@@ -37,30 +35,12 @@ type FilterSource =
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
-  data?: Degen[];
+  defaultFilterValues: DegenFilter;
 }
-
-const getPriceRangeFromData = (data: Degen[] | undefined) => {
-  if (data && data.length) {
-    let min = data[0].price;
-    let max = data[0].price;
-
-    for (let i = 1; i < data.length; i += 1) {
-      const price = data[i].price;
-
-      min = price < min ? price : min;
-      max = price > max ? price : max;
-    }
-
-    return [min, max];
-  }
-
-  return defaultFilterValues.prices;
-};
 
 const DegensFilter = ({
   handleFilter,
-  data,
+  defaultFilterValues,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -73,7 +53,7 @@ const DegensFilter = ({
   // Filter states
   // TODO: do something here to specify the default range for prices based on real data
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
-    getPriceRangeFromData(data),
+    defaultFilterValues.prices,
   );
   const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
     defaultFilterValues.multipliers,
@@ -90,6 +70,7 @@ const DegensFilter = ({
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
   );
+
   const actions = {
     prices: setPricesRangeValue,
     multipliers: setMultipliersRangeValue,
@@ -145,11 +126,6 @@ const DegensFilter = ({
     ],
   );
 
-  useEffect(() => {
-    setPricesRangeValue(getPriceRangeFromData(data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
   // For checkbox filter
   const handleCheckboxChange = useCallback(
     (
@@ -174,16 +150,25 @@ const DegensFilter = ({
     [handleChangeCommitted],
   );
 
-  const handleReset = () => {
-    if (isParamsEmpty) return;
+  const setAllFilterValues = () => {
     setPricesRangeValue(defaultFilterValues.prices);
     setMultipliersRangeValue(defaultFilterValues.multipliers);
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
+  };
+
+  const handleReset = () => {
+    if (isParamsEmpty) return;
+    setAllFilterValues();
     setSearchParams({});
   };
+
+  useEffect(() => {
+    setAllFilterValues();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultFilterValues]);
 
   // Update local state on mounted
   useEffect(() => {
@@ -197,7 +182,7 @@ const DegensFilter = ({
       cosmetics: cosmeticsValue,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, defaultFilterValues]);
 
   return (
     <Stack
@@ -231,7 +216,8 @@ const DegensFilter = ({
           <Stack gap={4}>
             <FilterRangeSlider
               value={pricesRangeValue}
-              max={getPriceRangeFromData(data)[1]}
+              min={defaultFilterValues.prices[0]}
+              max={defaultFilterValues.prices[1]}
               unit=" NFTL"
               label="Price"
               onChange={(_, value) => setPricesRangeValue(value as number[])}
@@ -239,7 +225,8 @@ const DegensFilter = ({
             />
             <FilterRangeSlider
               value={multipliersRangeValue}
-              max={15}
+              min={defaultFilterValues.multipliers[0]}
+              max={defaultFilterValues.multipliers[1]}
               unit="x"
               label="Multipliers"
               onChange={(_, value) =>
@@ -249,7 +236,8 @@ const DegensFilter = ({
             />
             <FilterRangeSlider
               value={rentalsRangeValue}
-              max={40}
+              min={defaultFilterValues.rentals[0]}
+              max={defaultFilterValues.rentals[1]}
               label="Rentals"
               onChange={(_, value) => setRentalsRangeValue(value as number[])}
               onChangeCommitted={() => handleChangeCommitted('rentals')}
