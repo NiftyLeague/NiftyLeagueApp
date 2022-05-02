@@ -43,13 +43,15 @@ const ViewTraitsContentDialog = ({
           <Typography color="gray">#{degen?.id}</Typography>
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          <Typography color="yellow">
+          <Typography color="rgb(75, 7, 175)">
             {degen?.multiplier}x Multiplier
           </Typography>
-          <Typography color="green">
+          <Typography color="rgb(75, 7, 175)">
             {degen?.rental_count} Active Rentals
           </Typography>
-          <Typography color="error">{degen?.price} NFTL/ 1 Week</Typography>
+          <Typography color="rgb(75, 7, 175)">
+            {degen?.price} NFTL/ 1 Week
+          </Typography>
         </Stack>
         <Stack direction="column" alignItems="center" gap={1}>
           <Typography color="gray">
