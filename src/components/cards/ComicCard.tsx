@@ -72,7 +72,7 @@ const ComicCard: React.FC<ComicCardProps> = ({
               variant="body2"
               sx={{ color: theme.palette.success.main }}
             >
-              {comic.balance}
+              Owned: {comic.balance}
             </Typography>
           ) : null}
         </Stack>

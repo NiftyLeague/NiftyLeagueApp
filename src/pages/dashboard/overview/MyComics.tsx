@@ -1,11 +1,15 @@
-import { useState } from 'react';
-import { Box, Button } from '@mui/material';
+/* eslint-disable no-nested-ternary */
+import { useMemo, useState } from 'react';
+import { Box, Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ComicCard from 'components/cards/ComicCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Comic } from 'types/comic';
+import EmptyState from 'components/EmptyState';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useComicsBalance from 'hooks/useComicsBalance';
+import { v4 as uuidv4 } from 'uuid';
 
 const BoxComicStyles = {
   px: 1,
@@ -29,10 +33,10 @@ const BoxComicStyles = {
 const MyComics = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
   const navigate = useNavigate();
-  const comicsBalance = useComicsBalance();
-  console.log(
-    'comicsBalance filtered',
-    comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
+  const { comicsBalance, loading } = useComicsBalance();
+  const filteredComics = useMemo(
+    () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
+    [comicsBalance],
   );
 
   const handleViewComic = (comic: Comic) => {
@@ -41,6 +45,13 @@ const MyComics = (): JSX.Element => {
 
   const handleCloseDialog = () => {
     setSelectedComic(null);
+  };
+
+  const handleBuyComics = () => {
+    window.open(
+      'https://opensea.io/collection/nifty-league-launch-comics',
+      '_blank',
+    );
   };
 
   const settings = {
@@ -88,17 +99,7 @@ const MyComics = (): JSX.Element => {
           </Button>
         }
       >
-        {comicsBalance
-          .filter((comic) => comic.balance && comic.balance > 0)
-          .map((comic) => (
-            <Box sx={BoxComicStyles} key={comic.wearableName}>
-              <ComicCard
-                comic={comic}
-                onViewComic={() => handleViewComic(comic)}
-              />
-            </Box>
-          ))}
-        {comicsBalance.map((comic) => (
+        {filteredComics.map((comic) => (
           <Box sx={BoxComicStyles} key={comic.wearableName}>
             <ComicCard
               comic={comic}
@@ -106,6 +107,28 @@ const MyComics = (): JSX.Element => {
             />
           </Box>
         ))}
+        {loading ? (
+          [...Array(6)].map(() => (
+            <Grid item xs={12} sm={11} md={11} lg={11} xl={11} key={uuidv4()}>
+              <SkeletonDegenPlaceholder />
+            </Grid>
+          ))
+        ) : filteredComics.length ? (
+          filteredComics.map((comic) => (
+            <Box sx={BoxComicStyles} key={comic.wearableName}>
+              <ComicCard
+                comic={comic}
+                onViewComic={() => handleViewComic(comic)}
+              />
+            </Box>
+          ))
+        ) : (
+          <EmptyState
+            message="No Comics found. Please check your address or go purchase some if you have not done so already!"
+            buttonText="Buy Comics"
+            onClick={handleBuyComics}
+          />
+        )}
       </SectionSlider>
       <ViewComicDialog
         comic={selectedComic}
