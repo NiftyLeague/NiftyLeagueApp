@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { TRAIT_NAME_MAP, TRAIT_VALUE_MAP } from 'constants/cosmeticsFilters';
-import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 import { CharacterType, Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,12 +27,7 @@ const ViewTraitsContentDialog = ({
     <Grid container>
       <Grid item xs={12} sm={12} md={6} sx={{ py: 1, px: 2 }}>
         <Stack direction="row" justifyContent="center">
-          <img
-            src={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
-            alt={degen?.id}
-            width="240px"
-            height="auto"
-          />
+          {degen && <DegenImage tokenId={degen.id} />}
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           {!traitList.length ? (
