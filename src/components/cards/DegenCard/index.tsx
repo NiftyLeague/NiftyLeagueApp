@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  CardActions,
   CardContent,
   Link,
   Stack,
@@ -9,6 +8,7 @@ import {
   Theme,
   Typography,
   useTheme,
+  Box,
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 import EditIcon from '@mui/icons-material/Edit';
@@ -161,16 +161,24 @@ const DegenCard: React.FC<DegenCardProps> = ({
           )}
         </Stack>
       </CardContent>
-      <CardActions>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          px: 2,
+          gap: 1,
+        }}
+      >
         {isDashboardDegen ? (
-          <Button variant="contained" fullWidth sx={{ minWidth: 80 }}>
+          <Button variant="contained" fullWidth sx={{ minWidth: '48%' }}>
             Claim MyNFTL
           </Button>
         ) : (
           <Button
             variant="contained"
             fullWidth
-            sx={{ minWidth: 80 }}
+            sx={{ minWidth: '48%' }}
             onClick={onClickRent}
           >
             Rent Now
@@ -180,12 +188,12 @@ const DegenCard: React.FC<DegenCardProps> = ({
           variant="outlined"
           color="primary"
           fullWidth
-          sx={{ minWidth: 80 }}
+          sx={{ minWidth: '48%' }}
           onClick={onClickDetail}
         >
           View Traits
         </Button>
-      </CardActions>
+      </Box>
       <Stack direction="row" justifyContent="center" sx={{ pb: 2 }}>
         {isDashboardDegen && (
           <Typography
