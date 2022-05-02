@@ -166,6 +166,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
       });
       try {
         const response = await fetch(WITHDRAW_NFTL_SIGN, {
+          headers: { authorizationToken: auth as string },
           method: 'POST',
           body,
         });
@@ -187,7 +188,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         console.error('error', error);
       }
     },
-    [address, tx, writeContracts],
+    [address, auth, tx, writeContracts],
   );
 
   return (
