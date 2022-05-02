@@ -46,9 +46,7 @@ const ViewTraitsContentDialog = ({
           <Typography color="green">
             {degen?.rental_count} Active Rentals
           </Typography>
-          <Typography color="error">
-            {degen?.earning_cap} NFTL/ 1 Week
-          </Typography>
+          <Typography color="error">{degen?.price} NFTL/ 1 Week</Typography>
         </Stack>
         <Stack direction="column" alignItems="center" gap={1}>
           <Typography color="gray">
