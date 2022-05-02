@@ -55,7 +55,9 @@ const Sidebar = ({ window }: SidebarProps) => {
             <UserProfile />
             <MenuList />
           </Box>
-          <LogoutButton sx={{ marginBottom: 1 }} />
+          <Stack alignItems="center">
+            <LogoutButton sx={{ marginBottom: 3, width: '85%' }} />
+          </Stack>
         </Stack>
       </PerfectScrollbar>
     ),

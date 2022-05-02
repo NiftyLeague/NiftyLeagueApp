@@ -11,7 +11,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ sx }) => {
   if (web3Modal && web3Modal.cachedProvider) {
     return (
       <Button sx={sx} variant="outlined" onClick={logoutOfWeb3Modal}>
-        Logout
+        Log Out
       </Button>
     );
   }
