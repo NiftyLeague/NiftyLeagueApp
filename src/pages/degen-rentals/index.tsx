@@ -194,7 +194,7 @@ const DegenRentalsPage = (): JSX.Element => {
                       sm={6}
                       md={isDrawerOpen ? 6 : 4}
                       lg={isDrawerOpen ? 6 : 4}
-                      xl={2.4}
+                      xl={isDrawerOpen ? 4 : 2.4}
                     >
                       <DegenCard
                         id={degen.id}
