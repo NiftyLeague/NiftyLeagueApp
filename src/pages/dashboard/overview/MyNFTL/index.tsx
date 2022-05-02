@@ -18,7 +18,11 @@ import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../constants';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
-import { MY_PROFILE_API_URL } from 'constants/url';
+import {
+  GAMER_ACCOUNT_API,
+  MY_PROFILE_API_URL,
+  WITHDRAW_NFTL_SIGN,
+} from 'constants/url';
 
 interface MyNFTLProps {
   onClaimAll?: React.MouseEventHandler<HTMLButtonElement>;
@@ -50,19 +54,19 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     [characters],
   );
 
-  const [mockAccumulated, setMockAccumulated] = useState(0);
+  const [mockAccrued, setMockAccrued] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
-  const totalAccumulated = useClaimableNFTL(
+  const totalAccrued = useClaimableNFTL(
     writeContracts,
     tokenIndices,
     refreshKey,
   );
 
   useEffect(() => {
-    if (totalAccumulated) setMockAccumulated(totalAccumulated);
-  }, [totalAccumulated]);
+    if (totalAccrued) setMockAccrued(totalAccrued);
+  }, [totalAccrued]);
 
-  const amountParsed = mockAccumulated.toLocaleString(undefined, {
+  const mockAccruedStr = mockAccrued.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -81,12 +85,9 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   useEffect(() => {
     const fetchAccount = async () => {
       if (auth) {
-        const result = await fetch(
-          'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/accounts/account',
-          {
-            headers: { authorizationToken: auth },
-          },
-        )
+        const result = await fetch(GAMER_ACCOUNT_API, {
+          headers: { authorizationToken: auth },
+        })
           .then((res) => {
             if (res.status === 404) setAccError(true);
             return res.text();
@@ -120,30 +121,21 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     }
   }, [auth]);
 
-  const gameBal = account?.balance
-    ? parseFloat(
-        account.balance.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }),
-      )
-    : 0;
-
-  const totalNFTL = account?.balance || 0 + mockAccumulated;
-  const totalNFTLFormatted = totalNFTL.toLocaleString(undefined, {
+  const gameBal = account?.balance ? account.balance : 0;
+  const gameBalString = gameBal.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
   const handleClaimNFTL = useCallback(async () => {
     // eslint-disable-next-line no-console
-    if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
+    if (DEBUG) console.log('claim', tokenIndices, totalAccrued);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
-    setMockAccumulated(0);
+    setMockAccrued(0);
     setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenIndices, totalAccumulated, tx, writeContracts]);
+  }, [tokenIndices, totalAccrued, tx, writeContracts]);
 
   const handleDepositNFTL = useCallback(
     async (amount: number) => {
@@ -162,20 +154,38 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   const handleWithdrawNFTL = useCallback(
     async (amount: number) => {
       // eslint-disable-next-line no-console
-      if (DEBUG) console.log('withdraw', amount, utils.parseEther(`${amount}`));
+      if (DEBUG) console.log('withdraw', amount);
+      const addressToLower = address.toLowerCase();
       const nonce = await tx(
         writeContracts[GAME_ACCOUNT_CONTRACT].nonce(address),
       );
-      console.log('nonce', nonce);
-      const signature = '0x4423kjhasdf9823e';
-      const res = await tx(
-        writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
-          utils.parseEther(`${amount}`),
-          nonce,
-          signature,
-        ),
-      );
-      console.log('res', res);
+      const body = JSON.stringify({
+        amount,
+        nonce,
+        address: addressToLower,
+      });
+      try {
+        const response = await fetch(WITHDRAW_NFTL_SIGN, {
+          method: 'POST',
+          body,
+        });
+        if (!response.ok) throw new Error(response.statusText);
+        const signData = await response.json();
+        // eslint-disable-next-line no-console
+        if (DEBUG) console.log('signData', signData);
+        const { signature } = signData;
+        const txRes = await tx(
+          writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
+            utils.parseEther(`${amount}`),
+            nonce,
+            signature,
+          ),
+        );
+        // eslint-disable-next-line no-console
+        if (DEBUG) console.log('txRes', txRes);
+      } catch (error) {
+        console.error('error', error);
+      }
     },
     [address, tx, writeContracts],
   );
@@ -196,7 +206,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                 />
               ) : (
                 <Button variant="outlined" onClick={handleClaimNFTL}>
-                  Claim All {totalNFTLFormatted} NFTL
+                  Claim All {mockAccruedStr} NFTL
                 </Button>
               )}
             </Stack>
@@ -259,11 +269,11 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         <Grid container spacing={sectionSpacing}>
           <Grid item sm={6} xs={12}>
             <HoverDataCard
-              title="Game & Rental Balance"
+              title="Game &amp; Rental Balance"
               primary={`${
                 accError
                   ? 'Error fetching balance'
-                  : `${gameBal || '0.00'} NFTL`
+                  : `${gameBalString || '0.00'} NFTL`
               }`}
               isLoading={loading}
               customStyle={{
@@ -282,7 +292,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                     </DialogTrigger>
                     <DialogContent
                       aria-labelledby="customized-dialog-title"
-                      dialogTitle="Withdraw Game & Rental Earnings"
+                      dialogTitle="Withdraw Game &amp; Rental Earnings"
                       sx={{
                         '& h2': {
                           textAlign: 'center',
@@ -329,7 +339,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
           <Grid item sm={6} xs={12}>
             <HoverDataCard
               title="Daily NFTL Accrued"
-              primary={`${mockAccumulated ? amountParsed : '0.00'} NFTL`}
+              primary={`${mockAccrued ? mockAccruedStr : '0.00'} NFTL`}
               customStyle={{
                 backgroundColor: theme.palette.background.default,
                 border: '1px solid',
@@ -342,7 +352,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                   fullWidth
                   variant="contained"
                   disabled={
-                    !(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])
+                    !(mockAccrued > 0.0 && writeContracts[NFTL_CONTRACT])
                   }
                   onClick={handleClaimNFTL}
                 >

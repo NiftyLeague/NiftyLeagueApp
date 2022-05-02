@@ -84,9 +84,12 @@ const WithdrawForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack alignItems="center" gap={2}>
-        <Typography variant="h4">Game & Rental Balance</Typography>
+        <Typography variant="h4">Game &amp; Rental Balance</Typography>
         <Typography variant="h2" sx={{ opacity: 0.7 }}>
-          {balance.toLocaleString('en-US')}
+          {balance.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
           <Typography variant="body1">Available to Claim</Typography>
         </Typography>
         <Typography variant="h4">
@@ -194,7 +197,7 @@ const WithdrawForm = ({
                       variant="body1"
                       href="#"
                     >
-                      terms & conditions
+                      terms &amp; conditions
                     </Link>
                     regarding withdrawing earnings.
                   </Typography>
