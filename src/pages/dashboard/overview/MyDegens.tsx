@@ -5,6 +5,7 @@ import DegenCard from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo } from 'react';
 import { NetworkContext } from 'NetworkProvider';
+import { useNavigate } from 'react-router-dom';
 import { Owner } from 'types/graph';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
@@ -14,10 +15,6 @@ import { DEGEN_BASE_API_URL } from 'constants/url';
 import { useQuery } from '@apollo/client';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
-
-interface MyDegensProps {
-  onViewAllDegens?: React.MouseEventHandler<HTMLButtonElement>;
-}
 
 const BoxDegenStyles = {
   px: 1,
@@ -32,8 +29,9 @@ const BoxDegenStyles = {
   },
 };
 
-const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
+const MyDegens = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
+  const navigate = useNavigate();
 
   const {
     loading,
@@ -103,8 +101,7 @@ const MyDegens = ({ onViewAllDegens }: MyDegensProps): JSX.Element => {
       actions={
         <Button
           variant="outlined"
-          onClick={onViewAllDegens}
-          href="/dashboard/degens"
+          onClick={() => navigate('/dashboard/degens')}
         >
           View All Degens
         </Button>

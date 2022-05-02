@@ -1,14 +1,11 @@
 import { Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import ComicCard from 'components/cards/ComicCard';
 import comics from 'constants/comics';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useState } from 'react';
 import { Comic } from 'types/comic';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
-
-interface MyComicsProps {
-  onViewAllComics?: React.MouseEventHandler<HTMLButtonElement>;
-}
 
 const BoxComicStyles = {
   px: 1,
@@ -29,8 +26,9 @@ const BoxComicStyles = {
     p: '12px',
   },
 };
-const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
+const MyComics = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
+  const navigate = useNavigate();
 
   const handleViewComic = (comic: Comic) => {
     setSelectedComic(comic);
@@ -79,8 +77,7 @@ const MyComics = ({ onViewAllComics }: MyComicsProps): JSX.Element => {
         actions={
           <Button
             variant="outlined"
-            onClick={onViewAllComics}
-            href="/dashboard/comics"
+            onClick={() => navigate('/dashboard/comics')}
           >
             View All Comics
           </Button>
