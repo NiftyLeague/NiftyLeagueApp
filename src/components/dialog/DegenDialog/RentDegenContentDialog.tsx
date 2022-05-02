@@ -81,12 +81,12 @@ const RentDegenContentDialog = ({
   };
 
   const validateAddress = (value: string) => {
+    setEthAddress(value);
     if (!ethers.utils.isAddress(value)) {
       setAddressError('Address is invalid!');
     } else if (!value) {
       setAddressError('Please input an address');
     } else {
-      setEthAddress(value);
       setAddressError('');
     }
   };
