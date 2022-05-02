@@ -1,6 +1,9 @@
 import { Box, Button, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { TRAIT_NAME_MAP, TRAIT_VALUE_MAP } from 'constants/cosmeticsFilters';
+import {
+  TRAIT_KEY_VALUE_MAP,
+  TRAIT_NAME_MAP,
+} from 'constants/cosmeticsFilters';
 import { CharacterType, Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -86,10 +89,12 @@ const ViewTraitsContentDialog = ({
                 .map(([key, value]) => (
                   <Grid item xs={3} key={key}>
                     <Stack direction="column" alignItems="center">
-                      <Typography fontWeight={700}>
+                      <Typography fontWeight={700} textAlign="center">
                         {TRAIT_NAME_MAP[key]}
                       </Typography>
-                      <Typography>{TRAIT_VALUE_MAP[value] ?? value}</Typography>
+                      <Typography textAlign="center">
+                        {TRAIT_KEY_VALUE_MAP[value] ?? value}
+                      </Typography>
                     </Stack>
                   </Grid>
                 ))}
