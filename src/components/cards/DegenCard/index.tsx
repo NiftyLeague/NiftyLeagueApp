@@ -125,7 +125,11 @@ const DegenCard: React.FC<DegenCardProps> = ({
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Link
-            href="#"
+            href={
+              id
+                ? `https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${id}`
+                : '#'
+            }
             target="_blank"
             rel="nofollow"
             variant="body2"
@@ -134,7 +138,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             {`Degen #${id}`}
           </Link>
           <Link
-            href="#"
+            href={owner ? `https://opensea.io/${owner}/niftydegen` : '#'}
             target="_blank"
             rel="nofollow"
             variant="body2"
