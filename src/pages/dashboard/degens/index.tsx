@@ -107,6 +107,8 @@ const DashboardDegensPage = (): JSX.Element => {
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(filteredDegens, PER_PAGE);
 
+  const hasData = currentData().length > 0;
+
   useEffect(() => {
     if (filteredDegens) {
       const originalDegens: Degen[] = Object.values(filteredDegens);
@@ -160,9 +162,10 @@ const DashboardDegensPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => (
-          <DegensFilter handleFilter={handleFilter} data={degens} />
-        )}
+        drawerWidth={hasData ? 320 : 0}
+        renderDrawer={() =>
+          hasData && <DegensFilter handleFilter={handleFilter} data={degens} />
+        }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
@@ -170,24 +173,28 @@ const DashboardDegensPage = (): JSX.Element => {
             <SectionTitle
               firstSection
               actions={
-                <SortButton handleSort={handleSort}>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  />
-                </SortButton>
+                hasData && (
+                  <SortButton handleSort={handleSort}>
+                    <Button
+                      id="demo-positioned-button"
+                      aria-controls="demo-positioned-menu"
+                      aria-haspopup="true"
+                      sx={{ color: 'grey.500', fontWeight: 400 }}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    />
+                  </SortButton>
+                )
               }
             >
               <Stack direction="row" alignItems="center" gap={1}>
-                <IconButton
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                  size="large"
-                >
-                  {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
-                </IconButton>
+                {hasData && (
+                  <IconButton
+                    onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                    size="large"
+                  >
+                    {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
+                  </IconButton>
+                )}
                 {newData.length} Degens
               </Stack>
             </SectionTitle>
@@ -240,13 +247,15 @@ const DashboardDegensPage = (): JSX.Element => {
                 />
               )}
             </Grid>
-            <Pagination
-              count={maxPage}
-              page={currentPage}
-              color="primary"
-              sx={{ margin: '0 auto' }}
-              onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
-            />
+            {hasData && (
+              <Pagination
+                count={maxPage}
+                page={currentPage}
+                color="primary"
+                sx={{ margin: '0 auto' }}
+                onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+              />
+            )}
           </Stack>
         )}
       />
