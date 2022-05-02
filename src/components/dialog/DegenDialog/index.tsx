@@ -16,6 +16,7 @@ export interface DegenDialogProps extends DialogProps {
 }
 
 const DegenDialog = ({
+  open,
   degen,
   isRent,
   setIsRent,
@@ -38,6 +39,13 @@ const DegenDialog = ({
     owner: string;
     traitList: number[];
   };
+  const resetDialog = () => {
+    setCharacter({
+      name: null,
+      owner: null,
+      traitList: [],
+    });
+  };
 
   useEffect(() => {
     async function getCharacter() {
@@ -53,10 +61,13 @@ const DegenDialog = ({
       };
       setCharacter(characterData);
     }
-    if (tokenId && readContracts && readContracts[NFT_CONTRACT])
+    if (open && tokenId && readContracts && readContracts[NFT_CONTRACT]) {
       // eslint-disable-next-line no-void
       void getCharacter();
-  }, [tokenId, readContracts]);
+    } else {
+      resetDialog();
+    }
+  }, [tokenId, readContracts, open]);
 
   const displayName = name || 'No Name DEGEN';
   const traits: { [traitType: string]: number } = traitList.reduce(
@@ -65,11 +76,6 @@ const DegenDialog = ({
   );
 
   const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setCharacter({
-      name: null,
-      owner: null,
-      traitList: [],
-    });
     onClose?.(event, 'backdropClick');
   };
 
@@ -80,6 +86,7 @@ const DegenDialog = ({
       scroll="body"
       fullScreen={fullScreen}
       onClose={handleClose}
+      open={open}
       {...rest}
     >
       {isRent ? (
