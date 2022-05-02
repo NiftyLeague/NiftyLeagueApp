@@ -65,7 +65,7 @@ const GameCard: React.FC<GameCardProps> = ({
                   : theme.palette.success.main,
               }}
             >
-              {isComingSoon ? 'coming soon' : `${onlineCounter} online`}
+              {isComingSoon && 'coming soon'}
             </Typography>
           </Stack>
           <Typography variant="body2" color="text.secondary">
