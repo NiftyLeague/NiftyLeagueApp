@@ -107,6 +107,8 @@ const DashboardDegensPage = (): JSX.Element => {
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(filteredDegens, PER_PAGE);
 
+  const isShowing = currentData().length > 0;
+
   useEffect(() => {
     if (filteredDegens) {
       const originalDegens: Degen[] = Object.values(filteredDegens);
@@ -160,9 +162,12 @@ const DashboardDegensPage = (): JSX.Element => {
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => (
-          <DegensFilter handleFilter={handleFilter} data={degens} />
-        )}
+        drawerWidth={isShowing ? 320 : 0}
+        renderDrawer={() =>
+          isShowing && (
+            <DegensFilter handleFilter={handleFilter} data={degens} />
+          )
+        }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
@@ -170,15 +175,17 @@ const DashboardDegensPage = (): JSX.Element => {
             <SectionTitle
               firstSection
               actions={
-                <SortButton handleSort={handleSort}>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  />
-                </SortButton>
+                isShowing && (
+                  <SortButton handleSort={handleSort}>
+                    <Button
+                      id="demo-positioned-button"
+                      aria-controls="demo-positioned-menu"
+                      aria-haspopup="true"
+                      sx={{ color: 'grey.500', fontWeight: 400 }}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    />
+                  </SortButton>
+                )
               }
             >
               <Stack direction="row" alignItems="center" gap={1}>
@@ -240,13 +247,15 @@ const DashboardDegensPage = (): JSX.Element => {
                 />
               )}
             </Grid>
-            <Pagination
-              count={maxPage}
-              page={currentPage}
-              color="primary"
-              sx={{ margin: '0 auto' }}
-              onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
-            />
+            {isShowing && (
+              <Pagination
+                count={maxPage}
+                page={currentPage}
+                color="primary"
+                sx={{ margin: '0 auto' }}
+                onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+              />
+            )}
           </Stack>
         )}
       />
