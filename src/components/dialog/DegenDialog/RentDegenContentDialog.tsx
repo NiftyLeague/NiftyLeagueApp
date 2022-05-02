@@ -13,7 +13,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
 import { useCallback, useState } from 'react';
@@ -24,6 +23,7 @@ import useRent from 'hooks/useRent';
 import useRentalRename from 'hooks/useRentalRename';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
+import DegenImage from 'components/cards/DegenCard/DegenImage';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -123,12 +123,7 @@ const RentDegenContentDialog = ({
     <Grid container>
       <Grid item xs={12} sm={12} md={6} sx={{ py: 1, px: 2 }}>
         <Stack direction="row" justifyContent="center">
-          <img
-            src={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
-            alt={degen?.id}
-            width="240px"
-            height="auto"
-          />
+          {degen && <DegenImage tokenId={degen.id} />}
         </Stack>
         <Stack direction="column" alignItems="center" gap={1} sx={{ my: 2 }}>
           <Typography color="gray">
@@ -289,8 +284,7 @@ const RentDegenContentDialog = ({
           <FormControlLabel
             label={
               <Typography variant="caption">
-                I have read the{' '}
-                <Link href="https://example.com">terms & conditions</Link>{' '}
+                I have read the <Link href="#">terms & conditions</Link>{' '}
                 regarding disabling a rental
               </Typography>
             }
