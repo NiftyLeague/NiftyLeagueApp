@@ -7,7 +7,7 @@ import ComicP4 from 'assets/images/comics/page4.png';
 import ComicP5 from 'assets/images/comics/page5.png';
 import ComicP6 from 'assets/images/comics/page6.png';
 
-const comics: Comic[] = [
+const COMICS: Comic[] = [
   {
     id: 1,
     title: 'Comic',
@@ -58,4 +58,4 @@ const comics: Comic[] = [
   },
 ];
 
-export default comics;
+export default COMICS;

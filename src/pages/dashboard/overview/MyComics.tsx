@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ComicCard from 'components/cards/ComicCard';
-import comics from 'constants/comics';
 import SectionSlider from 'components/sections/SectionSlider';
-import { useState } from 'react';
 import { Comic } from 'types/comic';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
+import useComicsBalance from 'hooks/useComicsBalance';
 
 const BoxComicStyles = {
   px: 1,
@@ -29,6 +29,11 @@ const BoxComicStyles = {
 const MyComics = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
   const navigate = useNavigate();
+  const comicsBalance = useComicsBalance();
+  console.log(
+    'comicsBalance filtered',
+    comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
+  );
 
   const handleViewComic = (comic: Comic) => {
     setSelectedComic(comic);
@@ -83,7 +88,17 @@ const MyComics = (): JSX.Element => {
           </Button>
         }
       >
-        {comics.map((comic) => (
+        {comicsBalance
+          .filter((comic) => comic.balance && comic.balance > 0)
+          .map((comic) => (
+            <Box sx={BoxComicStyles} key={comic.wearableName}>
+              <ComicCard
+                comic={comic}
+                onViewComic={() => handleViewComic(comic)}
+              />
+            </Box>
+          ))}
+        {comicsBalance.map((comic) => (
           <Box sx={BoxComicStyles} key={comic.wearableName}>
             <ComicCard
               comic={comic}
