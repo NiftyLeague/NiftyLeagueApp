@@ -6,6 +6,10 @@ export interface Rentals {
       charges: number;
       earnings: number;
       time_played: number;
+      earnings_player: number;
+      earnings_owner: number;
+      earnings_renter: number;
+      xp: number;
     };
   };
   next_charge_at: number;
