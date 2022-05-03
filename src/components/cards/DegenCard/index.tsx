@@ -178,14 +178,16 @@ const DegenCard: React.FC<DegenCardProps> = ({
           gap: 1,
         }}
       >
-        <Button
-          onClick={onClickClaim}
-          variant="contained"
-          fullWidth
-          sx={{ minWidth: '32%' }}
-        >
-          Claim NFTL
-        </Button>
+        {isDashboardDegen && (
+          <Button
+            onClick={onClickClaim}
+            variant="contained"
+            fullWidth
+            sx={{ minWidth: '32%' }}
+          >
+            Claim NFTL
+          </Button>
+        )}
         <Button
           variant="contained"
           fullWidth
