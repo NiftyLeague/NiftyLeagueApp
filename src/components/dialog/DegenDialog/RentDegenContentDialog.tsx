@@ -95,7 +95,9 @@ const RentDegenContentDialog = ({
   const handleRent = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       if (!web3Modal.cachedProvider) {
-        toast.error('You need to connect to your wallet first!');
+        toast.error(
+          'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
+        );
         return;
       }
 
@@ -131,6 +133,7 @@ const RentDegenContentDialog = ({
       onClose,
     ],
   );
+  const degenPrice = degen?.price || 0;
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
@@ -287,12 +290,14 @@ const RentDegenContentDialog = ({
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Renaming Fee</Typography>
-                <Typography color="gray">{renameFee} NFTL</Typography>
+                <Typography color="gray">
+                  {renameEnabled ? renameFee : 0} NFTL
+                </Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Total Due Now</Typography>
                 <Typography color="gray">{`${
-                  degen?.price || 0 + (renameEnabled ? renameFee : 0)
+                  renameEnabled ? degenPrice + renameFee : degenPrice
                 } NFTL`}</Typography>
               </Stack>
             </Stack>
