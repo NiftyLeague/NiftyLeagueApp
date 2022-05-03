@@ -134,7 +134,25 @@ const RentDegenContentDialog = ({
       onClose,
     ],
   );
-  const degenPrice = degen?.price || 0;
+
+  const precheckRent = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (rentFor === 'recruit' && !ethAddress) {
+        setAddressError('Please input an address.');
+        return;
+      }
+
+      if (renameEnabled && !newDegenName) {
+        setNameError('Please input a name.');
+        return;
+      }
+
+      handleRent(event);
+    },
+    [ethAddress, handleRent, newDegenName, renameEnabled, rentFor],
+  );
+
+  const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
@@ -162,23 +180,25 @@ const RentDegenContentDialog = ({
             />
           </RadioGroup>
         </Stack>
-        <Stack direction="column" alignItems="center" gap={2} sx={{ my: 2 }}>
-          <Typography textAlign="center">
-            What is your recruit&#39;s ETH wallet address?
-          </Typography>
-          <FormControl fullWidth>
-            <TextField
-              placeholder="0xunkown"
-              name="address"
-              variant="outlined"
-              fullWidth
-              value={ethAddress}
-              error={addressError !== ''}
-              helperText={addressError}
-              onChange={(event) => validateAddress(event.target.value)}
-            />
-          </FormControl>
-        </Stack>
+        {rentFor === 'recruit' && (
+          <Stack direction="column" alignItems="center" gap={2} sx={{ my: 2 }}>
+            <Typography textAlign="center">
+              What is your recruit&#39;s ETH wallet address?
+            </Typography>
+            <FormControl fullWidth>
+              <TextField
+                placeholder="0xunkown"
+                name="address"
+                variant="outlined"
+                fullWidth
+                value={ethAddress}
+                error={addressError !== ''}
+                helperText={addressError}
+                onChange={(event) => validateAddress(event.target.value)}
+              />
+            </FormControl>
+          </Stack>
+        )}
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           <Typography textAlign="center">
             Do you want to rename the degen for your rental?
@@ -216,7 +236,7 @@ const RentDegenContentDialog = ({
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
         <Stack sx={{ justifyContent: 'space-between', height: '100%' }} gap={2}>
-          <Stack>
+          <Stack sx={{ flex: 1 }}>
             <Box
               display="flex"
               flexDirection="row"
@@ -225,7 +245,7 @@ const RentDegenContentDialog = ({
             >
               <Typography variant="h2">Rental Overview</Typography>
             </Box>
-            <Stack gap={1} sx={{ my: 2 }}>
+            <Stack gap={1} sx={{ flex: 1, my: 2 }}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Degen Being Rented</Typography>
                 <Typography color="gray">
@@ -255,7 +275,7 @@ const RentDegenContentDialog = ({
               </Stack>
             </Stack>
             <Divider />
-            <Stack gap={1} sx={{ my: 2 }}>
+            <Stack gap={1} sx={{ flex: 1, my: 2 }}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>First Week Rental Cost:</Typography>
                 <Typography color="gray">{degen?.price} NFTL</Typography>
@@ -289,12 +309,12 @@ const RentDegenContentDialog = ({
                   <FormControlLabel value="no" control={<Radio />} label="No" />
                 </RadioGroup>
               </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Renaming Fee</Typography>
-                <Typography color="gray">
-                  {renameEnabled ? renameFee : 0} NFTL
-                </Typography>
-              </Stack>
+              {renameEnabled && (
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography>Renaming Fee</Typography>
+                  <Typography color="gray">{renameFee} NFTL</Typography>
+                </Stack>
+              )}
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Total Due Now</Typography>
                 <Typography color="gray">{`${
@@ -324,7 +344,7 @@ const RentDegenContentDialog = ({
             <LoadingButton
               variant="contained"
               fullWidth
-              onClick={handleRent}
+              onClick={precheckRent}
               disabled={
                 !agreement || Boolean(nameError) || Boolean(addressError)
               }
