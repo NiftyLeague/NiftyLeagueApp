@@ -157,6 +157,7 @@ const MyDegens = (): JSX.Element => {
                 id={degen.id}
                 name={degen.name}
                 isDashboardDegen
+                isEnabled={degen.is_active}
                 multiplier={degen.multiplier}
                 owner={degen.owner}
                 price={degen.price}
