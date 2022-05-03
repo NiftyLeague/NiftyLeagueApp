@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 
 // project imports
+import ExternalIcon from 'components/ExternalIcon';
 import LogoSection from '../LogoSection';
 
 import { useDispatch, useSelector } from 'store';
@@ -123,7 +124,7 @@ const Header = () => {
             color="inherit"
             underline="hover"
           >
-            {page.name}
+            {page.name} <ExternalIcon />
           </Link>
         ))}
       </Box>
