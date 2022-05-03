@@ -256,6 +256,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       price={degen.price}
                       background={degen.background}
                       activeRentals={degen.rental_count}
+                      isEnabled={degen.is_active}
                       isDashboardDegen
                       onEnableDisable={() => handleEnableDisable(degen)}
                       onClickDetail={() => handleViewTraits(degen)}
