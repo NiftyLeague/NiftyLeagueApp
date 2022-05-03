@@ -52,6 +52,7 @@ const RentDegenContentDialog = ({
     degen?.rental_count || 0,
     degen?.price,
     ethAddress,
+    isUseRentalPass,
   );
 
   const handleChangeRentingFor = (
