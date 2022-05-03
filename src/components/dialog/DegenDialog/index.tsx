@@ -6,12 +6,15 @@ import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
 import { CharacterType, Degen } from 'types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
+import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
-  isRent: boolean;
-  setIsRent: React.Dispatch<React.SetStateAction<boolean>>;
+  isRent?: boolean;
+  setIsRent?: React.Dispatch<React.SetStateAction<boolean>>;
+  isClaim?: boolean;
+  setIsClaim?: React.Dispatch<React.SetStateAction<boolean>>;
   onRent?: (degen: Degen) => void;
 }
 
@@ -20,6 +23,8 @@ const DegenDialog = ({
   degen,
   isRent,
   setIsRent,
+  isClaim,
+  setIsClaim,
   onRent,
   onClose,
   ...rest
@@ -89,15 +94,27 @@ const DegenDialog = ({
       open={open}
       {...rest}
     >
-      {isRent ? (
-        <RentDegenContentDialog degen={degen} onClose={handleClose} />
-      ) : (
+      {isClaim && (
+        <ClaimDegenContentDialog degen={degen} onClose={handleClose} />
+      )}
+      {isRent && <RentDegenContentDialog degen={degen} onClose={handleClose} />}
+      {!isRent && setIsRent && (
         <ViewTraitsContentDialog
           degen={degen}
           character={character}
           traits={traits}
           displayName={displayName}
           onRent={() => setIsRent(true)}
+          onClose={handleClose}
+        />
+      )}
+      {!isClaim && setIsClaim && (
+        <ViewTraitsContentDialog
+          degen={degen}
+          character={character}
+          traits={traits}
+          displayName={displayName}
+          onClaim={() => setIsClaim(true)}
           onClose={handleClose}
         />
       )}
