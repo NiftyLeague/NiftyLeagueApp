@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
@@ -45,7 +44,7 @@ import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 
 const DashboardDegensPage = (): JSX.Element => {
-  // let { address } = useContext(NetworkContext);
+  const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
   const [defaultValues, setDefaultValues] =
@@ -62,8 +61,6 @@ const DashboardDegensPage = (): JSX.Element => {
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
-
-  const address = '0xB970e591772F2CEb482bcD03a8d2f1924a4044Ce';
 
   const {
     loading,

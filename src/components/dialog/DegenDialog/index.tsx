@@ -98,14 +98,26 @@ const DegenDialog = ({
         <ClaimDegenContentDialog degen={degen} onClose={handleClose} />
       )}
       {isRent && <RentDegenContentDialog degen={degen} onClose={handleClose} />}
-      <ViewTraitsContentDialog
-        degen={degen}
-        character={character}
-        traits={traits}
-        displayName={displayName}
-        onClaim={() => setIsClaim(true)}
-        onClose={handleClose}
-      />
+      {!isRent && setIsRent && (
+        <ViewTraitsContentDialog
+          degen={degen}
+          character={character}
+          traits={traits}
+          displayName={displayName}
+          onRent={() => setIsRent(true)}
+          onClose={handleClose}
+        />
+      )}
+      {!isClaim && setIsClaim && (
+        <ViewTraitsContentDialog
+          degen={degen}
+          character={character}
+          traits={traits}
+          displayName={displayName}
+          onClaim={() => setIsClaim(true)}
+          onClose={handleClose}
+        />
+      )}
     </Dialog>
   );
 };

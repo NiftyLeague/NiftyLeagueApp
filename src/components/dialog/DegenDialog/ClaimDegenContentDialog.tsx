@@ -1,29 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
-import useRentalPassCount from 'hooks/useRentalPassCount';
-import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { useCallback, useState, useContext, useEffect } from 'react';
 import { Degen } from 'types/degens';
-import { getErrorForName } from 'utils/name';
-import { ethers } from 'ethers';
-import useRent from 'hooks/useRent';
-import useRentalRename from 'hooks/useRentalRename';
-import { toast } from 'react-toastify';
-import LoadingButton from '@mui/lab/LoadingButton';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
+import { NetworkContext } from 'NetworkProvider';
+import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import { NFTL_CONTRACT } from 'constants/contracts';
+import { DEBUG } from 'constants/index';
 
 export interface ClaimDegenContentDialogProps {
   degen?: Degen;
@@ -34,92 +15,52 @@ const ClaimDegenContentDialog = ({
   degen,
   onClose,
 }: ClaimDegenContentDialogProps) => {
-  const [agreement, setAgreement] = useState<boolean>(false);
-  const [rentFor, setRentFor] = useState<string>('recruit');
-  const [renameEnabled, setRenameEnabled] = useState<boolean>(false);
-  const [ethAddress, setEthAddress] = useState<string>('');
-  const [newDegenName, setNewDegenName] = useState<string>('');
-  const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
-  const [nameError, setNameError] = useState<string>('');
-  const [addressError, setAddressError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const [, , rentalPassCount] = useRentalPassCount(degen?.id);
-  const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
-  const rent = useRent(
-    degen?.id,
-    degen?.rental_count || 0,
-    degen?.price,
-    ethAddress,
+  const { tx, writeContracts } = useContext(NetworkContext);
+  const [mockAccumulated, setMockAccumulated] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const tokenId: any = degen?.id;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const tokenIndices = [parseInt(tokenId, 10)];
+  const totalAccumulated = useClaimableNFTL(
+    writeContracts,
+    tokenIndices,
+    refreshKey,
   );
+  useEffect(() => {
+    if (totalAccumulated) setMockAccumulated(totalAccumulated);
+  }, [totalAccumulated]);
 
-  const handleChangeRentingFor = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
-  ) => {
-    setRentFor(value);
-  };
-
-  const handleChangeRenameDegen = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
-  ) => {
-    setRenameEnabled(value === 'yes');
-  };
-
-  const handleChangeUseRentalPass = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
-  ) => {
-    setIsUseRentalPass(value === 'yes');
-  };
-
-  const validateName = (value: string) => {
-    setNewDegenName(value);
-    const errorMsg = getErrorForName(value);
-    setNameError(errorMsg);
-  };
-
-  const validateAddress = (value: string) => {
-    setEthAddress(value);
-    if (!ethers.utils.isAddress(value)) {
-      setAddressError('Address is invalid!');
-    } else if (!value) {
-      setAddressError('Please input an address');
-    } else {
-      setAddressError('');
-    }
-  };
-
-  const handleRent = useCallback(
+  const handleClaimNFTL = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
-      setLoading(true);
-      try {
-        const myRental = await rent();
-
-        // useRentalRename is actually not a hook, so we can safely use it here
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const renameRental = useRentalRename(
-          degen?.id,
-          myRental?.id,
-          newDegenName,
-        );
-
-        if (renameEnabled) {
-          await renameRental();
-        }
-        setLoading(false);
-        toast.success('Rent successfully!');
-        onClose?.(event);
-      } catch (err: any) {
-        setLoading(false);
-        toast.error(err.message);
-      }
+      // eslint-disable-next-line no-console
+      if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
+      setMockAccumulated(0);
+      setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+      onClose?.(event);
     },
-    [newDegenName, onClose, renameEnabled, rent, degen?.id],
+    [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
   );
 
-  return <div>Claim</div>;
+  const amountParsed = mockAccumulated.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return (
+    <Stack padding={3} gap={2}>
+      <Typography>{`${amountParsed} claimable for this DEGEN`}</Typography>
+
+      <Button
+        disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
+        variant="contained"
+        onClick={handleClaimNFTL}
+      >
+        Claim
+      </Button>
+    </Stack>
+  );
 };
 
 export default ClaimDegenContentDialog;
