@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
-import { MY_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
+import { ALL_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import { Rentals } from 'types/rentals';
 import { useDispatch } from 'store';
@@ -19,7 +19,7 @@ const DashboardRentalPage = (): JSX.Element => {
       authorizationToken: authToken,
     };
   }
-  const { data } = useFetch<Rentals[]>(MY_RENTAL_API_URL, {
+  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
   });
   const [rentails, setRentails] = useState<Rentals[] | any>([]);

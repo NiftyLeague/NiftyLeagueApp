@@ -35,7 +35,7 @@ export const transformRentals = (rows: Rentals[]) =>
       profits: earnings,
       roi:
         Number(earnings) > 0 && Number(charges) > 0
-          ? Number(earnings) / Number(charges)
+          ? (Number(earnings) / Number(charges)) * 100
           : 0,
       rentalRenewsIn: next_charge_at
         ? format(new Date(next_charge_at - Date.now()), 'HH:mm:ss')
