@@ -146,7 +146,7 @@ const RentDegenContentDialog = ({
         </Stack>
         <Stack direction="column" alignItems="center" gap={2} sx={{ my: 2 }}>
           <Typography textAlign="center">
-            What is your recruits ETH wallet address?
+            What is your recruit&#39;s ETH wallet address?
           </Typography>
           <FormControl fullWidth>
             <TextField
