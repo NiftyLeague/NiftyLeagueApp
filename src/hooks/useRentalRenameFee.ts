@@ -10,14 +10,18 @@ const useRentalRenameFee = (
 
   useEffect(() => {
     async function resolveRental() {
-      if (!degenId) {
+      const auth: string | undefined = window.localStorage.getItem(
+        'authentication-token',
+      ) as string;
+      if (!degenId && !auth) {
         return;
       }
 
       try {
         setLoading(true);
-        const res = await fetch(RENTAL_RENAME_URL(degenId), {
+        const res = await fetch(RENTAL_RENAME_URL(degenId as string), {
           method: 'GET',
+          headers: { authorizationToken: auth },
         });
         if (res.status === 404 || res.status === 401) {
           throw Error('Not Found');
