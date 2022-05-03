@@ -24,10 +24,10 @@ const useRentalPassCount = (
         if (res.status === 404) {
           throw Error('Not Found');
         }
-        const json = (await res.json()) as any[];
-        setRentalPassCount(json.length);
+        const json = await res.json();
+        setRentalPassCount(json.balance || 0);
       } catch (err) {
-        setError(true);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
