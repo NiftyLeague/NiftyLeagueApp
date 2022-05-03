@@ -56,6 +56,7 @@ const DashboardDegensPage = (): JSX.Element => {
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
+  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
   const { data } = useFetch<Degen[]>(
@@ -163,12 +164,21 @@ const DashboardDegensPage = (): JSX.Element => {
   const handleViewTraits = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(false);
+    setIsRentDialog(false);
     setIsDegenModalOpen(true);
   };
 
   const handleClaimDegen = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(true);
+    setIsRentDialog(false);
+    setIsDegenModalOpen(true);
+  };
+
+  const handleRentDegen = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(true);
+    setIsClaimDialog(false);
     setIsDegenModalOpen(true);
   };
 
@@ -262,6 +272,7 @@ const DashboardDegensPage = (): JSX.Element => {
                       onClickDetail={() => handleViewTraits(degen)}
                       onClickEditName={() => handleClickEditName(degen)}
                       onClickClaim={() => handleClaimDegen(degen)}
+                      onClickRent={() => handleRentDegen(degen)}
                     />
                   </Grid>
                 ))
@@ -289,7 +300,8 @@ const DashboardDegensPage = (): JSX.Element => {
         open={isDegenModalOpen}
         degen={selectedDegen}
         isClaim={isClaimDialog}
-        setIsClaim={setIsClaimDialog}
+        isRent={isRentDialog}
+        setIsRent={setIsRentDialog}
         onClose={() => setIsDegenModalOpen(false)}
       />
       <Dialog
