@@ -7,7 +7,7 @@ import { NFTL_CONTRACT } from '../constants/contracts';
 export default function useClaimableNFTL(
   writeContracts: Contracts,
   tokenIndices: number[],
-  refreshKey: string | number,
+  refreshKey?: string | number,
 ): number {
   const formatter = useCallback((value: BigInt) => {
     const totalAccumulatedStr = value && value.toString();
