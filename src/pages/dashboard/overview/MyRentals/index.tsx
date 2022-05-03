@@ -2,7 +2,7 @@ import { Button, Grid, Stack } from '@mui/material';
 import SectionTitle from 'components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
 import { sectionSpacing } from 'store/constant';
-import { MY_RENTAL_API_URL } from 'constants/url';
+import { ALL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import { useState, useEffect } from 'react';
 import { Rentals } from 'types/rentals';
@@ -52,7 +52,7 @@ const MyRentals = (): JSX.Element => {
       authorizationToken: authToken,
     };
   }
-  const { data } = useFetch<Rentals[]>(MY_RENTAL_API_URL, {
+  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
   });
   const [rentals, setRentals] = useState<Rentals[] | any>([]);

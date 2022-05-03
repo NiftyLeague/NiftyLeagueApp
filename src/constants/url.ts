@@ -12,6 +12,7 @@ export const DEGEN_BASE_IMAGE_URL = `${DEGEN_BASE_API_URL}/degens`;
 export const DISABLE_RENT_API_URL = `${BASE_API_URL}/rentals/rentable/`;
 export const DEGEN_ASSETS_DOWNLOAD_URL = `${BASE_API_URL}/assets/degen`;
 export const MY_RENTAL_API_URL = `${BASE_API_URL}/rentals/my-rentals?active=true`;
+export const ALL_RENTAL_API_URL = `${BASE_API_URL}/rentals/all-rentals?active=true`;
 export const TERMINAL_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/terminate`;
 export const RENAME_RENTAL_API_URL = `${BASE_API_URL}/rentals/rental/rename`;
 export const RENTAL_PASS_INVENTORY_URL = `${BASE_API_URL}/accounts/account/inventory?id=rental-pass-base`;
