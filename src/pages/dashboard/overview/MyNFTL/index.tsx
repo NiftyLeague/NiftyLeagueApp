@@ -239,7 +239,9 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
               <Grid item xs={12}>
                 <HoverDataCard
                   title="All-Time Rental Earnings"
-                  primary={!profileError ? profile?.stats?.total?.earnings : 0}
+                  primary={
+                    !profileError ? profile?.stats?.total?.rental_earnings : 0
+                  }
                   isLoading={loading}
                   customStyle={{
                     backgroundColor: theme.palette.background.default,
@@ -251,9 +253,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
               <Grid item xs={12}>
                 <HoverDataCard
                   title="All-Time Game Earnings"
-                  primary={
-                    !profileError ? profile?.stats?.total?.rental_earnings : 0
-                  }
+                  primary={!profileError ? profile?.stats?.total?.earnings : 0}
                   isLoading={loading}
                   customStyle={{
                     backgroundColor: theme.palette.background.default,
