@@ -67,6 +67,14 @@ const ComicCard: React.FC<ComicCardProps> = ({
           >
             {comic.viewsCount}
           </Typography> */}
+          {comic.balance ? (
+            <Typography
+              variant="body2"
+              sx={{ color: theme.palette.success.main }}
+            >
+              Owned: {comic.balance}
+            </Typography>
+          ) : null}
         </Stack>
       </CardContent>
       <CardActions>

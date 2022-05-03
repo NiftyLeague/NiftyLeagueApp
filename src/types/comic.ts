@@ -5,4 +5,5 @@ export interface Comic {
   wearableName: string;
   viewsCount: number;
   image: string;
+  balance?: number;
 }

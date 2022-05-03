@@ -1,6 +1,6 @@
 import { Grid, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import comics from 'constants/comics';
+import COMICS from 'constants/comics';
 import ComicCard from 'components/cards/ComicCard';
 import EmptyState from 'components/EmptyState';
 import { cardSpacing } from 'store/constant';
@@ -20,7 +20,7 @@ const DashboardComicsPage = (): JSX.Element => {
     setSelectedComic(null);
   };
 
-  if (!comics.length)
+  if (!COMICS.length)
     return (
       <Grid
         container
@@ -47,7 +47,7 @@ const DashboardComicsPage = (): JSX.Element => {
             justifyContent="space-between"
             spacing={cardSpacing}
           >
-            {comics.map((comic) => (
+            {COMICS.map((comic) => (
               <Grid key={comic.id} item xs={12} sm={6} md={6} lg={6} xl={4}>
                 <ComicCard
                   comic={comic}
