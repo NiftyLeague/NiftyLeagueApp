@@ -6,6 +6,7 @@ const useRent = (
   position: number,
   price: number | undefined,
   address: string,
+  isUseRentalPass: boolean,
 ): (() => Promise<MyRental | undefined>) => {
   const rent = async (): Promise<MyRental | undefined> => {
     const auth = window.localStorage.getItem('authentication-token');
@@ -21,6 +22,7 @@ const useRent = (
         position,
         price,
         address,
+        use_item: isUseRentalPass ? 'rental-pass-base' : undefined,
       }),
     });
     if (res.status === 404) {
