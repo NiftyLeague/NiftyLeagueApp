@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { Degen } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
@@ -23,6 +23,7 @@ import useRentalRename from 'hooks/useRentalRename';
 import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import { NetworkContext } from 'NetworkProvider';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -33,6 +34,7 @@ const RentDegenContentDialog = ({
   degen,
   onClose,
 }: RentDegenContentDialogProps) => {
+  const { web3Modal } = useContext(NetworkContext);
   const [agreement, setAgreement] = useState<boolean>(false);
   const [rentFor, setRentFor] = useState<string>('recruit');
   const [renameEnabled, setRenameEnabled] = useState<boolean>(false);
@@ -92,6 +94,11 @@ const RentDegenContentDialog = ({
 
   const handleRent = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (!web3Modal.cachedProvider) {
+        toast.error('You need to connect to your wallet first!');
+        return;
+      }
+
       setLoading(true);
       try {
         const myRental = await rent();
@@ -115,7 +122,14 @@ const RentDegenContentDialog = ({
         toast.error(err.message);
       }
     },
-    [newDegenName, onClose, renameEnabled, rent, degen?.id],
+    [
+      web3Modal.cachedProvider,
+      rent,
+      degen?.id,
+      newDegenName,
+      renameEnabled,
+      onClose,
+    ],
   );
 
   return (
