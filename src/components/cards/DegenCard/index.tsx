@@ -41,6 +41,7 @@ export interface DegenCardProps {
   onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -59,6 +60,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
   onClickEditName,
   onClickRent,
   onClickDetail,
+  onClickClaim,
 }) => {
   const { palette } = useTheme();
 
@@ -171,7 +173,12 @@ const DegenCard: React.FC<DegenCardProps> = ({
         }}
       >
         {isDashboardDegen ? (
-          <Button variant="contained" fullWidth sx={{ minWidth: '48%' }}>
+          <Button
+            onClick={onClickClaim}
+            variant="contained"
+            fullWidth
+            sx={{ minWidth: '48%' }}
+          >
             Claim MyNFTL
           </Button>
         ) : (

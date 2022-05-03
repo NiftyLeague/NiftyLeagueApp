@@ -12,7 +12,8 @@ export interface ViewTraitsContentDialogProps {
   character: CharacterType;
   traits: { [traitType: string]: number };
   displayName?: string;
-  onRent: () => void;
+  onRent?: () => void;
+  onClaim?: () => void;
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -22,6 +23,7 @@ const ViewTraitsContentDialog = ({
   traits,
   displayName,
   onRent,
+  onClaim,
   onClose,
 }: ViewTraitsContentDialogProps) => {
   const { traitList } = character;
@@ -111,8 +113,8 @@ const ViewTraitsContentDialog = ({
             </Grid>
           </Stack>
           <Stack direction="column" gap={1} width="100%">
-            <Button variant="contained" fullWidth onClick={onRent}>
-              Rent Degen
+            <Button variant="contained" fullWidth onClick={onRent || onClaim}>
+              {onRent ? 'Rent Degen' : 'Claim Degen'}
             </Button>
             <Button fullWidth onClick={onClose}>
               Close

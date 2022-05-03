@@ -41,6 +41,7 @@ import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
 import EmptyState from 'components/EmptyState';
+import DegenDialog from 'components/dialog/DegenDialog';
 
 const DashboardDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
@@ -53,6 +54,8 @@ const DashboardDegensPage = (): JSX.Element => {
     useState<boolean>(false);
   const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
+  const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
+  const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
   const { data } = useFetch<Degen[]>(
@@ -157,6 +160,18 @@ const DashboardDegensPage = (): JSX.Element => {
     setIsRenameDegenModalOpen(true);
   };
 
+  const handleViewTraits = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsClaimDialog(false);
+    setIsDegenModalOpen(true);
+  };
+
+  const handleClaimDegen = (degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsClaimDialog(true);
+    setIsDegenModalOpen(true);
+  };
+
   const handleBuyDegen = () => {
     window.open('https://opensea.io/collection/niftydegen', '_blank');
   };
@@ -241,9 +256,11 @@ const DashboardDegensPage = (): JSX.Element => {
                       price={degen.price}
                       background={degen.background}
                       activeRentals={degen.rental_count}
-                      onEnableDisable={() => handleEnableDisable(degen)}
                       isDashboardDegen
+                      onEnableDisable={() => handleEnableDisable(degen)}
+                      onClickDetail={() => handleViewTraits(degen)}
                       onClickEditName={() => handleClickEditName(degen)}
+                      onClickClaim={() => handleClaimDegen(degen)}
                     />
                   </Grid>
                 ))
@@ -267,14 +284,18 @@ const DashboardDegensPage = (): JSX.Element => {
           </Stack>
         )}
       />
+      <DegenDialog
+        open={isDegenModalOpen}
+        degen={selectedDegen}
+        isClaim={isClaimDialog}
+        setIsClaim={setIsClaimDialog}
+        onClose={() => setIsDegenModalOpen(false)}
+      />
       <Dialog
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
-        <RenameDegenDialogContent
-          degen={selectedDegen}
-          onSuccess={() => setIsRenameDegenModalOpen(false)}
-        />
+        <RenameDegenDialogContent degen={selectedDegen} />
       </Dialog>
       <Dialog
         open={isEnableDisableDegenModalOpen}
