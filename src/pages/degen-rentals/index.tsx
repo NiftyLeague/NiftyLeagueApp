@@ -66,13 +66,14 @@ const DegenRentalsPage = (): JSX.Element => {
       return 8;
     }
     if (isTablet) {
-      return 6;
+      return 8;
     }
     if (isMobile) {
-      return 3;
+      return 4;
     }
     return 2;
   };
+
   const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
@@ -178,8 +179,8 @@ const DegenRentalsPage = (): JSX.Element => {
                       item
                       xs={12}
                       sm={6}
-                      md={6}
-                      lg={6}
+                      md={isDrawerOpen ? 6 : 3}
+                      lg={isDrawerOpen ? 6 : 3}
                       xl={2.4}
                       key={uuidv4()}
                     >
@@ -192,9 +193,9 @@ const DegenRentalsPage = (): JSX.Element => {
                       item
                       xs={12}
                       sm={6}
-                      md={isDrawerOpen ? 6 : 4}
-                      lg={isDrawerOpen ? 6 : 4}
-                      xl={isDrawerOpen ? 4 : 2.4}
+                      md={isDrawerOpen ? 6 : 3}
+                      lg={isDrawerOpen ? 6 : 3}
+                      xl={2.4}
                     >
                       <DegenCard
                         id={degen.id}

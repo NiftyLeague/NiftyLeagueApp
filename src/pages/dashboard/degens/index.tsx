@@ -55,28 +55,6 @@ const DashboardDegensPage = (): JSX.Element => {
     useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
-  const isMobile = useMediaQuery('(min-width:600px)');
-  const isTablet = useMediaQuery('(min-width:900px)');
-  const isMediumScreen = useMediaQuery('(min-width:1200px)');
-  const isLargeScreen = useMediaQuery('(min-width:1536px)');
-
-  const getPageLimit = (): number => {
-    if (isLargeScreen) {
-      return 10;
-    }
-    if (isMediumScreen) {
-      return 8;
-    }
-    if (isTablet) {
-      return 6;
-    }
-    if (isMobile) {
-      return 3;
-    }
-    return 2;
-  };
-  const PER_PAGE: number = getPageLimit();
-
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
@@ -107,6 +85,28 @@ const DashboardDegensPage = (): JSX.Element => {
     return [];
   }, [characters, data]);
 
+  const isMobile = useMediaQuery('(min-width:600px)');
+  const isTablet = useMediaQuery('(min-width:900px)');
+  const isMediumScreen = useMediaQuery('(min-width:1200px)');
+  const isLargeScreen = useMediaQuery('(min-width:1536px)');
+
+  const getPageLimit = (): number => {
+    if (isLargeScreen) {
+      return 10;
+    }
+    if (isMediumScreen) {
+      return 8;
+    }
+    if (isTablet) {
+      return 8;
+    }
+    if (isMobile) {
+      return 4;
+    }
+    return 2;
+  };
+
+  const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(filteredDegens, PER_PAGE);
 
@@ -214,8 +214,8 @@ const DashboardDegensPage = (): JSX.Element => {
                     item
                     xs={12}
                     sm={6}
-                    md={6}
-                    lg={6}
+                    md={isDrawerOpen ? 6 : 3}
+                    lg={isDrawerOpen ? 6 : 3}
                     xl={2.4}
                     key={uuidv4()}
                   >
@@ -229,8 +229,8 @@ const DashboardDegensPage = (): JSX.Element => {
                     item
                     xs={12}
                     sm={6}
-                    md={isDrawerOpen ? 6 : 4}
-                    lg={isDrawerOpen ? 6 : 4}
+                    md={isDrawerOpen ? 6 : 3}
+                    lg={isDrawerOpen ? 6 : 3}
                     xl={2.4}
                   >
                     <DegenCard
