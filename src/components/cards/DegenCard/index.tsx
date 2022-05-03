@@ -165,7 +165,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             {`Owned by ${owner?.substring(0, 5)}`}
           </Link>
         </Stack>
-        <Stack direction="row" justifyContent="center" sx={{ pt: 2 }}>
+        <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
           {isDashboardDegen && <DegenClaimBal tokenId={id} />}
         </Stack>
       </CardContent>
@@ -206,7 +206,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           View Traits
         </Button>
       </Box>
-      <Stack direction="row" justifyContent="center" sx={{ pb: 2 }}>
+      <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
         {isDashboardDegen && (
           <Typography
             variant="body2"

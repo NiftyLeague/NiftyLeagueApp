@@ -98,7 +98,7 @@ const DegenDialog = ({
         <ClaimDegenContentDialog degen={degen} onClose={handleClose} />
       )}
       {isRent && <RentDegenContentDialog degen={degen} onClose={handleClose} />}
-      {!isRent && setIsRent && (
+      {!isRent && !isClaim && setIsRent && (
         <ViewTraitsContentDialog
           degen={degen}
           character={character}
@@ -108,7 +108,7 @@ const DegenDialog = ({
           onClose={handleClose}
         />
       )}
-      {!isClaim && setIsClaim && (
+      {!isRent && !isClaim && setIsClaim && (
         <ViewTraitsContentDialog
           degen={degen}
           character={character}
