@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   Button,
   Card,
@@ -12,6 +13,8 @@ import {
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 import EditIcon from '@mui/icons-material/Edit';
+import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
 
 const chipStyles = {
@@ -44,6 +47,19 @@ export interface DegenCardProps {
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
 }
+
+const DegenClaimBal = ({ tokenId }) => {
+  const { readContracts } = useContext(NetworkContext);
+  const tokenIndices = [parseInt(tokenId, 10)];
+  const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
+  const amountParsed = totalAccumulated
+    ? totalAccumulated.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    : 0;
+  return <>{`${amountParsed} NFTL Available`}</>;
+};
 
 const DegenCard: React.FC<DegenCardProps> = ({
   id,
@@ -150,17 +166,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           </Link>
         </Stack>
         <Stack direction="row" justifyContent="center" sx={{ pt: 2 }}>
-          {isDashboardDegen && (
-            <Link
-              href="#"
-              target="_blank"
-              rel="nofollow"
-              variant="body2"
-              color={palette.error.main}
-            >
-              {`${id} NFTL Available`}
-            </Link>
-          )}
+          {isDashboardDegen && <DegenClaimBal tokenId={id} />}
         </Stack>
       </CardContent>
       <Box
