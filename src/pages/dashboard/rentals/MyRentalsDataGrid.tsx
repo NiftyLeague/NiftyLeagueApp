@@ -46,7 +46,6 @@ const MyRentalsDataGrid = ({
   });
 
   const newRows = transformRentals(rows, data?.id || '');
-  console.log({ rows, newRows, data });
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
