@@ -4,10 +4,12 @@ import { NFT_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
-import { CharacterType, Degen } from 'types/degens';
+import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
 import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';
+import { GET_DEGEN_DETAIL_URL } from 'constants/url';
+import { toast } from 'react-toastify';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -34,6 +36,7 @@ const DegenDialog = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const { readContracts } = useContext(NetworkContext);
+  const [degenDetail, setDegenDetail] = useState<GetDegenResponse>();
   const [character, setCharacter] = useState<CharacterType>({
     name: null,
     owner: null,
@@ -53,6 +56,7 @@ const DegenDialog = ({
   };
 
   useEffect(() => {
+    const authToken = window.localStorage.getItem('authentication-token');
     async function getCharacter() {
       const characterData = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -66,14 +70,45 @@ const DegenDialog = ({
       };
       setCharacter(characterData);
     }
-    if (open && tokenId && readContracts && readContracts[NFT_CONTRACT]) {
+
+    async function getDegenDetail() {
+      if (!tokenId || !authToken) {
+        return;
+      }
+
+      try {
+        const res = await fetch(GET_DEGEN_DETAIL_URL(tokenId), {
+          method: 'GET',
+          headers: { authorizationToken: authToken },
+        });
+
+        if (res.status === 404) {
+          throw Error('Not Found');
+        }
+        const json = await res.json();
+        setDegenDetail(json);
+      } catch (err) {
+        if (DEBUG) console.error(err.message);
+        toast.error(err.message);
+      }
+    }
+
+    if (
+      open &&
+      tokenId &&
+      readContracts &&
+      readContracts[NFT_CONTRACT] &&
+      authToken
+    ) {
       // eslint-disable-next-line no-void
       void getCharacter();
+      // eslint-disable-next-line no-void
+      void getDegenDetail();
     } else {
       resetDialog();
     }
   }, [tokenId, readContracts, open]);
-
+  console.log({ degenDetail });
   const displayName = name || 'No Name DEGEN';
   const traits: { [traitType: string]: number } = traitList.reduce(
     (acc, trait, i) => ({ ...acc, [TRAIT_INDEXES[i]]: trait }),
@@ -101,6 +136,7 @@ const DegenDialog = ({
       {!isRent && !isClaim && setIsRent && (
         <ViewTraitsContentDialog
           degen={degen}
+          degenDetail={degenDetail}
           character={character}
           traits={traits}
           displayName={displayName}
@@ -111,6 +147,7 @@ const DegenDialog = ({
       {!isRent && !isClaim && setIsClaim && (
         <ViewTraitsContentDialog
           degen={degen}
+          degenDetail={degenDetail}
           character={character}
           traits={traits}
           displayName={displayName}
