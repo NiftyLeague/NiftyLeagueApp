@@ -185,7 +185,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
             fullWidth
             sx={{ minWidth: '32%' }}
           >
-            Claim NFTL
+            Claim
           </Button>
         )}
         <Button
@@ -194,7 +194,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           sx={{ minWidth: '32%' }}
           onClick={onClickRent}
         >
-          Rent Now
+          Rent
         </Button>
         <Button
           variant="outlined"
@@ -203,7 +203,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           sx={{ minWidth: '32%' }}
           onClick={onClickDetail}
         >
-          View Traits
+          Traits
         </Button>
       </Box>
       <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
