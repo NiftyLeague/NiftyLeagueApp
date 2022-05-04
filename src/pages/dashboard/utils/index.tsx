@@ -50,7 +50,7 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
           ? format(new Date(time_played), 'HH:mm:ss')
           : 'N/A',
         totalEarnings: earnings,
-        yourEarnings,
+        yourEarnings: yourEarnings || 0,
         costs: charges,
         profits: earnings,
         roi:
