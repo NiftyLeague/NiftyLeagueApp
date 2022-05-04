@@ -4,11 +4,12 @@ import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
 } from 'constants/cosmeticsFilters';
-import { CharacterType, Degen } from 'types/degens';
+import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ViewTraitsContentDialogProps {
   degen?: Degen;
+  degenDetail?: GetDegenResponse;
   character: CharacterType;
   traits: { [traitType: string]: number };
   displayName?: string;
@@ -19,6 +20,7 @@ export interface ViewTraitsContentDialogProps {
 
 const ViewTraitsContentDialog = ({
   degen,
+  degenDetail,
   character,
   traits,
   displayName,
@@ -46,13 +48,13 @@ const ViewTraitsContentDialog = ({
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           <Typography color="rgb(75, 7, 175)">
-            {degen?.multiplier}x Multiplier
+            {degenDetail?.multiplier}x Multiplier
           </Typography>
           <Typography color="rgb(75, 7, 175)">
-            {degen?.rental_count} Active Rentals
+            {degenDetail?.rental_count} Active Rentals
           </Typography>
           <Typography color="rgb(75, 7, 175)">
-            {degen?.price} NFTL/ 1 Week
+            {degenDetail?.price} NFTL/ 1 Week
           </Typography>
         </Stack>
         <Stack direction="column" alignItems="center" gap={1}>
