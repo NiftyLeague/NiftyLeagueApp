@@ -2,7 +2,7 @@ import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { Grid, Button, Stack, Skeleton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -156,12 +156,8 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('withdraw', amount);
       const amountWEI = utils.parseEther(`${amount}`);
-      const nonce = await tx(
-        writeContracts[GAME_ACCOUNT_CONTRACT].nonce(address),
-      );
       const body = JSON.stringify({
         amount: amountWEI.toString(),
-        nonce: nonce?.toString(),
         address,
       });
       try {
@@ -174,11 +170,14 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         const signData = await response.json();
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('signData', signData);
-        const { signature } = signData;
+        const { signature, nonce } = signData as {
+          signature: string;
+          nonce: number;
+        };
         const txRes = await tx(
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
             amountWEI,
-            nonce,
+            BigNumber.from(nonce),
             signature,
           ),
         );
