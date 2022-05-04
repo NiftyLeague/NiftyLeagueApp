@@ -19,6 +19,8 @@ export const RENTAL_PASS_INVENTORY_URL = `${BASE_API_URL}/accounts/account/inven
 export const RENTAL_RENAME_URL = (rentalId: string): string =>
   `${BASE_API_URL}/rentals/rental/rename?id=${encodeURIComponent(rentalId)}`;
 export const RENT_URL = `${BASE_API_URL}/rentals/rent`;
+export const GET_DEGEN_DETAIL_URL = (degenId: string): string =>
+  `${BASE_API_URL}/rentals/rentables?degen_id=${encodeURIComponent(degenId)}`;
 
 // Gamer Account API
 export const GAMER_ACCOUNT_API = `${BASE_API_URL}/accounts/account`;
