@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { Rentals } from 'types/rentals';
-import formatDistance from 'date-fns/formatDistance';
 
 // eslint-disable-next-line import/prefer-default-export
 export const transformRentals = (rows: Rentals[], userId: string) =>
@@ -51,19 +50,14 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
           ? format(new Date(time_played), 'HH:mm:ss')
           : 'N/A',
         totalEarnings: earnings,
-        yourEarnings,
+        yourEarnings: yourEarnings || 0,
         costs: charges,
         profits: earnings,
         roi:
           Number(earnings) > 0 && Number(charges) > 0
             ? (Number(earnings) / Number(charges)) * 100
             : 0,
-        rentalRenewsIn: next_charge_at
-          ? formatDistance(new Date(next_charge_at * 1000), new Date(), {
-              addSuffix: true,
-              includeSeconds: true,
-            })
-          : 'N/A',
+        rentalRenewsIn: next_charge_at || 'N/A',
         action: is_terminated,
       };
     },

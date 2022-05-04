@@ -15,6 +15,7 @@ import { transformRentals } from 'pages/dashboard/utils';
 import useFetch from 'hooks/useFetch';
 import { MY_PROFILE_API_URL } from 'constants/url';
 import { Profile } from 'types/account';
+import Countdown from 'react-countdown';
 
 interface Props {
   rows: Rentals[];
@@ -121,6 +122,9 @@ const MyRentalsDataGrid = ({
       headerName: 'Rental Renews In',
       ...commonColumnProp,
       width: 150,
+      renderCell: (params) => (
+        <Countdown date={new Date(params.value * 1000)} />
+      ),
     },
     {
       field: 'action',
