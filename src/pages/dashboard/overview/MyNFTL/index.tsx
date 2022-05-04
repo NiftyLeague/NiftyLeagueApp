@@ -155,14 +155,14 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     async (amount: number) => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('withdraw', amount);
-      const addressToLower = address.toLowerCase();
+      const amountWEI = utils.parseEther(`${amount}`);
       const nonce = await tx(
         writeContracts[GAME_ACCOUNT_CONTRACT].nonce(address),
       );
       const body = JSON.stringify({
-        amount,
-        nonce,
-        address: addressToLower,
+        amount: amountWEI.toString(),
+        nonce: nonce?.toString(),
+        address,
       });
       try {
         const response = await fetch(WITHDRAW_NFTL_SIGN, {
@@ -177,7 +177,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         const { signature } = signData;
         const txRes = await tx(
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
-            utils.parseEther(`${amount}`),
+            amountWEI,
             nonce,
             signature,
           ),
@@ -287,7 +287,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                 <Stack direction="row" gap={2}>
                   <Dialog>
                     <DialogTrigger>
-                      <Button fullWidth variant="contained" disabled>
+                      <Button fullWidth variant="contained">
                         Withdraw
                       </Button>
                     </DialogTrigger>
