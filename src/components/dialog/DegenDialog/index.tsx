@@ -108,7 +108,7 @@ const DegenDialog = ({
       resetDialog();
     }
   }, [tokenId, readContracts, open]);
-  console.log({ degenDetail });
+
   const displayName = name || 'No Name DEGEN';
   const traits: { [traitType: string]: number } = traitList.reduce(
     (acc, trait, i) => ({ ...acc, [TRAIT_INDEXES[i]]: trait }),
