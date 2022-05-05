@@ -253,7 +253,7 @@ const RentDegenContentDialog = ({
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Degen Being Rented</Typography>
                 <Typography color="gray">
-                  {degen?.name || 'No Name Degen'}
+                  {degen?.name || 'No Name DEGEN'}
                 </Typography>
               </Stack>
               <Stack direction="row" justifyContent="flex-end">
