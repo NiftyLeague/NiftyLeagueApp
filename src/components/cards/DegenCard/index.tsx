@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Card,
@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
+import { downloadDegenAsZip } from 'utils/file';
+import ErrorModal from 'components/Modal/ErrorModal';
 
 const chipStyles = {
   color: 'white',
@@ -80,6 +82,21 @@ const DegenCard: React.FC<DegenCardProps> = ({
 }) => {
   const { palette } = useTheme();
 
+  const [errorContent, setErrorContent] = useState('');
+
+  const handleCloseErrorModal = () => {
+    setErrorContent('');
+  };
+  const authToken = window.localStorage.getItem('authentication-token');
+  const onClickDownload = async () => {
+    if (authToken) {
+      try {
+        await downloadDegenAsZip(authToken, id);
+      } catch (e) {
+        setErrorContent(`${(e.message as string) || 'Unknown error occurred'}`);
+      }
+    }
+  };
   return (
     <Card
       sx={{
@@ -206,6 +223,20 @@ const DegenCard: React.FC<DegenCardProps> = ({
           View Traits
         </Button>
       </Box>
+      <Box
+        sx={{
+          margin: 2,
+        }}
+      >
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ minWidth: '100%' }}
+          onClick={onClickDownload}
+        >
+          Download IP
+        </Button>
+      </Box>
       <Stack direction="row" justifyContent="center" sx={{ pb: 2 }}>
         {isDashboardDegen && (
           <Typography
@@ -218,6 +249,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           </Typography>
         )}
       </Stack>
+      <ErrorModal content={errorContent} onClose={handleCloseErrorModal} />
     </Card>
   );
 };
