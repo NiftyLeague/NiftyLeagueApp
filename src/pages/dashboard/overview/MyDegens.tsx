@@ -33,7 +33,9 @@ const BoxDegenStyles = {
 };
 
 const MyDegens = (): JSX.Element => {
-  const { address } = useContext(NetworkContext);
+  const { address: abc } = useContext(NetworkContext);
+  console.log({ abc });
+  const address = '0xB970e591772F2CEb482bcD03a8d2f1924a4044Ce';
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
