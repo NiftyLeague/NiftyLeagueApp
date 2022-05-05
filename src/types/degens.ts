@@ -25,3 +25,28 @@ export interface CharacterType {
   owner: string | null;
   traitList: [];
 }
+
+export interface GetDegenResponse {
+  degen: {
+    background: string;
+    id: string;
+    traits: { [key: string]: number };
+    traits_string: string;
+    tribe: string;
+  };
+  id: string;
+  is_active: boolean;
+  last_rented_at: number;
+  multiplier: number;
+  multipliers: {
+    background: number;
+  };
+  price: number;
+  price_daily: number;
+  rental_count: number;
+  rental_ids: string[];
+  stats?: object | string | number;
+  total_rented: number;
+  update_counter: number;
+  updated_at: number;
+}
