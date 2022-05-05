@@ -44,7 +44,9 @@ import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 
 const DashboardDegensPage = (): JSX.Element => {
-  const { address } = useContext(NetworkContext);
+  const { address: abc } = useContext(NetworkContext);
+  console.log({ abc });
+  const address = '0xB970e591772F2CEb482bcD03a8d2f1924a4044Ce';
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
   const [defaultValues, setDefaultValues] =
