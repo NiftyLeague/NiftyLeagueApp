@@ -27,6 +27,7 @@ const chipStyles = {
   '&:hover': {
     backgroundColor: 'transparent',
     cursor: 'auto',
+    color: 'white',
   },
 };
 
