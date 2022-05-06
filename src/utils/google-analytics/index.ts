@@ -1,8 +1,11 @@
 import ReactGA from 'react-ga4';
 
 const initGA = () => {
-  // const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-  // if (isDev) return;
+  const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+  if (isDev) {
+    return;
+  }
+
   ReactGA.initialize(process.env.REACT_APP_GA_CONTAINER_ID || '');
 };
 
