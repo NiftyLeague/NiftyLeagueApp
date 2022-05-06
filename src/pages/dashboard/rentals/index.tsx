@@ -22,11 +22,11 @@ const DashboardRentalPage = (): JSX.Element => {
   const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
   });
-  const [rentails, setRentails] = useState<Rentals[] | any>([]);
+  const [rentals, setRentals] = useState<Rentals[] | any>([]);
 
   useEffect(() => {
     if (data) {
-      setRentails(data);
+      setRentals(data);
     }
   }, [data]);
 
@@ -67,13 +67,13 @@ const DashboardRentalPage = (): JSX.Element => {
           close: false,
         }),
       );
-      const newRentails = rentails.find((ren) => ren.id === res.id);
-      const rentalIndex = rentails.findIndex((ren) => ren.id === res.id);
+      const newRentals = rentals.find((ren) => ren.id === res.id);
+      const rentalIndex = rentals.findIndex((ren) => ren.id === res.id);
 
-      setRentails([
-        ...rentails.slice(0, rentalIndex),
-        newRentails,
-        ...rentails.slice(rentalIndex + 1),
+      setRentals([
+        ...rentals.slice(0, rentalIndex),
+        newRentals,
+        ...rentals.slice(rentalIndex + 1),
       ]);
     } catch (error) {
       dispatch(
@@ -91,28 +91,28 @@ const DashboardRentalPage = (): JSX.Element => {
   };
 
   const updateRentalName = (newName: string, id: string) => {
-    const newRentails = rentails.find((ren) => ren.id === id);
-    const rentalIndex = rentails.findIndex((ren) => ren.id === id);
+    const newRentals = rentals.find((ren) => ren.id === id);
+    const rentalIndex = rentals.findIndex((ren) => ren.id === id);
 
-    setRentails([
-      ...rentails.slice(0, rentalIndex),
+    setRentals([
+      ...rentals.slice(0, rentalIndex),
       {
-        ...newRentails,
+        ...newRentals,
         name: newName,
       },
-      ...rentails.slice(rentalIndex + 1),
+      ...rentals.slice(rentalIndex + 1),
     ]);
   };
 
   const handleSearch = (currentValue: string) => {
     if (currentValue?.trim() === '') {
-      setRentails(data);
+      setRentals(data);
       return;
     }
     const newRental: any = data?.filter((rental: any) =>
       rental.renter_id.toLowerCase().includes(currentValue),
     );
-    setRentails(newRental);
+    setRentals(newRental);
   };
 
   return (
@@ -143,7 +143,7 @@ const DashboardRentalPage = (): JSX.Element => {
       <Box height={700}>
         <MyRentalsDataGrid
           loading={!data}
-          rows={rentails}
+          rows={rentals}
           handleTerminalRental={terminalRentalById}
           updateRentalName={updateRentalName}
         />
