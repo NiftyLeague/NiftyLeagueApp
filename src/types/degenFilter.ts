@@ -6,4 +6,5 @@ export interface DegenFilter {
   backgrounds: string[];
   sort?: string;
   cosmetics: string[];
+  searchTerm: string[];
 }

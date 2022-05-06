@@ -8,6 +8,7 @@ const defaultFilterValues: DegenFilter = {
   backgrounds: [],
   sort: 'name',
   cosmetics: [],
+  searchTerm: [''],
 };
 
 export default defaultFilterValues;
