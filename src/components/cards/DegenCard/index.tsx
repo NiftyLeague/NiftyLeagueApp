@@ -131,7 +131,7 @@ const DegenCard: React.FC<DegenCardProps> = ({
           }}
         >
           <Typography gutterBottom variant="h3">
-            {name || 'No Name Degen'}
+            {name || 'No Name DEGEN'}
           </Typography>
           {isDashboardDegen && (
             <EditIcon
