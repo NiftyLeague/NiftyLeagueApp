@@ -1,16 +1,8 @@
-import {
-  Stack,
-  Typography,
-  Button,
-  useTheme,
-  IconButton,
-  Dialog,
-} from '@mui/material';
-import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import { Stack, Typography, Button, useTheme } from '@mui/material';
+import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
 import { Rentals } from 'types/rentals';
-import RenameRentalDialogContent from './RenameRentalDialogContent';
+// import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import useFetch from 'hooks/useFetch';
 import { MY_PROFILE_API_URL } from 'constants/url';
@@ -33,8 +25,8 @@ const MyRentalsDataGrid = ({
   const authToken = window.localStorage.getItem('authentication-token');
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
-  const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
-  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
+  // const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
+  // const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   let headers;
   if (authToken) {
@@ -48,15 +40,15 @@ const MyRentalsDataGrid = ({
 
   const newRows = transformRentals(rows, data?.id || '');
 
-  const handleOpenRenameDegen = (params: GridRenderCellParams) => {
-    setSelectedRowForEditing(params.row);
-    setIsRenameDegenModalOpen(true);
-  };
+  // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
+  //   setSelectedRowForEditing(params.row);
+  //   setIsRenameDegenModalOpen(true);
+  // };
 
-  const handleUpdateRentalName = (name: string, id: string) => {
-    updateRentalName(name, id);
-    setIsRenameDegenModalOpen(false);
-  };
+  // const handleUpdateRentalName = (name: string, id: string) => {
+  //   updateRentalName(name, id);
+  //   setIsRenameDegenModalOpen(false);
+  // };
 
   const commonColumnProp = {
     minWidth: 100,
@@ -70,7 +62,7 @@ const MyRentalsDataGrid = ({
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           <Typography>{params.value}</Typography>
-          {!params.row.action && (
+          {/* {!params.row.action && (
             <IconButton
               aria-label="edit"
               onClick={() => handleOpenRenameDegen(params)}
@@ -78,7 +70,7 @@ const MyRentalsDataGrid = ({
             >
               <EditIcon fontSize="small" />
             </IconButton>
-          )}
+          )} */}
         </Stack>
       ),
     },
@@ -183,7 +175,7 @@ const MyRentalsDataGrid = ({
         }}
       />
       {/* Rename Degen Dialog */}
-      <Dialog
+      {/* <Dialog
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
@@ -191,7 +183,7 @@ const MyRentalsDataGrid = ({
           updateRentalName={handleUpdateRentalName}
           rental={selectedRowForEditing}
         />
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
