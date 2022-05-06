@@ -24,7 +24,7 @@ const PublicItems = {
     },
     {
       id: 'degen-rentals',
-      title: 'Degen Rentals',
+      title: 'DEGEN Rentals',
       type: 'item',
       url: '/degen-rentals',
       icon: icons.IconTag,

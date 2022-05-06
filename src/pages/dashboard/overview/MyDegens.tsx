@@ -143,14 +143,14 @@ const MyDegens = (): JSX.Element => {
     <>
       <SectionSlider
         firstSection
-        title="My Degens"
+        title="My DEGENs"
         sliderSettingsOverride={settings}
         actions={
           <Button
             variant="outlined"
             onClick={() => navigate('/dashboard/degens')}
           >
-            View All Degens
+            View All DEGENs
           </Button>
         }
       >
@@ -183,8 +183,8 @@ const MyDegens = (): JSX.Element => {
           ))
         ) : (
           <EmptyState
-            message="No Degens found. Please check your address or go purchase a degen if you have not done so already!"
-            buttonText="Buy a Degen"
+            message="No DEGENs found. Please check your address or go purchase a DEGEN if you have not done so already!"
+            buttonText="Buy a DEGEN"
             onClick={handleBuyDegen}
           />
         )}

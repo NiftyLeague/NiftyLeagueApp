@@ -278,8 +278,8 @@ const DashboardDegensPage = (): JSX.Element => {
                 ))
               ) : (
                 <EmptyState
-                  message="No Degens found. Please check your address or go purchase a degen if you have not done so already!"
-                  buttonText="Buy a Degen"
+                  message="No DEGENs found. Please check your address or go purchase a degen if you have not done so already!"
+                  buttonText="Buy a DEGEN"
                   onClick={handleBuyDegen}
                 />
               )}
