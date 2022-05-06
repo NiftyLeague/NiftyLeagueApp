@@ -34,6 +34,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const [error, setError] = useState('');
   const [agreement, setAgreement] = useState(false);
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [isLoadingRename, setLoadingRename] = useState(false);
   // const [renameSuccess, setRenameSuccess] = useState(false);
   const insufficientAllowance = allowance < 1000;
   const insufficientBalance = userNFTLBalance < 1000;
@@ -72,7 +73,10 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   };
 
   const handleRename = useCallback(async () => {
-    if (
+    setLoadingRename(true);
+    if (insufficientBalance) {
+      setError('Failed to charge the rental rename fee');
+    } else if (
       !error &&
       writeContracts &&
       writeContracts[NFT_CONTRACT] &&
@@ -105,6 +109,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
         onSuccess?.();
       }
     }
+    setLoadingRename(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     error,
@@ -143,7 +148,9 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             size="small"
             fullWidth
             value={input}
-            disabled={insufficientBalance}
+            error={!!error}
+            helperText={error}
+            disabled={isLoadingRename}
             onChange={handleChange}
           />
           {/* <RenameStepper
@@ -177,7 +184,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
           variant="contained"
           fullWidth
           onClick={handleRename}
-          disabled={insufficientBalance || !agreement || Boolean(error)}
+          disabled={!agreement || Boolean(error)}
         >
           Rename Rental
         </Button>
