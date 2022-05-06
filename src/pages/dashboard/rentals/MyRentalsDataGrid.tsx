@@ -82,15 +82,34 @@ const MyRentalsDataGrid = ({
         </Stack>
       ),
     },
-    { field: 'degenId', headerName: 'Degen ID' },
+    {
+      field: 'degenId',
+      headerName: 'Degen ID',
+      renderCell: (params) => <span>#{params.value}</span>,
+    },
     { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
-    { field: 'winLoss', headerName: 'Win-Loss', ...commonColumnProp },
+    {
+      field: 'winLoss',
+      headerName: 'Win Rate',
+      ...commonColumnProp,
+      renderCell: (params) => <span>{params.value}%</span>,
+    },
     // {
     //   field: 'timePlayed',
     //   headerName: 'Time Played',
     //   ...commonColumnProp,
     //   width: 150,
     // },
+    {
+      field: 'weeklyRentalFee',
+      headerName: 'Weekly Rental Fee',
+      ...commonColumnProp,
+    },
+    {
+      field: 'dailyRentalFee',
+      headerName: 'Daily Rental Fee',
+      ...commonColumnProp,
+    },
     {
       field: 'totalEarnings',
       headerName: 'Total Earnings',
