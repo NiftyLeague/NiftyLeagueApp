@@ -26,29 +26,36 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
       },
       next_charge_at,
       is_terminated,
-      name,
+      accounts,
     }) => {
+      const isPlayer = userId === user_id;
+      const isSponsor = userId === renter_id;
+
+      let walletAddress: string | undefined = '';
       let yourEarnings = 0;
-      if (userId === renter_id) {
-        yourEarnings = earnings_owner;
-      } else if (userId === user_id) {
+      if (isSponsor) {
+        yourEarnings = earnings_renter;
+        walletAddress = accounts?.renter?.name || accounts?.owner?.name;
+      } else if (isPlayer) {
         yourEarnings = earnings_player;
+        walletAddress = accounts?.player?.name;
       } else {
         yourEarnings = earnings_renter;
+        walletAddress = accounts?.owner?.name;
       }
 
       return {
         id,
-        renter: name || `Rental #${degen_id}`,
+        renter: walletAddress || 'No address',
         degenId: degen_id,
         multiplier,
         winLoss:
           Number(wins) > 0 && Number(matches) > 0
-            ? Number(wins) / Number(matches)
+            ? (Number(wins) / Number(matches)) * 100
             : 0,
         timePlayed: time_played
           ? format(new Date(time_played), 'HH:mm:ss')
-          : 'N/A',
+          : '00:00:00',
         totalEarnings: earnings,
         yourEarnings: yourEarnings || 0,
         costs: charges,
@@ -59,6 +66,8 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
             : 0,
         rentalRenewsIn: next_charge_at || 'N/A',
         action: is_terminated,
+        weeklyRentalFee: earning_cap,
+        dailyRentalFee: earning_cap_daily,
       };
     },
   );

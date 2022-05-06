@@ -1,3 +1,9 @@
+export interface RentalAccount {
+  id?: string;
+  address?: string;
+  name?: string;
+}
+
 export interface Rentals {
   stats: {
     total: {
@@ -39,4 +45,9 @@ export interface Rentals {
     player: number;
   };
   name?: string;
+  accounts?: {
+    owner?: RentalAccount;
+    renter?: RentalAccount;
+    player?: RentalAccount;
+  };
 }
