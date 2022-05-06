@@ -16,6 +16,7 @@ import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
+import { sendEvent } from 'utils/google-analytics';
 
 export interface UserProfileProps {}
 
@@ -72,6 +73,11 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccumulated, tx, writeContracts]);
 
+  const handleConnectWallet = useCallback(() => {
+    sendEvent('login', 'engagement', 'method');
+    loadWeb3Modal();
+  }, [loadWeb3Modal]);
+
   return (
     <Box
       display="flex"
@@ -110,7 +116,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
           Claim NFTL
         </Button>
       ) : (
-        <Button variant="contained" fullWidth onClick={loadWeb3Modal}>
+        <Button variant="contained" fullWidth onClick={handleConnectWallet}>
           Connect Wallet
         </Button>
       )}
