@@ -5,13 +5,18 @@ import ComicCard from 'components/cards/ComicCard';
 import EmptyState from 'components/EmptyState';
 import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
+import useComicsBalance from 'hooks/useComicsBalance';
 
 const DashboardComicsPage = (): JSX.Element => {
   const theme = useTheme();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-
+  const { comicsBalance } = useComicsBalance();
+  const filteredComics = useMemo(
+    () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
+    [comicsBalance],
+  );
   const handleViewComic = (comic: Comic) => {
     setSelectedComic(comic);
   };
@@ -47,7 +52,7 @@ const DashboardComicsPage = (): JSX.Element => {
             justifyContent="space-between"
             spacing={cardSpacing}
           >
-            {COMICS.map((comic) => (
+            {filteredComics.map((comic) => (
               <Grid key={comic.id} item xs={12} sm={6} md={6} lg={6} xl={4}>
                 <ComicCard
                   comic={comic}
