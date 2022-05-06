@@ -26,7 +26,7 @@ const PrivateItems = {
         },
         {
           id: 'dashboard-degens',
-          title: 'Degens',
+          title: 'DEGENs',
           type: 'item',
           url: '/dashboard/degens',
         },
