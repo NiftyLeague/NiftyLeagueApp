@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import { sendEvent } from 'utils/google-analytics';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);
@@ -53,6 +54,10 @@ const NiftyLeagueAppPage = () => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsDegenModalOpen(true);
+  };
+
+  const handleViewAllTraits = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    sendEvent('view_item_list', 'engagement');
   };
 
   const settings = {
@@ -123,7 +128,7 @@ const NiftyLeagueAppPage = () => {
               },
             }}
           >
-            <Link to="/degen-rentals">
+            <Link to="/degen-rentals" onClick={handleViewAllTraits}>
               <Button variant="outlined">View All Rentals</Button>
             </Link>
           </Box>

@@ -4,7 +4,9 @@ import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
 } from 'constants/cosmeticsFilters';
+import { useEffect } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
+import { sendEvent } from 'utils/google-analytics';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ViewTraitsContentDialogProps {
@@ -29,6 +31,10 @@ const ViewTraitsContentDialog = ({
   onClose,
 }: ViewTraitsContentDialogProps) => {
   const { traitList } = character;
+
+  useEffect(() => {
+    sendEvent('view_item', 'engagement');
+  }, []);
 
   return (
     <Grid container>

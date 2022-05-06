@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen, GetDegenResponse } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { NetworkContext } from 'NetworkProvider';
+import { sendEvent } from 'utils/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -104,6 +105,8 @@ const RentDegenContentDialog = ({
         return;
       }
 
+      sendEvent('begin_checkout', 'ecommerce');
+
       setLoading(true);
       try {
         const myRental = await rent();
@@ -122,6 +125,8 @@ const RentDegenContentDialog = ({
         setLoading(false);
         toast.success('Rent successfully!');
         onClose?.(event);
+
+        sendEvent('purchase', 'ecommerce');
       } catch (err: any) {
         setLoading(false);
         toast.error(err.message);
@@ -157,6 +162,10 @@ const RentDegenContentDialog = ({
   const degenPrice = isUseRentalPass
     ? 0
     : degenDetail?.price || degen?.price || 0;
+
+  useEffect(() => {
+    sendEvent('add_to_cart', 'ecommerce');
+  }, []);
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
