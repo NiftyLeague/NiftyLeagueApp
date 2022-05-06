@@ -6,6 +6,7 @@ import {
   Stack,
   Typography,
   useMediaQuery,
+  TextField,
 } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
@@ -31,7 +32,8 @@ type FilterSource =
   | 'rentals'
   | 'tribes'
   | 'backgrounds'
-  | 'cosmetics';
+  | 'cosmetics'
+  | 'searchTerm';
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
@@ -70,6 +72,9 @@ const DegensFilter = ({
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
   );
+  const [searchTermValue, setSearchTermValue] = useState<string[]>(
+    defaultFilterValues.searchTerm,
+  );
 
   const actions = {
     prices: setPricesRangeValue,
@@ -78,6 +83,7 @@ const DegensFilter = ({
     tribes: setTribesValue,
     backgrounds: setBackgroundsValue,
     cosmetics: setCosmeticsValue,
+    searchTerm: setSearchTermValue,
   };
 
   // Set search params from filter values
@@ -106,6 +112,9 @@ const DegensFilter = ({
           break;
         case 'cosmetics':
           keyValue = { cosmetics: value };
+          break;
+        case 'searchTerm':
+          keyValue = { searchTerm: [value] };
           break;
       }
       const newParams = {
@@ -157,6 +166,7 @@ const DegensFilter = ({
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
+    setSearchTermValue(defaultFilterValues.searchTerm);
   };
 
   const handleReset = () => {
@@ -164,6 +174,15 @@ const DegensFilter = ({
     setAllFilterValues();
     setSearchParams({});
   };
+
+  const handleChangeSearchTerm = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setSearchTermValue([value]);
+      handleChangeCommitted('searchTerm', value);
+    },
+    [handleChangeCommitted],
+  );
 
   useEffect(() => {
     setAllFilterValues();
@@ -180,6 +199,7 @@ const DegensFilter = ({
       tribes: tribesValue,
       backgrounds: backgroundsValue,
       cosmetics: cosmeticsValue,
+      searchTerm: searchTermValue,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, defaultFilterValues]);
@@ -208,6 +228,16 @@ const DegensFilter = ({
           </Button>
         </Stack>
       </Stack>
+      <TextField
+        label="Search degens by token # or name"
+        name="search-degen-by-token-id-name"
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={searchTermValue}
+        onChange={handleChangeSearchTerm}
+        sx={{ margin: '6px 0px 10px 0px' }}
+      />
       <Stack>
         <FilterAccordion
           summary={<Typography variant="h5">Overview</Typography>}
