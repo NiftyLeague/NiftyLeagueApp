@@ -30,7 +30,8 @@ const FilterAccordion = ({
         '&:before': {
           backgroundColor: theme.palette.grey[800],
         },
-        marginTop: 0,
+        marginTop: 1,
+        width: '100%',
       }}
     >
       <AccordionSummary expandIcon={<IconChevronDown />}>
