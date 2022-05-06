@@ -21,9 +21,7 @@ export default function useComicsBalance(): {
 } {
   const [loading, setLoading] = useState(true);
   const [comicsBalance, setComicsBal] = useState<Comic[]>([]);
-  const { address: abc, readContracts } = useContext(NetworkContext);
-  console.log({ abc });
-  const address = '0xB970e591772F2CEb482bcD03a8d2f1924a4044Ce';
+  const { address, readContracts } = useContext(NetworkContext);
 
   useEffect(() => {
     async function checkUserComics() {
