@@ -13,6 +13,7 @@ export const tranformDataByFilter = (
     backgrounds,
     cosmetics,
     sort,
+    searchTerm,
   }: DegenFilter,
 ): Degen[] => {
   if (sort === 'name') {
@@ -57,13 +58,18 @@ export const tranformDataByFilter = (
             degen.traits_string.split(',').includes(cosmetic),
           )
         : true;
+    const searchTermMatches = searchTerm[0]
+      ? degen.name.toLowerCase().includes(searchTerm[0].toLowerCase()) ||
+        degen.id.toLocaleLowerCase().includes(searchTerm[0].toLowerCase())
+      : true;
     return (
       priceMatches &&
       multipliersMatches &&
       rentalsMatches &&
       tribesMatches &&
       backgroundsMatches &&
-      cosmeticsMatches
+      cosmeticsMatches &&
+      searchTermMatches
     );
   });
   return result;
@@ -81,19 +87,24 @@ export const updateFilterValue = (
   // eslint-disable-next-line guard-for-in
   for (const key in params) {
     const value = params[key as keyof DegenFilter];
-    const isOverviewFilter =
-      ['prices', 'multipliers', 'rentals'].indexOf(key) !== -1;
-    if (!value) {
-      return;
+    if (key === 'searchTerm') {
+      newFilter[key] = [value];
+      actions && actions[key]([value] || ['']);
+    } else {
+      const isOverviewFilter =
+        ['prices', 'multipliers', 'rentals'].indexOf(key) !== -1;
+      if (!value) {
+        return;
+      }
+      const newValue = value
+        .split('-')
+        .map((type: number | string) =>
+          isOverviewFilter ? Number(type) : String(type),
+        );
+      actions &&
+        actions[key](newValue || defaultFilterValues[key as keyof DegenFilter]);
+      newFilter[key] = newValue;
     }
-    const newValue = value
-      .split('-')
-      .map((type: number | string) =>
-        isOverviewFilter ? Number(type) : String(type),
-      );
-    actions &&
-      actions[key](newValue || defaultFilterValues[key as keyof DegenFilter]);
-    newFilter[key] = newValue;
   }
   // eslint-disable-next-line consistent-return
   return newFilter;
