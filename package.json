@@ -102,6 +102,7 @@
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "remark-gfm": "^3.0.1",
+    "save-as": "0.1.8",
     "set-interval-async": "2.0.3",
     "slick-carousel": "^1.8.1",
     "stylis-plugin-rtl": "^2.1.1",
