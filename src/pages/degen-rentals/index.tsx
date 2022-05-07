@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
@@ -10,7 +10,6 @@ import {
   Pagination,
   Stack,
   Dialog,
-  useMediaQuery,
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
@@ -49,32 +48,13 @@ const DegenRentalsPage = (): JSX.Element => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
+  const { walletAddress } = useParams();
+
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const isMobile = useMediaQuery('(min-width:600px)');
-  const isTablet = useMediaQuery('(min-width:900px)');
-  const isMediumScreen = useMediaQuery('(min-width:1200px)');
-  const isLargeScreen = useMediaQuery('(min-width:1536px)');
-
-  const getPageLimit = (): number => {
-    if (isLargeScreen) {
-      return 10;
-    }
-    if (isMediumScreen) {
-      return 8;
-    }
-    if (isTablet) {
-      return 8;
-    }
-    if (isMobile) {
-      return 4;
-    }
-    return 2;
-  };
-
-  const PER_PAGE: number = getPageLimit();
+  const PER_PAGE: number = 8;
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, PER_PAGE);
 
@@ -90,6 +70,7 @@ const DegenRentalsPage = (): JSX.Element => {
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
+
       updateNewData(newDegens);
     }
     return () => {
@@ -100,8 +81,11 @@ const DegenRentalsPage = (): JSX.Element => {
 
   const handleFilter = (filter: DegenFilter) => {
     const newFilters = { ...filter, sort: filters.sort };
-    const result = tranformDataByFilter(degens, newFilters);
+    let result = tranformDataByFilter(degens, newFilters);
     setFilters(newFilters);
+    if (!isEmpty(walletAddress)) {
+      result = result.filter((degen) => degen.owner === walletAddress);
+    }
     updateNewData(result);
   };
 
@@ -178,10 +162,10 @@ const DegenRentalsPage = (): JSX.Element => {
                     <Grid
                       item
                       xs={12}
-                      sm={6}
-                      md={isDrawerOpen ? 6 : 3}
-                      lg={isDrawerOpen ? 6 : 3}
-                      xl={2.4}
+                      sm={4}
+                      md={3}
+                      lg={isDrawerOpen ? 4 : 3}
+                      xl={3}
                       key={uuidv4()}
                     >
                       <SkeletonDegenPlaceholder />
@@ -192,10 +176,10 @@ const DegenRentalsPage = (): JSX.Element => {
                       key={degen.id}
                       item
                       xs={12}
-                      sm={6}
-                      md={isDrawerOpen ? 6 : 3}
-                      lg={isDrawerOpen ? 6 : 3}
-                      xl={2.4}
+                      sm={4}
+                      md={3}
+                      lg={isDrawerOpen ? 4 : 3}
+                      xl={3}
                     >
                       <DegenCard
                         id={degen.id}
