@@ -16,10 +16,10 @@ interface SubCardProps {
   className?: string;
   contentClass?: string;
   darkTitle?: boolean;
-  secondary?: ReactNode | string | {};
+  secondary?: ReactNode | string;
   sx?: {};
   contentSX?: {};
-  title?: ReactNode | string | {};
+  title?: ReactNode | string;
 }
 
 // ==============================|| CUSTOM SUB CARD ||============================== //
