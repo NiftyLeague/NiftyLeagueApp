@@ -86,8 +86,10 @@ const DegenRentalsPage = (): JSX.Element => {
       const newFilters = { ...filter, sort: filters.sort };
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
-      if (!isEmpty(walletAddress)) {
-        result = result.filter((degen) => degen.owner === walletAddress);
+      if (walletAddress) {
+        result = result.filter(
+          (degen) => degen.owner.toLowerCase() === walletAddress.toLowerCase(),
+        );
       }
       updateNewData(result);
     },
