@@ -335,9 +335,13 @@ const DegensFilter = ({
           expanded={false}
         >
           {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((categoryKey) => {
-            const traitGroup = Object.keys(
+            const traitGroup = Object.entries(
               CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
-            );
+            )
+              .sort((a: [string, string], b: [string, string]) =>
+                a[1].localeCompare(b[1]),
+              )
+              .map((item) => item[0]);
             return (
               <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
                 <FilterAccordion
