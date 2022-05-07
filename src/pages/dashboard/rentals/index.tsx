@@ -140,7 +140,7 @@ const DashboardRentalPage = (): JSX.Element => {
         </Stack>
       </Stack>
 
-      <Box height={700}>
+      <Box height="calc(100vh - 208px)">
         <MyRentalsDataGrid
           loading={!data}
           rows={rentails}

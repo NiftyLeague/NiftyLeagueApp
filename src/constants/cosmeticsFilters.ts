@@ -21,6 +21,7 @@ export const TRAIT_INDEXES = {
   19: 'neckwear',
   20: 'leftItem',
   21: 'rightItem',
+  22: 'property',
 };
 
 export const TRAIT_NAME_MAP = {
@@ -46,6 +47,7 @@ export const TRAIT_NAME_MAP = {
   neckwear: 'Neckwear',
   leftItem: 'Left Item',
   rightItem: 'Right Item',
+  property: 'Property',
 };
 
 export const TRIBES = {
@@ -1094,6 +1096,10 @@ export const RIGHT_ITEMS = {
   1023: 'Wand',
 };
 
+export const PROPERTY = {
+  1024: 'Naked Gang',
+};
+
 export const TRAIT_VALUE_MAP = {
   // Tribes: TRIBES,
   'Skin Colors': SKIN_COLORS,
@@ -1117,6 +1123,7 @@ export const TRAIT_VALUE_MAP = {
   Neckwear: NECKWEAR,
   'Left Items': LEFT_ITEMS,
   'Right Items': RIGHT_ITEMS,
+  Property: PROPERTY,
 };
 
 export const TRAIT_KEY_VALUE_MAP = {
