@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function getSteps() {
   return [
     'Obtain 1000 NFTL',
-    'Increase contract as NFTL spender',
+    'Approve contract as NFTL spender',
     'Submit rename request',
     'DEGEN Renamed!',
   ];
