@@ -54,7 +54,7 @@ export const tranformDataByFilter = (
         : true;
     const cosmeticsMatches =
       cosmetics.length > 0
-        ? cosmetics.some((cosmetic) =>
+        ? cosmetics.every((cosmetic) =>
             degen.traits_string.split(',').includes(cosmetic),
           )
         : true;
