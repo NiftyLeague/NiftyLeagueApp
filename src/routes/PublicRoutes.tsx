@@ -32,6 +32,10 @@ const PublicRoutes = {
       element: <DegenRentalsPage />,
     },
     {
+      path: '/degen-rentals/:walletAddress',
+      element: <DegenRentalsPage />,
+    },
+    {
       path: '/games',
       element: <GamesPage />,
     },
