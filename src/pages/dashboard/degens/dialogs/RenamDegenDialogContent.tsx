@@ -20,6 +20,7 @@ import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
+import { DEBUG } from 'constants/index';
 // import RenameStepper from './RenameStepper';
 
 interface Props {
