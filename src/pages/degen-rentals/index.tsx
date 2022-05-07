@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams, useParams } from 'react-router-dom';
 
@@ -53,7 +53,7 @@ const DegenRentalsPage = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const { walletAddress } = useParams();
 
-  const { data } = useFetch<Degen[]>(
+  const { data } = useFetch<{ [id: number]: Degen }>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
@@ -61,7 +61,7 @@ const DegenRentalsPage = (): JSX.Element => {
     usePagination(degens, DEGENS_PER_PAGE);
 
   useEffect(() => {
-    if (data) {
+    if (data && !isEmpty(data)) {
       const originalDegens: Degen[] = Object.values(data);
       setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
@@ -81,15 +81,18 @@ const DegenRentalsPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const handleFilter = (filter: DegenFilter) => {
-    const newFilters = { ...filter, sort: filters.sort };
-    let result = tranformDataByFilter(degens, newFilters);
-    setFilters(newFilters);
-    if (!isEmpty(walletAddress)) {
-      result = result.filter((degen) => degen.owner === walletAddress);
-    }
-    updateNewData(result);
-  };
+  const handleFilter = useCallback(
+    (filter: DegenFilter) => {
+      const newFilters = { ...filter, sort: filters.sort };
+      let result = tranformDataByFilter(degens, newFilters);
+      setFilters(newFilters);
+      if (!isEmpty(walletAddress)) {
+        result = result.filter((degen) => degen.owner === walletAddress);
+      }
+      updateNewData(result);
+    },
+    [degens, filters.sort, updateNewData, walletAddress],
+  );
 
   const handleSort = (sort: string) => {
     const newSort = { ...filters, sort };
