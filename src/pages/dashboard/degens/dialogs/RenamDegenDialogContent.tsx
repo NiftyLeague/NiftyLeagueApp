@@ -120,7 +120,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
 
   return (
     <>
-      <DialogTitle sx={{ textAlign: 'center' }}>Rename Degen</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Rename DEGEN</DialogTitle>
       <DialogContent dividers sx={{ maxWidth: '420px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
@@ -168,7 +168,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
           onClick={handleRename}
           disabled={!input || Boolean(error)}
         >
-          Rename Rental
+          Rename
         </Button>
       </DialogActions>
     </>
