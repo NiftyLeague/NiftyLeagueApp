@@ -35,6 +35,9 @@ import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialog';
 
+// Needs to be divisible by 2, 3, or 4
+const DEGENS_PER_PAGE = 12;
+
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
@@ -54,9 +57,8 @@ const DegenRentalsPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const PER_PAGE: number = 8;
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(degens, PER_PAGE);
+    usePagination(degens, DEGENS_PER_PAGE);
 
   useEffect(() => {
     if (data) {
@@ -162,8 +164,8 @@ const DegenRentalsPage = (): JSX.Element => {
                     <Grid
                       item
                       xs={12}
-                      sm={4}
-                      md={3}
+                      sm={6}
+                      md={4}
                       lg={isDrawerOpen ? 4 : 3}
                       xl={3}
                       key={uuidv4()}
@@ -176,8 +178,8 @@ const DegenRentalsPage = (): JSX.Element => {
                       key={degen.id}
                       item
                       xs={12}
-                      sm={4}
-                      md={3}
+                      sm={6}
+                      md={4}
                       lg={isDrawerOpen ? 4 : 3}
                       xl={3}
                     >
