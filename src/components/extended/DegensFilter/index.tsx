@@ -16,6 +16,7 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { updateFilterValue } from './utils';
@@ -47,13 +48,16 @@ const DegensFilter = ({
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const params = Object.fromEntries(searchParams.entries()) as {
-    [key in FilterSource]?: string;
-  };
+  const params = useMemo(
+    () =>
+      Object.fromEntries(searchParams.entries()) as {
+        [key in FilterSource]?: string;
+      },
+    [searchParams],
+  );
   const isParamsEmpty = isEmpty(params);
 
   // Filter states
-  // TODO: do something here to specify the default range for prices based on real data
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
     defaultFilterValues.prices,
   );
@@ -75,16 +79,33 @@ const DegensFilter = ({
   const [searchTermValue, setSearchTermValue] = useState<string[]>(
     defaultFilterValues.searchTerm,
   );
+  const [refreshKey, setRefreshKey] = useState(0);
+  const filterOptionsMemoized = useMemo(
+    () => ({
+      backgroundsValue,
+      cosmeticsValue,
+      multipliersRangeValue,
+      pricesRangeValue,
+      rentalsRangeValue,
+      searchTermValue,
+      tribesValue,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [refreshKey, params],
+  );
 
-  const actions = {
-    prices: setPricesRangeValue,
-    multipliers: setMultipliersRangeValue,
-    rentals: setRentalsRangeValue,
-    tribes: setTribesValue,
-    backgrounds: setBackgroundsValue,
-    cosmetics: setCosmeticsValue,
-    searchTerm: setSearchTermValue,
-  };
+  const actions = useMemo(
+    () => ({
+      prices: setPricesRangeValue,
+      multipliers: setMultipliersRangeValue,
+      rentals: setRentalsRangeValue,
+      tribes: setTribesValue,
+      backgrounds: setBackgroundsValue,
+      cosmetics: setCosmeticsValue,
+      searchTerm: setSearchTermValue,
+    }),
+    [],
+  );
 
   // Set search params from filter values
   // Use value to manually set the source's value
@@ -159,7 +180,7 @@ const DegensFilter = ({
     [handleChangeCommitted],
   );
 
-  const setAllFilterValues = () => {
+  const setAllFilterValues = useCallback(() => {
     setPricesRangeValue(defaultFilterValues.prices);
     setMultipliersRangeValue(defaultFilterValues.multipliers);
     setRentalsRangeValue(defaultFilterValues.rentals);
@@ -167,7 +188,8 @@ const DegensFilter = ({
     setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchTermValue(defaultFilterValues.searchTerm);
-  };
+    setRefreshKey(Math.random());
+  }, [defaultFilterValues]);
 
   const handleReset = () => {
     if (isParamsEmpty) return;
@@ -184,25 +206,30 @@ const DegensFilter = ({
     [handleChangeCommitted],
   );
 
+  // Updates local filter state on defaultFilterValues change
   useEffect(() => {
     setAllFilterValues();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultFilterValues]);
+  }, [setAllFilterValues]);
 
-  // Update local state on mounted
+  // Update local state on mount & on filter params update
   useEffect(() => {
     updateFilterValue(params, actions);
     handleFilter({
-      prices: pricesRangeValue,
-      multipliers: multipliersRangeValue,
-      rentals: rentalsRangeValue,
-      tribes: tribesValue,
-      backgrounds: backgroundsValue,
-      cosmetics: cosmeticsValue,
-      searchTerm: searchTermValue,
+      prices: filterOptionsMemoized.pricesRangeValue,
+      multipliers: filterOptionsMemoized.multipliersRangeValue,
+      rentals: filterOptionsMemoized.rentalsRangeValue,
+      tribes: filterOptionsMemoized.tribesValue,
+      backgrounds: filterOptionsMemoized.backgroundsValue,
+      cosmetics: filterOptionsMemoized.cosmeticsValue,
+      searchTerm: filterOptionsMemoized.searchTermValue,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, defaultFilterValues]);
+  }, [
+    actions,
+    defaultFilterValues,
+    filterOptionsMemoized,
+    handleFilter,
+    params,
+  ]);
 
   return (
     <Stack
