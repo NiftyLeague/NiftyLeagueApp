@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // routing
 import Routes from 'routes';
@@ -31,7 +31,8 @@ export default App;
 
 describe('🧪 Running test suite for App', () => {
   it('Renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
+    const container = document.createElement('div');
+    const root = createRoot(container!);
+    root.render(<App />);
   });
 });
