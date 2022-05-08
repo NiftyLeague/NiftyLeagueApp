@@ -40,7 +40,7 @@ const ViewTraitsContentDialog = ({
     <Grid container>
       <Grid item xs={12} sm={12} md={6} sx={{ py: 1, px: 2 }}>
         <Stack direction="row" justifyContent="center">
-          {degen && <DegenImage tokenId={degen.id} />}
+          {degen?.id && <DegenImage tokenId={degen.id} />}
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           {!traitList.length ? (
