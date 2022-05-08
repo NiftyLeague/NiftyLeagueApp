@@ -44,6 +44,6 @@ export interface WithdrawalHistory {
   nonce: number;
   request_id: string;
   signature: string;
-  state: string;
+  state: 'pending' | 'void' | 'complete';
   user_id: string;
 }
