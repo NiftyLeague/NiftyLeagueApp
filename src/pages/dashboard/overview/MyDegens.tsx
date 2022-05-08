@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Box, Button, Grid, Dialog } from '@mui/material';
-import DegenCard from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo, useState } from 'react';
 import { NetworkContext } from 'NetworkProvider';
@@ -165,7 +165,6 @@ const MyDegens = (): JSX.Element => {
             <Box sx={BoxDegenStyles} key={degen.id}>
               <DegenCard
                 id={degen.id}
-                checkInView={degens.length > 10}
                 name={degen.name}
                 isDashboardDegen
                 isEnabled={degen.is_active}

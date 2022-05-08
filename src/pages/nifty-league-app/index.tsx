@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, Box, Dialog } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
-import DegenCard from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
@@ -147,7 +147,6 @@ const NiftyLeagueAppPage = () => {
                 <DegenCard
                   activeRentals={degen.rental_count}
                   background={degen.background}
-                  checkInView
                   id={degen.id}
                   multiplier={degen.multiplier}
                   name={degen.name}

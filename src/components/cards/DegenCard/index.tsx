@@ -1,20 +1,20 @@
 import { useContext, memo } from 'react';
+import { useInView } from 'react-intersection-observer';
 import {
   Box,
   Button,
   Card,
   CardContent,
   Link,
-  Skeleton,
   Stack,
   SxProps,
   Theme,
   Typography,
   useTheme,
 } from '@mui/material';
-import Chip from 'components/extended/Chip';
 import EditIcon from '@mui/icons-material/Edit';
-import { useInView } from 'react-intersection-observer';
+import Chip from 'components/extended/Chip';
+import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
@@ -36,8 +36,7 @@ const chipStyles = {
 export interface DegenCardProps {
   activeRentals?: number;
   background?: string;
-  checkInView?: boolean;
-  id: string | number;
+  id: string;
   isDashboardDegen?: boolean;
   isEnabled?: boolean;
   multiplier?: number;
@@ -52,7 +51,7 @@ export interface DegenCardProps {
   sx?: SxProps<Theme>;
 }
 
-const DegenClaimBal = ({ tokenId }) => {
+const DegenClaimBal: React.FC<{ tokenId: string }> = memo(({ tokenId }) => {
   const { readContracts } = useContext(NetworkContext);
   const tokenIndices = [parseInt(tokenId, 10)];
   const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
@@ -63,13 +62,12 @@ const DegenClaimBal = ({ tokenId }) => {
       })
     : 0;
   return <>{`${amountParsed} NFTL Available`}</>;
-};
+});
 
 const DegenCard: React.FC<DegenCardProps> = memo(
   ({
     activeRentals,
     background,
-    checkInView = false,
     id,
     isDashboardDegen = false,
     isEnabled,
@@ -85,11 +83,9 @@ const DegenCard: React.FC<DegenCardProps> = memo(
     sx,
   }) => {
     const { palette } = useTheme();
-    const { ref, inView } = useInView();
 
     return (
       <Card
-        ref={ref}
         sx={{
           width: '100%',
           height: '100%',
@@ -98,11 +94,7 @@ const DegenCard: React.FC<DegenCardProps> = memo(
           ...sx,
         }}
       >
-        {!checkInView || inView ? (
-          <DegenImage tokenId={id} />
-        ) : (
-          <Skeleton variant="rectangular" height={320} />
-        )}
+        <DegenImage tokenId={id} />
         <Stack
           direction="row"
           justifyContent="space-evenly"
@@ -178,7 +170,7 @@ const DegenCard: React.FC<DegenCardProps> = memo(
             </Link>
           </Stack>
           <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
-            {isDashboardDegen && inView && <DegenClaimBal tokenId={id} />}
+            {isDashboardDegen && <DegenClaimBal tokenId={id} />}
           </Stack>
         </CardContent>
         <Box
@@ -234,5 +226,17 @@ const DegenCard: React.FC<DegenCardProps> = memo(
     );
   },
 );
+
+const DegenCardInView: React.FC<DegenCardProps> = (props) => {
+  const { ref, inView } = useInView();
+
+  return (
+    <div ref={ref}>
+      {inView ? <DegenCard {...props} /> : <SkeletonDegenPlaceholder />}
+    </div>
+  );
+};
+
+export { DegenCardInView };
 
 export default DegenCard;

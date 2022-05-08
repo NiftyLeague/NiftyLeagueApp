@@ -1,3 +1,13 @@
+import React, {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import {
   Button,
   Checkbox,
@@ -8,23 +18,13 @@ import {
   useMediaQuery,
   TextField,
 } from '@mui/material';
-import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
-import React, {
-  ChangeEvent,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import * as CosmeticsFilter from 'constants/cosmeticsFilters';
+import { DegenFilter } from 'types/degenFilter';
 import { updateFilterValue } from './utils';
-import { useSearchParams } from 'react-router-dom';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
-import { DegenFilter } from 'types/degenFilter';
-import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
 type FilterSource =
@@ -79,7 +79,6 @@ const DegensFilter = ({
   const [searchTermValue, setSearchTermValue] = useState<string[]>(
     defaultFilterValues.searchTerm,
   );
-  const [refreshKey, setRefreshKey] = useState(0);
   const filterOptionsMemoized = useMemo(
     () => ({
       backgroundsValue,
@@ -91,7 +90,7 @@ const DegensFilter = ({
       tribesValue,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refreshKey, params],
+    [params],
   );
 
   const actions = useMemo(
@@ -188,7 +187,6 @@ const DegensFilter = ({
     setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchTermValue(defaultFilterValues.searchTerm);
-    setRefreshKey(Math.random());
   }, [defaultFilterValues]);
 
   const handleReset = () => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DEGEN_BASE_BACKGROUND_URL } from 'constants/url';
 
 const useBackgroundType = (
@@ -7,6 +7,13 @@ const useBackgroundType = (
   const [loading, setLoading] = useState(true);
   const [background, setBackground] = useState('Not Found');
   const [error, setError] = useState(false);
+  const isMounted = useRef(true);
+  useEffect(
+    () => () => {
+      isMounted.current = false;
+    },
+    [],
+  );
 
   const backgroundAPI = `${DEGEN_BASE_BACKGROUND_URL}/mainnet/degen/${tokenId}/background`;
 
@@ -16,16 +23,18 @@ const useBackgroundType = (
         const result = await fetch(backgroundAPI, { cache: 'force-cache' });
         if (result.status === 404) {
           setError(true);
-          return;
+        } else if (isMounted.current) {
+          const bg = await result.text();
+          setBackground(bg);
+          setLoading(false);
         }
-        setBackground(await result.text());
-        setLoading(false);
       } catch (err) {
         setError(true);
       }
     };
-    if (tokenId && background === 'Not Found') resolveBackground();
-  }, [tokenId, background, backgroundAPI]);
+    // eslint-disable-next-line no-void
+    if (tokenId && isMounted.current) void resolveBackground();
+  }, [tokenId, backgroundAPI]);
 
   return [loading, error, background];
 };

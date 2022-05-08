@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams, useParams } from 'react-router-dom';
 
@@ -41,8 +41,7 @@ const DEGENS_PER_PAGE = 12;
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] =
-    useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -59,6 +58,8 @@ const DegenRentalsPage = (): JSX.Element => {
 
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(degens, DEGENS_PER_PAGE);
+
+  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
 
   useEffect(() => {
     if (data && !isEmpty(data)) {
@@ -110,33 +111,35 @@ const DegenRentalsPage = (): JSX.Element => {
   //   setIsEnableDisableDegenModalOpen(true);
   // };
 
-  const handleClickEditName = (degen: Degen): void => {
+  const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleViewTraits = (degen: Degen): void => {
+  const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleRentDegen = (degen: Degen): void => {
+  const handleRentDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
   return (
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => (
-          <DegensFilter
-            handleFilter={handleFilter}
-            defaultFilterValues={defaultValues}
-          />
-        )}
+        renderDrawer={() =>
+          !isEmpty(defaultValues) && (
+            <DegensFilter
+              handleFilter={handleFilter}
+              defaultFilterValues={defaultValues as DegenFilter}
+            />
+          )
+        }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
@@ -181,7 +184,7 @@ const DegenRentalsPage = (): JSX.Element => {
                       <SkeletonDegenPlaceholder />
                     </Grid>
                   ))
-                : currentData().map((degen: Degen) => (
+                : currentDataMemoized.map((degen: Degen) => (
                     <Grid
                       key={degen.id}
                       item
