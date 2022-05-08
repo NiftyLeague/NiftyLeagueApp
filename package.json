@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "husky install",
     "start": "react-scripts start",
-    "build": "react-scripts build --max_old_space_size=16384",
+    "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "npm run lint:script",

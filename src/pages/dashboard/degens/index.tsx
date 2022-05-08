@@ -49,8 +49,7 @@ const DashboardDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] =
-    useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -83,7 +82,7 @@ const DashboardDegensPage = (): JSX.Element => {
     );
   }, [userDegens]);
 
-  const filteredDegens = useMemo(() => {
+  const filteredDegens: Degen[] = useMemo(() => {
     if (characters.length && data) {
       const mapDegens = characters.map((character) => data[character.id]);
       return mapDegens;
@@ -94,10 +93,12 @@ const DashboardDegensPage = (): JSX.Element => {
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
     usePagination(filteredDegens, DEGENS_PER_PAGE);
 
-  const hasData = currentData().length > 0;
+  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
+
+  const hasData = currentDataMemoized.length > 0;
 
   useEffect(() => {
-    if (filteredDegens) {
+    if (filteredDegens && filteredDegens.length) {
       const originalDegens: Degen[] = Object.values(filteredDegens);
       setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
@@ -110,10 +111,6 @@ const DashboardDegensPage = (): JSX.Element => {
       }
       updateNewData(newDegens);
     }
-
-    return () => {
-      setDegens([]);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredDegens]);
 
@@ -177,10 +174,11 @@ const DashboardDegensPage = (): JSX.Element => {
         // Filter drawer
         drawerWidth={hasData ? 320 : 0}
         renderDrawer={() =>
-          hasData && (
+          hasData &&
+          !isEmpty(defaultValues) && (
             <DegensFilter
               handleFilter={handleFilter}
-              defaultFilterValues={defaultValues}
+              defaultFilterValues={defaultValues as DegenFilter}
             />
           )
         }
@@ -218,7 +216,7 @@ const DashboardDegensPage = (): JSX.Element => {
             </SectionTitle>
             {/* Main grid content */}
             <Grid container spacing={2}>
-              {loading ? (
+              {loading || !address ? (
                 [...Array(8)].map(() => (
                   <Grid
                     item
@@ -233,7 +231,7 @@ const DashboardDegensPage = (): JSX.Element => {
                   </Grid>
                 ))
               ) : filteredDegens.length && characters.length ? (
-                currentData().map((degen: Degen) => (
+                currentDataMemoized.map((degen: Degen) => (
                   <Grid
                     key={degen.id}
                     item
