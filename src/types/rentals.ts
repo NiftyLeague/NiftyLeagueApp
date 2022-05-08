@@ -20,6 +20,7 @@ export interface Rentals {
   };
   next_charge_at: number;
   created_at: number;
+  updated_at: number;
   last_charge_at: number;
   entry_price: number;
   earning_cap: number;
@@ -43,11 +44,22 @@ export interface Rentals {
   shares: {
     owner: number;
     player: number;
+    renter?: number;
   };
   name?: string;
   accounts?: {
     owner?: RentalAccount;
-    renter?: RentalAccount;
+    renter_user?: RentalAccount;
     player?: RentalAccount;
   };
+  daily_price?: number;
+  daily_cap?: number;
 }
+
+export type RentalType =
+  | 'all'
+  | 'personal'
+  | 'direct'
+  | 'recruit'
+  | 'owned-sponsorship'
+  | 'non-owned-sponsorship';
