@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Stack, Typography, FormControl, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
 import { ALL_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
-import { Rentals } from 'types/rentals';
+import { Rentals, RentalType } from 'types/rentals';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import SearchRental from './SearchRental';
+import InputLabel from '../../../components/extended/Form/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const DashboardRentalPage = (): JSX.Element => {
   const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
+  const [category, setCategory] = useState<RentalType>('all');
 
   let headers;
   if (authToken) {
@@ -115,6 +118,10 @@ const DashboardRentalPage = (): JSX.Element => {
     setRentals(newRental);
   };
 
+  const handleChange = (event: SelectChangeEvent) => {
+    setCategory(event.target.value as RentalType);
+  };
+
   return (
     <Stack spacing={3}>
       {/* Header */}
@@ -123,7 +130,7 @@ const DashboardRentalPage = (): JSX.Element => {
         alignItems="center"
         justifyContent="space-between"
         flexWrap="wrap"
-        columnGap={4}
+        columnGap={3}
         rowGap={1}
       >
         <Typography variant="h2">My Rentals</Typography>
@@ -136,6 +143,25 @@ const DashboardRentalPage = (): JSX.Element => {
           columnGap={2}
           flexWrap="wrap"
         >
+          <FormControl sx={{ minWidth: '200px' }}>
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
+              id="category"
+              value={category}
+              label="Category"
+              onChange={handleChange}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="personal">Personal</MenuItem>
+              <MenuItem value="recruit">Recruit</MenuItem>
+              <MenuItem value="owned-sponsorship">Owned Sponsorship</MenuItem>
+              <MenuItem value="non-owned-sponsorship">
+                Non-Owned Sponsorship
+              </MenuItem>
+              <MenuItem value="direct">Direct</MenuItem>
+            </Select>
+          </FormControl>
           <SearchRental handleSearch={handleSearch} />
         </Stack>
       </Stack>

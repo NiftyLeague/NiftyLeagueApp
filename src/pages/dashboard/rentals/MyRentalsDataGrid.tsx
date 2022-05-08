@@ -58,7 +58,6 @@ const MyRentalsDataGrid = ({
     {
       field: 'renter',
       headerName: 'Renter',
-      width: 180,
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           <Typography>{params.value}</Typography>

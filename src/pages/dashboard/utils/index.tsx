@@ -28,20 +28,32 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
       is_terminated,
       accounts,
     }) => {
-      const isPlayer = userId === user_id;
-      const isSponsor = userId === renter_id;
+      const isPersonal = userId === user_id && userId === renter_id; // Owner
+      const isSponsor = userId === renter_id && userId !== user_id; // Sponsor
+      const isDirect = userId !== renter_id && userId === user_id; // Player
+      // const isRecruit = userId !== renter_id && userId !== user_id; // ???
 
       let walletAddress: string | undefined = '';
       let yourEarnings = 0;
-      if (isSponsor) {
+      let rentalFeeEarning = 0;
+      // let netGameEarning = 0;
+      if (isPersonal) {
+        walletAddress = accounts?.owner?.name;
+        yourEarnings = earnings_owner;
+        rentalFeeEarning = 0;
+      } else if (isSponsor) {
         yourEarnings = earnings_renter;
-        walletAddress = accounts?.renter?.name || accounts?.owner?.name;
-      } else if (isPlayer) {
+        walletAddress = accounts?.renter_user?.name || accounts?.owner?.name;
+        rentalFeeEarning = earning_cap * 0.45 + earning_cap_daily * 0.1;
+      } else if (isDirect) {
         yourEarnings = earnings_player;
         walletAddress = accounts?.player?.name;
+        rentalFeeEarning = 0;
       } else {
-        yourEarnings = earnings_renter;
-        walletAddress = accounts?.owner?.name;
+        // Direct
+        yourEarnings = earnings;
+        walletAddress = 'Unknown';
+        rentalFeeEarning = earning_cap * 0.45 + earning_cap_daily * 0.1;
       }
 
       return {
@@ -68,6 +80,7 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
         action: is_terminated,
         weeklyRentalFee: earning_cap,
         dailyRentalFee: earning_cap_daily,
+        rentalFeeEarning,
       };
     },
   );
