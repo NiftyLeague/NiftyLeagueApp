@@ -1,4 +1,4 @@
-import { Suspense, LazyExoticComponent, ComponentType } from 'react';
+import { Suspense, LazyExoticComponent } from 'react';
 
 // material-ui
 import { LinearProgressProps } from '@mui/material/LinearProgress';
@@ -11,12 +11,7 @@ import Loader from './Loader';
 interface LoaderProps extends LinearProgressProps {}
 
 const Loadable =
-  (
-    Component:
-      | LazyExoticComponent<() => JSX.Element>
-      | ComponentType<React.ReactNode>,
-  ) =>
-  (props: LoaderProps) =>
+  (Component: LazyExoticComponent<() => JSX.Element>) => (props: LoaderProps) =>
     (
       <Suspense fallback={<Loader />}>
         <Component {...props} />

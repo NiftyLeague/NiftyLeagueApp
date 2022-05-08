@@ -136,7 +136,7 @@ const NiftyLeagueAppPage = () => {
         }
         sliderSettingsOverride={settings}
       >
-        {!data
+        {!degens.length
           ? [...Array(4)].map(() => (
               <Box paddingRight={2} key={uuidv4()}>
                 <SkeletonDegenPlaceholder />

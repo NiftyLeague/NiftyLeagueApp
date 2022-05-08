@@ -20,7 +20,9 @@ import { sendEvent } from 'utils/google-analytics';
 
 export interface UserProfileProps {}
 
-const UserProfile: React.FC<UserProfileProps> = () => {
+const UserProfile: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<UserProfileProps>>
+> = () => {
   const { palette } = useTheme();
   const { address, loadWeb3Modal, web3Modal, writeContracts, tx } =
     useContext(NetworkContext);

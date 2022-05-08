@@ -5,11 +5,9 @@ export interface SectionTitleProps {
   firstSection?: boolean;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({
-  children,
-  firstSection,
-  actions,
-}) => (
+const SectionTitle: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<SectionTitleProps>>
+> = ({ children, firstSection, actions }) => (
   <Stack
     direction="row"
     justifyContent="space-between"

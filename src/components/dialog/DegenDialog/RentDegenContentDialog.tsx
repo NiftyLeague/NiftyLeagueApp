@@ -101,6 +101,7 @@ const RentDegenContentDialog = ({
       if (!web3Modal.cachedProvider) {
         toast.error(
           'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
+          { theme: 'dark' },
         );
         return;
       }
@@ -123,13 +124,13 @@ const RentDegenContentDialog = ({
           await renameRental();
         }
         setLoading(false);
-        toast.success('Rent successfully!');
+        toast.success('Rent successfully!', { theme: 'dark' });
         onClose?.(event);
 
         sendEvent('purchase', 'ecommerce');
       } catch (err: any) {
         setLoading(false);
-        toast.error(err.message);
+        toast.error(err.message, { theme: 'dark' });
       }
     },
     [
