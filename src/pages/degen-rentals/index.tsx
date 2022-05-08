@@ -96,11 +96,14 @@ const DegenRentalsPage = (): JSX.Element => {
     [degens, filters.sort, updateNewData, walletAddress],
   );
 
-  const handleSort = (sort: string) => {
-    const newSort = { ...filters, sort };
-    setFilters(newSort);
-    updateNewData(tranformDataByFilter(degens, newSort));
-  };
+  const handleSort = useCallback(
+    (sort: string) => {
+      const newSort = { ...filters, sort };
+      setFilters(newSort);
+      updateNewData(tranformDataByFilter(degens, newSort));
+    },
+    [degens, filters, updateNewData],
+  );
 
   // const handleClickCard = (degen: Degen): void => {
   //   setSelectedDegen(degen);

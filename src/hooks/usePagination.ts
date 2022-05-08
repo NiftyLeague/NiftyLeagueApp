@@ -6,11 +6,11 @@ const usePagination = (data: any, itemsPerPage: number) => {
 
   const maxPage = Math.ceil(newData.length / itemsPerPage);
 
-  const currentData = () => {
+  const currentData = useCallback(() => {
     const begin = (currentPage - 1) * itemsPerPage;
     const end = begin + itemsPerPage;
     return newData.slice(begin, end);
-  };
+  }, [currentPage, itemsPerPage, newData]);
 
   const next = () => {
     setCurrentPage((current) => Math.min(current + 1, maxPage));
