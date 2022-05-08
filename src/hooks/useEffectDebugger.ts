@@ -21,8 +21,12 @@ const useEffectDebugger = (
 ): void => {
   const previousDeps = usePrevious(dependencies, []);
 
-  const changedDeps: { [key: number]: { before: unknown; after: unknown } } =
-    dependencies.reduce((accum, dependency, index) => {
+  const changedDeps = dependencies.reduce(
+    (
+      accum: { [key: number]: { before: unknown; after: unknown } },
+      dependency,
+      index,
+    ) => {
       if (dependency !== previousDeps[index]) {
         const keyName = dependencyNames[index] || index;
         return {
@@ -35,7 +39,9 @@ const useEffectDebugger = (
       }
 
       return accum;
-    }, {});
+    },
+    {},
+  ) as { [key: number]: { before: unknown; after: unknown } };
 
   if (Object.keys(changedDeps).length) {
     // eslint-disable-next-line no-console

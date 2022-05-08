@@ -7,11 +7,9 @@ interface EmptyStateProps {
   buttonText?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-const EmptyState: React.FC<EmptyStateProps> = ({
-  message,
-  buttonText,
-  onClick,
-}) => {
+const EmptyState: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<EmptyStateProps>>
+> = ({ message, buttonText, onClick }) => {
   const theme = useTheme();
 
   return (
