@@ -174,7 +174,7 @@ export default function Notifier(
               ({ data }) => `${networkName} Transaction Sent: ${data}`,
               {
                 data: result.hash,
-                position: 'top-right',
+                position: 'bottom-right',
                 theme: 'dark',
               },
             );
@@ -183,7 +183,7 @@ export default function Notifier(
               ({ data }) => `${networkName} Transaction Successful: ${data}`,
               {
                 data: result.hash,
-                position: 'top-right',
+                position: 'bottom-right',
                 theme: 'dark',
               },
             );
