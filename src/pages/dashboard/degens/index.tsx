@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ import {
   Pagination,
   Stack,
   Dialog,
-  useMediaQuery,
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
@@ -43,12 +42,14 @@ import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 
+// Needs to be divisible by 2, 3, or 4
+const DEGENS_PER_PAGE = 12;
+
 const DashboardDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] =
-    useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -81,7 +82,7 @@ const DashboardDegensPage = (): JSX.Element => {
     );
   }, [userDegens]);
 
-  const filteredDegens = useMemo(() => {
+  const filteredDegens: Degen[] = useMemo(() => {
     if (characters.length && data) {
       const mapDegens = characters.map((character) => data[character.id]);
       return mapDegens;
@@ -89,35 +90,15 @@ const DashboardDegensPage = (): JSX.Element => {
     return [];
   }, [characters, data]);
 
-  const isMobile = useMediaQuery('(min-width:600px)');
-  const isTablet = useMediaQuery('(min-width:900px)');
-  const isMediumScreen = useMediaQuery('(min-width:1200px)');
-  const isLargeScreen = useMediaQuery('(min-width:1536px)');
-
-  const getPageLimit = (): number => {
-    if (isLargeScreen) {
-      return 10;
-    }
-    if (isMediumScreen) {
-      return 8;
-    }
-    if (isTablet) {
-      return 8;
-    }
-    if (isMobile) {
-      return 4;
-    }
-    return 2;
-  };
-
-  const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(filteredDegens, PER_PAGE);
+    usePagination(filteredDegens, DEGENS_PER_PAGE);
 
-  const hasData = currentData().length > 0;
+  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
+
+  const hasData = currentDataMemoized.length > 0;
 
   useEffect(() => {
-    if (filteredDegens) {
+    if (filteredDegens && filteredDegens.length) {
       const originalDegens: Degen[] = Object.values(filteredDegens);
       setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
@@ -130,57 +111,58 @@ const DashboardDegensPage = (): JSX.Element => {
       }
       updateNewData(newDegens);
     }
-
-    return () => {
-      setDegens([]);
-    };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredDegens]);
 
-  const handleFilter = (filter: DegenFilter) => {
-    const newFilters = { ...filter, sort: filters.sort };
-    const result = tranformDataByFilter(degens, newFilters);
-    setFilters(newFilters);
-    updateNewData(result);
-  };
+  const handleFilter = useCallback(
+    (filter: DegenFilter) => {
+      const newFilters = { ...filter, sort: filters.sort };
+      const result = tranformDataByFilter(degens, newFilters);
+      setFilters(newFilters);
+      updateNewData(result);
+    },
+    [degens, filters.sort, setFilters, updateNewData],
+  );
 
-  const handleSort = (sort: string) => {
-    const newSort = { ...filters, sort };
-    setFilters(newSort);
-    updateNewData(tranformDataByFilter(degens, newSort));
-  };
+  const handleSort = useCallback(
+    (sort: string) => {
+      const newSort = { ...filters, sort };
+      setFilters(newSort);
+      updateNewData(tranformDataByFilter(degens, newSort));
+    },
+    [degens, filters, updateNewData],
+  );
 
-  const handleEnableDisable = (degen: Degen): void => {
+  const handleEnableDisable = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsEnableDisableDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleClickEditName = (degen: Degen): void => {
+  const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleViewTraits = (degen: Degen): void => {
+  const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(false);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleClaimDegen = (degen: Degen): void => {
+  const handleClaimDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(true);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleRentDegen = (degen: Degen): void => {
+  const handleRentDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsClaimDialog(false);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
   const handleBuyDegen = () => {
     window.open('https://opensea.io/collection/niftydegen', '_blank');
@@ -192,10 +174,11 @@ const DashboardDegensPage = (): JSX.Element => {
         // Filter drawer
         drawerWidth={hasData ? 320 : 0}
         renderDrawer={() =>
-          hasData && (
+          hasData &&
+          !isEmpty(defaultValues) && (
             <DegensFilter
               handleFilter={handleFilter}
-              defaultFilterValues={defaultValues}
+              defaultFilterValues={defaultValues as DegenFilter}
             />
           )
         }
@@ -233,30 +216,30 @@ const DashboardDegensPage = (): JSX.Element => {
             </SectionTitle>
             {/* Main grid content */}
             <Grid container spacing={2}>
-              {loading ? (
+              {loading || !address ? (
                 [...Array(8)].map(() => (
                   <Grid
                     item
                     xs={12}
                     sm={6}
-                    md={isDrawerOpen ? 6 : 3}
-                    lg={isDrawerOpen ? 6 : 3}
-                    xl={2.4}
+                    md={4}
+                    lg={isDrawerOpen ? 4 : 3}
+                    xl={3}
                     key={uuidv4()}
                   >
                     <SkeletonDegenPlaceholder />
                   </Grid>
                 ))
               ) : filteredDegens.length && characters.length ? (
-                currentData().map((degen: Degen) => (
+                currentDataMemoized.map((degen: Degen) => (
                   <Grid
                     key={degen.id}
                     item
                     xs={12}
                     sm={6}
-                    md={isDrawerOpen ? 6 : 3}
-                    lg={isDrawerOpen ? 6 : 3}
-                    xl={2.4}
+                    md={4}
+                    lg={isDrawerOpen ? 4 : 3}
+                    xl={3}
                   >
                     <DegenCard
                       id={degen.id}
