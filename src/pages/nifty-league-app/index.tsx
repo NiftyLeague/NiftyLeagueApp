@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, Box, Dialog } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
-import DegenCard from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
@@ -30,7 +30,8 @@ const NiftyLeagueAppPage = () => {
       const degensArray = Object.values(data);
       const sortDegens = degensArray
         .filter((degen) => degen.rental_count > 0)
-        .sort((degenA, degenB) => degenB.rental_count - degenA.rental_count);
+        .sort((degenA, degenB) => degenB.rental_count - degenA.rental_count)
+        .slice(0, 100);
       setDegens(sortDegens);
     }
     return () => {
@@ -144,16 +145,16 @@ const NiftyLeagueAppPage = () => {
           : degens.map((degen) => (
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
+                  activeRentals={degen.rental_count}
+                  background={degen.background}
                   id={degen.id}
-                  name={degen.name}
                   multiplier={degen.multiplier}
+                  name={degen.name}
+                  onClickDetail={() => handleViewTraits(degen)}
+                  onClickEditName={() => handleClickEditName(degen)}
+                  onClickRent={() => handleRentDegen(degen)}
                   owner={degen.owner}
                   price={degen.price}
-                  background={degen.background}
-                  activeRentals={degen.rental_count}
-                  onClickEditName={() => handleClickEditName(degen)}
-                  onClickDetail={() => handleViewTraits(degen)}
-                  onClickRent={() => handleRentDegen(degen)}
                 />
               </Box>
             ))}
