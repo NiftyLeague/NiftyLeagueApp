@@ -17,11 +17,15 @@ import useNFTLBalance from 'hooks/useNFTLBalance';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import {
+  BALANCE_INTERVAL,
+  CHARACTERS_SUBGRAPH_INTERVAL,
+  DEBUG,
+} from 'constants/index';
+import {
   GAMER_ACCOUNT_API,
   MY_PROFILE_API_URL,
   WITHDRAW_NFTL_SIGN,
 } from 'constants/url';
-import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../constants';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 
@@ -32,7 +36,12 @@ interface MyNFTLProps {
 const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
-  const userNFTLBalance = useNFTLBalance(address);
+  const [refreshBalKey, setRefreshBalKey] = useState(0);
+  const userNFTLBalance = useNFTLBalance(
+    address,
+    BALANCE_INTERVAL,
+    refreshBalKey,
+  );
 
   const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
     useQuery(OWNER_QUERY, {
@@ -56,11 +65,11 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   );
 
   const [mockAccrued, setMockAccrued] = useState(0);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshClaimKey, setRefreshClaimKey] = useState(0);
   const totalAccrued = useClaimableNFTL(
     writeContracts,
     tokenIndices,
-    refreshKey,
+    refreshClaimKey,
   );
 
   useEffect(() => {
@@ -123,7 +132,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
     setMockAccrued(0);
-    setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+    setTimeout(() => setRefreshClaimKey(Math.random() + 1), 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccrued, tx, writeContracts]);
 
@@ -138,6 +147,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         ),
       );
       await fetchAccount();
+      setRefreshBalKey(Math.random());
       return txRes;
     },
     [tx, writeContracts, fetchAccount],
@@ -176,6 +186,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         );
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('txRes', txRes);
+        setRefreshBalKey(Math.random());
         return txRes;
       } catch (error) {
         console.error('error', error);

@@ -34,3 +34,16 @@ export interface Profile {
     };
   };
 }
+
+export interface WithdrawalHistory {
+  address: string;
+  amount: number;
+  balance_before: number;
+  balance_tx_id: string;
+  created_at: number;
+  nonce: number;
+  request_id: string;
+  signature: string;
+  state: string;
+  user_id: string;
+}
