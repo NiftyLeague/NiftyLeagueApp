@@ -14,14 +14,18 @@ import {
   useTheme,
   Stack,
 } from '@mui/material';
+import { providers } from 'ethers';
 import { useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
 import { DialogContext } from 'components/dialog';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 interface WithdrawFormProps {
-  onWithdrawEarnings: (amount: number) => void;
+  onWithdrawEarnings: (
+    amount: number,
+  ) => Promise<providers.TransactionResponse | null>;
   balance: number;
 }
 
@@ -69,7 +73,7 @@ const WithdrawForm = ({
     setIsOpen(false);
   };
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     if (balanceWithdraw === 0) {
       setError('amountInput', {
         type: 'custom',
@@ -77,8 +81,8 @@ const WithdrawForm = ({
       });
       return;
     }
-    onWithdrawEarnings?.(balanceWithdraw);
-    resetForm();
+    const res = await onWithdrawEarnings(balanceWithdraw);
+    if (res) resetForm();
   };
 
   return (
@@ -86,10 +90,7 @@ const WithdrawForm = ({
       <Stack alignItems="center" gap={2}>
         <Typography variant="h4">Game &amp; Rental Balance</Typography>
         <Typography variant="h2" sx={{ opacity: 0.7 }}>
-          {balance.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+          {formatNumberToDisplay(balance)}
           <Typography variant="body1">Available to Claim</Typography>
         </Typography>
         <Typography variant="h4">
@@ -165,7 +166,7 @@ const WithdrawForm = ({
             sx={{ mx: '4px', fontWeight: 600, fontSize: 16, opacity: 0.7 }}
             variant="body1"
           >
-            {balanceWithdraw.toLocaleString('en-US')}
+            {formatNumberToDisplay(balanceWithdraw)}
           </Typography>
           NFTL
         </Typography>
