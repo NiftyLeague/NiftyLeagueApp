@@ -94,7 +94,7 @@ const DegenCard: React.FC<DegenCardProps> = memo(
           ...sx,
         }}
       >
-        <DegenImage tokenId={id} />
+        {id && <DegenImage tokenId={id} />}
         <Stack
           direction="row"
           justifyContent="space-evenly"
