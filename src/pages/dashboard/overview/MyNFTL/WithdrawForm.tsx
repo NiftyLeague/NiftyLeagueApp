@@ -79,7 +79,7 @@ const WithdrawForm = ({
   });
   const theme = useTheme();
 
-  const withdrawalHistory = useWithdrawalHistory();
+  const { withdrawalHistory } = useWithdrawalHistory('pending');
   const withdrawDisabled = checkWithdrawalDisabled(withdrawalHistory);
 
   const resetForm = () => {

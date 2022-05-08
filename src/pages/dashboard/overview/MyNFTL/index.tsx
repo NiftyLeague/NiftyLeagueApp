@@ -1,5 +1,6 @@
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import { Grid, Button, Stack, Skeleton } from '@mui/material';
+import { Grid, Button, Stack, Skeleton, IconButton } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
 import { BigNumber, utils } from 'ethers';
@@ -25,8 +26,10 @@ import {
   GAMER_ACCOUNT_API,
   MY_PROFILE_API_URL,
   WITHDRAW_NFTL_SIGN,
+  WITHDRAW_NFTL_REFRESH,
 } from 'constants/url';
 import DepositForm from './DepositForm';
+import RefreshBalanceForm from './RefreshBalanceForm';
 import WithdrawForm from './WithdrawForm';
 
 interface MyNFTLProps {
@@ -196,6 +199,19 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     [address, auth, tx, writeContracts, fetchAccount],
   );
 
+  const handleRefreshBal = useCallback(async () => {
+    try {
+      const response = await fetch(WITHDRAW_NFTL_REFRESH, {
+        headers: { authorizationToken: auth as string },
+        method: 'POST',
+      });
+      if (!response.ok) throw new Error(response.statusText);
+      await fetchAccount();
+    } catch (error) {
+      console.error('error', error);
+    }
+  }, [auth, fetchAccount]);
+
   return (
     <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
@@ -285,7 +301,40 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         <Grid container spacing={sectionSpacing}>
           <Grid item sm={6} xs={12}>
             <HoverDataCard
-              title="Game &amp; Rental Balance"
+              title={
+                <>
+                  Game &amp; Rental Balance
+                  <Dialog>
+                    <DialogTrigger>
+                      <IconButton
+                        color="primary"
+                        component="span"
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                        }}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </DialogTrigger>
+                    <DialogContent
+                      aria-labelledby="refresh-dialog"
+                      dialogTitle="Recent Transaction History:"
+                      sx={{
+                        '& h2': {
+                          textAlign: 'center',
+                        },
+                        '& .MuiDialogContent-root': {
+                          textAlign: 'center',
+                        },
+                      }}
+                    >
+                      <RefreshBalanceForm onRefresh={handleRefreshBal} />
+                    </DialogContent>
+                  </Dialog>
+                </>
+              }
               primary={`${
                 accError
                   ? 'Error fetching balance'
@@ -296,6 +345,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                 backgroundColor: theme.palette.background.default,
                 border: '1px solid',
                 borderColor: theme.palette.grey[800],
+                position: 'relative',
               }}
               secondary="Available to Claim"
               actions={

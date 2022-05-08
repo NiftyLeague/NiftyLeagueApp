@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { WITHDRAW_NFTL_LIST } from 'constants/url';
 import { WithdrawalHistory } from 'types/account';
 
-const useWithdrawalHistory = () => {
+const useWithdrawalHistory = (state?: WithdrawalHistory['state']) => {
+  const [loading, setLoading] = useState(true);
   const [withdrawalHistory, setWithdrawalHistory] = useState<
     WithdrawalHistory[]
   >([]);
@@ -10,18 +11,27 @@ const useWithdrawalHistory = () => {
 
   const fetchWithdrawalHistory = useCallback(async () => {
     if (auth) {
-      const res = await fetch(`${WITHDRAW_NFTL_LIST}?state=pending`, {
-        headers: { authorizationToken: auth },
-      });
+      const res = await fetch(
+        `${WITHDRAW_NFTL_LIST}${state ? `?state=${state}` : ''}`,
+        {
+          headers: { authorizationToken: auth },
+        },
+      );
       if (res && res.status === 200) setWithdrawalHistory(await res.json());
+      setLoading(false);
     }
-  }, [auth]);
+  }, [auth, state]);
 
   useEffect(() => {
     if (auth) fetchWithdrawalHistory();
   }, [auth, fetchWithdrawalHistory]);
 
-  return withdrawalHistory.sort((a, b) => b.created_at - a.created_at);
+  return {
+    loading,
+    withdrawalHistory: withdrawalHistory.sort(
+      (a, b) => b.created_at - a.created_at,
+    ),
+  };
 };
 
 export default useWithdrawalHistory;
