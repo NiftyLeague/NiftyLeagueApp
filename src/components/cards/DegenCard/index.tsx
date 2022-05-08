@@ -1,18 +1,20 @@
 import { useContext } from 'react';
 import {
+  Box,
   Button,
   Card,
   CardContent,
   Link,
+  Skeleton,
   Stack,
   SxProps,
   Theme,
   Typography,
   useTheme,
-  Box,
 } from '@mui/material';
 import Chip from 'components/extended/Chip';
 import EditIcon from '@mui/icons-material/Edit';
+import { useInView } from 'react-intersection-observer';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
@@ -32,21 +34,22 @@ const chipStyles = {
 };
 
 export interface DegenCardProps {
-  id: string | number;
-  name?: string;
-  multiplier?: number;
   activeRentals?: number;
-  owner?: string;
-  price?: number;
   background?: string;
+  checkInView?: boolean;
+  id: string | number;
   isDashboardDegen?: boolean;
   isEnabled?: boolean;
-  sx?: SxProps<Theme>;
-  onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
-  onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
-  onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  multiplier?: number;
+  name?: string;
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
+  onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
+  owner?: string;
+  price?: number;
+  sx?: SxProps<Theme>;
 }
 
 const DegenClaimBal = ({ tokenId }) => {
@@ -63,26 +66,29 @@ const DegenClaimBal = ({ tokenId }) => {
 };
 
 const DegenCard: React.FC<DegenCardProps> = ({
-  id,
-  name,
-  multiplier,
   activeRentals,
-  owner,
-  price,
   background,
+  checkInView = false,
+  id,
   isDashboardDegen = false,
   isEnabled,
-  sx,
-  onEnableDisable,
+  multiplier,
+  name,
+  onClickClaim,
+  onClickDetail,
   onClickEditName,
   onClickRent,
-  onClickDetail,
-  onClickClaim,
+  onEnableDisable,
+  owner,
+  price,
+  sx,
 }) => {
   const { palette } = useTheme();
+  const { ref, inView } = useInView();
 
   return (
     <Card
+      ref={ref}
       sx={{
         width: '100%',
         height: '100%',
@@ -91,7 +97,11 @@ const DegenCard: React.FC<DegenCardProps> = ({
         ...sx,
       }}
     >
-      <DegenImage tokenId={id} />
+      {!checkInView || inView ? (
+        <DegenImage tokenId={id} />
+      ) : (
+        <Skeleton variant="rectangular" height={320} />
+      )}
       <Stack
         direction="row"
         justifyContent="space-evenly"

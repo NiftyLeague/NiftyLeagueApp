@@ -13,7 +13,7 @@ const useBackgroundType = (
   useEffect(() => {
     const resolveBackground = async () => {
       try {
-        const result = await fetch(backgroundAPI);
+        const result = await fetch(backgroundAPI, { cache: 'force-cache' });
         if (result.status === 404) {
           setError(true);
           return;
@@ -24,8 +24,8 @@ const useBackgroundType = (
         setError(true);
       }
     };
-    if (tokenId) resolveBackground();
-  }, [tokenId, backgroundAPI]);
+    if (tokenId && background === 'Not Found') resolveBackground();
+  }, [tokenId, background, backgroundAPI]);
 
   return [loading, error, background];
 };

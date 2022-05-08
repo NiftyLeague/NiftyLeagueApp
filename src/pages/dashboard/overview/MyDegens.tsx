@@ -165,6 +165,7 @@ const MyDegens = (): JSX.Element => {
             <Box sx={BoxDegenStyles} key={degen.id}>
               <DegenCard
                 id={degen.id}
+                checkInView={degens.length > 10}
                 name={degen.name}
                 isDashboardDegen
                 isEnabled={degen.is_active}
