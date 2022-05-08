@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Box, Button, Grid, Dialog } from '@mui/material';
-import DegenCard from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo, useState } from 'react';
 import { NetworkContext } from 'NetworkProvider';
