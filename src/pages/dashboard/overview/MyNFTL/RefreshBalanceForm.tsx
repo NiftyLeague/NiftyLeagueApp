@@ -116,7 +116,7 @@ const RefreshForm = ({ onRefresh }: RefreshFormProps): JSX.Element => {
             ) : (
               <Alert severity="error">No withdrawal history found</Alert>
             )}
-            {!hasPendingTxs && (
+            {refreshEnabled && !hasPendingTxs && (
               <Alert severity="error">No pending transactions found</Alert>
             )}
           </>
