@@ -179,7 +179,6 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
           signature: string;
           nonce: number;
         };
-        await fetchAccount();
         const txRes = await tx(
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
             amountWEI,
@@ -190,6 +189,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('txRes', txRes);
         setRefreshBalKey(Math.random());
+        await fetchAccount();
         return txRes;
       } catch (error) {
         console.error('error', error);
