@@ -6,10 +6,11 @@ import MainCard from './MainCard';
 
 // ============================|| HOVER DATA CARD ||============================ //
 
-interface HoverDataCardProps extends GenericCardProps {
+interface HoverDataCardProps extends Omit<GenericCardProps, 'title'> {
   customStyle?: React.CSSProperties;
   actions?: React.ReactNode;
   isLoading?: boolean;
+  title?: string | React.ReactNode;
 }
 
 const HoverDataCard = ({

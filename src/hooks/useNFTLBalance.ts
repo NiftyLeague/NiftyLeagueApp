@@ -18,6 +18,7 @@ import { NFTL_CONTRACT } from 'constants/contracts';
 export default function useNFTLBalance(
   address: string,
   pollTime = BALANCE_INTERVAL,
+  refreshKey?: string | number,
 ): number {
   const { writeContracts } = useContext(NetworkContext);
   const [balance, setBalance] = useState(BigNumber.from(0));
@@ -27,6 +28,8 @@ export default function useNFTLBalance(
     'balanceOf',
     [address],
     pollTime,
+    undefined,
+    refreshKey,
   ) as BigNumber;
   useEffect(() => {
     if (result && result !== balance) setBalance(result);

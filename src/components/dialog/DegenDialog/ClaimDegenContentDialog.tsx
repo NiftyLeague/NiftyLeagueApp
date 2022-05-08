@@ -5,6 +5,7 @@ import { NetworkContext } from 'NetworkProvider';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 export interface ClaimDegenContentDialogProps {
   degen?: Degen;
@@ -43,10 +44,7 @@ const ClaimDegenContentDialog = ({
     [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
   );
 
-  const amountParsed = mockAccumulated.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  const amountParsed = formatNumberToDisplay(mockAccumulated);
 
   return (
     <Stack padding={3} gap={2}>
