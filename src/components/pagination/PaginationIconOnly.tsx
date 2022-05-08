@@ -9,12 +9,9 @@ export interface PaginationIconOnlyProps {
   onClickNext?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const PaginationIconOnly: React.FC<PaginationIconOnlyProps> = ({
-  hasNext,
-  hasPrev,
-  onClickPrev,
-  onClickNext,
-}) => (
+const PaginationIconOnly: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<PaginationIconOnlyProps>>
+> = ({ hasNext, hasPrev, onClickPrev, onClickNext }) => (
   <Stack direction="row" gap={1}>
     <IconButton disabled={hasPrev === false} onClick={onClickPrev}>
       <ArrowBackIosNewIcon fontSize="small" />

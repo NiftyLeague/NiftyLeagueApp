@@ -90,7 +90,7 @@ const DegenDialog = ({
         setDegenDetail(json);
       } catch (err) {
         if (DEBUG) console.error(err.message);
-        toast.error(err.message);
+        toast.error(err.message, { theme: 'dark' });
       }
     }
 

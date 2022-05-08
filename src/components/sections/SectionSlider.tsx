@@ -11,6 +11,7 @@ interface Props {
   actions?: ReactNode;
   sliderSettingsOverride?: Settings;
   isSlider?: boolean;
+  children?: React.ReactNode;
 }
 
 const SectionSlider = ({

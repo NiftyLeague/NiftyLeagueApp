@@ -23,7 +23,9 @@ export interface GameCardProps {
   actions?: React.ReactNode;
 }
 
-const GameCard: React.FC<GameCardProps> = ({
+const GameCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<GameCardProps>>
+> = ({
   title,
   description,
   onlineCounter,

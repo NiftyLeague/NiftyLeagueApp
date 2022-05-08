@@ -46,7 +46,7 @@ const EnableDisableDegenDialogContent = ({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (json.statusCode) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        toast.error(json.body);
+        toast.error(json.body, { theme: 'dark' });
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 
