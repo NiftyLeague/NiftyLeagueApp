@@ -12,11 +12,12 @@ import { NetworkContext } from 'NetworkProvider';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Owner } from 'types/graph';
-import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendEvent } from 'utils/google-analytics';
+import { formatNumberToDisplay } from 'utils/numbers';
+import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
 
 export interface UserProfileProps {}
 
@@ -60,11 +61,6 @@ const UserProfile: React.FC<
     if (totalAccumulated) setMockAccumulated(totalAccumulated);
   }, [totalAccumulated]);
 
-  const amountParsed = mockAccumulated.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
   const handleClaimNFTL = useCallback(async () => {
     // eslint-disable-next-line no-console
     if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
@@ -103,7 +99,8 @@ const UserProfile: React.FC<
           <Skeleton variant="text" animation="wave" width={80} />
         ) : (
           <Typography variant="h4">
-            {mockAccumulated ? amountParsed : '0.00'} NFTL
+            {mockAccumulated ? formatNumberToDisplay(mockAccumulated) : '0.00'}{' '}
+            NFTL
           </Typography>
         )}
         <Typography>Available to Claim</Typography>

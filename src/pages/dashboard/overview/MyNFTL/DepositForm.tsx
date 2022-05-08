@@ -16,6 +16,7 @@ import { BigNumber, BigNumberish, providers, utils } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DialogContext } from 'components/dialog';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 interface DepositFormProps {
   onDeposit: (amount: number) => Promise<providers.TransactionResponse | null>;
@@ -107,7 +108,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
       <Stack alignItems="center" gap={2}>
         <Typography variant="h4">NFTL in Wallet</Typography>
         <Typography variant="h2" sx={{ opacity: 0.7 }}>
-          {balance.toLocaleString('en-US')}
+          {formatNumberToDisplay(balance)}
           <Typography variant="body1">Available to Deposit</Typography>
         </Typography>
         <Typography variant="h4">
@@ -183,7 +184,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
             sx={{ mx: '4px', fontWeight: 600, fontSize: 16, opacity: 0.7 }}
             variant="body1"
           >
-            {balanceDeposit.toLocaleString('en-US')}
+            {formatNumberToDisplay(balanceDeposit)}
           </Typography>
           NFTL
         </Typography>
