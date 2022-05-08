@@ -51,7 +51,9 @@ export interface DegenCardProps {
   sx?: SxProps<Theme>;
 }
 
-const DegenClaimBal: React.FC<{ tokenId: string }> = memo(({ tokenId }) => {
+const DegenClaimBal: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<{ tokenId: string }>>
+> = memo(({ tokenId }) => {
   const { readContracts } = useContext(NetworkContext);
   const tokenIndices = [parseInt(tokenId, 10)];
   const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
@@ -64,7 +66,9 @@ const DegenClaimBal: React.FC<{ tokenId: string }> = memo(({ tokenId }) => {
   return <>{`${amountParsed} NFTL Available`}</>;
 });
 
-const DegenCard: React.FC<DegenCardProps> = memo(
+const DegenCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
+> = memo(
   ({
     activeRentals,
     background,
@@ -227,7 +231,9 @@ const DegenCard: React.FC<DegenCardProps> = memo(
   },
 );
 
-const DegenCardInView: React.FC<DegenCardProps> = (props) => {
+const DegenCardInView: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
+> = (props) => {
   const { ref, inView } = useInView();
 
   return (

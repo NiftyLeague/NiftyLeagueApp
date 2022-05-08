@@ -12,7 +12,9 @@ interface PopUpCardProps {
   actions?: React.ReactNode;
 }
 
-const PopUpCard: React.FC<PopUpCardProps> = ({ title, content, actions }) => {
+const PopUpCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<PopUpCardProps>>
+> = ({ title, content, actions }) => {
   const [open, setOpen] = React.useState(true);
   const handleClose = () => setOpen(false);
   const theme = useTheme();

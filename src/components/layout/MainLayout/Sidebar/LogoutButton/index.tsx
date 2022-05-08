@@ -6,7 +6,9 @@ export interface LogoutButtonProps {
   sx?: React.CSSProperties;
 }
 
-const LogoutButton: React.FC<LogoutButtonProps> = ({ sx }) => {
+const LogoutButton: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<LogoutButtonProps>>
+> = ({ sx }) => {
   const { logoutOfWeb3Modal, web3Modal } = useContext(NetworkContext);
   if (web3Modal && web3Modal.cachedProvider) {
     return (
