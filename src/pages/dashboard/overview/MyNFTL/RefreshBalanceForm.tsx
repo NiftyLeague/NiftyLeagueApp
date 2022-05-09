@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Paper,
   Stack,
   Table,
@@ -12,6 +11,7 @@ import {
   TableRow,
   Skeleton,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { DialogContext } from 'components/dialog';
@@ -72,6 +72,7 @@ const HistoryTable = ({
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
+        sx={{ marginTop: '-16px' }}
         count={withdrawalHistory.length}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -83,23 +84,32 @@ const HistoryTable = ({
 };
 
 interface RefreshFormProps {
+  refreshTimeout: number;
   onRefresh: () => Promise<void>;
 }
 
-const RefreshForm = ({ onRefresh }: RefreshFormProps): JSX.Element => {
+const RefreshForm = ({
+  refreshTimeout,
+  onRefresh,
+}: RefreshFormProps): JSX.Element => {
   const [, setIsOpen] = useContext(DialogContext);
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(refreshTimeout > 0);
   const { handleSubmit, reset } = useForm();
-  const { loading, withdrawalHistory } = useWithdrawalHistory();
+  const { loading: historyLoading, withdrawalHistory } = useWithdrawalHistory();
   const refreshEnabled = withdrawalHistory.length;
   const hasPendingTxs =
     withdrawalHistory.filter((tx) => tx.state === 'pending').length > 0;
 
   const resetForm = () => {
     reset();
+    setLoading(false);
     setIsOpen(false);
   };
 
   const onSubmit: SubmitHandler<{}> = async () => {
+    setLoading(true);
+    setDisabled(true);
     await onRefresh();
     resetForm();
   };
@@ -107,7 +117,7 @@ const RefreshForm = ({ onRefresh }: RefreshFormProps): JSX.Element => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack alignItems="center" gap={2}>
-        {loading ? (
+        {historyLoading ? (
           <Skeleton variant="rectangular" width="100%" height={320} />
         ) : (
           <>
@@ -121,15 +131,16 @@ const RefreshForm = ({ onRefresh }: RefreshFormProps): JSX.Element => {
             ) : null}
           </>
         )}
-        <Button
+        <LoadingButton
           size="large"
           type="submit"
           variant="contained"
+          loading={loading}
           fullWidth
-          disabled={!refreshEnabled || !hasPendingTxs}
+          disabled={!refreshEnabled || !hasPendingTxs || disabled}
         >
           Refresh game balance
-        </Button>
+        </LoadingButton>
       </Stack>
     </form>
   );
