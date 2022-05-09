@@ -69,6 +69,22 @@ const MyRentalsDataGrid = ({
 
   const columns: GridColDef[] = [
     {
+      field: 'action',
+      headerName: 'Actions',
+      width: 100,
+      ...commonColumnProp,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleOpenTerminateRental(params)}
+          variant="outlined"
+          color="secondary"
+          disabled={params.value}
+        >
+          {params.value ? 'Terminated' : 'Terminate'}
+        </Button>
+      ),
+    },
+    {
       field: 'renter',
       headerName: 'Player Address',
       width: 120,
@@ -212,22 +228,6 @@ const MyRentalsDataGrid = ({
       width: 150,
       renderCell: (params) => (
         <Countdown date={new Date(params.value * 1000)} />
-      ),
-    },
-    {
-      field: 'action',
-      headerName: 'Actions',
-      width: 200,
-      ...commonColumnProp,
-      renderCell: (params) => (
-        <Button
-          onClick={() => handleOpenTerminateRental(params)}
-          variant="outlined"
-          color="secondary"
-          disabled={params.value}
-        >
-          {params.value ? 'Terminated' : 'Terminate'}
-        </Button>
       ),
     },
   ];
