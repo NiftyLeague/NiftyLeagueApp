@@ -47,7 +47,8 @@ const MyRentalsDataGrid = ({
   const columns: GridColDef[] = [
     {
       field: 'renter',
-      headerName: 'Renter',
+      headerName: 'Player Address',
+      width: 120,
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           <Typography>{params.value}</Typography>
@@ -64,47 +65,95 @@ const MyRentalsDataGrid = ({
       ),
     },
     {
+      field: 'nickname',
+      headerName: 'Player Nickname',
+      width: 130,
+    },
+    {
+      field: 'rentalCategory',
+      headerName: 'Category',
+      width: 150,
+    },
+    {
+      field: 'player',
+      headerName: "Who's playing?",
+      width: 130,
+    },
+    {
       field: 'degenId',
       headerName: 'Degen ID',
       renderCell: (params) => <span>#{params.value}</span>,
     },
-    { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
     {
-      field: 'winLoss',
+      field: 'background',
+      headerName: 'Background',
+    },
+    {
+      field: 'tribe',
+      headerName: 'Tribe',
+    },
+    {
+      field: 'multiplier',
+      headerName: 'Degen Multiplier',
+      width: 150,
+      ...commonColumnProp,
+    },
+    {
+      field: 'timePlayed',
+      headerName: 'Time Played',
+      ...commonColumnProp,
+      width: 120,
+    },
+    {
+      field: 'matches',
+      headerName: 'Matches',
+    },
+    {
+      field: 'wins',
+      headerName: 'Wins',
+    },
+    {
+      field: 'winRate',
       headerName: 'Win Rate',
       ...commonColumnProp,
       renderCell: (params) => <span>{params.value}%</span>,
     },
-    // {
-    //   field: 'timePlayed',
-    //   headerName: 'Time Played',
-    //   ...commonColumnProp,
-    //   width: 150,
-    // },
     {
-      field: 'weeklyRentalFee',
-      headerName: 'Weekly Rental Fee',
+      field: 'weeklyFee',
+      headerName: 'Weekly Fee',
       ...commonColumnProp,
     },
     {
-      field: 'dailyRentalFee',
-      headerName: 'Daily Rental Fee',
+      field: 'dailyFee',
+      headerName: 'Current Daily Fee',
       ...commonColumnProp,
     },
     {
-      field: 'totalEarnings',
-      headerName: 'Total Earnings',
+      field: 'dailyFeesToDate',
+      headerName: 'Daily Fees To Date',
       ...commonColumnProp,
-      width: 150,
+    },
+    { field: 'costs', headerName: 'My Rental Fee Costs', ...commonColumnProp },
+    {
+      field: 'rentalFeeEarning',
+      headerName: 'Rental Fees Earned',
+      ...commonColumnProp,
     },
     {
-      field: 'yourEarnings',
-      headerName: 'Your Earnings',
+      field: 'profits',
+      headerName: 'Gross Gameplay Earnings',
       ...commonColumnProp,
-      width: 150,
     },
-    { field: 'costs', headerName: 'Costs', ...commonColumnProp },
-    { field: 'profits', headerName: 'Profits', ...commonColumnProp },
+    {
+      field: 'netGameEarning',
+      headerName: 'Your NET Gameplay Earnings',
+      ...commonColumnProp,
+    },
+    {
+      field: 'netEarning',
+      headerName: 'Your NET Earnings',
+      ...commonColumnProp,
+    },
     {
       field: 'roi',
       headerName: 'ROI %',
