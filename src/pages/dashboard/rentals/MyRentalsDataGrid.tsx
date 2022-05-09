@@ -1,11 +1,19 @@
-import { Stack, Typography, Button, useTheme } from '@mui/material';
-import { GridColDef, DataGrid } from '@mui/x-data-grid';
+import {
+  Stack,
+  Typography,
+  Button,
+  useTheme,
+  IconButton,
+  Dialog,
+} from '@mui/material';
+import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { Rentals, RentalType } from 'types/rentals';
-// import RenameRentalDialogContent from './RenameRentalDialogContent';
+import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface Props {
   rows: Rentals[];
@@ -24,21 +32,21 @@ const MyRentalsDataGrid = ({
 }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
-  // const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
-  // const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
+  const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
+  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   const { profile } = usePlayerProfile();
   const newRows = transformRentals(rows, profile?.id || '', category);
 
-  // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
-  //   setSelectedRowForEditing(params.row);
-  //   setIsRenameDegenModalOpen(true);
-  // };
+  const handleOpenRenameDegen = (params: GridRenderCellParams) => {
+    setSelectedRowForEditing(params.row);
+    setIsRenameDegenModalOpen(true);
+  };
 
-  // const handleUpdateRentalName = (name: string, id: string) => {
-  //   updateRentalName(name, id);
-  //   setIsRenameDegenModalOpen(false);
-  // };
+  const handleUpdateRentalName = (name: string, id: string) => {
+    updateRentalName(name, id);
+    setIsRenameDegenModalOpen(false);
+  };
 
   const commonColumnProp = {
     minWidth: 100,
@@ -52,7 +60,17 @@ const MyRentalsDataGrid = ({
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           <Typography>{params.value}</Typography>
-          {/* {!params.row.action && (
+        </Stack>
+      ),
+    },
+    {
+      field: 'nickname',
+      headerName: 'Player Nickname',
+      width: 150,
+      renderCell: (params) => (
+        <Stack direction="row" columnGap={1} alignItems="center">
+          <Typography>{params.value}</Typography>
+          {params.isEditable && (
             <IconButton
               aria-label="edit"
               onClick={() => handleOpenRenameDegen(params)}
@@ -60,14 +78,9 @@ const MyRentalsDataGrid = ({
             >
               <EditIcon fontSize="small" />
             </IconButton>
-          )} */}
+          )}
         </Stack>
       ),
-    },
-    {
-      field: 'nickname',
-      headerName: 'Player Nickname',
-      width: 130,
     },
     {
       field: 'rentalCategory',
@@ -126,32 +139,43 @@ const MyRentalsDataGrid = ({
     {
       field: 'dailyFee',
       headerName: 'Current Daily Fee',
+      width: 150,
       ...commonColumnProp,
     },
     {
       field: 'dailyFeesToDate',
       headerName: 'Daily Fees To Date',
+      width: 150,
       ...commonColumnProp,
     },
-    { field: 'costs', headerName: 'My Rental Fee Costs', ...commonColumnProp },
+    {
+      field: 'costs',
+      headerName: 'My Rental Fee Costs',
+      width: 150,
+      ...commonColumnProp,
+    },
     {
       field: 'rentalFeeEarning',
       headerName: 'Rental Fees Earned',
+      width: 150,
       ...commonColumnProp,
     },
     {
       field: 'profits',
       headerName: 'Gross Gameplay Earnings',
+      width: 180,
       ...commonColumnProp,
     },
     {
       field: 'netGameEarning',
       headerName: 'Your NET Gameplay Earnings',
+      width: 200,
       ...commonColumnProp,
     },
     {
       field: 'netEarning',
       headerName: 'Your NET Earnings',
+      width: 150,
       ...commonColumnProp,
     },
     {
@@ -213,7 +237,7 @@ const MyRentalsDataGrid = ({
         }}
       />
       {/* Rename Degen Dialog */}
-      {/* <Dialog
+      <Dialog
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
@@ -221,7 +245,7 @@ const MyRentalsDataGrid = ({
           updateRentalName={handleUpdateRentalName}
           rental={selectedRowForEditing}
         />
-      </Dialog> */}
+      </Dialog>
     </>
   );
 };
