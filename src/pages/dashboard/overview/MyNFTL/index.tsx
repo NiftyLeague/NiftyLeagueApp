@@ -39,6 +39,7 @@ interface MyNFTLProps {
 const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
   const theme = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
+  const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const userNFTLBalance = useNFTLBalance(
     address,
@@ -206,6 +207,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         method: 'POST',
       });
       if (!response.ok) throw new Error(response.statusText);
+      setRefreshTimeout(1);
       await fetchAccount();
     } catch (error) {
       console.error('error', error);
@@ -320,7 +322,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                     </DialogTrigger>
                     <DialogContent
                       aria-labelledby="refresh-dialog"
-                      dialogTitle="Recent Transaction History:"
+                      dialogTitle="Withdrawal Request History"
                       sx={{
                         '& h2': {
                           textAlign: 'center',
@@ -330,7 +332,10 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                         },
                       }}
                     >
-                      <RefreshBalanceForm onRefresh={handleRefreshBal} />
+                      <RefreshBalanceForm
+                        refreshTimeout={refreshTimeout}
+                        onRefresh={handleRefreshBal}
+                      />
                     </DialogContent>
                   </Dialog>
                 </>

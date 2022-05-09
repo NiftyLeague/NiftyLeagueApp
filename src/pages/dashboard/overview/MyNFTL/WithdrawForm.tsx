@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -14,8 +13,9 @@ import {
   useTheme,
   Stack,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { providers } from 'ethers';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 import * as yup from 'yup';
@@ -58,7 +58,9 @@ const WithdrawForm = ({
   balance,
 }: WithdrawFormProps): JSX.Element => {
   const [balanceWithdraw, setBalanceWithdraw] = useState(0);
+  const [withdrawDisabled, setWithdrawDisabled] = useState(false);
   const [, setIsOpen] = useContext(DialogContext);
+  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     control,
@@ -80,9 +82,12 @@ const WithdrawForm = ({
   const theme = useTheme();
 
   const { withdrawalHistory } = useWithdrawalHistory('pending');
-  const withdrawDisabled = checkWithdrawalDisabled(withdrawalHistory);
+  useEffect(() => {
+    setWithdrawDisabled(checkWithdrawalDisabled(withdrawalHistory));
+  }, [withdrawalHistory]);
 
   const resetForm = () => {
+    setLoading(false);
     reset();
     setBalanceWithdraw(0);
     setIsOpen(false);
@@ -96,6 +101,8 @@ const WithdrawForm = ({
       });
       return;
     }
+    setWithdrawDisabled(true);
+    setLoading(true);
     const res = await onWithdrawEarnings(balanceWithdraw);
     if (res) resetForm();
   };
@@ -231,11 +238,12 @@ const WithdrawForm = ({
             Please wait 1 minute before sending another withdrawal request
           </Alert>
         )}
-        <Button
+        <LoadingButton
           size="large"
           type="submit"
           variant="contained"
           fullWidth
+          loading={loading}
           disabled={
             !getValues('isCheckedTerm') ||
             balanceWithdraw === 0 ||
@@ -243,7 +251,16 @@ const WithdrawForm = ({
           }
         >
           Withdraw earnings
-        </Button>
+        </LoadingButton>
+        {/* <LoadingButton
+          size="small"
+          onClick={handleClick}
+          loading={loading}
+          variant="outlined"
+          disabled
+        >
+          disabled
+        </LoadingButton> */}
       </Stack>
     </form>
   );
