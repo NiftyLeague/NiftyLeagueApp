@@ -1,4 +1,4 @@
-import { useContext, memo, useState } from 'react';
+import { useContext, memo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   useTheme,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { toast } from 'react-toastify';
 import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
@@ -20,7 +21,6 @@ import { formatNumberToDisplay } from 'utils/numbers';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
-import ErrorModal from 'components/modal/ErrorModal';
 
 const chipStyles = {
   color: 'white',
@@ -87,20 +87,14 @@ const DegenCard: React.FC<
     sx,
   }) => {
     const { palette } = useTheme();
-    const [errorContent, setErrorContent] = useState('');
 
-    const handleCloseErrorModal = () => {
-      setErrorContent('');
-    };
     const authToken = window.localStorage.getItem('authentication-token');
     const onClickDownload = async () => {
       if (authToken) {
         try {
           await downloadDegenAsZip(authToken, id);
-        } catch (e) {
-          setErrorContent(
-            `${(e.message as string) || 'Unknown error occurred'}`,
-          );
+        } catch (err) {
+          toast.error(err.message, { theme: 'dark' });
         }
       }
     };
@@ -251,7 +245,6 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
-        <ErrorModal content={errorContent} onClose={handleCloseErrorModal} />
       </Card>
     );
   },
