@@ -304,7 +304,7 @@ const MyNFTL = (): JSX.Element => {
                 <Stack direction="row" gap={2}>
                   <Dialog>
                     <DialogTrigger>
-                      <Button fullWidth variant="contained" disabled>
+                      <Button fullWidth variant="contained">
                         Withdraw
                       </Button>
                     </DialogTrigger>
