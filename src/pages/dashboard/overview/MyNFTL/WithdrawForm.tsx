@@ -252,15 +252,6 @@ const WithdrawForm = ({
         >
           Withdraw earnings
         </LoadingButton>
-        {/* <LoadingButton
-          size="small"
-          onClick={handleClick}
-          loading={loading}
-          variant="outlined"
-          disabled
-        >
-          disabled
-        </LoadingButton> */}
       </Stack>
     </form>
   );

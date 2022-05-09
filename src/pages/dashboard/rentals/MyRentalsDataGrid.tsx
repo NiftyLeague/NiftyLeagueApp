@@ -12,9 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Rentals } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
-import useFetch from 'hooks/useFetch';
-import { MY_PROFILE_API_URL } from 'constants/url';
-import { Profile } from 'types/account';
+import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
 
 interface Props {
@@ -30,23 +28,13 @@ const MyRentalsDataGrid = ({
   handleTerminalRental,
   updateRentalName,
 }: Props): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
+  const { profile } = usePlayerProfile();
 
-  let headers;
-  if (authToken) {
-    headers = {
-      authorizationToken: authToken,
-    };
-  }
-  const { data } = useFetch<Profile>(MY_PROFILE_API_URL, {
-    headers,
-  });
-
-  const newRows = transformRentals(rows, data?.id || '');
+  const newRows = transformRentals(rows, profile?.id || '');
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);

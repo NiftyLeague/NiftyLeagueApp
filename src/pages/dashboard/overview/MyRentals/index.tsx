@@ -2,13 +2,13 @@ import { Button, Grid, Stack } from '@mui/material';
 import SectionTitle from 'components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
 import { sectionSpacing } from 'store/constant';
-import { ALL_RENTAL_API_URL, MY_PROFILE_API_URL } from 'constants/url';
+import { ALL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
+import usePlayerProfile from 'hooks/usePlayerProfile';
 import { useState, useEffect } from 'react';
 import { Rentals } from 'types/rentals';
 import { transformRentals } from 'pages/dashboard/utils';
 import { Link } from 'react-router-dom';
-import { Profile } from 'types/account';
 
 export interface ColumnType {
   id:
@@ -57,9 +57,7 @@ const MyRentals = (): JSX.Element => {
     headers,
   });
 
-  const { data: account } = useFetch<Profile>(MY_PROFILE_API_URL, {
-    headers,
-  });
+  const { profile } = usePlayerProfile();
 
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
 
@@ -69,7 +67,7 @@ const MyRentals = (): JSX.Element => {
     }
   }, [data]);
 
-  const rows = transformRentals(rentals, account?.id || '');
+  const rows = transformRentals(rentals, profile?.id || '');
 
   return (
     <Grid container spacing={sectionSpacing} sx={{ height: '100%' }}>
