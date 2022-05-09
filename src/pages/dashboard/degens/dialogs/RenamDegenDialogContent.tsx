@@ -5,9 +5,6 @@ import {
   CardMedia,
   Typography,
   TextField,
-  FormControl,
-  FormControlLabel,
-  Checkbox,
   DialogActions,
   Button,
 } from '@mui/material';
@@ -20,7 +17,8 @@ import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
-// import RenameStepper from './RenameStepper';
+import { DEBUG } from 'constants/index';
+import RenameStepper from './RenameStepper';
 
 interface Props {
   degen?: Degen;
@@ -32,9 +30,9 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const userNFTLBalance = useNFTLBalance(address);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
-  const [agreement, setAgreement] = useState(false);
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
-  // const [renameSuccess, setRenameSuccess] = useState(false);
+  const [isLoadingRename, setLoadingRename] = useState(false);
+  const [renameSuccess, setRenameSuccess] = useState(false);
   const insufficientAllowance = allowance < 1000;
   const insufficientBalance = userNFTLBalance < 1000;
 
@@ -50,7 +48,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
       )) as BigNumberish;
       setAllowance(allowanceBN);
     };
-    // setRenameSuccess(false);
+    setRenameSuccess(false);
     if (
       writeContracts &&
       writeContracts[NFTL_CONTRACT] &&
@@ -72,7 +70,10 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   };
 
   const handleRename = useCallback(async () => {
-    if (
+    setLoadingRename(true);
+    if (insufficientBalance) {
+      setError('Failed to charge the rental rename fee');
+    } else if (
       !error &&
       writeContracts &&
       writeContracts[NFT_CONTRACT] &&
@@ -101,10 +102,11 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
         args,
       );
       if (result) {
-        // setRenameSuccess(true);
+        setRenameSuccess(true);
         onSuccess?.();
       }
     }
+    setLoadingRename(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     error,
@@ -118,8 +120,8 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
 
   return (
     <>
-      <DialogTitle sx={{ textAlign: 'center' }}>Rename Degen</DialogTitle>
-      <DialogContent dividers sx={{ maxWidth: '320px' }}>
+      <DialogTitle sx={{ textAlign: 'center' }}>Rename DEGEN</DialogTitle>
+      <DialogContent dividers sx={{ maxWidth: '420px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
             <CardMedia
@@ -143,33 +145,20 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             size="small"
             fullWidth
             value={input}
-            disabled={insufficientBalance}
+            error={!!error}
+            helperText={error}
+            disabled={isLoadingRename}
             onChange={handleChange}
           />
-          {/* <RenameStepper
+          <RenameStepper
             insufficientAllowance={insufficientAllowance}
             renameSuccess={renameSuccess}
             insufficientBalance={insufficientBalance}
-          /> */}
+          />
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">Renaming Fee</Typography>
             <Typography>1,000 NFTL</Typography>
           </Stack>
-          <FormControl>
-            <FormControlLabel
-              label={
-                <Typography variant="caption">
-                  I understand and agree the terms above.
-                </Typography>
-              }
-              control={
-                <Checkbox
-                  value={agreement}
-                  onChange={(event) => setAgreement(event.target.checked)}
-                />
-              }
-            />
-          </FormControl>
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -177,9 +166,9 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
           variant="contained"
           fullWidth
           onClick={handleRename}
-          disabled={insufficientBalance || !agreement || Boolean(error)}
+          disabled={!input || Boolean(error)}
         >
-          Rename Rental
+          Rename
         </Button>
       </DialogActions>
     </>

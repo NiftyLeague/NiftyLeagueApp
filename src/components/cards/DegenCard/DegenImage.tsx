@@ -1,36 +1,29 @@
+import { memo } from 'react';
 import { CardMedia } from '@mui/material';
 import useBackgroundType from 'hooks/useBackgroundType';
 import ImagePlaceholder from 'components/cards/Skeleton/ImagePlaceholder';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 
-const IMAGE_HEIGH = 320;
+const IMAGE_HEIGHT = 320;
 
-const DegenImage = ({
-  network,
-  tokenId,
-}: {
-  network?: string;
-  tokenId: string | number;
-}) => {
-  const [loading, error, background] = useBackgroundType(tokenId);
-  const imageURL = `${DEGEN_BASE_IMAGE_URL}/${network}/images/${tokenId}`;
+const DegenImage = memo(({ tokenId }: { tokenId: string | number }) => {
+  const { loading, error, background } = useBackgroundType(tokenId);
+  const imageURL = `${DEGEN_BASE_IMAGE_URL}/mainnet/images/${tokenId}`;
   let setting: any = {
-    height: IMAGE_HEIGH,
+    height: IMAGE_HEIGHT,
     component: 'img',
     image: `${imageURL}.png`,
   };
 
-  if (error) {
-    setting = { ...setting, image: UnavailableImg };
-  }
+  if (error) setting = { ...setting, image: UnavailableImg };
 
   if (loading) {
     return (
       <ImagePlaceholder
         sx={{
           overflow: 'hidden',
-          height: IMAGE_HEIGH,
+          height: IMAGE_HEIGHT,
         }}
       />
     );
@@ -48,7 +41,6 @@ const DegenImage = ({
   }
 
   return <CardMedia {...setting} />;
-};
-DegenImage.defaultProps = { network: 'mainnet' };
+});
 
 export default DegenImage;

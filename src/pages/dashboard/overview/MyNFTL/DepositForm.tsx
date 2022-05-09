@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Button,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -9,6 +8,7 @@ import {
   useTheme,
   Stack,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useEffect, useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
@@ -16,6 +16,7 @@ import { BigNumber, BigNumberish, providers, utils } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DialogContext } from 'components/dialog';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 interface DepositFormProps {
   onDeposit: (amount: number) => Promise<providers.TransactionResponse | null>;
@@ -32,6 +33,8 @@ const amountSelects: number[] = [25, 50, 75, 100];
 const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   const [balanceDeposit, setBalanceDeposit] = useState(0);
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [allowanceLoading, setAllowanceLoading] = useState(false);
+  const [depositLoading, setDepositLoading] = useState(false);
   const { address, tx, writeContracts } = useContext(NetworkContext);
   const [, setIsOpen] = useContext(DialogContext);
   const {
@@ -76,6 +79,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   const resetForm = () => {
     reset();
     setBalanceDeposit(0);
+    setDepositLoading(false);
     setIsOpen(false);
   };
 
@@ -87,11 +91,13 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
       });
       return;
     }
+    setDepositLoading(true);
     const res = await onDeposit(balanceDeposit);
     if (res) resetForm();
   };
 
   const handleIncreaseAllowance = async () => {
+    setAllowanceLoading(true);
     const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
     const gameAccountAddress = gameAccountContract.address;
     const nftl = writeContracts[NFTL_CONTRACT];
@@ -100,6 +106,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
     );
     await tx(nftl.increaseAllowance(gameAccountAddress, newAllowance));
     setAllowance(newAllowance);
+    setAllowanceLoading(false);
   };
 
   return (
@@ -107,7 +114,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
       <Stack alignItems="center" gap={2}>
         <Typography variant="h4">NFTL in Wallet</Typography>
         <Typography variant="h2" sx={{ opacity: 0.7 }}>
-          {balance.toLocaleString('en-US')}
+          {formatNumberToDisplay(balance)}
           <Typography variant="body1">Available to Deposit</Typography>
         </Typography>
         <Typography variant="h4">
@@ -183,7 +190,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
             sx={{ mx: '4px', fontWeight: 600, fontSize: 16, opacity: 0.7 }}
             variant="body1"
           >
-            {balanceDeposit.toLocaleString('en-US')}
+            {formatNumberToDisplay(balanceDeposit)}
           </Typography>
           NFTL
         </Typography>
@@ -191,24 +198,26 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
         {parseFloat(utils.formatEther(allowance)) < balanceDeposit ? (
-          <Button
+          <LoadingButton
             size="large"
             variant="contained"
             fullWidth
+            loading={allowanceLoading}
             onClick={handleIncreaseAllowance}
           >
             Increase Allowance
-          </Button>
+          </LoadingButton>
         ) : (
-          <Button
+          <LoadingButton
             size="large"
             type="submit"
             variant="contained"
             fullWidth
+            loading={depositLoading}
             disabled={balanceDeposit === 0}
           >
             Deposit NFTL
-          </Button>
+          </LoadingButton>
         )}
       </Stack>
     </form>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const usePagination = (data: any, itemsPerPage: number) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -6,11 +6,11 @@ const usePagination = (data: any, itemsPerPage: number) => {
 
   const maxPage = Math.ceil(newData.length / itemsPerPage);
 
-  const currentData = () => {
+  const currentData = useCallback(() => {
     const begin = (currentPage - 1) * itemsPerPage;
     const end = begin + itemsPerPage;
     return newData.slice(begin, end);
-  };
+  }, [currentPage, itemsPerPage, newData]);
 
   const next = () => {
     setCurrentPage((current) => Math.min(current + 1, maxPage));
@@ -25,9 +25,9 @@ const usePagination = (data: any, itemsPerPage: number) => {
     setCurrentPage(() => Math.min(pageNumber, maxPage));
   };
 
-  const updateNewData = (datas: any) => {
+  const updateNewData = useCallback((datas: any) => {
     setNewData(datas);
-  };
+  }, []);
 
   return {
     next,

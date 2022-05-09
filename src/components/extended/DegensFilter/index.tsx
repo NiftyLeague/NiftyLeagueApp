@@ -1,3 +1,13 @@
+import React, {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import {
   Button,
   Checkbox,
@@ -6,23 +16,15 @@ import {
   Stack,
   Typography,
   useMediaQuery,
+  TextField,
 } from '@mui/material';
-import { isEmpty } from 'lodash';
 import { useTheme } from '@mui/system';
 import { backgrounds, tribes } from 'constants/filters';
-import React, {
-  ChangeEvent,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import * as CosmeticsFilter from 'constants/cosmeticsFilters';
+import { DegenFilter } from 'types/degenFilter';
 import { updateFilterValue } from './utils';
-import { useSearchParams } from 'react-router-dom';
 import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
-import { DegenFilter } from 'types/degenFilter';
-import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
 type FilterSource =
@@ -31,7 +33,8 @@ type FilterSource =
   | 'rentals'
   | 'tribes'
   | 'backgrounds'
-  | 'cosmetics';
+  | 'cosmetics'
+  | 'searchTerm';
 
 interface DegensFilterProps {
   handleFilter: (filter: DegenFilter) => void;
@@ -45,13 +48,16 @@ const DegensFilter = ({
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const params = Object.fromEntries(searchParams.entries()) as {
-    [key in FilterSource]?: string;
-  };
+  const params = useMemo(
+    () =>
+      Object.fromEntries(searchParams.entries()) as {
+        [key in FilterSource]?: string;
+      },
+    [searchParams],
+  );
   const isParamsEmpty = isEmpty(params);
 
   // Filter states
-  // TODO: do something here to specify the default range for prices based on real data
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
     defaultFilterValues.prices,
   );
@@ -70,15 +76,35 @@ const DegensFilter = ({
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
   );
+  const [searchTermValue, setSearchTermValue] = useState<string[]>(
+    defaultFilterValues.searchTerm,
+  );
+  const filterOptionsMemoized = useMemo(
+    () => ({
+      backgroundsValue,
+      cosmeticsValue,
+      multipliersRangeValue,
+      pricesRangeValue,
+      rentalsRangeValue,
+      searchTermValue,
+      tribesValue,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [params],
+  );
 
-  const actions = {
-    prices: setPricesRangeValue,
-    multipliers: setMultipliersRangeValue,
-    rentals: setRentalsRangeValue,
-    tribes: setTribesValue,
-    backgrounds: setBackgroundsValue,
-    cosmetics: setCosmeticsValue,
-  };
+  const actions = useMemo(
+    () => ({
+      prices: setPricesRangeValue,
+      multipliers: setMultipliersRangeValue,
+      rentals: setRentalsRangeValue,
+      tribes: setTribesValue,
+      backgrounds: setBackgroundsValue,
+      cosmetics: setCosmeticsValue,
+      searchTerm: setSearchTermValue,
+    }),
+    [],
+  );
 
   // Set search params from filter values
   // Use value to manually set the source's value
@@ -106,6 +132,9 @@ const DegensFilter = ({
           break;
         case 'cosmetics':
           keyValue = { cosmetics: value };
+          break;
+        case 'searchTerm':
+          keyValue = { searchTerm: [value] };
           break;
       }
       const newParams = {
@@ -150,14 +179,15 @@ const DegensFilter = ({
     [handleChangeCommitted],
   );
 
-  const setAllFilterValues = () => {
+  const setAllFilterValues = useCallback(() => {
     setPricesRangeValue(defaultFilterValues.prices);
     setMultipliersRangeValue(defaultFilterValues.multipliers);
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
-  };
+    setSearchTermValue(defaultFilterValues.searchTerm);
+  }, [defaultFilterValues]);
 
   const handleReset = () => {
     if (isParamsEmpty) return;
@@ -165,30 +195,48 @@ const DegensFilter = ({
     setSearchParams({});
   };
 
+  const handleChangeSearchTerm = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setSearchTermValue([value]);
+      handleChangeCommitted('searchTerm', value);
+    },
+    [handleChangeCommitted],
+  );
+
+  // Updates local filter state on defaultFilterValues change
   useEffect(() => {
     setAllFilterValues();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultFilterValues]);
+  }, [setAllFilterValues]);
 
-  // Update local state on mounted
+  // Update local state on mount & on filter params update
   useEffect(() => {
     updateFilterValue(params, actions);
     handleFilter({
-      prices: pricesRangeValue,
-      multipliers: multipliersRangeValue,
-      rentals: rentalsRangeValue,
-      tribes: tribesValue,
-      backgrounds: backgroundsValue,
-      cosmetics: cosmeticsValue,
+      prices: filterOptionsMemoized.pricesRangeValue,
+      multipliers: filterOptionsMemoized.multipliersRangeValue,
+      rentals: filterOptionsMemoized.rentalsRangeValue,
+      tribes: filterOptionsMemoized.tribesValue,
+      backgrounds: filterOptionsMemoized.backgroundsValue,
+      cosmetics: filterOptionsMemoized.cosmeticsValue,
+      searchTerm: filterOptionsMemoized.searchTermValue,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, defaultFilterValues]);
+  }, [
+    actions,
+    defaultFilterValues,
+    filterOptionsMemoized,
+    handleFilter,
+    params,
+  ]);
 
   return (
     <Stack
       gap={1}
       sx={{
         overflowX: 'hidden',
+        [theme.breakpoints.down('sm')]: {
+          paddingX: 2,
+        },
       }}
     >
       <Stack
@@ -208,6 +256,16 @@ const DegensFilter = ({
           </Button>
         </Stack>
       </Stack>
+      <TextField
+        label="Search degens by token # or name"
+        name="search-degen-by-token-id-name"
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={searchTermValue}
+        onChange={handleChangeSearchTerm}
+        sx={{ margin: '6px 0px 10px 0px' }}
+      />
       <Stack>
         <FilterAccordion
           summary={<Typography variant="h5">Overview</Typography>}
@@ -304,31 +362,37 @@ const DegensFilter = ({
           summary={<Typography variant="h5">Cosmetics</Typography>}
           expanded={false}
         >
-          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((categoryKey) => {
-            const traitGroup = Object.keys(
-              CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
-            );
-            return (
-              <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
-                <FilterAccordion
-                  summary={
-                    <Typography variant="h5">
-                      {categoryKey} ({traitGroup.length})
-                    </Typography>
-                  }
-                  expanded={false}
-                >
-                  <FilterAllTraitCheckboxes
-                    traitGroup={traitGroup}
-                    categoryKey={categoryKey}
-                    cosmeticsValue={cosmeticsValue}
-                    handleCheckboxChange={handleCheckboxChange}
-                    setCosmeticsValue={setCosmeticsValue}
-                  />
-                </FilterAccordion>
-              </FormGroup>
-            );
-          })}
+          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
+            .sort()
+            .map((categoryKey) => {
+              const traitGroup = Object.entries(
+                CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
+              )
+                .sort((a: [string, string], b: [string, string]) =>
+                  a[1].localeCompare(b[1]),
+                )
+                .map((item) => item[0]);
+              return (
+                <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
+                  <FilterAccordion
+                    summary={
+                      <Typography variant="h5">
+                        {categoryKey} ({traitGroup.length})
+                      </Typography>
+                    }
+                    expanded={false}
+                  >
+                    <FilterAllTraitCheckboxes
+                      traitGroup={traitGroup}
+                      categoryKey={categoryKey}
+                      cosmeticsValue={cosmeticsValue}
+                      handleCheckboxChange={handleCheckboxChange}
+                      setCosmeticsValue={setCosmeticsValue}
+                    />
+                  </FilterAccordion>
+                </FormGroup>
+              );
+            })}
         </FilterAccordion>
       </Stack>
     </Stack>

@@ -130,7 +130,7 @@ const RenameRentalDialogContent = ({
       <DialogContent dividers sx={{ maxWidth: '380px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
-            <DegenImage tokenId={degenId} />
+            {degenId && <DegenImage tokenId={degenId} />}
             <Typography
               variant="caption"
               component="p"

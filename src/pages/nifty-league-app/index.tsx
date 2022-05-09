@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, Box, Dialog } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
-import DegenCard from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import { sendEvent } from 'utils/google-analytics';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);
@@ -29,7 +30,8 @@ const NiftyLeagueAppPage = () => {
       const degensArray = Object.values(data);
       const sortDegens = degensArray
         .filter((degen) => degen.rental_count > 0)
-        .sort((degenA, degenB) => degenB.rental_count - degenA.rental_count);
+        .sort((degenA, degenB) => degenB.rental_count - degenA.rental_count)
+        .slice(0, 100);
       setDegens(sortDegens);
     }
     return () => {
@@ -53,6 +55,10 @@ const NiftyLeagueAppPage = () => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsDegenModalOpen(true);
+  };
+
+  const handleViewAllTraits = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    sendEvent('view_item_list', 'engagement');
   };
 
   const settings = {
@@ -123,14 +129,14 @@ const NiftyLeagueAppPage = () => {
               },
             }}
           >
-            <Link to="/degen-rentals">
+            <Link to="/degen-rentals" onClick={handleViewAllTraits}>
               <Button variant="outlined">View All Rentals</Button>
             </Link>
           </Box>
         }
         sliderSettingsOverride={settings}
       >
-        {!data
+        {!degens.length
           ? [...Array(4)].map(() => (
               <Box paddingRight={2} key={uuidv4()}>
                 <SkeletonDegenPlaceholder />
@@ -139,16 +145,16 @@ const NiftyLeagueAppPage = () => {
           : degens.map((degen) => (
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
+                  activeRentals={degen.rental_count}
+                  background={degen.background}
                   id={degen.id}
-                  name={degen.name}
                   multiplier={degen.multiplier}
+                  name={degen.name}
+                  onClickDetail={() => handleViewTraits(degen)}
+                  onClickEditName={() => handleClickEditName(degen)}
+                  onClickRent={() => handleRentDegen(degen)}
                   owner={degen.owner}
                   price={degen.price}
-                  background={degen.background}
-                  activeRentals={degen.rental_count}
-                  onClickEditName={() => handleClickEditName(degen)}
-                  onClickDetail={() => handleViewTraits(degen)}
-                  onClickRent={() => handleRentDegen(degen)}
                 />
               </Box>
             ))}

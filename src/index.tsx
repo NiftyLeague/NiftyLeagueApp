@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // third party
 import { BrowserRouter } from 'react-router-dom';
@@ -26,7 +26,10 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <ApolloProvider client={client}>
     <NetworkProvider>
       <Provider store={store}>
@@ -40,7 +43,6 @@ ReactDOM.render(
       </Provider>
     </NetworkProvider>
   </ApolloProvider>,
-  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

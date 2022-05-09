@@ -19,12 +19,9 @@ export interface ComicCardProps {
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const ComicCard: React.FC<ComicCardProps> = ({
-  comic,
-  onViewComic,
-  onBurnComic,
-  sx,
-}) => {
+const ComicCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
+> = ({ comic, onViewComic, onBurnComic, sx }) => {
   const theme = useTheme();
 
   return (

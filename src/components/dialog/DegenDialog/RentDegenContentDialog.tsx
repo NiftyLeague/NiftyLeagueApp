@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen, GetDegenResponse } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { NetworkContext } from 'NetworkProvider';
+import { sendEvent } from 'utils/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -100,9 +101,12 @@ const RentDegenContentDialog = ({
       if (!web3Modal.cachedProvider) {
         toast.error(
           'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
+          { theme: 'dark' },
         );
         return;
       }
+
+      sendEvent('begin_checkout', 'ecommerce');
 
       setLoading(true);
       try {
@@ -120,11 +124,13 @@ const RentDegenContentDialog = ({
           await renameRental();
         }
         setLoading(false);
-        toast.success('Rent successfully!');
+        toast.success('Rent successfully!', { theme: 'dark' });
         onClose?.(event);
+
+        sendEvent('purchase', 'ecommerce');
       } catch (err: any) {
         setLoading(false);
-        toast.error(err.message);
+        toast.error(err.message, { theme: 'dark' });
       }
     },
     [
@@ -158,11 +164,15 @@ const RentDegenContentDialog = ({
     ? 0
     : degenDetail?.price || degen?.price || 0;
 
+  useEffect(() => {
+    sendEvent('add_to_cart', 'ecommerce');
+  }, []);
+
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
       <Grid item xs={12} sm={12} md={6}>
         <Stack direction="row" justifyContent="center">
-          {degen && <DegenImage tokenId={degen.id} />}
+          {degen?.id && <DegenImage tokenId={degen.id} />}
         </Stack>
         <Stack direction="column" alignItems="center" gap={1} sx={{ my: 2 }}>
           <Typography color="gray">
@@ -253,7 +263,7 @@ const RentDegenContentDialog = ({
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Degen Being Rented</Typography>
                 <Typography color="gray">
-                  {degen?.name || 'No Name Degen'}
+                  {degen?.name || 'No Name DEGEN'}
                 </Typography>
               </Stack>
               <Stack direction="row" justifyContent="flex-end">
@@ -296,27 +306,34 @@ const RentDegenContentDialog = ({
                 <Typography>Rental Passes Remaining</Typography>
                 <Typography color="gray">{rentalPassCount}</Typography>
               </Stack>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="caption" color="gray">
-                  Use a rental pass?
-                </Typography>
-                <RadioGroup
-                  row
-                  onChange={handleChangeUseRentalPass}
-                  value={isUseRentalPass ? 'yes' : 'no'}
+              {rentalPassCount !== 0 && (
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel value="no" control={<Radio />} label="No" />
-                </RadioGroup>
-              </Stack>
+                  <Typography variant="caption" color="gray">
+                    Use a rental pass?
+                  </Typography>
+                  <RadioGroup
+                    row
+                    onChange={handleChangeUseRentalPass}
+                    value={isUseRentalPass ? 'yes' : 'no'}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </Stack>
+              )}
+
               {renameEnabled && (
                 <Stack direction="row" justifyContent="space-between">
                   <Typography>Renaming Fee</Typography>

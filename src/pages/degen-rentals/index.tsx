@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
@@ -10,7 +10,6 @@ import {
   Pagination,
   Stack,
   Dialog,
-  useMediaQuery,
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
@@ -36,11 +35,13 @@ import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialog';
 
+// Needs to be divisible by 2, 3, or 4
+const DEGENS_PER_PAGE = 12;
+
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
   const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] =
-    useState<DegenFilter>(defaultFilterValues);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -49,37 +50,19 @@ const DegenRentalsPage = (): JSX.Element => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
-  const { data } = useFetch<Degen[]>(
+  const { walletAddress } = useParams();
+
+  const { data } = useFetch<{ [id: number]: Degen }>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const isMobile = useMediaQuery('(min-width:600px)');
-  const isTablet = useMediaQuery('(min-width:900px)');
-  const isMediumScreen = useMediaQuery('(min-width:1200px)');
-  const isLargeScreen = useMediaQuery('(min-width:1536px)');
-
-  const getPageLimit = (): number => {
-    if (isLargeScreen) {
-      return 10;
-    }
-    if (isMediumScreen) {
-      return 8;
-    }
-    if (isTablet) {
-      return 8;
-    }
-    if (isMobile) {
-      return 4;
-    }
-    return 2;
-  };
-
-  const PER_PAGE: number = getPageLimit();
   const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(degens, PER_PAGE);
+    usePagination(degens, DEGENS_PER_PAGE);
+
+  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
 
   useEffect(() => {
-    if (data) {
+    if (data && !isEmpty(data)) {
       const originalDegens: Degen[] = Object.values(data);
       setDefaultValues(getDefaultFilterValueFromData(originalDegens));
       setDegens(originalDegens);
@@ -90,6 +73,7 @@ const DegenRentalsPage = (): JSX.Element => {
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
+
       updateNewData(newDegens);
     }
     return () => {
@@ -98,51 +82,64 @@ const DegenRentalsPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const handleFilter = (filter: DegenFilter) => {
-    const newFilters = { ...filter, sort: filters.sort };
-    const result = tranformDataByFilter(degens, newFilters);
-    setFilters(newFilters);
-    updateNewData(result);
-  };
+  const handleFilter = useCallback(
+    (filter: DegenFilter) => {
+      const newFilters = { ...filter, sort: filters.sort };
+      let result = tranformDataByFilter(degens, newFilters);
+      setFilters(newFilters);
+      if (walletAddress) {
+        result = result.filter(
+          (degen) => degen.owner.toLowerCase() === walletAddress.toLowerCase(),
+        );
+      }
+      updateNewData(result);
+    },
+    [degens, filters.sort, updateNewData, walletAddress],
+  );
 
-  const handleSort = (sort: string) => {
-    const newSort = { ...filters, sort };
-    setFilters(newSort);
-    updateNewData(tranformDataByFilter(degens, newSort));
-  };
+  const handleSort = useCallback(
+    (sort: string) => {
+      const newSort = { ...filters, sort };
+      setFilters(newSort);
+      updateNewData(tranformDataByFilter(degens, newSort));
+    },
+    [degens, filters, updateNewData],
+  );
 
   // const handleClickCard = (degen: Degen): void => {
   //   setSelectedDegen(degen);
   //   setIsEnableDisableDegenModalOpen(true);
   // };
 
-  const handleClickEditName = (degen: Degen): void => {
+  const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleViewTraits = (degen: Degen): void => {
+  const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
-  const handleRentDegen = (degen: Degen): void => {
+  const handleRentDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsDegenModalOpen(true);
-  };
+  }, []);
 
   return (
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() => (
-          <DegensFilter
-            handleFilter={handleFilter}
-            defaultFilterValues={defaultValues}
-          />
-        )}
+        renderDrawer={() =>
+          !isEmpty(defaultValues) && (
+            <DegensFilter
+              handleFilter={handleFilter}
+              defaultFilterValues={defaultValues as DegenFilter}
+            />
+          )
+        }
         // Main grid
         renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
           <Stack gap={2}>
@@ -179,23 +176,23 @@ const DegenRentalsPage = (): JSX.Element => {
                       item
                       xs={12}
                       sm={6}
-                      md={isDrawerOpen ? 6 : 3}
-                      lg={isDrawerOpen ? 6 : 3}
-                      xl={2.4}
+                      md={4}
+                      lg={isDrawerOpen ? 4 : 3}
+                      xl={3}
                       key={uuidv4()}
                     >
                       <SkeletonDegenPlaceholder />
                     </Grid>
                   ))
-                : currentData().map((degen: Degen) => (
+                : currentDataMemoized.map((degen: Degen) => (
                     <Grid
                       key={degen.id}
                       item
                       xs={12}
                       sm={6}
-                      md={isDrawerOpen ? 6 : 3}
-                      lg={isDrawerOpen ? 6 : 3}
-                      xl={2.4}
+                      md={4}
+                      lg={isDrawerOpen ? 4 : 3}
+                      xl={3}
                     >
                       <DegenCard
                         id={degen.id}

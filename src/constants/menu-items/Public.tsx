@@ -15,7 +15,7 @@ const PublicItems = {
   type: 'group',
   children: [
     {
-      id: 'nifty-league-app',
+      id: '',
       title: 'Nifty League App',
       type: 'item',
       url: '/',
@@ -24,7 +24,7 @@ const PublicItems = {
     },
     {
       id: 'degen-rentals',
-      title: 'Degen Rentals',
+      title: 'DEGEN Rentals',
       type: 'item',
       url: '/degen-rentals',
       icon: icons.IconTag,
