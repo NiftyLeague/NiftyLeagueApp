@@ -243,8 +243,16 @@ const DegenCard: React.FC<
               }}
               onClick={onClickDownload}
             >
-              IP
-              <DownloadSolid width="20" height="20" />
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  pr: '4px',
+                }}
+              >
+                IP
+              </Typography>
+
+              <DownloadSolid width="16" height="16" />
             </Box>
             <DegenClaimBal tokenId={id} />
           </Stack>
