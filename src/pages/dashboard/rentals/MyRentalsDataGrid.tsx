@@ -5,21 +5,19 @@ import {
   useTheme,
   IconButton,
   Dialog,
-  DialogContent,
 } from '@mui/material';
 import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { Rentals, RentalType } from 'types/rentals';
+import EditIcon from '@mui/icons-material/Edit';
+import { Rentals } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
-import EditIcon from '@mui/icons-material/Edit';
 
 interface Props {
   rows: Rentals[];
   loading: boolean;
-  category: RentalType;
   handleTerminalRental: (rentalId: string) => void;
   updateRentalName: (name: string, id: string) => void;
 }
@@ -27,7 +25,6 @@ interface Props {
 const MyRentalsDataGrid = ({
   rows,
   loading,
-  category,
   handleTerminalRental,
   updateRentalName,
 }: Props): JSX.Element => {
@@ -35,11 +32,9 @@ const MyRentalsDataGrid = ({
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
-  const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
-    useState(false);
-
   const { profile } = usePlayerProfile();
-  const newRows = transformRentals(rows, profile?.id || '', category);
+
+  const newRows = transformRentals(rows, profile?.id || '');
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -51,57 +46,19 @@ const MyRentalsDataGrid = ({
     setIsRenameDegenModalOpen(false);
   };
 
-  const handleOpenTerminateRental = (params: GridRenderCellParams) => {
-    setSelectedRowForEditing(params.row);
-    setIsTerminalRentalModalOpen(true);
-  };
-
-  const handleConfirmTerminateRental = () => {
-    if (selectedRowForEditing) {
-      handleTerminalRental(selectedRowForEditing.id);
-      setIsTerminalRentalModalOpen(false);
-    }
-  };
-
   const commonColumnProp = {
     minWidth: 100,
   };
 
   const columns: GridColDef[] = [
     {
-      field: 'action',
-      headerName: 'Actions',
-      width: 100,
-      ...commonColumnProp,
-      renderCell: (params) => (
-        <Button
-          onClick={() => handleOpenTerminateRental(params)}
-          variant="outlined"
-          color="secondary"
-          disabled={params.value}
-        >
-          {params.value ? 'Terminated' : 'Terminate'}
-        </Button>
-      ),
-    },
-    {
       field: 'renter',
-      headerName: 'Player Address',
-      width: 120,
+      headerName: 'Renter',
+      width: 180,
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
           <Typography>{params.value}</Typography>
-        </Stack>
-      ),
-    },
-    {
-      field: 'nickname',
-      headerName: 'Player Nickname',
-      width: 150,
-      renderCell: (params) => (
-        <Stack direction="row" columnGap={1} alignItems="center">
-          <Typography>{params.value}</Typography>
-          {params.isEditable && (
+          {!params.row.action && (
             <IconButton
               aria-label="edit"
               onClick={() => handleOpenRenameDegen(params)}
@@ -113,102 +70,29 @@ const MyRentalsDataGrid = ({
         </Stack>
       ),
     },
+    { field: 'degenId', headerName: 'Degen ID' },
+    { field: 'multiplier', headerName: 'Multiplier', ...commonColumnProp },
+    { field: 'winLoss', headerName: 'Win-Loss', ...commonColumnProp },
+    // {
+    //   field: 'timePlayed',
+    //   headerName: 'Time Played',
+    //   ...commonColumnProp,
+    //   width: 150,
+    // },
     {
-      field: 'rentalCategory',
-      headerName: 'Category',
+      field: 'totalEarnings',
+      headerName: 'Total Earnings',
+      ...commonColumnProp,
       width: 150,
     },
     {
-      field: 'player',
-      headerName: "Who's playing?",
-      width: 130,
-    },
-    {
-      field: 'degenId',
-      headerName: 'Degen ID',
-      renderCell: (params) => <span>#{params.value}</span>,
-    },
-    {
-      field: 'background',
-      headerName: 'Background',
-    },
-    {
-      field: 'tribe',
-      headerName: 'Tribe',
-    },
-    {
-      field: 'multiplier',
-      headerName: 'Degen Multiplier',
+      field: 'yourEarnings',
+      headerName: 'Your Earnings',
+      ...commonColumnProp,
       width: 150,
-      ...commonColumnProp,
     },
-    {
-      field: 'timePlayed',
-      headerName: 'Time Played',
-      ...commonColumnProp,
-      width: 120,
-    },
-    {
-      field: 'matches',
-      headerName: 'Matches',
-    },
-    {
-      field: 'wins',
-      headerName: 'Wins',
-    },
-    {
-      field: 'winRate',
-      headerName: 'Win Rate',
-      ...commonColumnProp,
-      renderCell: (params) => <span>{params.value}%</span>,
-    },
-    {
-      field: 'weeklyFee',
-      headerName: 'Weekly Fee',
-      ...commonColumnProp,
-    },
-    {
-      field: 'dailyFee',
-      headerName: 'Current Daily Fee',
-      width: 150,
-      ...commonColumnProp,
-    },
-    {
-      field: 'dailyFeesToDate',
-      headerName: 'Daily Fees To Date',
-      width: 150,
-      ...commonColumnProp,
-    },
-    {
-      field: 'costs',
-      headerName: 'My Rental Fee Costs',
-      width: 150,
-      ...commonColumnProp,
-    },
-    {
-      field: 'rentalFeeEarning',
-      headerName: 'Rental Fees Earned',
-      width: 150,
-      ...commonColumnProp,
-    },
-    {
-      field: 'profits',
-      headerName: 'Gross Gameplay Earnings',
-      width: 180,
-      ...commonColumnProp,
-    },
-    {
-      field: 'netGameEarning',
-      headerName: 'Your NET Gameplay Earnings',
-      width: 200,
-      ...commonColumnProp,
-    },
-    {
-      field: 'netEarning',
-      headerName: 'Your NET Earnings',
-      width: 150,
-      ...commonColumnProp,
-    },
+    { field: 'costs', headerName: 'Costs', ...commonColumnProp },
+    { field: 'profits', headerName: 'Profits', ...commonColumnProp },
     {
       field: 'roi',
       headerName: 'ROI %',
@@ -228,6 +112,22 @@ const MyRentalsDataGrid = ({
       width: 150,
       renderCell: (params) => (
         <Countdown date={new Date(params.value * 1000)} />
+      ),
+    },
+    {
+      field: 'action',
+      headerName: 'Actions',
+      width: 200,
+      ...commonColumnProp,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleTerminalRental(params.row.id)}
+          variant="outlined"
+          color="secondary"
+          disabled={params.value}
+        >
+          {params.value ? 'Terminated' : 'Terminate'}
+        </Button>
       ),
     },
   ];
@@ -260,32 +160,6 @@ const MyRentalsDataGrid = ({
           updateRentalName={handleUpdateRentalName}
           rental={selectedRowForEditing}
         />
-      </Dialog>
-      <Dialog
-        open={isTerminateRentalModalOpen}
-        onClose={() => setIsTerminalRentalModalOpen(false)}
-      >
-        <DialogContent>
-          <Typography variant="h4" align="center">
-            Are you sure you want to terminate this rental?
-          </Typography>
-          <Stack mt={3} direction="column" justifyContent="center" gap={1}>
-            <Button
-              onClick={handleConfirmTerminateRental}
-              autoFocus
-              variant="contained"
-              fullWidth
-            >
-              Terminate Rental
-            </Button>
-            <Button
-              onClick={() => setIsTerminalRentalModalOpen(false)}
-              fullWidth
-            >
-              Cancel
-            </Button>
-          </Stack>
-        </DialogContent>
       </Dialog>
     </>
   );

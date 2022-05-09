@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 // project imports
 import App from 'App';
@@ -27,26 +26,22 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const queryClient = new QueryClient();
-
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
   <ApolloProvider client={client}>
-    <QueryClientProvider client={queryClient}>
-      <NetworkProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persister}>
-            <ConfigProvider>
-              <BrowserRouter basename={BASE_PATH}>
-                <App />
-              </BrowserRouter>
-            </ConfigProvider>
-          </PersistGate>
-        </Provider>
-      </NetworkProvider>
-    </QueryClientProvider>
+    <NetworkProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persister}>
+          <ConfigProvider>
+            <BrowserRouter basename={BASE_PATH}>
+              <App />
+            </BrowserRouter>
+          </ConfigProvider>
+        </PersistGate>
+      </Provider>
+    </NetworkProvider>
   </ApolloProvider>,
 );
 
