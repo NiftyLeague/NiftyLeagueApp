@@ -7,6 +7,7 @@ import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
 import { useMemo, useState } from 'react';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
+import ComicsClaim from 'components/extended/ComicsClaim';
 import useComicsBalance from 'hooks/useComicsBalance';
 
 const DashboardComicsPage = (): JSX.Element => {
@@ -77,6 +78,7 @@ const DashboardComicsPage = (): JSX.Element => {
           </Box>
         </Grid>
       </Grid>
+      <ComicsClaim />
       <ViewComicDialog
         comic={selectedComic}
         open={Boolean(selectedComic)}

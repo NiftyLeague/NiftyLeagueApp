@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { CardMedia } from '@mui/material';
 import useBackgroundType from 'hooks/useBackgroundType';
 import ImagePlaceholder from 'components/cards/Skeleton/ImagePlaceholder';
@@ -8,14 +8,7 @@ import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 const IMAGE_HEIGHT = 320;
 
 const DegenImage = memo(({ tokenId }: { tokenId: string | number }) => {
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, []);
-  const [loading, error, background] = useBackgroundType(tokenId, isMounted);
+  const { loading, error, background } = useBackgroundType(tokenId);
   const imageURL = `${DEGEN_BASE_IMAGE_URL}/mainnet/images/${tokenId}`;
   let setting: any = {
     height: IMAGE_HEIGHT,
@@ -23,9 +16,7 @@ const DegenImage = memo(({ tokenId }: { tokenId: string | number }) => {
     image: `${imageURL}.png`,
   };
 
-  if (error) {
-    setting = { ...setting, image: UnavailableImg };
-  }
+  if (error) setting = { ...setting, image: UnavailableImg };
 
   if (loading) {
     return (

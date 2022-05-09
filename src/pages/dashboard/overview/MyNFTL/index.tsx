@@ -12,9 +12,10 @@ import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import { NetworkContext } from 'NetworkProvider';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
-import { Account, Profile } from 'types/account';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
+import useGameBalance from 'hooks/useGameBalance';
+import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import {
@@ -22,25 +23,20 @@ import {
   CHARACTERS_SUBGRAPH_INTERVAL,
   DEBUG,
 } from 'constants/index';
-import {
-  GAMER_ACCOUNT_API,
-  MY_PROFILE_API_URL,
-  WITHDRAW_NFTL_SIGN,
-  WITHDRAW_NFTL_REFRESH,
-} from 'constants/url';
+import { WITHDRAW_NFTL_SIGN, WITHDRAW_NFTL_REFRESH } from 'constants/url';
 import DepositForm from './DepositForm';
 import RefreshBalanceForm from './RefreshBalanceForm';
 import WithdrawForm from './WithdrawForm';
 
-interface MyNFTLProps {
-  onClaimAll?: React.MouseEventHandler<HTMLButtonElement>;
-}
-
-const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
+const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
+  const auth = window.localStorage.getItem('authentication-token');
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
+  const [refreshAccKey, setRefreshAccKey] = useState(0);
+  const { profile, error: profileError } = usePlayerProfile();
+  const { gameBal, error: accError } = useGameBalance(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
     address,
     BALANCE_INTERVAL,
@@ -75,68 +71,19 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
     tokenIndices,
     refreshClaimKey,
   );
-
   useEffect(() => {
     if (totalAccrued) setMockAccrued(totalAccrued);
   }, [totalAccrued]);
-
-  const mockAccruedStr = formatNumberToDisplay(mockAccrued);
-  const walletBal = formatNumberToDisplay(userNFTLBalance);
-
-  const auth = window.localStorage.getItem('authentication-token');
-  const [account, setAccount] = useState<Account>();
-  const [accError, setAccError] = useState(false);
-  const [profile, setProfile] = useState<Profile>();
-  const [profileError, setProfileError] = useState(false);
-
-  const fetchAccount = useCallback(async () => {
-    if (auth) {
-      const result = await fetch(GAMER_ACCOUNT_API, {
-        headers: { authorizationToken: auth },
-      })
-        .then((res) => {
-          if (res.status === 404) setAccError(true);
-          return res.text();
-        })
-        .catch(() => {
-          setAccError(true);
-        });
-      if (result) setAccount(JSON.parse(result));
-    }
-  }, [auth]);
-
-  const fetchProfile = useCallback(async () => {
-    if (auth) {
-      const result = await fetch(MY_PROFILE_API_URL, {
-        headers: { authorizationToken: auth },
-      })
-        .then((res) => {
-          if (res.status === 404) setProfileError(true);
-          return res.text();
-        })
-        .catch(() => {
-          setProfileError(true);
-        });
-      if (result) setProfile(JSON.parse(result));
-    }
-  }, [auth]);
-
-  useEffect(() => {
-    if (auth) {
-      fetchAccount();
-      fetchProfile();
-    }
-  }, [auth, fetchAccount, fetchProfile]);
-
-  const gameBal = account?.balance ? account.balance : 0;
 
   const handleClaimNFTL = useCallback(async () => {
     // eslint-disable-next-line no-console
     if (DEBUG) console.log('claim', tokenIndices, totalAccrued);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
-    setMockAccrued(0);
-    setTimeout(() => setRefreshClaimKey(Math.random() + 1), 5000);
+    const res = await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
+    if (res) {
+      setMockAccrued(0);
+      setTimeout(() => setRefreshClaimKey(Math.random() + 1), 5000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccrued, tx, writeContracts]);
 
@@ -150,11 +97,11 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
           utils.parseEther(`${amount}`),
         ),
       );
-      await fetchAccount();
+      setRefreshAccKey(Math.random());
       setRefreshBalKey(Math.random());
       return txRes;
     },
-    [tx, writeContracts, fetchAccount],
+    [tx, writeContracts],
   );
 
   const handleWithdrawNFTL = useCallback(
@@ -190,14 +137,14 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('txRes', txRes);
         setRefreshBalKey(Math.random());
-        await fetchAccount();
+        setRefreshAccKey(Math.random());
         return txRes;
       } catch (error) {
         console.error('error', error);
         return null;
       }
     },
-    [address, auth, tx, writeContracts, fetchAccount],
+    [address, auth, tx, writeContracts],
   );
 
   const handleRefreshBal = useCallback(async () => {
@@ -208,11 +155,11 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
       });
       if (!response.ok) throw new Error(response.statusText);
       setRefreshTimeout(1);
-      await fetchAccount();
+      setRefreshAccKey(Math.random());
     } catch (error) {
       console.error('error', error);
     }
-  }, [auth, fetchAccount]);
+  }, [auth]);
 
   return (
     <Grid container spacing={sectionSpacing}>
@@ -230,7 +177,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                 />
               ) : (
                 <Button variant="outlined" onClick={handleClaimNFTL}>
-                  Claim All {mockAccruedStr} NFTL
+                  Claim All {formatNumberToDisplay(mockAccrued)} NFTL
                 </Button>
               )}
             </Stack>
@@ -244,7 +191,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
           <Grid item sm={6} xs={12}>
             <HoverDataCard
               title="NFTL in Wallet"
-              primary={walletBal}
+              primary={formatNumberToDisplay(userNFTLBalance)}
               isLoading={loading}
               customStyle={{
                 backgroundColor: theme.palette.background.default,
@@ -381,7 +328,7 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
                   </Dialog>
                   <Dialog>
                     <DialogTrigger>
-                      <Button fullWidth variant="contained" color="secondary">
+                      <Button fullWidth variant="outlined">
                         Deposit
                       </Button>
                     </DialogTrigger>
@@ -410,7 +357,9 @@ const MyNFTL = ({ onClaimAll }: MyNFTLProps): JSX.Element => {
           <Grid item sm={6} xs={12}>
             <HoverDataCard
               title="Daily NFTL Accrued"
-              primary={`${mockAccrued ? mockAccruedStr : '0.00'} NFTL`}
+              primary={`${
+                mockAccrued ? formatNumberToDisplay(mockAccrued) : '0.00'
+              } NFTL`}
               customStyle={{
                 backgroundColor: theme.palette.background.default,
                 border: '1px solid',
