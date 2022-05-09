@@ -1,26 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Stack, Typography, FormControl, MenuItem } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
-import {
-  ALL_RENTAL_API_URL,
-  MY_RENTAL_API_URL,
-  RENTED_FOR_ME_API_URL,
-  TERMINAL_RENTAL_API_URL,
-} from 'constants/url';
-import { Rentals, RentalType } from 'types/rentals';
+import { ALL_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
+import useFetch from 'hooks/useFetch';
+import { Rentals } from 'types/rentals';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import SearchRental from './SearchRental';
-import InputLabel from '../../../components/extended/Form/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useQuery } from 'react-query';
 
 const DashboardRentalPage = (): JSX.Element => {
   const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
-  const [rentals, setRentals] = useState<Rentals[] | any>([]);
-  const [category, setCategory] = useState<RentalType>('all');
 
   let headers;
   if (authToken) {
@@ -28,52 +19,16 @@ const DashboardRentalPage = (): JSX.Element => {
       authorizationToken: authToken,
     };
   }
-
-  const getFetchUrl = (): string => {
-    switch (category) {
-      case 'all':
-      case 'owned-sponsorship':
-      case 'non-owned-sponsorship':
-        return ALL_RENTAL_API_URL;
-
-      case 'personal':
-      case 'recruit':
-        return MY_RENTAL_API_URL;
-
-      case 'direct':
-        return RENTED_FOR_ME_API_URL;
-
-      default:
-        return ALL_RENTAL_API_URL;
-    }
-  };
-
-  const fetchRentals = async (): Promise<Rentals[]> => {
-    const response = await fetch(getFetchUrl(), {
-      method: 'GET',
-      headers,
-    });
-    const data = await response.json();
-    return data;
-  };
-
-  const { data, isLoading, isFetching, refetch } = useQuery<Rentals[]>(
-    'rentals',
-    fetchRentals,
-    {
-      onSuccess: (response) => {
-        if (response.length) {
-          return setRentals(response);
-        }
-        return setRentals([]);
-      },
-    },
-  );
+  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+    headers,
+  });
+  const [rentails, setRentails] = useState<Rentals[] | any>([]);
 
   useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+    if (data) {
+      setRentails(data);
+    }
+  }, [data]);
 
   const terminalRentalById = async (rentalId: string) => {
     try {
@@ -112,15 +67,14 @@ const DashboardRentalPage = (): JSX.Element => {
           close: false,
         }),
       );
-      const newRentals = rentals.find((ren) => ren.id === res.id);
-      const rentalIndex = rentals.findIndex((ren) => ren.id === res.id);
+      const newRentails = rentails.find((ren) => ren.id === res.id);
+      const rentalIndex = rentails.findIndex((ren) => ren.id === res.id);
 
-      setRentals([
-        ...rentals.slice(0, rentalIndex),
-        newRentals,
-        ...rentals.slice(rentalIndex + 1),
+      setRentails([
+        ...rentails.slice(0, rentalIndex),
+        newRentails,
+        ...rentails.slice(rentalIndex + 1),
       ]);
-      refetch();
     } catch (error) {
       dispatch(
         openSnackbar({
@@ -137,32 +91,28 @@ const DashboardRentalPage = (): JSX.Element => {
   };
 
   const updateRentalName = (newName: string, id: string) => {
-    const newRentals = rentals.find((ren) => ren.id === id);
-    const rentalIndex = rentals.findIndex((ren) => ren.id === id);
+    const newRentails = rentails.find((ren) => ren.id === id);
+    const rentalIndex = rentails.findIndex((ren) => ren.id === id);
 
-    setRentals([
-      ...rentals.slice(0, rentalIndex),
+    setRentails([
+      ...rentails.slice(0, rentalIndex),
       {
-        ...newRentals,
+        ...newRentails,
         name: newName,
       },
-      ...rentals.slice(rentalIndex + 1),
+      ...rentails.slice(rentalIndex + 1),
     ]);
   };
 
   const handleSearch = (currentValue: string) => {
     if (currentValue?.trim() === '') {
-      setRentals(data);
+      setRentails(data);
       return;
     }
     const newRental: any = data?.filter((rental: any) =>
       rental.renter_id.toLowerCase().includes(currentValue),
     );
-    setRentals(newRental);
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as RentalType);
+    setRentails(newRental);
   };
 
   return (
@@ -173,7 +123,7 @@ const DashboardRentalPage = (): JSX.Element => {
         alignItems="center"
         justifyContent="space-between"
         flexWrap="wrap"
-        columnGap={3}
+        columnGap={4}
         rowGap={1}
       >
         <Typography variant="h2">My Rentals</Typography>
@@ -186,34 +136,14 @@ const DashboardRentalPage = (): JSX.Element => {
           columnGap={2}
           flexWrap="wrap"
         >
-          <FormControl sx={{ minWidth: '200px' }}>
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category"
-              value={category}
-              label="Category"
-              onChange={handleChange}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="personal">Owned</MenuItem>
-              <MenuItem value="recruit">Recruited</MenuItem>
-              <MenuItem value="owned-sponsorship">Owned Sponsorship</MenuItem>
-              <MenuItem value="non-owned-sponsorship">
-                Non-Owned Sponsorship
-              </MenuItem>
-              <MenuItem value="direct">Direct</MenuItem>
-            </Select>
-          </FormControl>
           <SearchRental handleSearch={handleSearch} />
         </Stack>
       </Stack>
 
       <Box height="calc(100vh - 208px)">
         <MyRentalsDataGrid
-          loading={isLoading || isFetching}
-          rows={rentals}
-          category={category}
+          loading={!data}
+          rows={rentails}
           handleTerminalRental={terminalRentalById}
           updateRentalName={updateRentalName}
         />
