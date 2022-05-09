@@ -1,8 +1,12 @@
 import { format } from 'date-fns';
-import { Rentals } from 'types/rentals';
+import { Rentals, RentalType } from 'types/rentals';
 
 // eslint-disable-next-line import/prefer-default-export
-export const transformRentals = (rows: Rentals[], userId: string) =>
+export const transformRentals = (
+  rows: Rentals[],
+  userId: string,
+  category?: RentalType,
+) =>
   rows.map(
     ({
       id,

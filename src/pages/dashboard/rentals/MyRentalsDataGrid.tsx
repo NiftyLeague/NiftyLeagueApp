@@ -1,7 +1,7 @@
 import { Stack, Typography, Button, useTheme } from '@mui/material';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { Rentals } from 'types/rentals';
+import { Rentals, RentalType } from 'types/rentals';
 // import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
@@ -10,6 +10,7 @@ import Countdown from 'react-countdown';
 interface Props {
   rows: Rentals[];
   loading: boolean;
+  category: RentalType;
   handleTerminalRental: (rentalId: string) => void;
   updateRentalName: (name: string, id: string) => void;
 }
@@ -17,6 +18,7 @@ interface Props {
 const MyRentalsDataGrid = ({
   rows,
   loading,
+  category,
   handleTerminalRental,
   updateRentalName,
 }: Props): JSX.Element => {
@@ -26,7 +28,7 @@ const MyRentalsDataGrid = ({
   // const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
 
   const { profile } = usePlayerProfile();
-  const newRows = transformRentals(rows, profile?.id || '');
+  const newRows = transformRentals(rows, profile?.id || '', category);
 
   // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
   //   setSelectedRowForEditing(params.row);

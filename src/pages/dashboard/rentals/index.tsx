@@ -2,18 +2,24 @@ import { useEffect, useState } from 'react';
 import { Stack, Typography, FormControl, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
-import { ALL_RENTAL_API_URL, TERMINAL_RENTAL_API_URL } from 'constants/url';
-import useFetch from 'hooks/useFetch';
+import {
+  ALL_RENTAL_API_URL,
+  MY_RENTAL_API_URL,
+  RENTED_FOR_ME_API_URL,
+  TERMINAL_RENTAL_API_URL,
+} from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import SearchRental from './SearchRental';
 import InputLabel from '../../../components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useQuery } from 'react-query';
 
 const DashboardRentalPage = (): JSX.Element => {
   const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
+  const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
 
   let headers;
@@ -22,16 +28,52 @@ const DashboardRentalPage = (): JSX.Element => {
       authorizationToken: authToken,
     };
   }
-  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
-    headers,
-  });
-  const [rentals, setRentals] = useState<Rentals[] | any>([]);
+
+  const getFetchUrl = (): string => {
+    switch (category) {
+      case 'all':
+      case 'owned-sponsorship':
+      case 'non-owned-sponsorship':
+        return ALL_RENTAL_API_URL;
+
+      case 'personal':
+      case 'recruit':
+        return MY_RENTAL_API_URL;
+
+      case 'direct':
+        return RENTED_FOR_ME_API_URL;
+
+      default:
+        return ALL_RENTAL_API_URL;
+    }
+  };
+
+  const fetchRentals = async (): Promise<Rentals[]> => {
+    const response = await fetch(getFetchUrl(), {
+      method: 'GET',
+      headers,
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  const { data, isLoading, isFetching, refetch } = useQuery<Rentals[]>(
+    'rentals',
+    fetchRentals,
+    {
+      onSuccess: (response) => {
+        if (response.length) {
+          return setRentals(response);
+        }
+        return setRentals([]);
+      },
+    },
+  );
 
   useEffect(() => {
-    if (data) {
-      setRentals(data);
-    }
-  }, [data]);
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   const terminalRentalById = async (rentalId: string) => {
     try {
@@ -168,8 +210,9 @@ const DashboardRentalPage = (): JSX.Element => {
 
       <Box height="calc(100vh - 208px)">
         <MyRentalsDataGrid
-          loading={!data}
+          loading={isLoading || isFetching}
           rows={rentals}
+          category={category}
           handleTerminalRental={terminalRentalById}
           updateRentalName={updateRentalName}
         />
