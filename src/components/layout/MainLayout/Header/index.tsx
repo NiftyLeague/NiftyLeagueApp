@@ -2,15 +2,7 @@
 import React from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-  Avatar,
-  Box,
-  Typography,
-  Menu,
-  MenuItem,
-  Stack,
-  Link,
-} from '@mui/material';
+import { Avatar, Box, Stack, Link } from '@mui/material';
 
 // project imports
 import ExternalIcon from 'components/ExternalIcon';
@@ -54,7 +46,7 @@ const Header = () => {
       {/* logo & toggler button */}
       <Box
         sx={{
-          width: 228,
+          width: drawerOpen ? 228 : 80,
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto',
@@ -99,15 +91,6 @@ const Header = () => {
         >
           <IconMenu2 stroke={1.5} size="1.3rem" />
         </Avatar>
-      </Box>
-      <Box>
-        <Menu open={false}>
-          {pages.map((page) => (
-            <MenuItem key={page.name}>
-              <Typography textAlign="center">{page.name}</Typography>
-            </MenuItem>
-          ))}
-        </Menu>
       </Box>
       <Box
         sx={{
