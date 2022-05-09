@@ -21,6 +21,7 @@ import { formatNumberToDisplay } from 'utils/numbers';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
+import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
 
 const chipStyles = {
   color: 'white',
@@ -63,7 +64,11 @@ const DegenClaimBal: React.FC<
   const amountParsed = totalAccumulated
     ? formatNumberToDisplay(totalAccumulated)
     : 0;
-  return <>{`${amountParsed} NFTL`}</>;
+  return (
+    <Typography
+      sx={{ textAlign: 'center' }}
+    >{`${amountParsed} NFTL`}</Typography>
+  );
 });
 
 const DegenCard: React.FC<
@@ -213,35 +218,34 @@ const DegenCard: React.FC<
           )}
         </Box>
         {isDashboardDegen && (
-          <Box
-            sx={{
-              margin: 2,
-            }}
-          >
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{ minWidth: '100%' }}
-              onClick={onClickDownload}
-            >
-              Download IP
-            </Button>
-          </Box>
-        )}
-        {isDashboardDegen && (
           <Stack
             direction="row"
             justifyContent="space-between"
+            alignItems="center"
             sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
           >
             <Typography
               variant="body2"
               color={palette.grey[700]}
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+              sx={{
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                textAlign: 'center',
+              }}
               onClick={onEnableDisable}
             >
               {isEnabled ? 'Disable' : 'Enable'} Rentals
             </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                cursor: 'pointer',
+              }}
+              onClick={onClickDownload}
+            >
+              IP
+              <DownloadSolid width="20" height="20" />
+            </Box>
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
