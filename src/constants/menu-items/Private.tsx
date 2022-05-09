@@ -19,25 +19,25 @@ const PrivateItems = {
       icon: icons.IconDashboard,
       children: [
         {
-          id: 'dashboard-overview',
+          id: 'dashboard',
           title: 'Overview',
           type: 'item',
           url: '/dashboard',
         },
         {
-          id: 'dashboard-degens',
+          id: 'degens',
           title: 'DEGENs',
           type: 'item',
           url: '/dashboard/degens',
         },
         {
-          id: 'dashboard-comics',
+          id: 'comics',
           title: 'Comics',
           type: 'item',
           url: '/dashboard/comics',
         },
         {
-          id: 'dashboard-rentals',
+          id: 'rentals',
           title: 'Rentals',
           type: 'item',
           url: '/dashboard/rentals',
