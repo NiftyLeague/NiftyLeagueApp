@@ -306,27 +306,34 @@ const RentDegenContentDialog = ({
                 <Typography>Rental Passes Remaining</Typography>
                 <Typography color="gray">{rentalPassCount}</Typography>
               </Stack>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="caption" color="gray">
-                  Use a rental pass?
-                </Typography>
-                <RadioGroup
-                  row
-                  onChange={handleChangeUseRentalPass}
-                  value={isUseRentalPass ? 'yes' : 'no'}
+              {rentalPassCount !== 0 && (
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel value="no" control={<Radio />} label="No" />
-                </RadioGroup>
-              </Stack>
+                  <Typography variant="caption" color="gray">
+                    Use a rental pass?
+                  </Typography>
+                  <RadioGroup
+                    row
+                    onChange={handleChangeUseRentalPass}
+                    value={isUseRentalPass ? 'yes' : 'no'}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </Stack>
+              )}
+
               {renameEnabled && (
                 <Stack direction="row" justifyContent="space-between">
                   <Typography>Renaming Fee</Typography>
