@@ -195,8 +195,8 @@ const DashboardRentalPage = (): JSX.Element => {
               onChange={handleChange}
             >
               <MenuItem value="all">All</MenuItem>
-              <MenuItem value="personal">Personal</MenuItem>
-              <MenuItem value="recruit">Recruit</MenuItem>
+              <MenuItem value="personal">Owned</MenuItem>
+              <MenuItem value="recruit">Recruited</MenuItem>
               <MenuItem value="owned-sponsorship">Owned Sponsorship</MenuItem>
               <MenuItem value="non-owned-sponsorship">
                 Non-Owned Sponsorship
