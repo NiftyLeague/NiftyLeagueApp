@@ -16,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import { formatNumberToDisplay } from 'utils/numbers';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
 
@@ -58,10 +59,7 @@ const DegenClaimBal: React.FC<
   const tokenIndices = [parseInt(tokenId, 10)];
   const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
   const amountParsed = totalAccumulated
-    ? totalAccumulated.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+    ? formatNumberToDisplay(totalAccumulated)
     : 0;
   return <>{`${amountParsed} NFTL Available`}</>;
 });
