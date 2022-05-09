@@ -359,35 +359,37 @@ const DegensFilter = ({
           summary={<Typography variant="h5">Cosmetics</Typography>}
           expanded={false}
         >
-          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP).map((categoryKey) => {
-            const traitGroup = Object.entries(
-              CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
-            )
-              .sort((a: [string, string], b: [string, string]) =>
-                a[1].localeCompare(b[1]),
+          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
+            .sort()
+            .map((categoryKey) => {
+              const traitGroup = Object.entries(
+                CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
               )
-              .map((item) => item[0]);
-            return (
-              <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
-                <FilterAccordion
-                  summary={
-                    <Typography variant="h5">
-                      {categoryKey} ({traitGroup.length})
-                    </Typography>
-                  }
-                  expanded={false}
-                >
-                  <FilterAllTraitCheckboxes
-                    traitGroup={traitGroup}
-                    categoryKey={categoryKey}
-                    cosmeticsValue={cosmeticsValue}
-                    handleCheckboxChange={handleCheckboxChange}
-                    setCosmeticsValue={setCosmeticsValue}
-                  />
-                </FilterAccordion>
-              </FormGroup>
-            );
-          })}
+                .sort((a: [string, string], b: [string, string]) =>
+                  a[1].localeCompare(b[1]),
+                )
+                .map((item) => item[0]);
+              return (
+                <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
+                  <FilterAccordion
+                    summary={
+                      <Typography variant="h5">
+                        {categoryKey} ({traitGroup.length})
+                      </Typography>
+                    }
+                    expanded={false}
+                  >
+                    <FilterAllTraitCheckboxes
+                      traitGroup={traitGroup}
+                      categoryKey={categoryKey}
+                      cosmeticsValue={cosmeticsValue}
+                      handleCheckboxChange={handleCheckboxChange}
+                      setCosmeticsValue={setCosmeticsValue}
+                    />
+                  </FilterAccordion>
+                </FormGroup>
+              );
+            })}
         </FilterAccordion>
       </Stack>
     </Stack>
