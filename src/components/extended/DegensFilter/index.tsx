@@ -234,6 +234,9 @@ const DegensFilter = ({
       gap={1}
       sx={{
         overflowX: 'hidden',
+        [theme.breakpoints.down('sm')]: {
+          paddingX: 2,
+        },
       }}
     >
       <Stack
