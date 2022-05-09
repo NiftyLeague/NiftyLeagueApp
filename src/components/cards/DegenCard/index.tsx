@@ -1,4 +1,4 @@
-import { useContext, memo } from 'react';
+import { useContext, memo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Box,
@@ -19,6 +19,8 @@ import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
+import { downloadDegenAsZip } from 'utils/file';
+import ErrorModal from 'components/modal/ErrorModal';
 
 const chipStyles = {
   color: 'white',
@@ -85,7 +87,23 @@ const DegenCard: React.FC<
     sx,
   }) => {
     const { palette } = useTheme();
+    const [errorContent, setErrorContent] = useState('');
 
+    const handleCloseErrorModal = () => {
+      setErrorContent('');
+    };
+    const authToken = window.localStorage.getItem('authentication-token');
+    const onClickDownload = async () => {
+      if (authToken) {
+        try {
+          await downloadDegenAsZip(authToken, id);
+        } catch (e) {
+          setErrorContent(
+            `${(e.message as string) || 'Unknown error occurred'}`,
+          );
+        }
+      }
+    };
     return (
       <Card
         sx={{
@@ -200,7 +218,22 @@ const DegenCard: React.FC<
             </Button>
           )}
         </Box>
-
+        {isDashboardDegen && (
+          <Box
+            sx={{
+              margin: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ minWidth: '100%' }}
+              onClick={onClickDownload}
+            >
+              Download IP
+            </Button>
+          </Box>
+        )}
         {isDashboardDegen && (
           <Stack
             direction="row"
@@ -218,6 +251,7 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
+        <ErrorModal content={errorContent} onClose={handleCloseErrorModal} />
       </Card>
     );
   },
