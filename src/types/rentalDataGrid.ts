@@ -9,7 +9,7 @@ export interface RentalDataGrid {
   yourEarnings?: number;
   costs?: number;
   profits?: number;
-  roi?: number;
+  roi?: number | string;
   rentalRenewsIn?: React.ReactNode;
   action?: any;
 }
