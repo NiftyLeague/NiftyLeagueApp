@@ -172,16 +172,6 @@ const DegenCard: React.FC<
             gap: 1,
           }}
         >
-          {isDashboardDegen && (
-            <Button
-              onClick={onClickClaim}
-              variant="contained"
-              fullWidth
-              sx={{ minWidth: '32%' }}
-            >
-              Claim
-            </Button>
-          )}
           <Button
             variant="contained"
             fullWidth
@@ -199,6 +189,16 @@ const DegenCard: React.FC<
           >
             Traits
           </Button>
+          {isDashboardDegen && (
+            <Button
+              onClick={onClickClaim}
+              variant="contained"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+            >
+              Claim
+            </Button>
+          )}
         </Box>
 
         {isDashboardDegen && (
