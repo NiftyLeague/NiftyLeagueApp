@@ -13,11 +13,10 @@ import { Link } from 'react-router-dom';
 export interface ColumnType {
   id:
     | 'renter'
-    | 'nickname'
     | 'degenId'
-    | 'winRate'
-    | 'profits'
-    | 'netEarning'
+    | 'multiplier'
+    | 'winLoss'
+    | 'totalEarnings'
     | 'roi'
     | 'rentalRenewsIn';
   label: string;
@@ -26,31 +25,21 @@ export interface ColumnType {
 }
 
 const columns: ColumnType[] = [
-  { id: 'renter', label: 'Player Address', minWidth: 150, align: 'center' },
+  { id: 'renter', label: 'Renter', minWidth: 50, align: 'center' },
+  { id: 'degenId', label: 'Degen ID', minWidth: 50, align: 'center' },
+  { id: 'multiplier', label: 'Multiplier', minWidth: 50, align: 'center' },
+  { id: 'winLoss', label: 'Win-Loss', minWidth: 50, align: 'center' },
   {
-    id: 'nickname',
-    label: 'Player Nickname',
-    minWidth: 150,
-  },
-  { id: 'degenId', label: 'Degen ID', minWidth: 100, align: 'center' },
-  { id: 'winRate', label: 'Win Rate (%)', minWidth: 120, align: 'center' },
-  {
-    id: 'profits',
-    label: 'Gross Gameplay Earnings',
-    minWidth: 200,
+    id: 'totalEarnings',
+    label: 'NFTL Generated',
+    minWidth: 100,
     align: 'center',
   },
-  {
-    id: 'netEarning',
-    label: 'Your NET Earnings',
-    minWidth: 150,
-    align: 'center',
-  },
-  { id: 'roi', label: 'ROI %', minWidth: 80, align: 'center' },
+  { id: 'roi', label: 'ROI %', minWidth: 50, align: 'center' },
   {
     id: 'rentalRenewsIn',
     label: 'Rental Renews In',
-    minWidth: 150,
+    minWidth: 100,
     align: 'center',
   },
 ];
