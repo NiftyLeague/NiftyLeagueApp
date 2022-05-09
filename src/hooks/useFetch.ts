@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 
 interface State<T> {
+  loading?: boolean;
   data?: T;
   error?: Error;
 }
@@ -13,13 +14,18 @@ type Action<T> =
   | { type: 'fetched'; payload: T }
   | { type: 'error'; payload: Error };
 
-function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
+function useFetch<T = unknown>(
+  url?: string,
+  options?: RequestInit,
+  textOnly = false,
+): State<T> {
   const cache = useRef<Cache<T>>({});
 
   // Used to prevent state update if the component is unmounted
   const cancelRequest = useRef<boolean>(false);
 
   const initialState: State<T> = {
+    loading: undefined,
     error: undefined,
     data: undefined,
   };
@@ -28,11 +34,11 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
   const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
       case 'loading':
-        return { ...initialState };
+        return { ...initialState, loading: true };
       case 'fetched':
-        return { ...initialState, data: action.payload };
+        return { ...initialState, loading: false, data: action.payload };
       case 'error':
-        return { ...initialState, error: action.payload };
+        return { ...initialState, loading: false, error: action.payload };
       default:
         return state;
     }
@@ -59,7 +65,9 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
           throw new Error(response.statusText);
         }
 
-        const data = (await response.json()) as T;
+        const data = (
+          textOnly ? await response.text() : await response.json()
+        ) as T;
         cache.current[url] = data;
         if (cancelRequest.current) return;
 
