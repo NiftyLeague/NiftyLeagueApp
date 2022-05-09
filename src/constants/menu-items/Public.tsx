@@ -15,7 +15,7 @@ const PublicItems = {
   type: 'group',
   children: [
     {
-      id: 'nifty-league-app',
+      id: '',
       title: 'Nifty League App',
       type: 'item',
       url: '/',
