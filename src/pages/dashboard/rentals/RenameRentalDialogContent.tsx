@@ -5,12 +5,11 @@ import {
   Stack,
   Typography,
   TextField,
-  FormControl,
-  FormControlLabel,
-  Checkbox,
+  // FormControl,
+  // FormControlLabel,
+  // Checkbox,
   DialogActions,
-  Link,
-  Skeleton,
+  // Link,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -19,8 +18,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { RENAME_RENTAL_API_URL } from 'constants/url';
-import useFetch from 'hooks/useFetch';
-import { Degen } from 'types/degens';
+// import useFetch from 'hooks/useFetch';
+// import { Degen } from 'types/degens';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 
@@ -35,7 +34,7 @@ interface IFormInput {
 
 const validationSchema = yup.object({
   name: yup.string().required(),
-  isCheckedTerm: yup.bool().oneOf([true]),
+  // isCheckedTerm: yup.bool().oneOf([true]),
 });
 
 const RenameRentalDialogContent = ({
@@ -46,18 +45,19 @@ const RenameRentalDialogContent = ({
   const dispatch = useDispatch();
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { id, degenId, renter } = rental;
-  const { data: degenDetail } = useFetch<Degen>(
-    `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
-    {
-      headers: {
-        authorizationToken: authToken,
-      } as any,
-    },
-  );
+
+  // const { data: degenDetail } = useFetch<Degen>(
+  //   `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
+  //   {
+  //     headers: {
+  //       authorizationToken: authToken,
+  //     } as any,
+  //   },
+  // );
+
   const {
     handleSubmit,
     control,
-    getValues,
     setError,
     reset,
     formState: { errors },
@@ -108,6 +108,7 @@ const RenameRentalDialogContent = ({
       });
     }
   };
+
   const onRenameRentalSuccess = (newName: string) => {
     dispatch(
       openSnackbar({
@@ -126,7 +127,7 @@ const RenameRentalDialogContent = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle sx={{ textAlign: 'center' }}>Rename Rental</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Assign a Nickname</DialogTitle>
       <DialogContent dividers sx={{ maxWidth: '380px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
@@ -136,7 +137,14 @@ const RenameRentalDialogContent = ({
               component="p"
               sx={{ textAlign: 'center' }}
             >
-              Owned by {renter}
+              Recruit
+            </Typography>
+            <Typography
+              variant="caption"
+              component="p"
+              sx={{ textAlign: 'center' }}
+            >
+              {renter}
             </Typography>
           </Stack>
 
@@ -146,7 +154,7 @@ const RenameRentalDialogContent = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Enter new rental name"
+                label="Enter nickname for recruit wallet"
                 variant="outlined"
                 size="small"
                 fullWidth
@@ -156,15 +164,15 @@ const RenameRentalDialogContent = ({
               />
             )}
           />
-          <Stack direction="row" justifyContent="space-between">
+          {/* <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">Renaming Fee</Typography>
             {!degenDetail ? (
               <Skeleton variant="rectangular" width={50} height={20} />
             ) : (
               <Typography>{degenDetail?.price}</Typography>
             )}
-          </Stack>
-          <Controller
+          </Stack> */}
+          {/* <Controller
             name="isCheckedTerm"
             control={control}
             render={({ field }) => (
@@ -199,18 +207,19 @@ const RenameRentalDialogContent = ({
                 />
               </FormControl>
             )}
-          />
+          /> */}
         </Stack>
       </DialogContent>
       <DialogActions>
         <LoadingButton
           loading={isLoadingRename}
-          disabled={!getValues('isCheckedTerm' || isLoadingRename)}
+          disabled={isLoadingRename}
           type="submit"
           variant="contained"
           fullWidth
+          onClick={() => handleSubmit(onSubmit)}
         >
-          Rename Rental
+          Add Nickname
         </LoadingButton>
       </DialogActions>
     </form>

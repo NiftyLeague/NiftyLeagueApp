@@ -1,15 +1,21 @@
 import { format } from 'date-fns';
-import { Rentals } from 'types/rentals';
+import { Rentals, RentalType } from 'types/rentals';
+import { capitalize } from '../../../utils/string';
 
 // eslint-disable-next-line import/prefer-default-export
-export const transformRentals = (rows: Rentals[], userId: string) =>
+export const transformRentals = (
+  rows: Rentals[],
+  userId: string,
+  category?: RentalType,
+) =>
   rows.map(
     ({
       id,
       renter_id,
       user_id,
       degen_id,
-      degen: { multiplier },
+      name,
+      degen: { multiplier, tribe, background },
       earning_cap,
       earning_cap_daily,
       stats: {
@@ -26,39 +32,124 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
       },
       next_charge_at,
       is_terminated,
-      name,
+      accounts,
+      entry_price,
+      daily_price,
+      is_daily,
+      shares,
     }) => {
+      const isPersonal = user_id === renter_id;
+      const isRecruit = user_id !== renter_id;
+      const isOwnedSponsor =
+        userId === accounts?.owner?.id && user_id !== renter_id;
+      const isNonOwnedSponsor =
+        userId !== accounts?.owner?.id && user_id !== renter_id;
+
       let yourEarnings = 0;
-      if (userId === renter_id) {
-        yourEarnings = earnings_owner;
-      } else if (userId === user_id) {
-        yourEarnings = earnings_player;
+      let rentalFeeEarning = 0;
+      let netEarning = 0;
+      let netGameEarning = 0;
+      let rentalCategory: string;
+      let player: string;
+      let roi = 0;
+      let isEditable = false;
+
+      let netEarningCharge = 0;
+      const shareRenter = shares?.renter || 0;
+
+      if (charges && charges === entry_price) {
+        if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
+          rentalFeeEarning = entry_price * 0.45;
+        }
+
+        netEarningCharge = entry_price * 0.45;
       } else {
-        yourEarnings = earnings_renter;
+        if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
+          rentalFeeEarning = entry_price * 0.45 + (charges - entry_price) * 0.1;
+        }
+
+        netEarningCharge = entry_price * 0.45 + (charges - entry_price) * 0.1;
+      }
+
+      if (isPersonal) {
+        rentalCategory = 'Owned';
+        player = 'MySelf';
+        netEarning = earnings * (shares.player + shares.owner) - charges;
+        netGameEarning = earnings * (shares.owner + shareRenter);
+        roi = (earnings * (shares.player + shareRenter) - charges) / charges;
+        isEditable = false;
+      } else if (isRecruit) {
+        rentalCategory = 'Recruited';
+        player = 'MySelf';
+        netEarning = earnings * shares.player;
+        netGameEarning = earnings * shares.player;
+        roi = 0;
+        isEditable = false;
+      } else if (isOwnedSponsor) {
+        rentalCategory = 'Owned Sponsorship';
+        player = 'Recruit';
+        netEarning =
+          earnings * (shares.owner + shareRenter) + netEarningCharge - charges;
+        netGameEarning = earnings * (shares.owner + shareRenter);
+        roi = (earnings * (shares.owner + shareRenter) - charges) / charges;
+        isEditable = true;
+      } else if (isNonOwnedSponsor) {
+        rentalCategory = 'Non-Owned Sponsorship';
+        player = 'Recruit';
+        netEarning = earnings * shareRenter - charges;
+        netGameEarning = earnings * shareRenter;
+        roi = (earnings * shareRenter - charges) / charges;
+        isEditable = true;
+      } else {
+        rentalCategory = 'Direct';
+        player = 'Renter';
+        netEarning = earnings * shares.owner + netEarningCharge;
+        netGameEarning = earnings * shares.owner;
+        roi = 0;
+        isEditable = true;
+      }
+
+      if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
+        if (charges && charges === entry_price) {
+          rentalFeeEarning = entry_price * 0.45;
+        } else {
+          rentalFeeEarning = entry_price * 0.45 + (charges - entry_price) * 0.1;
+        }
       }
 
       return {
         id,
-        renter: name || `Rental #${degen_id}`,
+        renter: accounts?.renter_user?.name || 'No address',
+        nickname: isPersonal ? 'MySelf' : name,
+        rentalCategory,
+        player,
         degenId: degen_id,
         multiplier,
-        winLoss:
+        background: capitalize(background) || '',
+        tribe: capitalize(tribe) || '',
+        matches: matches || 0,
+        wins: wins || 0,
+        winRate:
           Number(wins) > 0 && Number(matches) > 0
-            ? Number(wins) / Number(matches)
+            ? (Number(wins) / Number(matches)) * 100
             : 0,
         timePlayed: time_played
           ? format(new Date(time_played), 'HH:mm:ss')
-          : 'N/A',
+          : '00:00:00',
         totalEarnings: earnings,
         yourEarnings: yourEarnings || 0,
         costs: charges,
         profits: earnings,
-        roi:
-          Number(earnings) > 0 && Number(charges) > 0
-            ? (Number(earnings) / Number(charges)) * 100
-            : 0,
+        roi: roi || 'N/A',
         rentalRenewsIn: next_charge_at || 'N/A',
         action: is_terminated,
+        weeklyFee: entry_price,
+        dailyFee: is_daily ? daily_price : 0,
+        dailyFeesToDate: charges ? charges - entry_price : 0,
+        rentalFeeEarning,
+        netEarning,
+        netGameEarning,
+        isEditable,
       };
     },
   );
