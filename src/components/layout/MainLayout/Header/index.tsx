@@ -21,6 +21,7 @@ import { openDrawer } from 'store/slices/menu';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
+import AddNFTL from './AddNFTLToMetamask';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -116,6 +117,7 @@ const Header = () => {
           alignItems: 'center',
         }}
       >
+        <AddNFTL />
         {pages.map((page) => (
           <Link
             key={page.name}
