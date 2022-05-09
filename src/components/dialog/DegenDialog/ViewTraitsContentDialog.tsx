@@ -4,7 +4,9 @@ import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
 } from 'constants/cosmeticsFilters';
+import { useEffect } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
+import { sendEvent } from 'utils/google-analytics';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ViewTraitsContentDialogProps {
@@ -30,11 +32,15 @@ const ViewTraitsContentDialog = ({
 }: ViewTraitsContentDialogProps) => {
   const { traitList } = character;
 
+  useEffect(() => {
+    sendEvent('view_item', 'engagement');
+  }, []);
+
   return (
     <Grid container>
       <Grid item xs={12} sm={12} md={6} sx={{ py: 1, px: 2 }}>
         <Stack direction="row" justifyContent="center">
-          {degen && <DegenImage tokenId={degen.id} />}
+          {degen?.id && <DegenImage tokenId={degen.id} />}
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           {!traitList.length ? (

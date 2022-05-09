@@ -28,11 +28,14 @@ const useRent = (
     if (res.status === 404) {
       throw Error('Not Found');
     }
-    const json = await res.json();
-    if (json.statusCode === 400) {
-      throw Error(json.body);
+    if (res.status === 200) {
+      const json = await res.json();
+      if (json.statusCode === 400) {
+        throw Error(json.body);
+      }
+      return json as MyRental;
     }
-    return json as MyRental;
+    throw Error('Something wrong!');
   };
 
   return rent;

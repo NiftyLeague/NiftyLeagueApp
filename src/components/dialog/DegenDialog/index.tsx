@@ -9,6 +9,7 @@ import RentDegenContentDialog from './RentDegenContentDialog';
 import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
+import { DEBUG } from 'constants/index';
 import { toast } from 'react-toastify';
 
 export interface DegenDialogProps extends DialogProps {
@@ -89,7 +90,7 @@ const DegenDialog = ({
         setDegenDetail(json);
       } catch (err) {
         if (DEBUG) console.error(err.message);
-        toast.error(err.message);
+        toast.error(err.message, { theme: 'dark' });
       }
     }
 

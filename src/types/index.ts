@@ -55,7 +55,7 @@ export type OverrideIcon =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ComponentClass<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | FunctionComponent<any>
+  | FunctionComponent<React.PropsWithChildren<React.PropsWithChildren<any>>>
   | TablerIcon;
 
 export interface EnhancedTableHeadProps extends TableCellProps {

@@ -57,9 +57,9 @@ const handleError = (e: NotifyError): void => {
     message = serialized.message;
   }
 
-  toast.error({
-    message: 'Transaction Error',
-    description: message,
+  toast.error(({ data }) => `Transaction Error: ${data}`, {
+    data: message,
+    theme: 'dark',
   });
 };
 
@@ -170,17 +170,23 @@ export default function Notifier(
           } else {
             const networkName =
               network.name === 'unknown' ? targetNetwork.label : network.name;
-            toast.info({
-              message: `${networkName} Transaction Sent`,
-              description: result.hash,
-              placement: 'topRight',
-            });
+            toast.info(
+              ({ data }) => `${networkName} Transaction Sent: ${data}`,
+              {
+                data: result.hash,
+                position: 'bottom-right',
+                theme: 'dark',
+              },
+            );
             await result.wait();
-            toast.success({
-              message: `${networkName} Transaction Successful`,
-              description: result.hash,
-              placement: 'topRight',
-            });
+            toast.success(
+              ({ data }) => `${networkName} Transaction Successful: ${data}`,
+              {
+                data: result.hash,
+                position: 'bottom-right',
+                theme: 'dark',
+              },
+            );
             // on most networks BlockNative will update a transaction handler,
             // but locally we will set an interval to listen...
             if (callback) {
