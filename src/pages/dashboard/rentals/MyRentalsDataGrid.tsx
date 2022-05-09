@@ -5,6 +5,7 @@ import {
   useTheme,
   IconButton,
   Dialog,
+  DialogContent,
 } from '@mui/material';
 import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useState } from 'react';
@@ -34,6 +35,8 @@ const MyRentalsDataGrid = ({
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
+  const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
+    useState(false);
 
   const { profile } = usePlayerProfile();
   const newRows = transformRentals(rows, profile?.id || '', category);
@@ -46,6 +49,18 @@ const MyRentalsDataGrid = ({
   const handleUpdateRentalName = (name: string, id: string) => {
     updateRentalName(name, id);
     setIsRenameDegenModalOpen(false);
+  };
+
+  const handleOpenTerminateRental = (params: GridRenderCellParams) => {
+    setSelectedRowForEditing(params.row);
+    setIsTerminalRentalModalOpen(true);
+  };
+
+  const handleConfirmTerminateRental = () => {
+    if (selectedRowForEditing) {
+      handleTerminalRental(selectedRowForEditing.id);
+      setIsTerminalRentalModalOpen(false);
+    }
   };
 
   const commonColumnProp = {
@@ -206,7 +221,7 @@ const MyRentalsDataGrid = ({
       ...commonColumnProp,
       renderCell: (params) => (
         <Button
-          onClick={() => handleTerminalRental(params.row.id)}
+          onClick={() => handleOpenTerminateRental(params)}
           variant="outlined"
           color="secondary"
           disabled={params.value}
@@ -245,6 +260,32 @@ const MyRentalsDataGrid = ({
           updateRentalName={handleUpdateRentalName}
           rental={selectedRowForEditing}
         />
+      </Dialog>
+      <Dialog
+        open={isTerminateRentalModalOpen}
+        onClose={() => setIsTerminalRentalModalOpen(false)}
+      >
+        <DialogContent>
+          <Typography variant="h4" align="center">
+            Are you sure you want to terminate this rental?
+          </Typography>
+          <Stack mt={3} direction="column" justifyContent="center" gap={1}>
+            <Button
+              onClick={handleConfirmTerminateRental}
+              autoFocus
+              variant="contained"
+              fullWidth
+            >
+              Terminate Rental
+            </Button>
+            <Button
+              onClick={() => setIsTerminalRentalModalOpen(false)}
+              fullWidth
+            >
+              Cancel
+            </Button>
+          </Stack>
+        </DialogContent>
       </Dialog>
     </>
   );

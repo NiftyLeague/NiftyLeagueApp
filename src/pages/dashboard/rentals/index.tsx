@@ -120,6 +120,7 @@ const DashboardRentalPage = (): JSX.Element => {
         newRentals,
         ...rentals.slice(rentalIndex + 1),
       ]);
+      refetch();
     } catch (error) {
       dispatch(
         openSnackbar({
