@@ -61,7 +61,7 @@ const DegenClaimBal: React.FC<
   const amountParsed = totalAccumulated
     ? formatNumberToDisplay(totalAccumulated)
     : 0;
-  return <>{`${amountParsed} NFTL Available`}</>;
+  return <>{`${amountParsed} NFTL`}</>;
 });
 
 const DegenCard: React.FC<
@@ -93,6 +93,7 @@ const DegenCard: React.FC<
           height: '100%',
           border: `1px solid ${palette.grey[800]}`,
           backgroundColor: palette.background.default,
+          pb: 2,
           ...sx,
         }}
       >
@@ -124,9 +125,10 @@ const DegenCard: React.FC<
             size="small"
           />
         </Stack>
-        <CardContent sx={{ pb: 0, pt: 1 }}>
+        <CardContent sx={{ py: 1, px: 2 }}>
           <Stack
             direction="row"
+            justifyContent="space-between"
             gap={1}
             sx={{
               '&:hover': {
@@ -146,8 +148,6 @@ const DegenCard: React.FC<
                 fontSize="small"
               />
             )}
-          </Stack>
-          <Stack direction="row" justifyContent="space-between">
             <Link
               href={
                 id
@@ -159,20 +159,8 @@ const DegenCard: React.FC<
               variant="body2"
               color={palette.text.secondary}
             >
-              {`Degen #${id}`}
+              {`#${id}`}
             </Link>
-            <Link
-              href={owner ? `https://opensea.io/${owner}/niftydegen` : '#'}
-              target="_blank"
-              rel="nofollow"
-              variant="body2"
-              color={palette.text.secondary}
-            >
-              {`Owned by ${owner?.substring(0, 5)}`}
-            </Link>
-          </Stack>
-          <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
-            {isDashboardDegen && <DegenClaimBal tokenId={id} />}
           </Stack>
         </CardContent>
         <Box
@@ -212,8 +200,13 @@ const DegenCard: React.FC<
             Traits
           </Button>
         </Box>
-        <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
-          {isDashboardDegen && (
+
+        {isDashboardDegen && (
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
+          >
             <Typography
               variant="body2"
               color={palette.grey[700]}
@@ -222,8 +215,9 @@ const DegenCard: React.FC<
             >
               {isEnabled ? 'Disable' : 'Enable'} Rentals
             </Typography>
-          )}
-        </Stack>
+            <DegenClaimBal tokenId={id} />
+          </Stack>
+        )}
       </Card>
     );
   },
