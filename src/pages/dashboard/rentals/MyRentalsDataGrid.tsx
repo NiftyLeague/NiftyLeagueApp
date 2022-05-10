@@ -15,6 +15,7 @@ import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
 import EditIcon from '@mui/icons-material/Edit';
+import { formatNumberToDisplayWithCommas } from 'utils/numbers';
 
 interface Props {
   rows: Rentals[];
@@ -193,42 +194,49 @@ const MyRentalsDataGrid = ({
       field: 'dailyFee',
       headerName: 'Current Daily Fee',
       width: 150,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'dailyFeesToDate',
       headerName: 'Daily Fees To Date',
       width: 150,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'costs',
       headerName: 'My Rental Fee Costs',
       width: 150,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'rentalFeeEarning',
       headerName: 'Rental Fees Earned',
       width: 150,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'profits',
       headerName: 'Gross Gameplay Earnings',
       width: 180,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'netGameEarning',
       headerName: 'Your NET Gameplay Earnings',
       width: 200,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'netEarning',
       headerName: 'Your NET Earnings',
       width: 150,
+      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
@@ -240,7 +248,11 @@ const MyRentalsDataGrid = ({
         if (params.value === 0) color = palette.text.primary;
         if (params.value > 0) color = palette.success.main;
         if (params.value < 0) color = palette.error.main;
-        return <Typography color={color}>{params.value}%</Typography>;
+        return (
+          <Typography color={color}>
+            {formatNumberToDisplayWithCommas(params.value)}%
+          </Typography>
+        );
       },
     },
     {
