@@ -185,17 +185,9 @@ const MyRentalsDataGrid = ({
       field: 'winRate',
       headerName: 'Win Rate',
       ...commonColumnProp,
-      renderCell: (params) => {
-        let color;
-        if (params.value === 0) color = palette.text.primary;
-        if (params.value > 0) color = palette.success.main;
-        if (params.value < 0) color = palette.error.main;
-        return (
-          <Typography color={color}>
-            {formatNumberToDisplayWithCommas(params.value)}%
-          </Typography>
-        );
-      },
+      renderCell: (params) => (
+        <span>{formatNumberToDisplayWithCommas(params.value)}%</span>
+      ),
     },
     {
       field: 'weeklyFee',

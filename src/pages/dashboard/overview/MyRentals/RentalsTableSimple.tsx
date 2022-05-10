@@ -89,15 +89,9 @@ const RentalsTableSimple = ({
                     }
 
                     if (column.id === 'winRate') {
-                      let color;
-                      if (value === 0) color = palette.text.primary;
-                      if (value > 0) color = palette.success.main;
-                      if (value < 0) color = palette.error.main;
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <Typography color={color}>
-                            {formatNumberToDisplayWithCommas(value)}%
-                          </Typography>
+                          {formatNumberToDisplayWithCommas(value)}%
                         </TableCell>
                       );
                     }
