@@ -121,20 +121,22 @@ const MyRentalsDataGrid = ({
       field: 'nickname',
       headerName: 'Player Nickname',
       width: 150,
-      renderCell: (params) => (
-        <Stack direction="row" columnGap={1} alignItems="center">
-          <Typography>{params.value}</Typography>
-          {params.isEditable && (
-            <IconButton
-              aria-label="edit"
-              onClick={() => handleOpenRenameDegen(params)}
-              sx={{ display: 'none' }}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          )}
-        </Stack>
-      ),
+      renderCell: (params) => {
+        return (
+          <Stack direction="row" columnGap={1} alignItems="center">
+            <Typography>{params.value}</Typography>
+            {params.row.isEditable && (
+              <IconButton
+                aria-label="edit"
+                onClick={() => handleOpenRenameDegen(params)}
+                sx={{ display: 'none' }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Stack>
+        );
+      },
     },
     {
       field: 'rentalCategory',
