@@ -183,7 +183,9 @@ const MyRentalsDataGrid = ({
       field: 'winRate',
       headerName: 'Win Rate',
       ...commonColumnProp,
-      renderCell: (params) => <span>{params.value}%</span>,
+      renderCell: (params) => (
+        <span>{formatNumberToDisplayWithCommas(params.value)}%</span>
+      ),
     },
     {
       field: 'weeklyFee',
