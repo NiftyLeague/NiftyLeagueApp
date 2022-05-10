@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Rentals } from 'types/rentals';
-import { capitalize } from '../../../utils/string';
+import { capitalize } from 'utils/string';
 
 // eslint-disable-next-line import/prefer-default-export
 export const transformRentals = (rows: Rentals[], userId: string) =>

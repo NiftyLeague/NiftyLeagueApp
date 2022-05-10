@@ -12,6 +12,7 @@ import {
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import { ColumnType } from '.';
 import { v4 as uuidv4 } from 'uuid';
+import Countdown from 'react-countdown';
 
 interface RentalsTableSimpleProps {
   rentals: RentalDataGrid[];
@@ -75,6 +76,15 @@ const RentalsTableSimple = ({
                         </TableCell>
                       );
                     }
+
+                    if (column.id === 'rentalRenewsIn') {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <Countdown date={new Date(value * 1000)} />
+                        </TableCell>
+                      );
+                    }
+
                     return (
                       <TableCell key={column.id} align={column.align}>
                         {value}
