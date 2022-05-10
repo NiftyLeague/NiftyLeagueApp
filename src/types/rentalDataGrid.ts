@@ -1,5 +1,6 @@
 export interface RentalDataGrid {
   id: string;
+  rentalId: string;
   renter?: string;
   degenId: string;
   multiplier: number;

@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Rentals, RentalType } from 'types/rentals';
 import { capitalize } from 'utils/string';
+import { v4 as uuidv4 } from 'uuid';
 
 // eslint-disable-next-line import/prefer-default-export
 export const transformRentals = (
@@ -37,21 +38,27 @@ export const transformRentals = (
       daily_price,
       is_daily,
       shares,
+      rented_from_me,
     }) => {
-      const isPersonal = user_id === renter_id; // Direct Rental
-      const isRecruit = user_id !== renter_id; // Recruited
+      const isPersonal = user_id === renter_id && !rented_from_me; // Direct Rental
+      const isRecruit = user_id !== renter_id && !rented_from_me; // Recruited
       const isOwnedSponsor =
-        userId === accounts.owner.id && user_id !== renter_id; // Owned Sponsorship
+        userId === accounts.owner.id &&
+        user_id !== renter_id &&
+        !rented_from_me; // Owned Sponsorship
       const isNonOwnedSponsor =
-        userId !== accounts.owner.id && user_id !== renter_id; // Non-Owned Sponsorship
+        userId !== accounts.owner.id &&
+        user_id !== renter_id &&
+        !rented_from_me; // Non-Owned Sponsorship
+      const isDirectRenter = rented_from_me; // Direct Renter
 
       let yourEarnings = 0;
       let rentalFeeEarning = 0;
       let netEarning = 0;
       let netGameEarning = 0;
-      let category: string;
-      let rentalCategory: string;
-      let player: string;
+      let category: string = 'direct-renter';
+      let rentalCategory: string = 'Direct Renter';
+      let player: string = 'Myself';
       let roi = 0;
       let isEditable = false;
 
@@ -76,7 +83,7 @@ export const transformRentals = (
         if (isPersonal) {
           category = 'direct-rental';
           rentalCategory = 'Direct Rental';
-          player = 'MySelf';
+          player = 'Myself';
           netEarning = earnings * (shares.player + shares.owner) - charges;
           netGameEarning = earnings * (shares.owner + shareRenter);
           roi = (earnings * (shares.player + shareRenter) - charges) / charges;
@@ -103,12 +110,12 @@ export const transformRentals = (
         } else if (isRecruit) {
           category = 'recruited';
           rentalCategory = 'Recruited';
-          player = 'MySelf';
+          player = 'Myself';
           netEarning = earnings * shares.player;
           netGameEarning = earnings * shares.player;
           roi = 0;
           isEditable = false;
-        } else {
+        } else if (isDirectRenter) {
           category = 'direct-renter';
           rentalCategory = 'Direct Renter';
           player = 'Renter';
@@ -136,7 +143,8 @@ export const transformRentals = (
       }
 
       return {
-        id,
+        id: uuidv4(), // Change the id to uuid because it is not unique
+        rentalId: id,
         renter: accounts?.player?.name || 'No address',
         nickname: isPersonal ? 'Myself' : name || 'No nickname',
         category,

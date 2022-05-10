@@ -69,8 +69,8 @@ const MyRentalsDataGrid = ({
     setIsRenameDegenModalOpen(true);
   };
 
-  const handleUpdateRentalName = (name: string, id: string) => {
-    updateRentalName(name, id);
+  const handleUpdateRentalName = (name: string, rentalId: string) => {
+    updateRentalName(name, rentalId);
     setIsRenameDegenModalOpen(false);
   };
 
@@ -81,7 +81,7 @@ const MyRentalsDataGrid = ({
 
   const handleConfirmTerminateRental = () => {
     if (selectedRowForEditing) {
-      handleTerminalRental(selectedRowForEditing.id);
+      handleTerminalRental(selectedRowForEditing.rentalId);
       setIsTerminalRentalModalOpen(false);
     }
   };
@@ -278,6 +278,7 @@ const MyRentalsDataGrid = ({
         columns={columns}
         autoPageSize
         checkboxSelection={false}
+        disableSelectionOnClick={true}
         rowsPerPageOptions={[10, 25, 100]}
         // Page size and handler required to set default to 10
         pageSize={pageSize}

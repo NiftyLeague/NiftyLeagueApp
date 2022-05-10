@@ -49,12 +49,37 @@ const DashboardRentalPage = (): JSX.Element => {
   };
 
   const fetchRentals = async (): Promise<Rentals[]> => {
-    const response = await fetch(getFetchUrl(), {
-      method: 'GET',
-      headers,
-    });
-    const data = await response.json();
-    return data;
+    if (category === 'all') {
+      const allRentals = await fetch(getFetchUrl(), {
+        method: 'GET',
+        headers,
+      });
+      const rentedFromMe = await fetch(RENTED_FOR_ME_API_URL, {
+        method: 'GET',
+        headers,
+      });
+
+      const allRentalsJson = await allRentals.json();
+      const rentedFromMeJson = await rentedFromMe.json();
+
+      const newAllRentals = allRentalsJson.map((rental) => ({
+        ...rental,
+        rented_from_me: false,
+      }));
+      const newRentedFromMe = rentedFromMeJson.map((rental) => ({
+        ...rental,
+        rented_from_me: true,
+      }));
+
+      return newAllRentals.concat(newRentedFromMe);
+    } else {
+      const response = await fetch(getFetchUrl(), {
+        method: 'GET',
+        headers,
+      });
+      const data = await response.json();
+      return data;
+    }
   };
 
   const { data, isLoading, isFetching, refetch } = useQuery<Rentals[]>(
