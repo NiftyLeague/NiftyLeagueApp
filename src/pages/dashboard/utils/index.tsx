@@ -76,14 +76,6 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
         netGameEarning = earnings * (shares.owner + shareRenter);
         roi = (earnings * (shares.player + shareRenter) - charges) / charges;
         isEditable = false;
-      } else if (isRecruit) {
-        category = 'recruited';
-        rentalCategory = 'Recruited';
-        player = 'MySelf';
-        netEarning = earnings * shares.player;
-        netGameEarning = earnings * shares.player;
-        roi = 0;
-        isEditable = false;
       } else if (isOwnedSponsor) {
         category = 'owned-sponsorship';
         rentalCategory = 'Owned Sponsorship';
@@ -101,6 +93,14 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
         netGameEarning = earnings * shareRenter;
         roi = (earnings * shareRenter - charges) / charges;
         isEditable = true;
+      } else if (isRecruit) {
+        category = 'recruited';
+        rentalCategory = 'Recruited';
+        player = 'MySelf';
+        netEarning = earnings * shares.player;
+        netGameEarning = earnings * shares.player;
+        roi = 0;
+        isEditable = false;
       } else {
         category = 'direct-renter';
         rentalCategory = 'Direct Renter';
@@ -121,7 +121,7 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
 
       return {
         id,
-        renter: accounts?.renter_user?.name || 'No address',
+        renter: accounts?.player?.name || 'No address',
         nickname: isPersonal ? 'MySelf' : name,
         category,
         rentalCategory,
