@@ -2,7 +2,6 @@ import {
   DialogTitle,
   DialogContent,
   Stack,
-  CardMedia,
   Typography,
   FormControl,
   FormControlLabel,
@@ -12,8 +11,9 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Degen } from 'types/degens';
-import { DEGEN_BASE_IMAGE_URL, DISABLE_RENT_API_URL } from 'constants/url';
+import { DISABLE_RENT_API_URL } from 'constants/url';
 import { toast } from 'react-toastify';
+import DegenImage from 'components/cards/DegenCard/DegenImage';
 
 interface Props {
   degen?: Degen;
@@ -49,7 +49,9 @@ const EnableDisableDegenDialogContent = ({
         toast.error(json.body, { theme: 'dark' });
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-
+        toast.success(`${isEnabled ? 'Disable' : 'Enable'} successfully!`, {
+          theme: 'dark',
+        });
         onSuccess?.();
       }
     }
@@ -63,12 +65,7 @@ const EnableDisableDegenDialogContent = ({
       <DialogContent dividers sx={{ maxWidth: '320px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
-            <CardMedia
-              component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
-              alt="degen"
-              sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
-            />
+            {degen?.id && <DegenImage tokenId={degen.id} />}
             <Typography
               variant="caption"
               component="p"
