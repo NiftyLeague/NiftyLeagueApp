@@ -47,10 +47,10 @@ export interface Rentals {
     renter?: number;
   };
   name?: string;
-  accounts?: {
-    owner?: RentalAccount;
+  accounts: {
+    owner: RentalAccount;
     renter_user?: RentalAccount;
-    player?: RentalAccount;
+    player: RentalAccount;
   };
   daily_price?: number;
   daily_cap?: number;
@@ -58,8 +58,10 @@ export interface Rentals {
 
 export type RentalType =
   | 'all'
+  | 'direct-rental'
+  | 'direct-renter'
   | 'personal'
   | 'direct'
-  | 'recruit'
+  | 'recruited'
   | 'owned-sponsorship'
   | 'non-owned-sponsorship';

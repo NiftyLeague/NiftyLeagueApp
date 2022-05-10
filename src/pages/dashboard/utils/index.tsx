@@ -1,13 +1,9 @@
 import { format } from 'date-fns';
-import { Rentals, RentalType } from 'types/rentals';
+import { Rentals } from 'types/rentals';
 import { capitalize } from '../../../utils/string';
 
 // eslint-disable-next-line import/prefer-default-export
-export const transformRentals = (
-  rows: Rentals[],
-  userId: string,
-  category?: RentalType,
-) =>
+export const transformRentals = (rows: Rentals[], userId: string) =>
   rows.map(
     ({
       id,
@@ -38,17 +34,18 @@ export const transformRentals = (
       is_daily,
       shares,
     }) => {
-      const isPersonal = user_id === renter_id;
-      const isRecruit = user_id !== renter_id;
+      const isPersonal = user_id === renter_id; // Direct Rental
+      const isRecruit = user_id !== renter_id; // Recruited
       const isOwnedSponsor =
-        userId === accounts?.owner?.id && user_id !== renter_id;
+        userId === accounts.owner.id && user_id !== renter_id; // Owned Sponsorship
       const isNonOwnedSponsor =
-        userId !== accounts?.owner?.id && user_id !== renter_id;
+        userId !== accounts.owner.id && user_id !== renter_id; // Non-Owned Sponsorship
 
       let yourEarnings = 0;
       let rentalFeeEarning = 0;
       let netEarning = 0;
       let netGameEarning = 0;
+      let category: string;
       let rentalCategory: string;
       let player: string;
       let roi = 0;
@@ -72,13 +69,15 @@ export const transformRentals = (
       }
 
       if (isPersonal) {
-        rentalCategory = 'Owned';
+        category = 'direct-rental';
+        rentalCategory = 'Direct Rental';
         player = 'MySelf';
         netEarning = earnings * (shares.player + shares.owner) - charges;
         netGameEarning = earnings * (shares.owner + shareRenter);
         roi = (earnings * (shares.player + shareRenter) - charges) / charges;
         isEditable = false;
       } else if (isRecruit) {
+        category = 'recruited';
         rentalCategory = 'Recruited';
         player = 'MySelf';
         netEarning = earnings * shares.player;
@@ -86,6 +85,7 @@ export const transformRentals = (
         roi = 0;
         isEditable = false;
       } else if (isOwnedSponsor) {
+        category = 'owned-sponsorship';
         rentalCategory = 'Owned Sponsorship';
         player = 'Recruit';
         netEarning =
@@ -94,6 +94,7 @@ export const transformRentals = (
         roi = (earnings * (shares.owner + shareRenter) - charges) / charges;
         isEditable = true;
       } else if (isNonOwnedSponsor) {
+        category = 'non-owned-sponsorship';
         rentalCategory = 'Non-Owned Sponsorship';
         player = 'Recruit';
         netEarning = earnings * shareRenter - charges;
@@ -101,7 +102,8 @@ export const transformRentals = (
         roi = (earnings * shareRenter - charges) / charges;
         isEditable = true;
       } else {
-        rentalCategory = 'Direct';
+        category = 'direct-renter';
+        rentalCategory = 'Direct Renter';
         player = 'Renter';
         netEarning = earnings * shares.owner + netEarningCharge;
         netGameEarning = earnings * shares.owner;
@@ -121,6 +123,7 @@ export const transformRentals = (
         id,
         renter: accounts?.renter_user?.name || 'No address',
         nickname: isPersonal ? 'MySelf' : name,
+        category,
         rentalCategory,
         player,
         degenId: degen_id,

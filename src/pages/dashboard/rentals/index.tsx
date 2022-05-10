@@ -36,11 +36,11 @@ const DashboardRentalPage = (): JSX.Element => {
       case 'non-owned-sponsorship':
         return ALL_RENTAL_API_URL;
 
-      case 'personal':
-      case 'recruit':
+      case 'direct-rental':
+      case 'recruited':
         return MY_RENTAL_API_URL;
 
-      case 'direct':
+      case 'direct-renter':
         return RENTED_FOR_ME_API_URL;
 
       default:
@@ -148,6 +148,7 @@ const DashboardRentalPage = (): JSX.Element => {
       },
       ...rentals.slice(rentalIndex + 1),
     ]);
+    refetch();
   };
 
   const handleSearch = (currentValue: string) => {
@@ -196,13 +197,13 @@ const DashboardRentalPage = (): JSX.Element => {
               onChange={handleChange}
             >
               <MenuItem value="all">All</MenuItem>
-              <MenuItem value="personal">Owned</MenuItem>
-              <MenuItem value="recruit">Recruited</MenuItem>
+              <MenuItem value="direct-rental">Direct Rental</MenuItem>
+              <MenuItem value="recruited">Recruited</MenuItem>
               <MenuItem value="owned-sponsorship">Owned Sponsorship</MenuItem>
               <MenuItem value="non-owned-sponsorship">
                 Non-Owned Sponsorship
               </MenuItem>
-              <MenuItem value="direct">Direct</MenuItem>
+              <MenuItem value="direct-renter">Direct Renter</MenuItem>
             </Select>
           </FormControl>
           <SearchRental handleSearch={handleSearch} />
