@@ -1,5 +1,6 @@
 export interface RentalDataGrid {
   id: string;
+  rentalId: string;
   renter?: string;
   degenId: string;
   multiplier: number;
@@ -9,7 +10,7 @@ export interface RentalDataGrid {
   yourEarnings?: number;
   costs?: number;
   profits?: number;
-  roi?: number;
+  roi?: number | string;
   rentalRenewsIn?: React.ReactNode;
   action?: any;
 }
