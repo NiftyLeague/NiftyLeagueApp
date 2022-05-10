@@ -13,6 +13,7 @@ import { RentalDataGrid } from 'types/rentalDataGrid';
 import { ColumnType } from '.';
 import { v4 as uuidv4 } from 'uuid';
 import Countdown from 'react-countdown';
+import { formatNumberToDisplayWithCommas } from 'utils/numbers';
 
 interface RentalsTableSimpleProps {
   rentals: RentalDataGrid[];
@@ -72,7 +73,9 @@ const RentalsTableSimple = ({
                       if (rental.roi < 0) color = palette.error.main;
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <Typography color={color}>{value}%</Typography>
+                          <Typography color={color}>
+                            {formatNumberToDisplayWithCommas(value)}%
+                          </Typography>
                         </TableCell>
                       );
                     }
@@ -81,6 +84,18 @@ const RentalsTableSimple = ({
                       return (
                         <TableCell key={column.id} align={column.align}>
                           <Countdown date={new Date(value * 1000)} />
+                        </TableCell>
+                      );
+                    }
+
+                    if (
+                      column.id === 'winRate' ||
+                      column.id === 'profits' ||
+                      column.id === 'netEarning'
+                    ) {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {formatNumberToDisplayWithCommas(value)}
                         </TableCell>
                       );
                     }
