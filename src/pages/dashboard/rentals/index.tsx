@@ -31,7 +31,6 @@ const DashboardRentalPage = (): JSX.Element => {
 
   const getFetchUrl = (): string => {
     switch (category) {
-      case 'all':
       case 'owned-sponsorship':
       case 'non-owned-sponsorship':
         return ALL_RENTAL_API_URL;
@@ -50,7 +49,7 @@ const DashboardRentalPage = (): JSX.Element => {
 
   const fetchRentals = async (): Promise<Rentals[]> => {
     if (category === 'all') {
-      const allRentals = await fetch(getFetchUrl(), {
+      const allRentals = await fetch(ALL_RENTAL_API_URL, {
         method: 'GET',
         headers,
       });
