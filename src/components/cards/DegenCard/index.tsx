@@ -13,12 +13,15 @@ import {
   useTheme,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { toast } from 'react-toastify';
 import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
+import { downloadDegenAsZip } from 'utils/file';
+import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
 
 const chipStyles = {
   color: 'white',
@@ -61,7 +64,11 @@ const DegenClaimBal: React.FC<
   const amountParsed = totalAccumulated
     ? formatNumberToDisplay(totalAccumulated)
     : 0;
-  return <>{`${amountParsed} NFTL Available`}</>;
+  return (
+    <Typography
+      sx={{ textAlign: 'center' }}
+    >{`${amountParsed} NFTL`}</Typography>
+  );
 });
 
 const DegenCard: React.FC<
@@ -86,6 +93,16 @@ const DegenCard: React.FC<
   }) => {
     const { palette } = useTheme();
 
+    const authToken = window.localStorage.getItem('authentication-token');
+    const onClickDownload = async () => {
+      if (authToken) {
+        try {
+          await downloadDegenAsZip(authToken, id);
+        } catch (err) {
+          toast.error(err.message, { theme: 'dark' });
+        }
+      }
+    };
     return (
       <Card
         sx={{
@@ -93,6 +110,7 @@ const DegenCard: React.FC<
           height: '100%',
           border: `1px solid ${palette.grey[800]}`,
           backgroundColor: palette.background.default,
+          pb: 2,
           ...sx,
         }}
       >
@@ -124,9 +142,10 @@ const DegenCard: React.FC<
             size="small"
           />
         </Stack>
-        <CardContent sx={{ pb: 0, pt: 1 }}>
+        <CardContent sx={{ py: 1, px: 2 }}>
           <Stack
             direction="row"
+            justifyContent="space-between"
             gap={1}
             sx={{
               '&:hover': {
@@ -146,8 +165,6 @@ const DegenCard: React.FC<
                 fontSize="small"
               />
             )}
-          </Stack>
-          <Stack direction="row" justifyContent="space-between">
             <Link
               href={
                 id
@@ -159,20 +176,8 @@ const DegenCard: React.FC<
               variant="body2"
               color={palette.text.secondary}
             >
-              {`Degen #${id}`}
+              {`#${id}`}
             </Link>
-            <Link
-              href={owner ? `https://opensea.io/${owner}/niftydegen` : '#'}
-              target="_blank"
-              rel="nofollow"
-              variant="body2"
-              color={palette.text.secondary}
-            >
-              {`Owned by ${owner?.substring(0, 5)}`}
-            </Link>
-          </Stack>
-          <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
-            {isDashboardDegen && <DegenClaimBal tokenId={id} />}
           </Stack>
         </CardContent>
         <Box
@@ -184,16 +189,6 @@ const DegenCard: React.FC<
             gap: 1,
           }}
         >
-          {isDashboardDegen && (
-            <Button
-              onClick={onClickClaim}
-              variant="contained"
-              fullWidth
-              sx={{ minWidth: '32%' }}
-            >
-              Claim
-            </Button>
-          )}
           <Button
             variant="contained"
             fullWidth
@@ -211,19 +206,57 @@ const DegenCard: React.FC<
           >
             Traits
           </Button>
-        </Box>
-        <Stack direction="row" justifyContent="center" sx={{ py: 2 }}>
           {isDashboardDegen && (
+            <Button
+              onClick={onClickClaim}
+              variant="contained"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+            >
+              Claim
+            </Button>
+          )}
+        </Box>
+        {isDashboardDegen && (
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
+          >
             <Typography
               variant="body2"
               color={palette.grey[700]}
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+              sx={{
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                textAlign: 'center',
+              }}
               onClick={onEnableDisable}
             >
               {isEnabled ? 'Disable' : 'Enable'} Rentals
             </Typography>
-          )}
-        </Stack>
+            <Box
+              sx={{
+                display: 'flex',
+                cursor: 'pointer',
+              }}
+              onClick={onClickDownload}
+            >
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  pr: '4px',
+                }}
+              >
+                IP
+              </Typography>
+
+              <DownloadSolid width="16" height="16" />
+            </Box>
+            <DegenClaimBal tokenId={id} />
+          </Stack>
+        )}
       </Card>
     );
   },

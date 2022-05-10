@@ -15,7 +15,7 @@ import {
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Degen, GetDegenResponse } from 'types/degens';
+import { Degen } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
@@ -28,13 +28,11 @@ import { sendEvent } from 'utils/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
-  degenDetail?: GetDegenResponse;
   onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const RentDegenContentDialog = ({
   degen,
-  degenDetail,
   onClose,
 }: RentDegenContentDialogProps) => {
   const { web3Modal } = useContext(NetworkContext);
@@ -160,9 +158,7 @@ const RentDegenContentDialog = ({
     [ethAddress, handleRent, newDegenName, renameEnabled, rentFor],
   );
 
-  const degenPrice = isUseRentalPass
-    ? 0
-    : degenDetail?.price || degen?.price || 0;
+  const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
 
   useEffect(() => {
     sendEvent('add_to_cart', 'ecommerce');
@@ -281,13 +277,11 @@ const RentDegenContentDialog = ({
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Total Multipliers</Typography>
-                <Typography color="gray">{degenDetail?.multiplier}x</Typography>
+                <Typography color="gray">{degen?.multiplier}x</Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Rental Queue</Typography>
-                <Typography color="gray">
-                  {degenDetail?.rental_count}
-                </Typography>
+                <Typography color="gray">{degen?.rental_count}</Typography>
               </Stack>
             </Stack>
             <Divider />
@@ -298,9 +292,7 @@ const RentDegenContentDialog = ({
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Renews Daily After Week 1 at:</Typography>
-                <Typography color="gray">
-                  {degenDetail?.price_daily} NFTL
-                </Typography>
+                <Typography color="gray">{degen?.price_daily} NFTL</Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography>Rental Passes Remaining</Typography>
