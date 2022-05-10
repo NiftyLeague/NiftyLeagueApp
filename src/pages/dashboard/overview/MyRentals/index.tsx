@@ -33,7 +33,7 @@ const columns: ColumnType[] = [
     minWidth: 150,
   },
   { id: 'degenId', label: 'Degen ID', minWidth: 100, align: 'center' },
-  { id: 'winRate', label: 'Win Rate (%)', minWidth: 120, align: 'center' },
+  { id: 'winRate', label: 'Win Rate', minWidth: 120, align: 'center' },
   {
     id: 'profits',
     label: 'Gross Gameplay Earnings',

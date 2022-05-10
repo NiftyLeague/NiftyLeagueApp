@@ -86,7 +86,9 @@ export const transformRentals = (
           player = 'Myself';
           netEarning = earnings * (shares.player + shares.owner) - charges;
           netGameEarning = earnings * (shares.owner + shareRenter);
-          roi = (earnings * (shares.player + shareRenter) - charges) / charges;
+          roi =
+            ((earnings * (shares.player + shareRenter) - charges) / charges) *
+            100;
           isEditable = false;
         } else if (isOwnedSponsor) {
           category = 'owned-sponsorship';
@@ -97,7 +99,9 @@ export const transformRentals = (
             netEarningCharge -
             charges;
           netGameEarning = earnings * (shares.owner + shareRenter);
-          roi = (earnings * (shares.owner + shareRenter) - charges) / charges;
+          roi =
+            ((earnings * (shares.owner + shareRenter) - charges) / charges) *
+            100;
           isEditable = true;
         } else if (isNonOwnedSponsor) {
           category = 'non-owned-sponsorship';
@@ -105,7 +109,7 @@ export const transformRentals = (
           player = 'Recruit';
           netEarning = earnings * shareRenter - charges;
           netGameEarning = earnings * shareRenter;
-          roi = (earnings * shareRenter - charges) / charges;
+          roi = ((earnings * shareRenter - charges) / charges) * 100;
           isEditable = true;
         } else if (isRecruit) {
           category = 'recruited';
