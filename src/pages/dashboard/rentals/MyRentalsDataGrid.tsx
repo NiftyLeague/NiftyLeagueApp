@@ -8,7 +8,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Rentals, RentalType } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
@@ -39,7 +39,35 @@ const MyRentalsDataGrid = ({
     useState(false);
 
   const { profile } = usePlayerProfile();
-  const newRows = transformRentals(rows, profile?.id || '', category);
+  const transformedRows = transformRentals(rows, profile?.id || '');
+  const [rentals, setRentals] = useState(transformedRows);
+
+  const generateRows = () => {
+    switch (category) {
+      case 'direct-rental':
+        return rentals.filter((rental) => rental.category === 'direct-rental');
+      case 'owned-sponsorship':
+        return rentals.filter(
+          (rental) => rental.category === 'owned-sponsorship',
+        );
+      case 'non-owned-sponsorship':
+        return rentals.filter(
+          (rental) => rental.category === 'non-owned-sponsorship',
+        );
+      case 'recruited':
+        return rentals.filter((rental) => rental.category === 'recruited');
+      case 'direct-renter':
+        return rentals.filter((rental) => rental.category === 'direct-renter');
+      case 'all':
+      default:
+        return rentals;
+    }
+  };
+
+  useEffect(() => {
+    setRentals(generateRows());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -236,7 +264,7 @@ const MyRentalsDataGrid = ({
     <>
       <DataGrid
         loading={loading}
-        rows={newRows}
+        rows={rentals}
         columns={columns}
         autoPageSize
         rowsPerPageOptions={[10, 25, 100]}
