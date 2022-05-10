@@ -54,6 +54,7 @@ export interface Rentals {
   };
   daily_price?: number;
   daily_cap?: number;
+  rented_from_me?: boolean;
 }
 
 export type RentalType =

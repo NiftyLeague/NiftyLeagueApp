@@ -44,7 +44,7 @@ const RenameRentalDialogContent = ({
   const authToken = window.localStorage.getItem('authentication-token');
   const dispatch = useDispatch();
   const [isLoadingRename, setLoadingRename] = useState(false);
-  const { id, degenId, renter } = rental;
+  const { rentalId, degenId, renter } = rental;
 
   // const { data: degenDetail } = useFetch<Degen>(
   //   `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
@@ -71,14 +71,14 @@ const RenameRentalDialogContent = ({
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    if (!id && !degenId && !data.name && !authToken) {
+    if (!rentalId && !degenId && !data.name && !authToken) {
       return;
     }
 
     try {
       setLoadingRename(true);
       const result: any = await fetch(
-        `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
+        `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(rentalId)}`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -121,7 +121,7 @@ const RenameRentalDialogContent = ({
         close: false,
       }),
     );
-    updateRentalName(newName, id);
+    updateRentalName(newName, rentalId);
     reset();
   };
 
