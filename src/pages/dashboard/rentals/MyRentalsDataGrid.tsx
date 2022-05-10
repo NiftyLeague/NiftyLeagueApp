@@ -261,6 +261,7 @@ const MyRentalsDataGrid = ({
         rows={filteredRows}
         columns={columns}
         autoPageSize
+        checkboxSelection={false}
         rowsPerPageOptions={[10, 25, 100]}
         // Page size and handler required to set default to 10
         pageSize={pageSize}
