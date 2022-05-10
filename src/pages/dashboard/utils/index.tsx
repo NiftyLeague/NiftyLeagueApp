@@ -1,9 +1,13 @@
 import { format } from 'date-fns';
-import { Rentals } from 'types/rentals';
+import { Rentals, RentalType } from 'types/rentals';
 import { capitalize } from 'utils/string';
 
 // eslint-disable-next-line import/prefer-default-export
-export const transformRentals = (rows: Rentals[], userId: string) =>
+export const transformRentals = (
+  rows: Rentals[],
+  userId: string,
+  filterCategory?: RentalType,
+) =>
   rows.map(
     ({
       id,
@@ -68,39 +72,51 @@ export const transformRentals = (rows: Rentals[], userId: string) =>
         netEarningCharge = entry_price * 0.45 + (charges - entry_price) * 0.1;
       }
 
-      if (isPersonal) {
-        category = 'direct-rental';
-        rentalCategory = 'Direct Rental';
-        player = 'MySelf';
-        netEarning = earnings * (shares.player + shares.owner) - charges;
-        netGameEarning = earnings * (shares.owner + shareRenter);
-        roi = (earnings * (shares.player + shareRenter) - charges) / charges;
-        isEditable = false;
-      } else if (isOwnedSponsor) {
-        category = 'owned-sponsorship';
-        rentalCategory = 'Owned Sponsorship';
-        player = 'Recruit';
-        netEarning =
-          earnings * (shares.owner + shareRenter) + netEarningCharge - charges;
-        netGameEarning = earnings * (shares.owner + shareRenter);
-        roi = (earnings * (shares.owner + shareRenter) - charges) / charges;
-        isEditable = true;
-      } else if (isNonOwnedSponsor) {
-        category = 'non-owned-sponsorship';
-        rentalCategory = 'Non-Owned Sponsorship';
-        player = 'Recruit';
-        netEarning = earnings * shareRenter - charges;
-        netGameEarning = earnings * shareRenter;
-        roi = (earnings * shareRenter - charges) / charges;
-        isEditable = true;
-      } else if (isRecruit) {
-        category = 'recruited';
-        rentalCategory = 'Recruited';
-        player = 'MySelf';
-        netEarning = earnings * shares.player;
-        netGameEarning = earnings * shares.player;
-        roi = 0;
-        isEditable = false;
+      if (filterCategory !== 'direct-renter') {
+        if (isPersonal) {
+          category = 'direct-rental';
+          rentalCategory = 'Direct Rental';
+          player = 'MySelf';
+          netEarning = earnings * (shares.player + shares.owner) - charges;
+          netGameEarning = earnings * (shares.owner + shareRenter);
+          roi = (earnings * (shares.player + shareRenter) - charges) / charges;
+          isEditable = false;
+        } else if (isOwnedSponsor) {
+          category = 'owned-sponsorship';
+          rentalCategory = 'Owned Sponsorship';
+          player = 'Recruit';
+          netEarning =
+            earnings * (shares.owner + shareRenter) +
+            netEarningCharge -
+            charges;
+          netGameEarning = earnings * (shares.owner + shareRenter);
+          roi = (earnings * (shares.owner + shareRenter) - charges) / charges;
+          isEditable = true;
+        } else if (isNonOwnedSponsor) {
+          category = 'non-owned-sponsorship';
+          rentalCategory = 'Non-Owned Sponsorship';
+          player = 'Recruit';
+          netEarning = earnings * shareRenter - charges;
+          netGameEarning = earnings * shareRenter;
+          roi = (earnings * shareRenter - charges) / charges;
+          isEditable = true;
+        } else if (isRecruit) {
+          category = 'recruited';
+          rentalCategory = 'Recruited';
+          player = 'MySelf';
+          netEarning = earnings * shares.player;
+          netGameEarning = earnings * shares.player;
+          roi = 0;
+          isEditable = false;
+        } else {
+          category = 'direct-renter';
+          rentalCategory = 'Direct Renter';
+          player = 'Renter';
+          netEarning = earnings * shares.owner + netEarningCharge;
+          netGameEarning = earnings * shares.owner;
+          roi = 0;
+          isEditable = true;
+        }
       } else {
         category = 'direct-renter';
         rentalCategory = 'Direct Renter';

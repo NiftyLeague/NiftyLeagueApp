@@ -40,7 +40,7 @@ const MyRentalsDataGrid = ({
     useState(false);
 
   const { profile } = usePlayerProfile();
-  const rentals = transformRentals(rows, profile?.id || '');
+  const rentals = transformRentals(rows, profile?.id || '', category);
 
   const filteredRows = useMemo(() => {
     switch (category) {
