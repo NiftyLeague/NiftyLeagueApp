@@ -8,7 +8,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Rentals, RentalType } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
@@ -39,10 +39,9 @@ const MyRentalsDataGrid = ({
     useState(false);
 
   const { profile } = usePlayerProfile();
-  const transformedRows = transformRentals(rows, profile?.id || '');
-  const [rentals, setRentals] = useState(transformedRows);
+  const rentals = transformRentals(rows, profile?.id || '');
 
-  const generateRows = () => {
+  const filteredRows = useMemo(() => {
     switch (category) {
       case 'direct-rental':
         return rentals.filter((rental) => rental.category === 'direct-rental');
@@ -62,12 +61,7 @@ const MyRentalsDataGrid = ({
       default:
         return rentals;
     }
-  };
-
-  useEffect(() => {
-    setRentals(generateRows());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [rentals, category]);
 
   const handleOpenRenameDegen = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -264,7 +258,7 @@ const MyRentalsDataGrid = ({
     <>
       <DataGrid
         loading={loading}
-        rows={rentals}
+        rows={filteredRows}
         columns={columns}
         autoPageSize
         rowsPerPageOptions={[10, 25, 100]}
