@@ -138,7 +138,7 @@ export const transformRentals = (
       return {
         id,
         renter: accounts?.player?.name || 'No address',
-        nickname: isPersonal ? 'MySelf' : name,
+        nickname: isPersonal ? 'MySelf' : name || 'No nickname',
         category,
         rentalCategory,
         player,
