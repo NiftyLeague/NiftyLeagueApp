@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useMemo, useState } from 'react';
-import { Box, Button, Grid, useTheme } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ComicCard from 'components/cards/ComicCard';
 import SectionSlider from 'components/sections/SectionSlider';
@@ -12,7 +12,6 @@ import useComicsBalance from 'hooks/useComicsBalance';
 import { v4 as uuidv4 } from 'uuid';
 
 const MyComics = (): JSX.Element => {
-  const theme = useTheme();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
   const navigate = useNavigate();
   const { comicsBalance, loading } = useComicsBalance();
@@ -37,13 +36,13 @@ const MyComics = (): JSX.Element => {
   };
 
   const settings = {
-    slidesToShow: 2,
+    slidesToShow: 3,
     adaptiveHeight: true,
     responsive: [
       {
         breakpoint: 1750,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
         },
       },
       {
@@ -94,10 +93,6 @@ const MyComics = (): JSX.Element => {
               sx={{
                 px: 1,
                 '& .MuiPaper-root': {
-                  maxWidth: 345,
-                  [theme.breakpoints.up('xl')]: {
-                    height: '507.77px',
-                  },
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
