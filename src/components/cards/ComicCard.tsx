@@ -75,18 +75,20 @@ const ComicCard: React.FC<
         </Stack>
       </CardContent>
       <CardActions>
-        <Button variant="contained" fullWidth onClick={onViewComic}>
-          View Comic
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          fullWidth
-          onClick={onBurnComic}
-          disabled
-        >
-          Burn Comic
-        </Button>
+        <Stack flexDirection="column" gap={1} width="100%">
+          <Button variant="contained" fullWidth onClick={onViewComic}>
+            View Comic
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            onClick={onBurnComic}
+            disabled
+          >
+            Burn Comic
+          </Button>
+        </Stack>
       </CardActions>
     </Card>
   );
