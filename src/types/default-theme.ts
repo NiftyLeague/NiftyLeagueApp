@@ -52,9 +52,7 @@ export interface CustomTypography {
     width: string;
     minHeight: string;
     flexGrow: number;
-    padding: string;
     marginTop: string;
-    marginRight: string;
     borderRadius: string;
   };
   menuCaption?: {

@@ -15,7 +15,7 @@ import {
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Degen, GetDegenResponse } from 'types/degens';
+import { Degen } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
@@ -28,13 +28,11 @@ import { sendEvent } from 'utils/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
-  degenDetail?: GetDegenResponse;
   onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const RentDegenContentDialog = ({
   degen,
-  degenDetail,
   onClose,
 }: RentDegenContentDialogProps) => {
   const { web3Modal } = useContext(NetworkContext);
@@ -162,11 +160,10 @@ const RentDegenContentDialog = ({
     [ethAddress, handleRent, newDegenName, renameEnabled, rentFor],
   );
 
-  const degenPrice = isUseRentalPass
-    ? 0
-    : degenDetail?.price || degen?.price || 0;
+  const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
   const isShowRentalPassOption = () =>
     rentalPassCount > 0 && !degen?.rental_count;
+
   useEffect(() => {
     sendEvent('add_to_cart', 'ecommerce');
   }, []);
