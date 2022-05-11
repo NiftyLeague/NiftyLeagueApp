@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useMemo, useState } from 'react';
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ComicCard from 'components/cards/ComicCard';
 import SectionSlider from 'components/sections/SectionSlider';
@@ -11,26 +11,8 @@ import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder
 import useComicsBalance from 'hooks/useComicsBalance';
 import { v4 as uuidv4 } from 'uuid';
 
-const BoxComicStyles = {
-  px: 1,
-  '& .MuiPaper-root': {
-    maxWidth: 345,
-    height: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  '& .MuiCardContent-root': {
-    p: '12px',
-  },
-  '& .MuiTypography-h3': {
-    fontSize: '16px',
-  },
-  '& .MuiCardActions-root': {
-    p: '12px',
-  },
-};
 const MyComics = (): JSX.Element => {
+  const theme = useTheme();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
   const navigate = useNavigate();
   const { comicsBalance, loading } = useComicsBalance();
@@ -56,9 +38,10 @@ const MyComics = (): JSX.Element => {
 
   const settings = {
     slidesToShow: 2,
+    adaptiveHeight: true,
     responsive: [
       {
-        breakpoint: 1500,
+        breakpoint: 1750,
         settings: {
           slidesToShow: 1,
         },
@@ -99,14 +82,6 @@ const MyComics = (): JSX.Element => {
           </Button>
         }
       >
-        {filteredComics.map((comic) => (
-          <Box sx={BoxComicStyles} key={comic.wearableName}>
-            <ComicCard
-              comic={comic}
-              onViewComic={() => handleViewComic(comic)}
-            />
-          </Box>
-        ))}
         {loading ? (
           [...Array(6)].map(() => (
             <Grid item xs={12} sm={11} md={11} lg={11} xl={11} key={uuidv4()}>
@@ -115,7 +90,31 @@ const MyComics = (): JSX.Element => {
           ))
         ) : filteredComics.length ? (
           filteredComics.map((comic) => (
-            <Box sx={BoxComicStyles} key={comic.wearableName}>
+            <Box
+              sx={{
+                px: 1,
+                '& .MuiPaper-root': {
+                  maxWidth: 345,
+                  [theme.breakpoints.up('xl')]: {
+                    height: '507.77px',
+                  },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                },
+                '& .MuiCardContent-root': {
+                  p: '12px',
+                },
+                '& .MuiTypography-h3': {
+                  fontSize: '16px',
+                },
+                '& .MuiCardActions-root': {
+                  p: '12px',
+                  pt: 0,
+                },
+              }}
+              key={comic.wearableName}
+            >
               <ComicCard
                 comic={comic}
                 onViewComic={() => handleViewComic(comic)}

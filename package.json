@@ -88,6 +88,7 @@
     "react-organizational-chart": "^2.1.1",
     "react-otp-input-rc-17": "^2.4.1-minor",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-query": "3.39.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",

@@ -1,5 +1,6 @@
 import { Drawer, Stack, useMediaQuery, useTheme } from '@mui/material';
 import { useState, useEffect, ReactNode, SetStateAction } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 interface State {
   isDrawerOpen: boolean;
@@ -19,6 +20,8 @@ const CollapsibleSidebarLayout = ({
 }: Props): JSX.Element => {
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
+  const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   // toggle sidebar
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -38,9 +41,9 @@ const CollapsibleSidebarLayout = ({
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          zIndex: { xs: 1100, lg: 0 },
+          zIndex: isDrawerOpen ? 1100 : -1,
           ...(!matchDownLG && {
-            position: 'sticky',
+            position: 'fixed',
             // Follows how mainLayout sets the marginTop value
             top: theme.typography.mainContent.marginTop || 108,
           }),
@@ -59,8 +62,16 @@ const CollapsibleSidebarLayout = ({
         ModalProps={{ keepMounted: true }}
         onClose={handleDrawerOpen}
       >
-        {renderDrawer && renderDrawer({ isDrawerOpen, setIsDrawerOpen })}
+        <PerfectScrollbar
+          style={{
+            height: matchDownLG ? '100vh' : 'calc(100vh - 88px)',
+            padding: '16px',
+          }}
+        >
+          {renderDrawer && renderDrawer({ isDrawerOpen, setIsDrawerOpen })}
+        </PerfectScrollbar>
       </Drawer>
+
       {/* Main grid */}
       <Stack
         component="main"
@@ -71,21 +82,28 @@ const CollapsibleSidebarLayout = ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.shorter,
           }),
-          marginLeft: `-${drawerWidth}px`,
-          [theme.breakpoints.down('lg')]: {
-            paddingLeft: 0,
-            marginLeft: 0,
-          },
           ...(isDrawerOpen && {
             transition: theme.transitions.create('margin', {
               easing: theme.transitions.easing.easeOut,
               duration: theme.transitions.duration.shorter,
             }),
-            marginLeft: 0,
+            marginLeft: `${drawerWidth}px`,
           }),
+          [theme.breakpoints.down('lg')]: {
+            paddingLeft: 0,
+            marginLeft: 0,
+          },
         }}
       >
-        {renderMain && renderMain({ isDrawerOpen, setIsDrawerOpen })}
+        <PerfectScrollbar
+          style={{
+            padding: '20px',
+            paddingRight: matchDownSm ? '30px' : '40px',
+            height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+          }}
+        >
+          {renderMain && renderMain({ isDrawerOpen, setIsDrawerOpen })}
+        </PerfectScrollbar>
       </Stack>
     </Stack>
   );
