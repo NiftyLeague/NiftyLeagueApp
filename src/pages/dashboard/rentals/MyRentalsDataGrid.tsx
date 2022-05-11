@@ -3,7 +3,7 @@ import {
   Typography,
   Button,
   useTheme,
-  IconButton,
+  // IconButton,
   Dialog,
   DialogContent,
 } from '@mui/material';
@@ -14,7 +14,7 @@ import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 import { formatNumberToDisplayWithCommas } from 'utils/numbers';
 
 interface Props {
@@ -64,10 +64,10 @@ const MyRentalsDataGrid = ({
     }
   }, [rentals, category]);
 
-  const handleOpenRenameDegen = (params: GridRenderCellParams) => {
-    setSelectedRowForEditing(params.row);
-    setIsRenameDegenModalOpen(true);
-  };
+  // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
+  //   setSelectedRowForEditing(params.row);
+  //   setIsRenameDegenModalOpen(true);
+  // };
 
   const handleUpdateRentalName = (name: string, rentalId: string) => {
     updateRentalName(name, rentalId);
@@ -117,27 +117,27 @@ const MyRentalsDataGrid = ({
         </Stack>
       ),
     },
-    {
-      field: 'nickname',
-      headerName: 'Player Nickname',
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <Stack direction="row" columnGap={1} alignItems="center">
-            <Typography>{params.value}</Typography>
-            {params.row.isEditable && (
-              <IconButton
-                aria-label="edit"
-                onClick={() => handleOpenRenameDegen(params)}
-                sx={{ display: 'none' }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            )}
-          </Stack>
-        );
-      },
-    },
+    // {
+    //   field: 'nickname',
+    //   headerName: 'Player Nickname',
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     return (
+    //       <Stack direction="row" columnGap={1} alignItems="center">
+    //         <Typography>{params.value}</Typography>
+    //         {params.row.isEditable && (
+    //           <IconButton
+    //             aria-label="edit"
+    //             onClick={() => handleOpenRenameDegen(params)}
+    //             sx={{ display: 'none' }}
+    //           >
+    //             <EditIcon fontSize="small" />
+    //           </IconButton>
+    //         )}
+    //       </Stack>
+    //     );
+    //   },
+    // },
     {
       field: 'rentalCategory',
       headerName: 'Category',
