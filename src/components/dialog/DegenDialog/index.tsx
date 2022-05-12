@@ -123,7 +123,7 @@ const DegenDialog = ({
   return (
     <Dialog
       maxWidth="sm"
-      fullWidth
+      fullWidth={isClaim ? false : true}
       scroll="body"
       fullScreen={fullScreen}
       onClose={handleClose}
