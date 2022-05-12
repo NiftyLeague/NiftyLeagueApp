@@ -46,9 +46,13 @@ const MyRentalsDataGrid = ({
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
   const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
     useState(false);
+
+  const getColumnVisibilityModel = localStorage.getItem(
+    RENTAL_COLUMN_VISIBILITY,
+  );
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(
-      JSON.parse(localStorage.getItem(RENTAL_COLUMN_VISIBILITY) || ''),
+      getColumnVisibilityModel ? JSON.parse(getColumnVisibilityModel) : {},
     );
 
   const { profile } = usePlayerProfile();
