@@ -55,7 +55,10 @@ const ClaimDegenContentDialog = ({
 
   return (
     <Stack padding={3} gap={2}>
-      <Typography align="center">{`${amountParsed} claimable for this DEGEN`}</Typography>
+      <Typography
+        align="center"
+        variant="h4"
+      >{`${amountParsed} claimable for this DEGEN`}</Typography>
       <Stack gap={1}>
         <Button
           disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
