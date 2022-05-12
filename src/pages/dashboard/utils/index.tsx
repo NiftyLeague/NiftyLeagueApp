@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { Rentals, RentalType } from 'types/rentals';
+import { areEqualArrays } from 'utils/array';
 import { capitalize } from 'utils/string';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,19 +39,17 @@ export const transformRentals = (
       daily_price,
       is_daily,
       shares,
-      rented_from_me,
     }) => {
-      const isPersonal = user_id === renter_id && !rented_from_me; // Direct Rental
-      const isRecruit = user_id !== renter_id && !rented_from_me; // Recruited
-      const isOwnedSponsor =
-        userId === accounts.owner.id &&
-        user_id !== renter_id &&
-        !rented_from_me; // Owned Sponsorship
-      const isNonOwnedSponsor =
-        userId !== accounts.owner.id &&
-        user_id !== renter_id &&
-        !rented_from_me; // Non-Owned Sponsorship
-      const isDirectRenter = rented_from_me; // Direct Renter
+      const amIRenter = userId === renter_id;
+      const amIOwner = userId === accounts.owner.id;
+      const amIPlayer = userId === accounts.player.id;
+      const whoAmI = [amIRenter, amIOwner, amIPlayer];
+
+      const isRecruit = areEqualArrays(whoAmI, [false, false, true]); // Recruited
+      const isPersonal = areEqualArrays(whoAmI, [true, false, true]); // Direct Rental
+      const isOwnedSponsor = areEqualArrays(whoAmI, [true, true, false]);
+      const isNonOwnedSponsor = areEqualArrays(whoAmI, [true, false, false]);
+      const isDirectRenter = areEqualArrays(whoAmI, [false, true, false]); // Direct Renter
 
       let yourEarnings = 0;
       let rentalFeeEarning = 0;
@@ -79,56 +78,43 @@ export const transformRentals = (
         netEarningCharge = entry_price * 0.45 + (charges - entry_price) * 0.1;
       }
 
-      if (filterCategory !== 'direct-renter') {
-        if (isPersonal) {
-          category = 'direct-rental';
-          rentalCategory = 'Direct Rental';
-          player = 'Myself';
-          netEarning = earnings * (shares.player + shares.owner) - charges;
-          netGameEarning = earnings * (shares.owner + shareRenter);
-          roi =
-            ((earnings * (shares.player + shareRenter) - charges) / charges) *
-            100;
-          isEditable = false;
-        } else if (isOwnedSponsor) {
-          category = 'owned-sponsorship';
-          rentalCategory = 'Owned Sponsorship';
-          player = 'Recruit';
-          netEarning =
-            earnings * (shares.owner + shareRenter) +
-            netEarningCharge -
-            charges;
-          netGameEarning = earnings * (shares.owner + shareRenter);
-          roi =
-            ((earnings * (shares.owner + shareRenter) - charges) / charges) *
-            100;
-          isEditable = true;
-        } else if (isNonOwnedSponsor) {
-          category = 'non-owned-sponsorship';
-          rentalCategory = 'Non-Owned Sponsorship';
-          player = 'Recruit';
-          netEarning = earnings * shareRenter - charges;
-          netGameEarning = earnings * shareRenter;
-          roi = ((earnings * shareRenter - charges) / charges) * 100;
-          isEditable = true;
-        } else if (isRecruit) {
-          category = 'recruited';
-          rentalCategory = 'Recruited';
-          player = 'Myself';
-          netEarning = earnings * shares.player;
-          netGameEarning = earnings * shares.player;
-          roi = 0;
-          isEditable = false;
-        } else if (isDirectRenter) {
-          category = 'direct-renter';
-          rentalCategory = 'Direct Renter';
-          player = 'Renter';
-          netEarning = earnings * shares.owner + netEarningCharge;
-          netGameEarning = earnings * shares.owner;
-          roi = 0;
-          isEditable = true;
-        }
-      } else {
+      if (isPersonal) {
+        category = 'direct-rental';
+        rentalCategory = 'Direct Rental';
+        player = 'Myself';
+        netEarning = earnings * (shares.player + shares.owner) - charges;
+        netGameEarning = earnings * (shares.owner + shareRenter);
+        roi =
+          ((earnings * (shares.player + shareRenter) - charges) / charges) *
+          100;
+        isEditable = false;
+      } else if (isOwnedSponsor) {
+        category = 'owned-sponsorship';
+        rentalCategory = 'Owned Sponsorship';
+        player = 'Recruit';
+        netEarning =
+          earnings * (shares.owner + shareRenter) + netEarningCharge - charges;
+        netGameEarning = earnings * (shares.owner + shareRenter);
+        roi =
+          ((earnings * (shares.owner + shareRenter) - charges) / charges) * 100;
+        isEditable = true;
+      } else if (isNonOwnedSponsor) {
+        category = 'non-owned-sponsorship';
+        rentalCategory = 'Non-Owned Sponsorship';
+        player = 'Recruit';
+        netEarning = earnings * shareRenter - charges;
+        netGameEarning = earnings * shareRenter;
+        roi = ((earnings * shareRenter - charges) / charges) * 100;
+        isEditable = true;
+      } else if (isRecruit) {
+        category = 'recruited';
+        rentalCategory = 'Recruited';
+        player = 'Myself';
+        netEarning = earnings * shares.player;
+        netGameEarning = earnings * shares.player;
+        roi = 0;
+        isEditable = false;
+      } else if (isDirectRenter) {
         category = 'direct-renter';
         rentalCategory = 'Direct Renter';
         player = 'Renter';
