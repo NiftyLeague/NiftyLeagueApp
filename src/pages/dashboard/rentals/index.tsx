@@ -5,7 +5,7 @@ import MyRentalsDataGrid from './MyRentalsDataGrid';
 import {
   ALL_RENTAL_API_URL,
   MY_RENTAL_API_URL,
-  RENTED_FOR_ME_API_URL,
+  RENTED_FROM_ME_API_URL,
   TERMINAL_RENTAL_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
@@ -15,6 +15,7 @@ import SearchRental from './SearchRental';
 import InputLabel from '../../../components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
+import { getUniqueListBy } from 'utils/array';
 
 const DashboardRentalPage = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const DashboardRentalPage = (): JSX.Element => {
         return MY_RENTAL_API_URL;
 
       case 'direct-renter':
-        return RENTED_FOR_ME_API_URL;
+        return RENTED_FROM_ME_API_URL;
 
       default:
         return ALL_RENTAL_API_URL;
@@ -49,28 +50,27 @@ const DashboardRentalPage = (): JSX.Element => {
 
   const fetchRentals = async (): Promise<Rentals[]> => {
     if (category === 'all') {
-      const allRentals = await fetch(ALL_RENTAL_API_URL, {
-        method: 'GET',
-        headers,
-      });
-      const rentedFromMe = await fetch(RENTED_FOR_ME_API_URL, {
-        method: 'GET',
-        headers,
-      });
+      const [allRentalsResponse, rentedFromMeResponse, myRentalsResponse] =
+        await Promise.all([
+          fetch(ALL_RENTAL_API_URL, {
+            method: 'GET',
+            headers,
+          }),
+          fetch(RENTED_FROM_ME_API_URL, {
+            method: 'GET',
+            headers,
+          }),
+          fetch(MY_RENTAL_API_URL, {
+            method: 'GET',
+            headers,
+          }),
+        ]);
 
-      const allRentalsJson = await allRentals.json();
-      const rentedFromMeJson = await rentedFromMe.json();
-
-      const newAllRentals = allRentalsJson.map((rental) => ({
-        ...rental,
-        rented_from_me: false,
-      }));
-      const newRentedFromMe = rentedFromMeJson.map((rental) => ({
-        ...rental,
-        rented_from_me: true,
-      }));
-
-      return newAllRentals.concat(newRentedFromMe);
+      const allRentals = (await allRentalsResponse.json()) as any[];
+      const rentedFromMe = (await rentedFromMeResponse.json()) as any[];
+      const myRentals = (await myRentalsResponse.json()) as any[];
+      const totalRentals = allRentals.concat(rentedFromMe).concat(myRentals);
+      return getUniqueListBy(totalRentals, 'id');
     } else {
       const response = await fetch(getFetchUrl(), {
         method: 'GET',
@@ -93,11 +93,6 @@ const DashboardRentalPage = (): JSX.Element => {
       },
     },
   );
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
 
   const terminalRentalById = async (rentalId: string) => {
     try {
@@ -186,9 +181,19 @@ const DashboardRentalPage = (): JSX.Element => {
     setRentals(newRental);
   };
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as RentalType);
+  const handleChangeCategory = (event: SelectChangeEvent) => {
+    const newCategory = event.target.value as RentalType;
+    if (newCategory !== category) {
+      setCategory(newCategory);
+      setRentals([]);
+    } else {
+      refetch();
+    }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [category, refetch]);
 
   return (
     <Stack spacing={3}>
@@ -218,7 +223,7 @@ const DashboardRentalPage = (): JSX.Element => {
               id="category"
               value={category}
               label="Category"
-              onChange={handleChange}
+              onChange={handleChangeCategory}
             >
               <MenuItem value="all">All</MenuItem>
               <MenuItem value="direct-rental">Direct Rental</MenuItem>
