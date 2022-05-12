@@ -46,6 +46,10 @@ const MyRentalsDataGrid = ({
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
   const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
     useState(false);
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    useState<GridColumnVisibilityModel>(
+      JSON.parse(localStorage.getItem(RENTAL_COLUMN_VISIBILITY) || ''),
+    );
 
   const { profile } = usePlayerProfile();
   const rentals = transformRentals(rows, profile?.id || '', category);
@@ -71,15 +75,6 @@ const MyRentalsDataGrid = ({
         return rentals;
     }
   }, [rentals, category]);
-
-  const columnVisibilityModel: GridColumnVisibilityModel | undefined =
-    useMemo(() => {
-      const columns = localStorage.getItem(RENTAL_COLUMN_VISIBILITY);
-      if (columns) {
-        return JSON.parse(columns);
-      }
-      return undefined;
-    }, []);
 
   // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
   //   setSelectedRowForEditing(params.row);
@@ -108,6 +103,7 @@ const MyRentalsDataGrid = ({
     details: GridCallbackDetails,
   ) => {
     localStorage.setItem(RENTAL_COLUMN_VISIBILITY, JSON.stringify(model));
+    setColumnVisibilityModel(model);
   };
 
   const commonColumnProp = {
