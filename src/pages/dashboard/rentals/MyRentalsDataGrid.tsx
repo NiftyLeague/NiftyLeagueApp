@@ -167,11 +167,11 @@ const MyRentalsDataGrid = ({
       headerName: 'Category',
       width: 150,
     },
-    {
-      field: 'player',
-      headerName: "Who's playing?",
-      width: 130,
-    },
+    // {
+    //   field: 'player',
+    //   headerName: "Who's playing?",
+    //   width: 130,
+    // },
     {
       field: 'degenId',
       headerName: 'Degen ID',
@@ -191,12 +191,12 @@ const MyRentalsDataGrid = ({
       width: 150,
       ...commonColumnProp,
     },
-    {
-      field: 'timePlayed',
-      headerName: 'Time Played',
-      ...commonColumnProp,
-      width: 120,
-    },
+    // {
+    //   field: 'timePlayed',
+    //   headerName: 'Time Played',
+    //   ...commonColumnProp,
+    //   width: 120,
+    // },
     {
       field: 'matches',
       headerName: 'Matches',
