@@ -7,7 +7,13 @@ import {
   Dialog,
   DialogContent,
 } from '@mui/material';
-import { GridColDef, DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  GridColDef,
+  DataGrid,
+  GridRenderCellParams,
+  GridCallbackDetails,
+  GridColumnVisibilityModel,
+} from '@mui/x-data-grid';
 import { useState, useMemo } from 'react';
 import { Rentals, RentalType } from 'types/rentals';
 import RenameRentalDialogContent from './RenameRentalDialogContent';
@@ -16,6 +22,8 @@ import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
 // import EditIcon from '@mui/icons-material/Edit';
 import { formatNumberToDisplayWithCommas } from 'utils/numbers';
+
+const RENTAL_COLUMN_VISIBILITY = 'rental-column-visibility-model';
 
 interface Props {
   rows: Rentals[];
@@ -64,6 +72,15 @@ const MyRentalsDataGrid = ({
     }
   }, [rentals, category]);
 
+  const columnVisibilityModel: GridColumnVisibilityModel | undefined =
+    useMemo(() => {
+      const columns = localStorage.getItem(RENTAL_COLUMN_VISIBILITY);
+      if (columns) {
+        return JSON.parse(columns);
+      }
+      return undefined;
+    }, []);
+
   // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
   //   setSelectedRowForEditing(params.row);
   //   setIsRenameDegenModalOpen(true);
@@ -84,6 +101,13 @@ const MyRentalsDataGrid = ({
       handleTerminalRental(selectedRowForEditing.rentalId);
       setIsTerminalRentalModalOpen(false);
     }
+  };
+
+  const handleColumnVisibilityChange = (
+    model: GridColumnVisibilityModel,
+    details: GridCallbackDetails,
+  ) => {
+    localStorage.setItem(RENTAL_COLUMN_VISIBILITY, JSON.stringify(model));
   };
 
   const commonColumnProp = {
@@ -282,7 +306,9 @@ const MyRentalsDataGrid = ({
         rowsPerPageOptions={[10, 25, 100]}
         // Page size and handler required to set default to 10
         pageSize={pageSize}
+        columnVisibilityModel={columnVisibilityModel}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        onColumnVisibilityModelChange={handleColumnVisibilityChange}
         sx={{
           '& .MuiDataGrid-row:hover': {
             '& button': {
