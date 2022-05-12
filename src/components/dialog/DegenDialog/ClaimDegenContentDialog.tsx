@@ -44,19 +44,28 @@ const ClaimDegenContentDialog = ({
     [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
   );
 
+  const handleClose = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClose?.(event);
+    },
+    [onClose],
+  );
+
   const amountParsed = formatNumberToDisplay(mockAccumulated);
 
   return (
     <Stack padding={3} gap={2}>
-      <Typography>{`${amountParsed} claimable for this DEGEN`}</Typography>
-
-      <Button
-        disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
-        variant="contained"
-        onClick={handleClaimNFTL}
-      >
-        Claim
-      </Button>
+      <Typography align="center">{`${amountParsed} claimable for this DEGEN`}</Typography>
+      <Stack gap={1}>
+        <Button
+          disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
+          variant="contained"
+          onClick={handleClaimNFTL}
+        >
+          Claim
+        </Button>
+        <Button onClick={handleClose}>Cancel</Button>
+      </Stack>
     </Stack>
   );
 };
