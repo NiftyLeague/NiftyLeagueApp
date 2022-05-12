@@ -81,7 +81,7 @@ const DashboardRentalPage = (): JSX.Element => {
     }
   };
 
-  const { data, isLoading, isFetching, refetch } = useQuery<Rentals[]>(
+  const { data, isLoading, refetch } = useQuery<Rentals[]>(
     'rentals',
     fetchRentals,
     {
@@ -236,7 +236,7 @@ const DashboardRentalPage = (): JSX.Element => {
 
       <Box height="calc(100vh - 208px)">
         <MyRentalsDataGrid
-          loading={isLoading || isFetching}
+          loading={isLoading}
           rows={rentals}
           category={category}
           handleTerminalRental={terminalRentalById}
