@@ -132,14 +132,7 @@ const DashboardRentalPage = (): JSX.Element => {
           close: false,
         }),
       );
-      const newRentals = rentals.find((ren) => ren.id === res.id);
-      const rentalIndex = rentals.findIndex((ren) => ren.id === res.id);
 
-      setRentals([
-        ...rentals.slice(0, rentalIndex),
-        newRentals,
-        ...rentals.slice(rentalIndex + 1),
-      ]);
       refetch();
     } catch (error) {
       dispatch(
