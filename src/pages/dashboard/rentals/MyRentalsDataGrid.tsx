@@ -3,9 +3,9 @@ import {
   Typography,
   Button,
   useTheme,
-  // IconButton,
   Dialog,
   DialogContent,
+  Link,
 } from '@mui/material';
 import {
   GridColDef,
@@ -20,8 +20,9 @@ import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
-// import EditIcon from '@mui/icons-material/Edit';
 import { formatNumberToDisplayWithCommas } from 'utils/numbers';
+
+import DegenDialog from 'components/dialog/DegenDialog';
 
 const RENTAL_COLUMN_VISIBILITY = 'rental-column-visibility-model';
 
@@ -46,6 +47,9 @@ const MyRentalsDataGrid = ({
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
   const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
     useState(false);
+  const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
+  const [selectedDegen, setSelectedDegen] = useState();
+  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
 
   const getColumnVisibilityModel = localStorage.getItem(
     RENTAL_COLUMN_VISIBILITY,
@@ -110,6 +114,12 @@ const MyRentalsDataGrid = ({
     setColumnVisibilityModel(model);
   };
 
+  const handleClickDegenId = (params: GridRenderCellParams) => {
+    setSelectedDegen(params.row);
+    setIsRentDialog(false);
+    setIsDegenModalOpen(true);
+  };
+
   const commonColumnProp = {
     minWidth: 100,
   };
@@ -118,7 +128,7 @@ const MyRentalsDataGrid = ({
     {
       field: 'action',
       headerName: 'Actions',
-      width: 100,
+      width: 130,
       ...commonColumnProp,
       renderCell: (params) => (
         <Button
@@ -175,7 +185,16 @@ const MyRentalsDataGrid = ({
     {
       field: 'degenId',
       headerName: 'Degen ID',
-      renderCell: (params) => <span>#{params.value}</span>,
+      renderCell: (params) => (
+        <Link
+          component="button"
+          variant="body2"
+          sx={{ color: 'white', textDecorationColor: 'white' }}
+          onClick={() => handleClickDegenId(params)}
+        >
+          #{params.value}
+        </Link>
+      ),
     },
     {
       field: 'background',
@@ -327,6 +346,7 @@ const MyRentalsDataGrid = ({
           rental={selectedRowForEditing}
         />
       </Dialog>
+      {/* Terminal Rental Dialog */}
       <Dialog
         open={isTerminateRentalModalOpen}
         onClose={() => setIsTerminalRentalModalOpen(false)}
@@ -353,6 +373,14 @@ const MyRentalsDataGrid = ({
           </Stack>
         </DialogContent>
       </Dialog>
+      {/* Degen Traits Dialog */}
+      <DegenDialog
+        open={isDegenModalOpen}
+        degen={selectedDegen}
+        isRent={isRentDialog}
+        setIsRent={setIsRentDialog}
+        onClose={() => setIsDegenModalOpen(false)}
+      />
     </>
   );
 };
