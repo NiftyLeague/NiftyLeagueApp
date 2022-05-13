@@ -146,7 +146,7 @@ const MyRentalsDataGrid = ({
     },
     {
       field: 'renter',
-      headerName: 'Player Address',
+      headerName: 'Player',
       width: 120,
       renderCell: (params) => (
         <Stack direction="row" columnGap={1} alignItems="center">
@@ -209,7 +209,7 @@ const MyRentalsDataGrid = ({
     },
     {
       field: 'multiplier',
-      headerName: 'Degen Multiplier',
+      headerName: 'Multiplier',
       width: 150,
       ...commonColumnProp,
     },
@@ -256,7 +256,7 @@ const MyRentalsDataGrid = ({
     },
     {
       field: 'costs',
-      headerName: 'My Rental Fee Costs',
+      headerName: 'Rental Fee Costs',
       width: 150,
       renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
@@ -277,14 +277,14 @@ const MyRentalsDataGrid = ({
     },
     {
       field: 'netGameEarning',
-      headerName: 'Your NET Gameplay Earnings',
+      headerName: 'Net Gameplay Earnings',
       width: 200,
       renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
     {
       field: 'netEarning',
-      headerName: 'Your NET Earnings',
+      headerName: 'Net Earnings',
       width: 150,
       renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
