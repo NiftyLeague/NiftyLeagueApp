@@ -76,9 +76,10 @@ const MyDegens = (): JSX.Element => {
 
   const settings = {
     slidesToShow: 3,
+    adaptiveHeight: true,
     responsive: [
       {
-        breakpoint: 1500,
+        breakpoint: 1750,
         settings: {
           slidesToShow: 2,
         },

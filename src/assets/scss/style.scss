@@ -6,6 +6,10 @@
 @import '~slick-carousel/slick/slick.css';
 @import '~slick-carousel/slick/slick-theme.css';
 
+body {
+  overflow: hidden;
+}
+
 // ==============================|| LIGHT BOX ||============================== //
 .slick-arrow:before {
   color: $grey500;

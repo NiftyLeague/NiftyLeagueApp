@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import { Grid, Button, Stack, Skeleton, IconButton } from '@mui/material';
+import {
+  Grid,
+  Button,
+  Stack,
+  Skeleton,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
@@ -176,9 +184,12 @@ const MyNFTL = (): JSX.Element => {
                   height={40}
                 />
               ) : (
-                <Button variant="outlined" onClick={handleClaimNFTL}>
-                  Claim All {formatNumberToDisplay(mockAccrued)} NFTL
-                </Button>
+                // <Button variant="outlined" onClick={handleClaimNFTL}>
+                //   Claim All {formatNumberToDisplay(mockAccrued)} NFTL
+                // </Button>
+                <Typography variant="h5">
+                  NFTL in Wallet: {formatNumberToDisplay(mockAccrued)}{' '}
+                </Typography>
               )}
             </Stack>
           }
@@ -186,7 +197,7 @@ const MyNFTL = (): JSX.Element => {
           My NFTL
         </SectionTitle>
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
           <Grid item sm={6} xs={12}>
             <HoverDataCard
@@ -245,10 +256,10 @@ const MyNFTL = (): JSX.Element => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
-          <Grid item sm={6} xs={12}>
+          <Grid item xl={6} lg={12} md={12} sm={12} xs={12}>
             <HoverDataCard
               title={
                 <>
@@ -354,7 +365,7 @@ const MyNFTL = (): JSX.Element => {
               }
             />
           </Grid>
-          <Grid item sm={6} xs={12}>
+          <Grid item xl={6} lg={12} md={12} sm={12} xs={12}>
             <HoverDataCard
               title="Daily NFTL Accrued"
               primary={`${
