@@ -169,8 +169,13 @@ const DashboardRentalPage = (): JSX.Element => {
       setRentals(data);
       return;
     }
-    const newRental: any = data?.filter((rental: any) =>
-      rental.renter_id.toLowerCase().includes(currentValue),
+    const newRental: any = data?.filter(
+      (rental: any) =>
+        rental?.accounts?.player?.address
+          .toLowerCase()
+          .includes(currentValue) ||
+        rental?.degen?.id.toLowerCase().includes(currentValue) ||
+        rental?.accounts?.player?.name.toLowerCase().includes(currentValue),
     );
     setRentals(newRental);
   };
