@@ -32,7 +32,7 @@ const PrivateItems = {
         },
         {
           id: 'comics',
-          title: 'Comics',
+          title: 'Comics & Items',
           type: 'item',
           url: '/dashboard/comics',
         },
