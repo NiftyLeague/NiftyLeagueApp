@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useLocation } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme, Theme } from '@mui/material/styles';
@@ -49,13 +51,10 @@ const Main = styled<any>('main', {
     [theme.breakpoints.down('md')]: {
       marginLeft: '20px',
       width: `calc(100% - ${drawerWidth}px)`,
-      padding: '16px',
     },
     [theme.breakpoints.down('sm')]: {
       marginLeft: '10px',
       width: `calc(100% - ${drawerWidth}px)`,
-      padding: '16px',
-      marginRight: '10px',
     },
   }),
   ...(open && {
@@ -81,6 +80,9 @@ const Main = styled<any>('main', {
 const MainLayout = () => {
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
+  const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
+  const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+  const location = useLocation();
 
   const dispatch = useDispatch();
   const { drawerOpen } = useSelector((state) => state.menu);
@@ -99,6 +101,37 @@ const MainLayout = () => {
     ),
     [],
   );
+  const isNoFilterPage =
+    location && /(degen-rentals|dashboard\/degens)/.test(location.pathname);
+
+  const getContent = () => {
+    if (container) {
+      return (
+        <Container maxWidth="lg">
+          <Breadcrumbs
+            separator={IconChevronRight}
+            navigation={navigation}
+            icon
+            title
+            rightAlign
+          />
+          <Outlet />
+        </Container>
+      );
+    }
+    return (
+      <>
+        <Breadcrumbs
+          separator={IconChevronRight}
+          navigation={navigation}
+          icon
+          title
+          rightAlign
+        />
+        <Outlet />
+      </>
+    );
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -122,30 +155,18 @@ const MainLayout = () => {
 
       {/* main content */}
       <Main theme={theme} open={drawerOpen}>
-        {/* breadcrumb */}
-        {container && (
-          <Container maxWidth="lg">
-            <Breadcrumbs
-              separator={IconChevronRight}
-              navigation={navigation}
-              icon
-              title
-              rightAlign
-            />
-            <Outlet />
-          </Container>
-        )}
-        {!container && (
-          <>
-            <Breadcrumbs
-              separator={IconChevronRight}
-              navigation={navigation}
-              icon
-              title
-              rightAlign
-            />
-            <Outlet />
-          </>
+        {!isNoFilterPage ? (
+          <PerfectScrollbar
+            style={{
+              padding: '20px',
+              paddingRight: matchDownSm ? '30px' : '40px',
+              height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+            }}
+          >
+            {getContent()}
+          </PerfectScrollbar>
+        ) : (
+          getContent()
         )}
       </Main>
     </Box>

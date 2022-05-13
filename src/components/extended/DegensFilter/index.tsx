@@ -309,12 +309,15 @@ const DegensFilter = ({
           <FormGroup sx={{ flexDirection: 'row' }}>
             {tribes.map((tribe) => (
               <FormControlLabel
-                key={tribe}
+                key={tribe.name}
                 control={
                   <Checkbox
-                    name={tribe}
-                    value={tribe}
-                    checked={tribesValue.includes(tribe)}
+                    name={tribe.name}
+                    value={tribe.name}
+                    checked={tribesValue.includes(tribe.name)}
+                    icon={<tribe.icon />}
+                    checkedIcon={<tribe.icon />}
+                    disableRipple
                     onChange={(e) =>
                       handleCheckboxChange(
                         e,
@@ -325,7 +328,25 @@ const DegensFilter = ({
                     }
                   />
                 }
-                label={tribe}
+                label={tribe.name}
+                sx={{
+                  svg: {
+                    height: '22px',
+                    width: '22px',
+                  },
+                  background: tribesValue.includes(tribe.name)
+                    ? theme.palette.primary.main
+                    : theme.palette.dark[800],
+                  borderRadius: '16px',
+                  pl: 1,
+                  pr: 2,
+                  ml: 0,
+                  mb: '12px',
+                  '& .MuiCheckbox-root:': {
+                    padding: 0,
+                    mr: '8px',
+                  },
+                }}
               />
             ))}
           </FormGroup>

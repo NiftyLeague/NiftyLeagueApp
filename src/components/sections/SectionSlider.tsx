@@ -71,7 +71,7 @@ const SectionSlider = ({
   };
 
   return (
-    <Grid container spacing={sectionSpacing} sx={{ py: 2, px: 1 }}>
+    <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
         <SectionTitle
           firstSection={firstSection}
