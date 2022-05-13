@@ -115,7 +115,10 @@ const MyRentalsDataGrid = ({
   };
 
   const handleClickDegenId = (params: GridRenderCellParams) => {
-    setSelectedDegen(params.row);
+    setSelectedDegen({
+      ...params?.row,
+      id: params?.row?.degenId,
+    });
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
   };
