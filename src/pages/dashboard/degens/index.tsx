@@ -24,7 +24,6 @@ import {
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -59,8 +58,6 @@ const DashboardDegensPage = (): JSX.Element => {
   const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
-    useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
@@ -139,11 +136,6 @@ const DashboardDegensPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [populatedDegens.length, filters],
   );
-
-  const handleEnableDisable = useCallback((degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsEnableDisableDegenModalOpen(true);
-  }, []);
 
   const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
@@ -328,15 +320,6 @@ const DashboardDegensPage = (): JSX.Element => {
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
         <RenameDegenDialogContent degen={selectedDegen} />
-      </Dialog>
-      <Dialog
-        open={isEnableDisableDegenModalOpen}
-        onClose={() => setIsEnableDisableDegenModalOpen(false)}
-      >
-        <EnableDisableDegenDialogContent
-          degen={selectedDegen}
-          isEnabled={selectedDegen?.is_active}
-        />
       </Dialog>
     </>
   );

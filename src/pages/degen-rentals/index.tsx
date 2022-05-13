@@ -23,7 +23,7 @@ import {
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
+// import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -52,8 +52,8 @@ const DegenRentalsPage = (): JSX.Element => {
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
-    useState<boolean>(false);
+  // const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
+  //   useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
@@ -278,15 +278,15 @@ const DegenRentalsPage = (): JSX.Element => {
       >
         <RenameDegenDialogContent degen={selectedDegen} />
       </Dialog>
-      <Dialog
+      {/* <Dialog
         open={isEnableDisableDegenModalOpen}
         onClose={() => setIsEnableDisableDegenModalOpen(false)}
       >
         <EnableDisableDegenDialogContent
           degen={selectedDegen}
-          isEnabled={selectedDegen?.is_active}
+          onClose={() => setIsEnableDisableDegenModalOpen(false)}
         />
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };

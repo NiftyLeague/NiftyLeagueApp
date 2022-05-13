@@ -160,16 +160,10 @@ const NiftyLeagueAppPage = () => {
           : degens.map((degen) => (
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
-                  activeRentals={degen.rental_count}
-                  background={degen.background}
-                  id={degen.id}
-                  multiplier={degen.multiplier}
-                  name={degen.name}
+                  degen={degen}
                   onClickDetail={() => handleViewTraits(degen)}
                   onClickEditName={() => handleClickEditName(degen)}
                   onClickRent={() => handleRentDegen(degen)}
-                  owner={degen.owner}
-                  price={degen.price}
                 />
               </Box>
             ))}
