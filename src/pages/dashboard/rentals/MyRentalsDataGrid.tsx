@@ -300,7 +300,6 @@ const MyRentalsDataGrid = ({
         loading={loading}
         rows={filteredRows}
         columns={columns}
-        autoPageSize
         checkboxSelection={false}
         disableSelectionOnClick={true}
         rowsPerPageOptions={[10, 25, 100]}
