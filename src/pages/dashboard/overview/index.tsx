@@ -5,7 +5,12 @@ import MyNFTL from './MyNFTL';
 import MyRentals from './MyRentals';
 
 const DashboardOverview = (): JSX.Element => (
-  <Grid container flexDirection="row" spacing={4}>
+  <Grid
+    container
+    flexDirection="row"
+    spacing={4}
+    sx={{ maxHeight: 'cacl(100vh - 100px)' }}
+  >
     <Grid item xs={12} md={12} lg={5}>
       <Grid container flexDirection="column" spacing={6}>
         <Grid item xs={12}>

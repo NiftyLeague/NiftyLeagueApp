@@ -1,8 +1,7 @@
+import React from 'react';
 import {
   Button,
   Card,
-  CardActions,
-  CardContent,
   CardMedia,
   Stack,
   Typography,
@@ -10,86 +9,123 @@ import {
   Theme,
   SxProps,
 } from '@mui/material';
-import { Comic } from 'types/comic';
+import useImageOnLoad from 'hooks/useImageOnLoad';
+import { Comic, Item } from 'types/comic';
 
 export interface ComicCardProps {
-  comic: Comic;
+  data: Comic | Item;
   sx?: SxProps<Theme>;
+  actions?: React.ReactNode;
+  isItem?: boolean;
   onViewComic?: React.MouseEventHandler<HTMLButtonElement>;
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const ComicCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
-> = ({ comic, onViewComic, onBurnComic, sx }) => {
+> = ({ data, onViewComic, onBurnComic, sx, actions, isItem = false }) => {
+  const { image, title, balance, id, wearableName, thumbnail } = data;
   const theme = useTheme();
+  const { handleImageOnLoad, css } = useImageOnLoad();
+
+  const getActionsDefault = () => {
+    return (
+      <>
+        <Button variant="contained" fullWidth onClick={onViewComic}>
+          View Comic
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          onClick={onBurnComic}
+          disabled
+        >
+          Burn Comic
+        </Button>
+      </>
+    );
+  };
 
   return (
     <Card
       sx={{
-        width: '100%',
-        height: '100%',
+        maxWidth: '425px',
         border: `1px solid ${theme.palette.grey[800]}`,
         backgroundColor: theme.palette.background.default,
+        flexDirection: 'row',
+        display: 'flex',
         ...sx,
       }}
     >
-      <CardMedia
-        component="img"
-        height="auto"
-        image={comic.image}
-        alt={comic.title}
-      />
-      <CardContent sx={{ paddingBottom: 0 }}>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography gutterBottom variant="h3" component="div">
-            {`${comic.title} #${comic.id}`}
-          </Typography>
-          {/* <Typography
-            gutterBottom
-            variant="body2"
-            component="div"
-            sx={{
-              color: theme.palette.warning.main,
-            }}
+      <Stack flex="50%" sx={{ position: 'relative' }}>
+        <CardMedia
+          component="img"
+          image={thumbnail}
+          alt={`thumbnail-${title}`}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: `100%`,
+            height: `100%`,
+            ...css.thumbnail,
+          }}
+        />
+        <CardMedia
+          onLoad={handleImageOnLoad}
+          component="img"
+          image={image}
+          alt={title}
+          sx={{ height: '100%', ...css.fullSize }}
+        />
+      </Stack>
+      <Stack
+        justifyContent="space-between"
+        sx={{ width: '100%', padding: '12px' }}
+        flex="50%"
+      >
+        <Stack gap={1}>
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
           >
-            {`${comic.multiplier}x Multiplier`}
-          </Typography> */}
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">{comic.wearableName}</Typography>
-          {/* <Typography
-            variant="body2"
-            sx={{ color: theme.palette.success.main }}
-          >
-            {comic.viewsCount}
-          </Typography> */}
-          {comic.balance ? (
+            <Typography variant="h3" component="div">
+              {`${title} ${!isItem ? `#${id}` : ''}`}
+            </Typography>
             <Typography
               variant="body2"
-              sx={{ color: theme.palette.success.main }}
+              sx={{
+                color:
+                  balance === 0
+                    ? theme.palette.grey[800]
+                    : theme.palette.success.main,
+              }}
             >
-              Owned: {comic.balance}
+              {balance || 0}x
             </Typography>
-          ) : null}
+          </Stack>
+          {wearableName && (
+            <Stack justifyContent="flex-start">
+              <Typography
+                sx={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '95%',
+                }}
+                variant="body2"
+              >
+                {wearableName}
+              </Typography>
+            </Stack>
+          )}
         </Stack>
-      </CardContent>
-      <CardActions>
-        <Stack flexDirection="column" gap={1} width="100%">
-          <Button variant="contained" fullWidth onClick={onViewComic}>
-            View Comic
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            fullWidth
-            onClick={onBurnComic}
-            disabled
-          >
-            Burn Comic
-          </Button>
+        <Stack gap={1} width="100%">
+          {actions || getActionsDefault()}
         </Stack>
-      </CardActions>
+      </Stack>
     </Card>
   );
 };

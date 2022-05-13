@@ -38,7 +38,7 @@ const RentalsTableSimple = ({
     >
       <TableContainer
         sx={{
-          maxHeight: 422,
+          maxHeight: 750,
           backgroundColor: palette.background.default,
           borderRadius: 2,
           border: '1px solid',
