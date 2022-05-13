@@ -9,14 +9,14 @@ import ComicsClaim from 'components/extended/ComicsClaim';
 import SectionSlider from 'components/sections/SectionSlider';
 import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
 
-import { ITEMS, COMICS } from 'constants/comics';
+import { ITEMS } from 'constants/comics';
 import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
 
 const DashboardComicsPage = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-  const { comicsBalance } = useComicsBalance();
+  const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const filteredComics = useMemo(
     () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
     [comicsBalance],
@@ -30,14 +30,45 @@ const DashboardComicsPage = (): JSX.Element => {
     setSelectedComic(null);
   }, []);
 
+  const handleBuyDegen = () => {
+    window.open('https://opensea.io/collection/niftydegen', '_blank');
+  };
+
   const renderComics = useMemo(() => {
-    return filteredComics.map((comic) => (
-      <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
-        <ComicCard data={comic} onViewComic={() => handleViewComic(comic)} />
-      </Grid>
-    ));
+    if (filteredComics.length === 0) {
+      if (loadingComics) {
+        return [...Array(4)].map(() => (
+          <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
+            <ComicPlaceholder />
+          </Grid>
+        ));
+      }
+      return (
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          display="flex"
+          height="100%"
+        >
+          <EmptyState
+            message="You don't own any Comics yet."
+            buttonText="Buy a Comic"
+            onClick={handleBuyDegen}
+          />
+        </Grid>
+      );
+    }
+    if (filteredComics.length !== 0) {
+      return filteredComics.map((comic) => (
+        <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
+          <ComicCard data={comic} onViewComic={() => handleViewComic(comic)} />
+        </Grid>
+      ));
+    }
+    return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredComics]);
+  }, [filteredComics, loadingComics]);
 
   const renderItems = useMemo(() => {
     return ITEMS.map((item) => (
@@ -61,33 +92,12 @@ const DashboardComicsPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ITEMS]);
 
-  if (!COMICS.length)
-    return (
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        display="flex"
-        height="100%"
-      >
-        <EmptyState
-          message="You don't own any Comics yet."
-          buttonText="Buy a Comic"
-        />
-      </Grid>
-    );
   return (
     <>
       <Stack gap={4}>
         <SectionSlider firstSection title="My Comics" isSlider={false}>
           <Grid container direction="row" flexWrap="wrap" spacing={cardSpacing}>
-            {filteredComics.length === 0 &&
-              [...Array(4)].map(() => (
-                <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
-                  <ComicPlaceholder />
-                </Grid>
-              ))}
-            {filteredComics.length > 0 && renderComics}
+            {renderComics}
           </Grid>
         </SectionSlider>
         <SectionSlider firstSection title="My Items" isSlider={false}>
