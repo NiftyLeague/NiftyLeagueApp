@@ -54,6 +54,7 @@ export interface Rentals {
   };
   daily_price?: number;
   daily_cap?: number;
+  item_used?: string;
 }
 
 export type RentalType =
