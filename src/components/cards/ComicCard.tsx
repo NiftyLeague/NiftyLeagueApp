@@ -8,6 +8,7 @@ import {
   useTheme,
   Theme,
   SxProps,
+  Box,
 } from '@mui/material';
 import useImageOnLoad from 'hooks/useImageOnLoad';
 import { Comic, Item } from 'types/comic';
@@ -20,6 +21,18 @@ export interface ComicCardProps {
   onViewComic?: React.MouseEventHandler<HTMLButtonElement>;
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
+
+const styleImage = {
+  imageWrapper: {
+    height: 0,
+    paddingBottom: '100%',
+    width: '100%',
+  },
+  imageCommon: {
+    position: 'absolute',
+    width: '100%',
+  },
+};
 
 const ComicCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
@@ -59,26 +72,28 @@ const ComicCard: React.FC<
       }}
     >
       <Stack flex="50%" sx={{ position: 'relative' }}>
-        <CardMedia
-          component="img"
-          image={thumbnail}
-          alt={`thumbnail-${title}`}
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: `100%`,
-            height: `100%`,
-            ...css.thumbnail,
-          }}
-        />
-        <CardMedia
-          onLoad={handleImageOnLoad}
-          component="img"
-          image={image}
-          alt={title}
-          sx={{ height: '100%', ...css.fullSize }}
-        />
+        <Box className="img-wrapper" sx={styleImage.imageWrapper}>
+          <CardMedia
+            component="img"
+            image={thumbnail}
+            alt={`thumbnail-${title}`}
+            sx={{
+              ...styleImage.imageCommon,
+              ...css.thumbnail,
+            }}
+          />
+          <CardMedia
+            onLoad={handleImageOnLoad}
+            component="img"
+            image={image}
+            alt={title}
+            sx={{
+              height: '100%',
+              ...styleImage.imageCommon,
+              ...css.fullSize,
+            }}
+          />
+        </Box>
       </Stack>
       <Stack
         justifyContent="space-between"
