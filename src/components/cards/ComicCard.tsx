@@ -73,26 +73,30 @@ const ComicCard: React.FC<
     >
       <Stack flex="50%" sx={{ position: 'relative' }}>
         <Box className="img-wrapper" sx={styleImage.imageWrapper}>
-          <CardMedia
-            component="img"
-            image={thumbnail}
-            alt={`thumbnail-${title}`}
-            sx={{
-              ...styleImage.imageCommon,
-              ...css.thumbnail,
-            }}
-          />
-          <CardMedia
-            onLoad={handleImageOnLoad}
-            component="img"
-            image={image}
-            alt={title}
-            sx={{
-              height: '100%',
-              ...styleImage.imageCommon,
-              ...css.fullSize,
-            }}
-          />
+          {thumbnail && (
+            <CardMedia
+              component="img"
+              image={thumbnail}
+              alt={`thumbnail-${title}`}
+              sx={{
+                ...styleImage.imageCommon,
+                ...css.thumbnail,
+              }}
+            />
+          )}
+          {image && (
+            <CardMedia
+              onLoad={handleImageOnLoad}
+              component="img"
+              image={image}
+              alt={title}
+              sx={{
+                height: '100%',
+                ...styleImage.imageCommon,
+                ...css.fullSize,
+              }}
+            />
+          )}
         </Box>
       </Stack>
       <Stack

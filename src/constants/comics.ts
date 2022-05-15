@@ -140,7 +140,7 @@ export const ITEMS: Item[] = [
     wearableName: '',
     balance: 0,
     // TODO: will update the mystery image
-    image: ItemP6,
-    thumbnail: ItemThumbnailP6,
+    image: '',
+    thumbnail: '',
   },
 ];
