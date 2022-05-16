@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   Link,
+  IconButton,
 } from '@mui/material';
 import {
   GridColDef,
@@ -14,15 +15,16 @@ import {
   GridCallbackDetails,
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
+import EditIcon from '@mui/icons-material/Edit';
 import { useState, useMemo } from 'react';
 import { Rentals, RentalType } from 'types/rentals';
-import RenameRentalDialogContent from './RenameRentalDialogContent';
 import { transformRentals } from 'pages/dashboard/utils';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import Countdown from 'react-countdown';
 import { formatNumberToDisplayWithCommas } from 'utils/numbers';
 
 import DegenDialog from 'components/dialog/DegenDialog';
+import ChangeNicknameDialog from './ChangeNicknameDialog';
 
 const RENTAL_COLUMN_VISIBILITY = 'rental-column-visibility-model';
 
@@ -44,7 +46,7 @@ const MyRentalsDataGrid = ({
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
-  const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] = useState(false);
+  const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
   const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
     useState(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
@@ -84,14 +86,14 @@ const MyRentalsDataGrid = ({
     }
   }, [rentals, category]);
 
-  // const handleOpenRenameDegen = (params: GridRenderCellParams) => {
-  //   setSelectedRowForEditing(params.row);
-  //   setIsRenameDegenModalOpen(true);
-  // };
+  const handleOpenNickname = (params: GridRenderCellParams) => {
+    setSelectedRowForEditing(params.row);
+    setIsNicknameModalOpen(true);
+  };
 
-  const handleUpdateRentalName = (name: string, rentalId: string) => {
+  const handleUpdateNickname = (name: string, rentalId: string) => {
     updateRentalName(name, rentalId);
-    setIsRenameDegenModalOpen(false);
+    setIsNicknameModalOpen(false);
   };
 
   const handleOpenTerminateRental = (params: GridRenderCellParams) => {
@@ -154,27 +156,27 @@ const MyRentalsDataGrid = ({
         </Stack>
       ),
     },
-    // {
-    //   field: 'nickname',
-    //   headerName: 'Player Nickname',
-    //   width: 150,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Stack direction="row" columnGap={1} alignItems="center">
-    //         <Typography>{params.value}</Typography>
-    //         {params.row.isEditable && (
-    //           <IconButton
-    //             aria-label="edit"
-    //             onClick={() => handleOpenRenameDegen(params)}
-    //             sx={{ display: 'none' }}
-    //           >
-    //             <EditIcon fontSize="small" />
-    //           </IconButton>
-    //         )}
-    //       </Stack>
-    //     );
-    //   },
-    // },
+    {
+      field: 'playerNickname',
+      headerName: 'Player Nickname',
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <Stack direction="row" columnGap={1} alignItems="center">
+            <Typography>{params.value}</Typography>
+            {params.row.isEditable && (
+              <IconButton
+                aria-label="edit"
+                onClick={() => handleOpenNickname(params)}
+                sx={{ display: 'none' }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Stack>
+        );
+      },
+    },
     {
       field: 'rentalCategory',
       headerName: 'Category',
@@ -338,13 +340,13 @@ const MyRentalsDataGrid = ({
           },
         }}
       />
-      {/* Rename Degen Dialog */}
+      {/* Nickname Degen Dialog */}
       <Dialog
-        open={isRenameDegenModalOpen}
-        onClose={() => setIsRenameDegenModalOpen(false)}
+        open={isNicknameModalOpen}
+        onClose={() => setIsNicknameModalOpen(false)}
       >
-        <RenameRentalDialogContent
-          updateRentalName={handleUpdateRentalName}
+        <ChangeNicknameDialog
+          updateNickname={handleUpdateNickname}
           rental={selectedRowForEditing}
         />
       </Dialog>
