@@ -2,7 +2,7 @@ import {
   Stack,
   Typography,
   Button,
-  useTheme,
+  // useTheme,
   Dialog,
   DialogContent,
   Link,
@@ -43,7 +43,7 @@ const MyRentalsDataGrid = ({
   handleTerminalRental,
   updateRentalName,
 }: Props): JSX.Element => {
-  const { palette } = useTheme();
+  // const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
@@ -291,22 +291,22 @@ const MyRentalsDataGrid = ({
       renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
       ...commonColumnProp,
     },
-    {
-      field: 'roi',
-      headerName: 'ROI %',
-      ...commonColumnProp,
-      renderCell: (params) => {
-        let color;
-        if (params.value === 0) color = palette.text.primary;
-        if (params.value > 0) color = palette.success.main;
-        if (params.value < 0) color = palette.error.main;
-        return (
-          <Typography color={color}>
-            {formatNumberToDisplayWithCommas(params.value)}%
-          </Typography>
-        );
-      },
-    },
+    // {
+    //   field: 'roi',
+    //   headerName: 'ROI %',
+    //   ...commonColumnProp,
+    //   renderCell: (params) => {
+    //     let color;
+    //     if (params.value === 0) color = palette.text.primary;
+    //     if (params.value > 0) color = palette.success.main;
+    //     if (params.value < 0) color = palette.error.main;
+    //     return (
+    //       <Typography color={color}>
+    //         {formatNumberToDisplayWithCommas(params.value)}%
+    //       </Typography>
+    //     );
+    //   },
+    // },
     {
       field: 'rentalRenewsIn',
       headerName: 'Rental Renews In',
