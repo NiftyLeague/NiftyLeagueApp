@@ -47,6 +47,7 @@ export interface Rentals {
     renter?: number;
   };
   name?: string;
+  name_cased?: string;
   accounts: {
     owner: RentalAccount;
     renter_user?: RentalAccount;

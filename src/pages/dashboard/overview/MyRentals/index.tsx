@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 export interface ColumnType {
   id:
     | 'renter'
-    | 'nickname'
+    | 'playerNickname'
     | 'degenId'
     | 'winRate'
     | 'profits'
@@ -27,11 +27,11 @@ export interface ColumnType {
 
 const columns: ColumnType[] = [
   { id: 'renter', label: 'Player Address', minWidth: 150, align: 'center' },
-  // {
-  //   id: 'nickname',
-  //   label: 'Player Nickname',
-  //   minWidth: 150,
-  // },
+  {
+    id: 'playerNickname',
+    label: 'Player Nickname',
+    minWidth: 150,
+  },
   { id: 'degenId', label: 'Degen ID', minWidth: 100, align: 'center' },
   { id: 'winRate', label: 'Win Rate', minWidth: 120, align: 'center' },
   {
