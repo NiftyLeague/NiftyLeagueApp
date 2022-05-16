@@ -188,7 +188,7 @@ const MyNFTL = (): JSX.Element => {
                 //   Claim All {formatNumberToDisplay(mockAccrued)} NFTL
                 // </Button>
                 <Typography variant="h5">
-                  NFTL in Wallet: {formatNumberToDisplay(mockAccrued)}{' '}
+                  NFTL in Wallet: {formatNumberToDisplay(userNFTLBalance)}
                 </Typography>
               )}
             </Stack>

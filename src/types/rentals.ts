@@ -47,6 +47,7 @@ export interface Rentals {
     renter?: number;
   };
   name?: string;
+  name_cased?: string;
   accounts: {
     owner: RentalAccount;
     renter_user?: RentalAccount;
@@ -54,6 +55,7 @@ export interface Rentals {
   };
   daily_price?: number;
   daily_cap?: number;
+  item_used?: string;
 }
 
 export type RentalType =
