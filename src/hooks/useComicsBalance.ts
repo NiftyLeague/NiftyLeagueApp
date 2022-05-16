@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import { COMICS_CONTRACT } from 'constants/contracts';
-import COMICS from 'constants/comics';
+import { COMICS } from 'constants/comics';
 import { Comic } from 'types/comic';
 
 /*
@@ -41,6 +41,11 @@ export default function useComicsBalance(): {
       );
       setLoading(false);
     }
+    if (!address) {
+      setLoading(false);
+      setComicsBal([]);
+    }
+
     if (address && readContracts && readContracts[COMICS_CONTRACT]) {
       // eslint-disable-next-line no-void
       void checkUserComics();
