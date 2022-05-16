@@ -204,7 +204,11 @@ const TableModal = ({ flag }): JSX.Element | null => {
                 <code>TOTALNFTLEARNED</code>
               </TableCell>
             )}
-            <TableCell component="th" className="cell ellipsis">
+            <TableCell
+              component="th"
+              className="cell ellipsis"
+              style={{ fontSize: 12 }}
+            >
               <code>MATCHES PLAYED</code>
             </TableCell>
             {flag === 'xp' && (
