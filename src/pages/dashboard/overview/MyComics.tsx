@@ -1,15 +1,15 @@
 /* eslint-disable no-nested-ternary */
 import { useMemo, useState } from 'react';
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import ComicCard from 'components/cards/ComicCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Comic } from 'types/comic';
 import EmptyState from 'components/EmptyState';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
-import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useComicsBalance from 'hooks/useComicsBalance';
-import { v4 as uuidv4 } from 'uuid';
+import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
 
 const MyComics = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
@@ -46,13 +46,13 @@ const MyComics = (): JSX.Element => {
         },
       },
       {
-        breakpoint: 1200,
+        breakpoint: 1350,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 1,
         },
       },
       {
-        breakpoint: 900,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 2,
         },
@@ -82,36 +82,26 @@ const MyComics = (): JSX.Element => {
         }
       >
         {loading ? (
-          [...Array(6)].map(() => (
-            <Grid item xs={12} sm={11} md={11} lg={11} xl={11} key={uuidv4()}>
-              <SkeletonDegenPlaceholder />
-            </Grid>
+          [...Array(2)].map(() => (
+            <Box
+              sx={{
+                px: 1,
+              }}
+              key={uuidv4()}
+            >
+              <ComicPlaceholder imageWidth={158} imageHeight="100%" />
+            </Box>
           ))
         ) : filteredComics.length ? (
           filteredComics.map((comic) => (
             <Box
               sx={{
                 px: 1,
-                '& .MuiPaper-root': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                },
-                '& .MuiCardContent-root': {
-                  p: '12px',
-                },
-                '& .MuiTypography-h3': {
-                  fontSize: '16px',
-                },
-                '& .MuiCardActions-root': {
-                  p: '12px',
-                  pt: 0,
-                },
               }}
               key={comic.wearableName}
             >
               <ComicCard
-                comic={comic}
+                data={comic}
                 onViewComic={() => handleViewComic(comic)}
               />
             </Box>

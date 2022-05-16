@@ -16,7 +16,7 @@ export const transformRentals = (
       renter_id,
       user_id,
       degen_id,
-      name,
+      name_cased,
       degen: { multiplier, tribe, background },
       earning_cap,
       earning_cap_daily,
@@ -39,6 +39,7 @@ export const transformRentals = (
       daily_price,
       is_daily,
       shares,
+      item_used,
     }) => {
       const amIRenter = userId === renter_id;
       const amIOwner = userId === accounts.owner.id;
@@ -60,6 +61,8 @@ export const transformRentals = (
       let player: string = 'Myself';
       let roi = 0;
       let isEditable = false;
+      let weeklyFee = entry_price;
+      let dailyFee = is_daily ? daily_price : 0;
 
       let netEarningCharge = 0;
       const shareRenter = shares?.renter || 0;
@@ -132,11 +135,28 @@ export const transformRentals = (
         }
       }
 
+      if (item_used && item_used === 'rental-pass-base') {
+        weeklyFee = 0;
+      }
+
+      if (weeklyFee === 0 && dailyFee === 0) {
+        roi = 0;
+      }
+
+      const nicknames: { [address: string]: string } = JSON.parse(
+        window.localStorage.getItem('player-nicknames') || '{}',
+      );
+
       return {
         id: uuidv4(), // Change the id to uuid because it is not unique
         rentalId: id,
         renter: accounts?.player?.name || 'No address',
-        nickname: isPersonal ? 'Myself' : name || 'No nickname',
+        playerAddress: accounts?.player?.address,
+        playerNickname: isPersonal
+          ? 'Myself'
+          : (accounts?.player?.address && nicknames[accounts.player.address]) ||
+            'No nickname',
+        rentalName: name_cased,
         category,
         rentalCategory,
         player,
@@ -160,8 +180,8 @@ export const transformRentals = (
         roi: roi || 'N/A',
         rentalRenewsIn: next_charge_at || 'N/A',
         action: is_terminated,
-        weeklyFee: entry_price,
-        dailyFee: is_daily ? daily_price : 0,
+        weeklyFee,
+        dailyFee,
         dailyFeesToDate: charges ? charges - entry_price : 0,
         rentalFeeEarning,
         netEarning,
