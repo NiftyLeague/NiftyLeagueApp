@@ -1,4 +1,5 @@
 interface Stats {
+  win_rate: string;
   hits: string;
   kills: string;
   wins: string;
