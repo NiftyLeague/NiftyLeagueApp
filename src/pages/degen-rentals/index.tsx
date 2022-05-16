@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
@@ -50,7 +50,6 @@ const DegenRentalsPage = (): JSX.Element => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
-  const { walletAddress } = useParams();
 
   const { data } = useFetch<{ [id: number]: Degen }>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -87,14 +86,9 @@ const DegenRentalsPage = (): JSX.Element => {
       const newFilters = { ...filter, sort: filters.sort };
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
-      if (walletAddress) {
-        result = result.filter(
-          (degen) => degen.owner.toLowerCase() === walletAddress.toLowerCase(),
-        );
-      }
       updateNewData(result);
     },
-    [degens, filters.sort, updateNewData, walletAddress],
+    [degens, filters.sort, updateNewData],
   );
 
   const handleSort = useCallback(

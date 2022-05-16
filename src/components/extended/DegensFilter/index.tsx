@@ -79,19 +79,6 @@ const DegensFilter = ({
   const [searchTermValue, setSearchTermValue] = useState<string[]>(
     defaultFilterValues.searchTerm,
   );
-  const filterOptionsMemoized = useMemo(
-    () => ({
-      backgroundsValue,
-      cosmeticsValue,
-      multipliersRangeValue,
-      pricesRangeValue,
-      rentalsRangeValue,
-      searchTermValue,
-      tribesValue,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [params],
-  );
 
   const actions = useMemo(
     () => ({
@@ -211,23 +198,17 @@ const DegensFilter = ({
 
   // Update local state on mount & on filter params update
   useEffect(() => {
-    updateFilterValue(params, actions);
+    const newFilters = updateFilterValue(params, actions);
     handleFilter({
-      prices: filterOptionsMemoized.pricesRangeValue,
-      multipliers: filterOptionsMemoized.multipliersRangeValue,
-      rentals: filterOptionsMemoized.rentalsRangeValue,
-      tribes: filterOptionsMemoized.tribesValue,
-      backgrounds: filterOptionsMemoized.backgroundsValue,
-      cosmetics: filterOptionsMemoized.cosmeticsValue,
-      searchTerm: filterOptionsMemoized.searchTermValue,
+      prices: newFilters.prices,
+      multipliers: newFilters.multipliers,
+      rentals: newFilters.rentals,
+      tribes: newFilters.tribes,
+      backgrounds: newFilters.backgrounds,
+      cosmetics: newFilters.cosmetics,
+      searchTerm: newFilters.searchTerm,
     });
-  }, [
-    actions,
-    defaultFilterValues,
-    filterOptionsMemoized,
-    handleFilter,
-    params,
-  ]);
+  }, [actions, defaultFilterValues, handleFilter, params]);
 
   return (
     <Stack
