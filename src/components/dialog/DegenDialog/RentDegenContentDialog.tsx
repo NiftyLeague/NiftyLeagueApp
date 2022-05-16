@@ -46,7 +46,9 @@ const RentDegenContentDialog = ({
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [, , rentalPassCount] = useRentalPassCount(degen?.id);
+  const [rentalPassCountloading, , rentalPassCount] = useRentalPassCount(
+    degen?.id,
+  );
   const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
   const rent = useRent(
     degen?.id,
@@ -159,10 +161,28 @@ const RentDegenContentDialog = ({
   );
 
   const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
+  const isShowRentalPassOption = () =>
+    rentalPassCount > 0 && !degen?.rental_count;
 
   useEffect(() => {
     sendEvent('add_to_cart', 'ecommerce');
   }, []);
+
+  useEffect(() => {
+    if (!isShowRentalPassOption() && !rentalPassCountloading) {
+      if (rentalPassCount > 0)
+        toast.error(
+          "Rental passes can't be added to Degens with an active rental",
+          { theme: 'dark' },
+        );
+      else
+        toast.error(
+          "You can't use rental pass option because you have no remaining rental pass",
+          { theme: 'dark' },
+        );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rentalPassCount, rentalPassCountloading]);
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
@@ -298,7 +318,7 @@ const RentDegenContentDialog = ({
                 <Typography>Rental Passes Remaining</Typography>
                 <Typography color="gray">{rentalPassCount}</Typography>
               </Stack>
-              {rentalPassCount !== 0 && (
+              {isShowRentalPassOption() && (
                 <Stack
                   direction="row"
                   justifyContent="space-between"
