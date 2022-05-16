@@ -77,14 +77,20 @@ const DashboardComicsPage = (): JSX.Element => {
           data={item}
           isItem
           actions={
-            <>
+            item.title === 'Mystery Item' ? (
               <Button variant="contained" fullWidth disabled>
-                Equip Item
+                ?
               </Button>
-              <Button variant="contained" fullWidth disabled>
-                Unequip Item
-              </Button>
-            </>
+            ) : (
+              <>
+                <Button variant="contained" fullWidth disabled>
+                  Equip Item
+                </Button>
+                <Button variant="contained" fullWidth disabled>
+                  Unequip Item
+                </Button>
+              </>
+            )
           }
         />
       </Grid>
