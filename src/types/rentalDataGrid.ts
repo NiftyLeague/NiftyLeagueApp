@@ -2,6 +2,8 @@ export interface RentalDataGrid {
   id: string;
   rentalId: string;
   renter?: string;
+  playerAddress?: string;
+  playerNickname?: string;
   degenId: string;
   multiplier: number;
   winLoss?: number;

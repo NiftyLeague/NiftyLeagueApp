@@ -5,11 +5,7 @@ import {
   Stack,
   Typography,
   TextField,
-  // FormControl,
-  // FormControlLabel,
-  // Checkbox,
   DialogActions,
-  // Link,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -17,15 +13,12 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { RENAME_RENTAL_API_URL } from 'constants/url';
-// import useFetch from 'hooks/useFetch';
-// import { Degen } from 'types/degens';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 
 interface Props {
   rental: RentalDataGrid;
-  updateRentalName: (name: string, id: string) => void;
+  updateNickname: (name: string, id: string) => void;
 }
 interface IFormInput {
   name: string;
@@ -34,31 +27,20 @@ interface IFormInput {
 
 const validationSchema = yup.object({
   name: yup.string().required(),
-  // isCheckedTerm: yup.bool().oneOf([true]),
 });
 
-const RenameRentalDialogContent = ({
+const ChangeNicknameDialog = ({
   rental,
-  updateRentalName,
+  updateNickname,
 }: Props): JSX.Element => {
   const authToken = window.localStorage.getItem('authentication-token');
   const dispatch = useDispatch();
   const [isLoadingRename, setLoadingRename] = useState(false);
-  const { rentalId, degenId, renter } = rental;
-
-  // const { data: degenDetail } = useFetch<Degen>(
-  //   `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
-  //   {
-  //     headers: {
-  //       authorizationToken: authToken,
-  //     } as any,
-  //   },
-  // );
+  const { rentalId, degenId, renter, playerAddress } = rental;
 
   const {
     handleSubmit,
     control,
-    setError,
     reset,
     formState: { errors },
   } = useForm<IFormInput>({
@@ -66,7 +48,6 @@ const RenameRentalDialogContent = ({
     mode: 'onChange',
     defaultValues: {
       name: '',
-      isCheckedTerm: false,
     },
   });
 
@@ -74,39 +55,16 @@ const RenameRentalDialogContent = ({
     if (!rentalId && !degenId && !data.name && !authToken) {
       return;
     }
-
-    try {
-      setLoadingRename(true);
-      const result: any = await fetch(
-        `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(rentalId)}`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            name: data.name,
-            degen_id: degenId,
-          }),
-          headers: {
-            authorizationToken: authToken,
-          } as any,
-        },
-      );
-      const res = await result.json();
-      setLoadingRename(false);
-      if (res.statusCode === 400) {
-        setError('name', {
-          type: 'custom',
-          message: res.body,
-        });
-        return;
-      }
-      onRenameRentalSuccess(data.name);
-    } catch (error) {
-      setLoadingRename(false);
-      setError('name', {
-        type: 'custom',
-        message: error,
-      });
-    }
+    setLoadingRename(true);
+    const nicknames: { [address: string]: string } = JSON.parse(
+      window.localStorage.getItem('player-nicknames') || '{}',
+    );
+    window.localStorage.setItem(
+      'player-nicknames',
+      JSON.stringify({ ...nicknames, [playerAddress as string]: data.name }),
+    );
+    setLoadingRename(false);
+    onRenameRentalSuccess(data.name);
   };
 
   const onRenameRentalSuccess = (newName: string) => {
@@ -121,7 +79,7 @@ const RenameRentalDialogContent = ({
         close: false,
       }),
     );
-    updateRentalName(newName, rentalId);
+    updateNickname(newName, rentalId);
     reset();
   };
 
@@ -164,50 +122,6 @@ const RenameRentalDialogContent = ({
               />
             )}
           />
-          {/* <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">Renaming Fee</Typography>
-            {!degenDetail ? (
-              <Skeleton variant="rectangular" width={50} height={20} />
-            ) : (
-              <Typography>{degenDetail?.price}</Typography>
-            )}
-          </Stack> */}
-          {/* <Controller
-            name="isCheckedTerm"
-            control={control}
-            render={({ field }) => (
-              <FormControl>
-                <FormControlLabel
-                  label={
-                    <Typography
-                      textAlign="left"
-                      variant="body1"
-                      sx={{ opacity: 0.7 }}
-                    >
-                      I have read the
-                      <Link
-                        color="inherit"
-                        sx={{ mx: '4px' }}
-                        variant="body1"
-                        href="#"
-                      >
-                        terms & conditions
-                      </Link>
-                      regarding renaming a rental
-                    </Typography>
-                  }
-                  control={
-                    <Checkbox
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                      }}
-                    />
-                  }
-                />
-              </FormControl>
-            )}
-          /> */}
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -226,4 +140,4 @@ const RenameRentalDialogContent = ({
   );
 };
 
-export default RenameRentalDialogContent;
+export default ChangeNicknameDialog;
