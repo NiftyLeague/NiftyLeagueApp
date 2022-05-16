@@ -46,9 +46,7 @@ const RentDegenContentDialog = ({
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [rentalPassCountloading, , rentalPassCount] = useRentalPassCount(
-    degen?.id,
-  );
+  const [, , rentalPassCount] = useRentalPassCount(degen?.id);
   const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
   const rent = useRent(
     degen?.id,
@@ -168,21 +166,24 @@ const RentDegenContentDialog = ({
     sendEvent('add_to_cart', 'ecommerce');
   }, []);
 
-  useEffect(() => {
-    if (!isShowRentalPassOption() && !rentalPassCountloading) {
-      if (rentalPassCount > 0)
-        toast.error(
-          "Rental passes can't be added to Degens with an active rental",
-          { theme: 'dark' },
-        );
-      else
-        toast.error(
-          "You can't use rental pass option because you have no remaining rental pass",
-          { theme: 'dark' },
-        );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rentalPassCount, rentalPassCountloading]);
+  // TODO: @Brian double check requirements. Errors should not popup everytime someone opens the rental dialog.
+  // If this feedback below is required we should disable the radio buttons and show these messages on tooltip
+  //
+  // useEffect(() => {
+  //   if (!isShowRentalPassOption() && !rentalPassCountloading) {
+  //     if (rentalPassCount > 0)
+  //       toast.error(
+  //         "Rental passes can't be added to Degens with an active rental",
+  //         { theme: 'dark' },
+  //       );
+  //     else
+  //       toast.error(
+  //         "You can't use rental pass option because you have no remaining rental pass",
+  //         { theme: 'dark' },
+  //       );
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rentalPassCount, rentalPassCountloading]);
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
