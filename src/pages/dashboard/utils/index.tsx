@@ -16,7 +16,7 @@ export const transformRentals = (
       renter_id,
       user_id,
       degen_id,
-      name,
+      name_cased,
       degen: { multiplier, tribe, background },
       earning_cap,
       earning_cap_daily,
@@ -143,11 +143,20 @@ export const transformRentals = (
         roi = 0;
       }
 
+      const nicknames: { [address: string]: string } = JSON.parse(
+        window.localStorage.getItem('player-nicknames') || '{}',
+      );
+
       return {
         id: uuidv4(), // Change the id to uuid because it is not unique
         rentalId: id,
         renter: accounts?.player?.name || 'No address',
-        nickname: isPersonal ? 'Myself' : name || 'No nickname',
+        playerAddress: accounts?.player?.address,
+        playerNickname: isPersonal
+          ? 'Myself'
+          : (accounts?.player?.address && nicknames[accounts.player.address]) ||
+            'No nickname',
+        rentalName: name_cased,
         category,
         rentalCategory,
         player,
