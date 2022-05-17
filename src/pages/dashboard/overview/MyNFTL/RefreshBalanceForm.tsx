@@ -14,15 +14,31 @@ import {
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BigNumber, utils } from 'ethers';
 import { DialogContext } from 'components/dialog';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
+import useContractReader from 'hooks/useContractReader';
 import { WithdrawalHistory } from 'types/account';
 import { formatDateTime } from 'helpers/dateTime';
 import { NetworkContext } from 'NetworkProvider';
 import { GAME_ACCOUNT_CONTRACT } from 'constants/contracts';
+
+function useBalanceManagerNonce(address: string): number {
+  const { writeContracts } = useContext(NetworkContext);
+  const [nonce, setNonce] = useState(BigNumber.from(0));
+  const result = useContractReader(
+    writeContracts,
+    GAME_ACCOUNT_CONTRACT,
+    'nonce',
+    [address],
+  ) as BigNumber;
+  useEffect(() => {
+    if (result && result !== nonce) setNonce(result);
+  }, [result, nonce]);
+  return parseFloat(utils.formatEther(nonce));
+}
 
 const HistoryTable = ({
   withdrawalHistory,
@@ -135,8 +151,12 @@ const RefreshForm = ({
   const { handleSubmit, reset } = useForm();
   const { loading: historyLoading, withdrawalHistory } = useWithdrawalHistory();
   const refreshEnabled = withdrawalHistory.length;
-  const hasPendingTxs =
-    withdrawalHistory.filter((tx) => tx.state === 'pending').length > 0;
+  const { address } = useContext(NetworkContext);
+  const nonce = useBalanceManagerNonce(address);
+  const pendingTxs = withdrawalHistory.filter((tx) => tx.state === 'pending');
+  const hasPendingTxs = pendingTxs.length > 0;
+  const hasOldPendingTxs =
+    pendingTxs.filter((tx) => tx.nonce < nonce).length > 0;
 
   const resetForm = () => {
     reset();
@@ -167,7 +187,12 @@ const RefreshForm = ({
               <Alert severity="error">No withdrawal history found</Alert>
             )}
             {refreshEnabled && !hasPendingTxs ? (
-              <Alert severity="error">No pending transactions found</Alert>
+              <Alert severity="info">No pending transactions found</Alert>
+            ) : null}
+            {refreshEnabled && hasPendingTxs && !hasOldPendingTxs ? (
+              <Alert severity="info">
+                Can only void pending transactions with nonce less than {nonce}
+              </Alert>
             ) : null}
           </>
         )}
@@ -177,7 +202,7 @@ const RefreshForm = ({
           variant="contained"
           loading={loading}
           fullWidth
-          disabled={!refreshEnabled || !hasPendingTxs || disabled}
+          disabled={!refreshEnabled || !hasOldPendingTxs || disabled}
         >
           Void pending transactions
         </LoadingButton>
