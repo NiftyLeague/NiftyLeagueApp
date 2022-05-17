@@ -25,12 +25,12 @@ import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
 import { WithdrawalHistory } from 'types/account';
 
 const checkWithdrawalDisabled = (history: WithdrawalHistory[]) => {
-  if (history.length) {
-    const recent = history[0];
-    const now = Math.floor(Date.now() / 1000);
-    const differnce = (now - recent.created_at) / 60;
-    return differnce < 1;
-  }
+  // if (history.length) {
+  //   const recent = history[0];
+  //   const now = Math.floor(Date.now() / 1000);
+  //   const differnce = (now - recent.created_at) / 60;
+  //   return differnce < 1;
+  // }
   return false;
 };
 
@@ -101,7 +101,13 @@ const WithdrawForm = ({
       });
       return;
     }
-    setWithdrawDisabled(true);
+    if (balanceWithdraw < 100) {
+      setError('amountInput', {
+        type: 'custom',
+        message: 'Minimum withdraw is 100 NFTL',
+      });
+      return;
+    }
     setLoading(true);
     const res = await onWithdrawEarnings(balanceWithdraw);
     if (res) resetForm();
