@@ -108,6 +108,13 @@ const WithdrawForm = ({
       });
       return;
     }
+    if (balanceWithdraw > 100000) {
+      setError('amountInput', {
+        type: 'custom',
+        message: 'Max weekly withdrawal is 100K NFTL.',
+      });
+      return;
+    }
     setLoading(true);
     const res = await onWithdrawEarnings(balanceWithdraw);
     if (res) resetForm();
