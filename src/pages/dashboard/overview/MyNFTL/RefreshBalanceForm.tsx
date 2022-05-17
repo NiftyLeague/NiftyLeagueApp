@@ -1,5 +1,6 @@
 import {
   Alert,
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -12,20 +13,27 @@ import {
   Skeleton,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { BigNumber, utils } from 'ethers';
 import { DialogContext } from 'components/dialog';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
 import { WithdrawalHistory } from 'types/account';
 import { formatDateTime } from 'helpers/dateTime';
+import { NetworkContext } from 'NetworkProvider';
+import { GAME_ACCOUNT_CONTRACT } from 'constants/contracts';
 
 const HistoryTable = ({
   withdrawalHistory,
+  resetForm,
 }: {
   withdrawalHistory: WithdrawalHistory[];
+  resetForm: () => void;
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { writeContracts, tx } = useContext(NetworkContext);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -38,6 +46,24 @@ const HistoryTable = ({
     setPage(0);
   };
 
+  const handleRetryWithdraw = async (data) => {
+    const { amount, expire_at, signature, nonce } = data as {
+      amount: number;
+      expire_at: number;
+      signature: string;
+      nonce: number;
+    };
+    const res = await tx(
+      writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
+        utils.parseEther(`${amount}`),
+        BigNumber.from(nonce),
+        expire_at,
+        signature,
+      ),
+    );
+    if (res) resetForm();
+  };
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -48,6 +74,7 @@ const HistoryTable = ({
               <TableCell align="right">Nonce</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell align="right">State</TableCell>
+              <TableCell align="right">Retry</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -64,6 +91,16 @@ const HistoryTable = ({
                   <TableCell align="right">{row.nonce}</TableCell>
                   <TableCell align="right">{row.amount}</TableCell>
                   <TableCell align="right">{row.state}</TableCell>
+                  <TableCell align="right">
+                    {row.state === 'pending' ? (
+                      <IconButton
+                        aria-label="retry"
+                        onClick={() => handleRetryWithdraw(row)}
+                      >
+                        <ReplayIcon />
+                      </IconButton>
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -122,7 +159,10 @@ const RefreshForm = ({
         ) : (
           <>
             {refreshEnabled ? (
-              <HistoryTable withdrawalHistory={withdrawalHistory} />
+              <HistoryTable
+                withdrawalHistory={withdrawalHistory}
+                resetForm={resetForm}
+              />
             ) : (
               <Alert severity="error">No withdrawal history found</Alert>
             )}
@@ -139,7 +179,7 @@ const RefreshForm = ({
           fullWidth
           disabled={!refreshEnabled || !hasPendingTxs || disabled}
         >
-          Refresh game balance
+          Void pending transactions
         </LoadingButton>
       </Stack>
     </form>

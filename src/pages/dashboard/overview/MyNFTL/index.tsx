@@ -132,7 +132,7 @@ const MyNFTL = (): JSX.Element => {
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('signData', signData);
         const { expire_at, signature, nonce } = signData as {
-          expire_at: string;
+          expire_at: number;
           signature: string;
           nonce: number;
         };
