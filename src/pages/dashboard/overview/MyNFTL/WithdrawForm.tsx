@@ -1,11 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+// import * as yup from 'yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Box,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Link,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -18,7 +15,6 @@ import { providers } from 'ethers';
 import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
-import * as yup from 'yup';
 import { DialogContext } from 'components/dialog';
 import { formatNumberToDisplay } from 'utils/numbers';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
@@ -37,7 +33,7 @@ const checkWithdrawalDisabled = (history: WithdrawalHistory[]) => {
 interface WithdrawFormProps {
   onWithdrawEarnings: (
     amount: number,
-  ) => Promise<providers.TransactionResponse | null>;
+  ) => Promise<{ txRes: providers.TransactionResponse | null; error?: Error }>;
   balance: number;
 }
 
@@ -49,9 +45,9 @@ interface IFormInput {
 
 const amountSelects: number[] = [25, 50, 75, 100];
 
-const validationSchema = yup.object({
-  isCheckedTerm: yup.bool().oneOf([true]),
-});
+// const validationSchema = yup.object({
+//   isCheckedTerm: yup.bool().oneOf([true]),
+// });
 
 const WithdrawForm = ({
   onWithdrawEarnings,
@@ -71,12 +67,12 @@ const WithdrawForm = ({
     reset,
     formState: { errors },
   } = useForm<IFormInput>({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {
       amountSelected: 0,
       amountInput: '',
-      isCheckedTerm: false,
+      // isCheckedTerm: false,
     },
   });
   const theme = useTheme();
@@ -101,23 +97,17 @@ const WithdrawForm = ({
       });
       return;
     }
-    if (balanceWithdraw < 100) {
-      setError('amountInput', {
-        type: 'custom',
-        message: 'Minimum withdraw is 100 NFTL',
-      });
-      return;
-    }
-    if (balanceWithdraw > 100000) {
-      setError('amountInput', {
-        type: 'custom',
-        message: 'Max weekly withdrawal is 100K NFTL.',
-      });
-      return;
-    }
     setLoading(true);
-    const res = await onWithdrawEarnings(balanceWithdraw);
-    if (res) resetForm();
+    const { error } = await onWithdrawEarnings(balanceWithdraw);
+    if (error?.message) {
+      setError('amountInput', {
+        type: 'custom',
+        message: error.message.replaceAll('"', ''),
+      });
+      setLoading(false);
+      return;
+    }
+    resetForm();
   };
 
   return (
@@ -206,7 +196,7 @@ const WithdrawForm = ({
           </Typography>
           NFTL
         </Typography>
-        <Controller
+        {/* <Controller
           name="isCheckedTerm"
           control={control}
           render={({ field }) => (
@@ -242,13 +232,13 @@ const WithdrawForm = ({
               />
             </FormGroup>
           )}
-        />
+        /> */}
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
         {withdrawDisabled && (
           <Alert severity="error">
-            Please wait 1 minute before sending another withdrawal request
+            Please wait 1 week before sending another withdrawal request
           </Alert>
         )}
         <LoadingButton
@@ -258,9 +248,8 @@ const WithdrawForm = ({
           fullWidth
           loading={loading}
           disabled={
-            !getValues('isCheckedTerm') ||
-            balanceWithdraw === 0 ||
-            withdrawDisabled
+            // !getValues('isCheckedTerm') ||
+            balanceWithdraw === 0 || withdrawDisabled
           }
         >
           Withdraw earnings

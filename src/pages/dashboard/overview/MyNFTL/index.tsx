@@ -11,7 +11,7 @@ import {
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, providers, utils } from 'ethers';
 
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -113,9 +113,12 @@ const MyNFTL = (): JSX.Element => {
   );
 
   const handleWithdrawNFTL = useCallback(
-    async (amount: number) => {
-      // eslint-disable-next-line no-console
-      if (DEBUG) console.log('withdraw', amount);
+    async (
+      amount: number,
+    ): Promise<{
+      txRes: providers.TransactionResponse | null;
+      error?: Error;
+    }> => {
       const amountWEI = utils.parseEther(`${amount}`);
       const body = JSON.stringify({
         amount: amountWEI.toString(),
@@ -127,10 +130,13 @@ const MyNFTL = (): JSX.Element => {
           method: 'POST',
           body,
         });
-        if (!response.ok) throw new Error(response.statusText);
+        if (!response.ok) {
+          const errMsg = await response.text();
+          throw new Error(errMsg);
+        }
         const signData = await response.json();
         // eslint-disable-next-line no-console
-        if (DEBUG) console.log('signData', signData);
+        if (DEBUG) console.log('SIG_REQ_DATA', signData);
         const { expire_at, signature, nonce } = signData as {
           expire_at: number;
           signature: string;
@@ -145,13 +151,13 @@ const MyNFTL = (): JSX.Element => {
           ),
         );
         // eslint-disable-next-line no-console
-        if (DEBUG) console.log('txRes', txRes);
+        if (DEBUG) console.log('TX_DATA', txRes);
         setRefreshBalKey(Math.random());
         setRefreshAccKey(Math.random());
-        return txRes;
+        return { txRes };
       } catch (error) {
         console.error('error', error);
-        return null;
+        return { txRes: null, error: error as Error };
       }
     },
     [address, auth, tx, writeContracts],
