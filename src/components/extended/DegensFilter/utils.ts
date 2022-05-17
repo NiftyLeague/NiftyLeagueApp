@@ -29,7 +29,18 @@ export const tranformDataByFilter = (
     degens.sort((a, b) => Number(b.price) - Number(a.price));
   }
 
-  const result = degens.filter((degen: Degen) => {
+  const walletAddress = window.location.pathname.replace(
+    /(\/(degen-rentals)|\/)/g,
+    '',
+  );
+  let result = degens;
+  if (walletAddress?.length > 26) {
+    result = result.filter(
+      (degen: Degen) =>
+        degen.owner.toLowerCase() === walletAddress.toLowerCase(),
+    );
+  }
+  result = result.filter((degen: Degen) => {
     const priceMatches = prices
       ? degen.price >= prices[0] && degen.price <= prices[1]
       : true;
