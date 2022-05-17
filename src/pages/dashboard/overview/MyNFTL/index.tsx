@@ -8,7 +8,7 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
 import { BigNumber, providers, utils } from 'ethers';
@@ -23,7 +23,7 @@ import { Owner } from 'types/graph';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
 import useGameBalance from 'hooks/useGameBalance';
-import usePlayerProfile from 'hooks/usePlayerProfile';
+// import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import {
@@ -43,7 +43,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const { profile, error: profileError } = usePlayerProfile();
+  // const { profile, error: profileError } = usePlayerProfile();
   const { gameBal, error: accError } = useGameBalance(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
     address,
@@ -283,7 +283,7 @@ const MyNFTL = (): JSX.Element => {
                           right: 0,
                         }}
                       >
-                        <RefreshIcon />
+                        <HistoryIcon />
                       </IconButton>
                     </DialogTrigger>
                     <DialogContent

@@ -18,16 +18,35 @@ import NumberFormat from 'react-number-format';
 import { DialogContext } from 'components/dialog';
 import { formatNumberToDisplay } from 'utils/numbers';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
+import useFetch from 'hooks/useFetch';
 import { WithdrawalHistory } from 'types/account';
+import { WITHDRAW_NFTL_AVAILABILITY } from 'constants/url';
+import { formatDateTime } from 'helpers/dateTime';
 
-const checkWithdrawalDisabled = (history: WithdrawalHistory[]) => {
-  // if (history.length) {
-  //   const recent = history[0];
-  //   const now = Math.floor(Date.now() / 1000);
-  //   const differnce = (now - recent.created_at) / 60;
-  //   return differnce < 1;
-  // }
-  return false;
+const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
+  const [withdrawDisabled, setWithdrawDisabled] = useState(false);
+  const [availableIn, setAvailableIn] = useState(0);
+  const [availableAt, setAvailableAt] = useState<number | undefined>();
+  const authToken = window.localStorage.getItem('authentication-token');
+  let headers;
+  if (authToken) headers = { authorizationToken: authToken };
+  const { loading, data } = useFetch<{
+    is_available: boolean;
+    available_in: number;
+    available_at?: number;
+  }>(WITHDRAW_NFTL_AVAILABILITY, {
+    headers,
+  });
+
+  useEffect(() => {
+    if (!loading && data) {
+      setWithdrawDisabled(!data?.is_available);
+      setAvailableIn(data.available_in);
+      setAvailableAt(data.available_at);
+    }
+  }, [loading, data]);
+
+  return { withdrawDisabled, availableIn, availableAt };
 };
 
 interface WithdrawFormProps {
@@ -54,9 +73,11 @@ const WithdrawForm = ({
   balance,
 }: WithdrawFormProps): JSX.Element => {
   const [balanceWithdraw, setBalanceWithdraw] = useState(0);
-  const [withdrawDisabled, setWithdrawDisabled] = useState(false);
   const [, setIsOpen] = useContext(DialogContext);
   const [loading, setLoading] = useState(false);
+  const { withdrawalHistory } = useWithdrawalHistory('pending');
+  const { withdrawDisabled, availableAt } =
+    useWithdrawalDisabled(withdrawalHistory);
   const {
     handleSubmit,
     control,
@@ -76,11 +97,6 @@ const WithdrawForm = ({
     },
   });
   const theme = useTheme();
-
-  const { withdrawalHistory } = useWithdrawalHistory('pending');
-  useEffect(() => {
-    setWithdrawDisabled(checkWithdrawalDisabled(withdrawalHistory));
-  }, [withdrawalHistory]);
 
   const resetForm = () => {
     setLoading(false);
@@ -236,9 +252,10 @@ const WithdrawForm = ({
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
-        {withdrawDisabled && (
+        {withdrawDisabled && availableAt && (
           <Alert severity="error">
-            Please wait 1 week before sending another withdrawal request
+            Next withdrawal for your account isn't available until{' '}
+            {formatDateTime(availableAt)}
           </Alert>
         )}
         <LoadingButton
