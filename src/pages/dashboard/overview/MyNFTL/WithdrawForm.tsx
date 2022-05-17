@@ -252,10 +252,14 @@ const WithdrawForm = ({
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
-        {withdrawDisabled && availableAt && (
+        {withdrawDisabled && availableAt ? (
           <Alert severity="error">
-            Next withdrawal for your account isn't available until{' '}
+            Next withdrawal for your account is available after{' '}
             {formatDateTime(availableAt)}
+          </Alert>
+        ) : (
+          <Alert severity="info">
+            Only 1 withdrawal per week is allowed at this time
           </Alert>
         )}
         <LoadingButton
