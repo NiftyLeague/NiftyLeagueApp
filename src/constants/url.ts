@@ -28,4 +28,4 @@ export const GAMER_ACCOUNT_API = `${BASE_API_URL}/accounts/account`;
 export const WITHDRAW_NFTL_LIST = `${BASE_API_URL}/accounts/withdrawals`;
 export const WITHDRAW_NFTL_SIGN = `${BASE_API_URL}/accounts/withdraw/sign`;
 export const WITHDRAW_NFTL_CONFIRM = `${BASE_API_URL}/accounts/withdraw/confirm`;
-export const WITHDRAW_NFTL_REFRESH = `${BASE_API_URL}/accounts/withdraw/refresh`;
+export const WITHDRAW_NFTL_REFRESH = `${BASE_API_URL}/accounts/withdraw/refresh/2`;

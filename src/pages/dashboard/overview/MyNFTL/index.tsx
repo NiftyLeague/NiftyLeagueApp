@@ -131,7 +131,8 @@ const MyNFTL = (): JSX.Element => {
         const signData = await response.json();
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('signData', signData);
-        const { signature, nonce } = signData as {
+        const { expire_at, signature, nonce } = signData as {
+          expire_at: string;
           signature: string;
           nonce: number;
         };
@@ -139,6 +140,7 @@ const MyNFTL = (): JSX.Element => {
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
             amountWEI,
             BigNumber.from(nonce),
+            expire_at,
             signature,
           ),
         );
@@ -310,12 +312,12 @@ const MyNFTL = (): JSX.Element => {
                 borderColor: theme.palette.grey[800],
                 position: 'relative',
               }}
-              secondary="Available to Claim"
+              secondary="Available Balance"
               actions={
                 <Stack direction="row" gap={2}>
                   <Dialog>
                     <DialogTrigger>
-                      <Button fullWidth variant="contained" disabled>
+                      <Button fullWidth variant="contained">
                         Withdraw
                       </Button>
                     </DialogTrigger>
