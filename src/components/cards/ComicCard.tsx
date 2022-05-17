@@ -2,16 +2,14 @@ import React from 'react';
 import {
   Button,
   Card,
-  CardMedia,
   Stack,
   Typography,
   useTheme,
   Theme,
   SxProps,
-  Box,
 } from '@mui/material';
-import useImageOnLoad from 'hooks/useImageOnLoad';
 import { Comic, Item } from 'types/comic';
+import ImageCard from 'components/cards/ImageCard';
 
 export interface ComicCardProps {
   data: Comic | Item;
@@ -22,24 +20,11 @@ export interface ComicCardProps {
   onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const styleImage = {
-  imageWrapper: {
-    height: 0,
-    paddingBottom: '100%',
-    width: '100%',
-  },
-  imageCommon: {
-    position: 'absolute',
-    width: '100%',
-  },
-};
-
 const ComicCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
 > = ({ data, onViewComic, onBurnComic, sx, actions, isItem = false }) => {
   const { image, title, balance, id, wearableName, thumbnail } = data;
   const theme = useTheme();
-  const { handleImageOnLoad, css } = useImageOnLoad();
 
   const getActionsDefault = () => {
     return (
@@ -72,32 +57,12 @@ const ComicCard: React.FC<
       }}
     >
       <Stack flex="50%" sx={{ position: 'relative' }}>
-        <Box className="img-wrapper" sx={styleImage.imageWrapper}>
-          {thumbnail && (
-            <CardMedia
-              component="img"
-              image={thumbnail}
-              alt={`thumbnail-${title}`}
-              sx={{
-                ...styleImage.imageCommon,
-                ...css.thumbnail,
-              }}
-            />
-          )}
-          {image && (
-            <CardMedia
-              onLoad={handleImageOnLoad}
-              component="img"
-              image={image}
-              alt={title}
-              sx={{
-                height: '100%',
-                ...styleImage.imageCommon,
-                ...css.fullSize,
-              }}
-            />
-          )}
-        </Box>
+        <ImageCard
+          image={image}
+          thumbnail={thumbnail}
+          title={title}
+          ratio={1}
+        />
       </Stack>
       <Stack
         justifyContent="space-between"
