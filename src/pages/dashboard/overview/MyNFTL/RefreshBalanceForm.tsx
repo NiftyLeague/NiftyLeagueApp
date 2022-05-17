@@ -10,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Skeleton,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -109,13 +110,25 @@ const HistoryTable = ({
                   <TableCell align="right">{row.amount}</TableCell>
                   <TableCell align="right">{row.state}</TableCell>
                   <TableCell align="right">
-                    {row.state === 'pending' && row.nonce === nonce ? (
-                      <IconButton
-                        aria-label="retry"
-                        onClick={() => handleRetryWithdraw(row)}
-                      >
-                        <ReplayIcon />
-                      </IconButton>
+                    {row.state === 'pending' ? (
+                      <>
+                        {row.nonce === nonce ? (
+                          <IconButton
+                            aria-label="retry"
+                            onClick={() => handleRetryWithdraw(row)}
+                          >
+                            <ReplayIcon />
+                          </IconButton>
+                        ) : (
+                          <Tooltip title="Signature expired">
+                            <span>
+                              <IconButton disabled>
+                                <ReplayIcon />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        )}
+                      </>
                     ) : null}
                   </TableCell>
                 </TableRow>
