@@ -37,15 +37,17 @@ function useBalanceManagerNonce(address: string): number {
   useEffect(() => {
     if (result && result !== nonce) setNonce(result);
   }, [result, nonce]);
-  return parseFloat(utils.formatEther(nonce));
+  return nonce.toNumber();
 }
 
 const HistoryTable = ({
   withdrawalHistory,
   resetForm,
+  nonce,
 }: {
   withdrawalHistory: WithdrawalHistory[];
   resetForm: () => void;
+  nonce: number;
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -63,11 +65,10 @@ const HistoryTable = ({
   };
 
   const handleRetryWithdraw = async (data) => {
-    const { amount, expire_at, signature, nonce } = data as {
+    const { amount, expire_at, signature } = data as {
       amount: number;
       expire_at: number;
       signature: string;
-      nonce: number;
     };
     const res = await tx(
       writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
@@ -108,7 +109,7 @@ const HistoryTable = ({
                   <TableCell align="right">{row.amount}</TableCell>
                   <TableCell align="right">{row.state}</TableCell>
                   <TableCell align="right">
-                    {row.state === 'pending' ? (
+                    {row.state === 'pending' && row.nonce === nonce ? (
                       <IconButton
                         aria-label="retry"
                         onClick={() => handleRetryWithdraw(row)}
@@ -182,6 +183,7 @@ const RefreshForm = ({
               <HistoryTable
                 withdrawalHistory={withdrawalHistory}
                 resetForm={resetForm}
+                nonce={nonce}
               />
             ) : (
               <Alert severity="error">No withdrawal history found</Alert>
