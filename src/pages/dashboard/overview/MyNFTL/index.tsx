@@ -8,10 +8,10 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, providers, utils } from 'ethers';
 
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -23,7 +23,7 @@ import { Owner } from 'types/graph';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
 import useGameBalance from 'hooks/useGameBalance';
-import usePlayerProfile from 'hooks/usePlayerProfile';
+// import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import {
@@ -43,7 +43,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const { profile, error: profileError } = usePlayerProfile();
+  // const { profile, error: profileError } = usePlayerProfile();
   const { gameBal, error: accError } = useGameBalance(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
     address,
@@ -113,9 +113,12 @@ const MyNFTL = (): JSX.Element => {
   );
 
   const handleWithdrawNFTL = useCallback(
-    async (amount: number) => {
-      // eslint-disable-next-line no-console
-      if (DEBUG) console.log('withdraw', amount);
+    async (
+      amount: number,
+    ): Promise<{
+      txRes: providers.TransactionResponse | null;
+      error?: Error;
+    }> => {
       const amountWEI = utils.parseEther(`${amount}`);
       const body = JSON.stringify({
         amount: amountWEI.toString(),
@@ -127,11 +130,15 @@ const MyNFTL = (): JSX.Element => {
           method: 'POST',
           body,
         });
-        if (!response.ok) throw new Error(response.statusText);
+        if (!response.ok) {
+          const errMsg = await response.text();
+          throw new Error(errMsg);
+        }
         const signData = await response.json();
         // eslint-disable-next-line no-console
-        if (DEBUG) console.log('signData', signData);
-        const { signature, nonce } = signData as {
+        if (DEBUG) console.log('SIG_REQ_DATA', signData);
+        const { expire_at, signature, nonce } = signData as {
+          expire_at: number;
           signature: string;
           nonce: number;
         };
@@ -139,17 +146,18 @@ const MyNFTL = (): JSX.Element => {
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
             amountWEI,
             BigNumber.from(nonce),
+            expire_at,
             signature,
           ),
         );
         // eslint-disable-next-line no-console
-        if (DEBUG) console.log('txRes', txRes);
+        if (DEBUG) console.log('TX_DATA', txRes);
         setRefreshBalKey(Math.random());
         setRefreshAccKey(Math.random());
-        return txRes;
+        return { txRes };
       } catch (error) {
         console.error('error', error);
-        return null;
+        return { txRes: null, error: error as Error };
       }
     },
     [address, auth, tx, writeContracts],
@@ -275,7 +283,7 @@ const MyNFTL = (): JSX.Element => {
                           right: 0,
                         }}
                       >
-                        <RefreshIcon />
+                        <HistoryIcon />
                       </IconButton>
                     </DialogTrigger>
                     <DialogContent
@@ -310,12 +318,12 @@ const MyNFTL = (): JSX.Element => {
                 borderColor: theme.palette.grey[800],
                 position: 'relative',
               }}
-              secondary="Available to Claim"
+              secondary="Available Balance"
               actions={
                 <Stack direction="row" gap={2}>
                   <Dialog>
                     <DialogTrigger>
-                      <Button fullWidth variant="contained" disabled>
+                      <Button fullWidth variant="contained">
                         Withdraw
                       </Button>
                     </DialogTrigger>
