@@ -46,113 +46,77 @@ export const transformRentals = (
       const amIPlayer = userId === accounts.player.id;
       const whoAmI = [amIRenter, amIOwner, amIPlayer];
 
-      const isRecruit = areEqualArrays(whoAmI, [false, false, true]); // Recruited
-      const isPersonal = areEqualArrays(whoAmI, [true, false, true]); // Direct Rental
       const isOwnedSponsor = areEqualArrays(whoAmI, [true, true, false]);
       const isNonOwnedSponsor = areEqualArrays(whoAmI, [true, false, false]);
-      const isDirectRenter = areEqualArrays(whoAmI, [false, true, false]); // Direct Renter
+      const isDirectRenter = areEqualArrays(whoAmI, [true, false, true]); // Direct Renter
+      const isRental = areEqualArrays(whoAmI, [false, true, false]); // Direct Rental
+      const isRecruit = areEqualArrays(whoAmI, [false, false, true]); // Recruited
 
       let yourEarnings = 0;
-      let rentalFeeEarning = 0;
-      let netEarning = 0;
-      let netGameEarning = 0;
       let category: string = 'direct-renter';
       let rentalCategory: string = 'Direct Renter';
       let player: string = 'Myself';
-      let roi = 0;
       let isEditable = false;
       let weeklyFee = entry_price;
       let dailyFee = is_daily ? daily_price : 0;
 
-      let netEarningCharge = 0;
       const shareRenter = shares?.renter || 0;
 
-      if (charges && charges === entry_price) {
-        if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
-          rentalFeeEarning = entry_price * 0.45;
-        }
-
-        netEarningCharge = entry_price * 0.45;
-      } else {
-        if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
-          rentalFeeEarning = entry_price * 0.45 + (charges - entry_price) * 0.1;
-        }
-
-        netEarningCharge = entry_price * 0.45 + (charges - entry_price) * 0.1;
-      }
-
-      if (isPersonal) {
+      if (isDirectRenter) {
         category = 'direct-rental';
         rentalCategory = 'Direct Rental';
         player = 'Myself';
-        netEarning = earnings * (shares.player + shares.owner) - charges;
-        netGameEarning = earnings * (shares.owner + shareRenter);
-        roi =
-          ((earnings * (shares.player + shareRenter) - charges) / charges) *
-          100;
         isEditable = false;
       } else if (isOwnedSponsor) {
         category = 'owned-sponsorship';
         rentalCategory = 'Owned Sponsorship';
         player = 'Recruit';
-        netEarning =
-          earnings * (shares.owner + shareRenter) + netEarningCharge - charges;
-        netGameEarning = earnings * (shares.owner + shareRenter);
-        roi =
-          ((earnings * (shares.owner + shareRenter) - charges) / charges) * 100;
         isEditable = true;
       } else if (isNonOwnedSponsor) {
         category = 'non-owned-sponsorship';
         rentalCategory = 'Non-Owned Sponsorship';
         player = 'Recruit';
-        netEarning = earnings * shareRenter - charges;
-        netGameEarning = earnings * shareRenter;
-        roi = ((earnings * shareRenter - charges) / charges) * 100;
         isEditable = true;
       } else if (isRecruit) {
         category = 'recruited';
         rentalCategory = 'Recruited';
         player = 'Myself';
-        netEarning = earnings * shares.player;
-        netGameEarning = earnings * shares.player;
-        roi = 0;
         isEditable = false;
-      } else if (isDirectRenter) {
+      } else if (isRental) {
         category = 'direct-renter';
         rentalCategory = 'Direct Renter';
         player = 'Renter';
-        netEarning = earnings * shares.owner + netEarningCharge;
-        netGameEarning = earnings * shares.owner;
-        roi = 0;
         isEditable = true;
-      }
-
-      if (!isPersonal || !isRecruit || !isNonOwnedSponsor) {
-        if (charges && charges === entry_price) {
-          rentalFeeEarning = entry_price * 0.45;
-        } else {
-          rentalFeeEarning = entry_price * 0.45 + (charges - entry_price) * 0.1;
-        }
       }
 
       if (item_used && item_used === 'rental-pass-base') {
         weeklyFee = 0;
       }
 
-      if (weeklyFee === 0 && dailyFee === 0) {
-        roi = 0;
-      }
-
       const nicknames: { [address: string]: string } = JSON.parse(
         window.localStorage.getItem('player-nicknames') || '{}',
       );
+
+      const costs = amIRenter ? charges : 0;
+      const rentalFeeEarning = amIOwner
+        ? entry_price * 0.45 + (charges - entry_price) * 0.1
+        : 0;
+
+      const netGameEarning =
+        earnings *
+        (shares.owner * Number(amIOwner) +
+          shares.player * Number(amIPlayer) +
+          shareRenter * Number(amIRenter));
+
+      const netEarning = netGameEarning + rentalFeeEarning - costs;
+      const roi = amIRenter ? (netEarning / costs) * 100 : 0;
 
       return {
         id: uuidv4(), // Change the id to uuid because it is not unique
         rentalId: id,
         renter: accounts?.player?.name || 'No address',
         playerAddress: accounts?.player?.address,
-        playerNickname: isPersonal
+        playerNickname: isDirectRenter
           ? 'Myself'
           : (accounts?.player?.address && nicknames[accounts.player.address]) ||
             'No nickname',
@@ -175,14 +139,14 @@ export const transformRentals = (
           : '00:00:00',
         totalEarnings: earnings,
         yourEarnings: yourEarnings || 0,
-        costs: charges,
+        costs,
         profits: earnings,
-        roi: roi || 'N/A',
+        roi,
         rentalRenewsIn: next_charge_at || 'N/A',
         action: is_terminated,
         weeklyFee,
         dailyFee,
-        dailyFeesToDate: charges ? charges - entry_price : 0,
+        dailyFeesToDate: amIRenter ? charges - entry_price : 0,
         rentalFeeEarning,
         netEarning,
         netGameEarning,
