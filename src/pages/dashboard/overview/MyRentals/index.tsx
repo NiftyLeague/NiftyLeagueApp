@@ -46,7 +46,7 @@ const columns: ColumnType[] = [
     minWidth: 150,
     align: 'center',
   },
-  // { id: 'roi', label: 'ROI %', minWidth: 80, align: 'center' },
+  { id: 'roi', label: 'ROI %', minWidth: 80, align: 'center' },
   {
     id: 'rentalRenewsIn',
     label: 'Rental Renews In',
