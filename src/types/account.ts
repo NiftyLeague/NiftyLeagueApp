@@ -14,7 +14,7 @@ export interface Profile {
     nifty_smasher: {
       hits: number;
       kills: number;
-      win: number;
+      wins: number;
       earnings: number;
       suicides: number;
       round_wins: number;
@@ -23,16 +23,31 @@ export interface Profile {
       time_played: number;
       deaths: number;
       rounds: number;
-    };
-    total: {
-      xp: number;
       rental_earnings: number;
-      rental_royalty_earnings: number;
-      earnings: number;
-      matches: number;
-      time_played: number;
+      rental_earnings_as_renter: number;
+      rental_earnings_as_owner: number;
+      rank: number;
+      rank_xp_previous: number;
+      rank_xp_next: number;
     };
+    total: ProfileTotal;
   };
+}
+
+export interface ProfileTotal {
+  wins: number;
+  xp: number;
+  rental_earnings: number;
+  rental_royalty_earnings: number;
+  rental_earnings_as_owner: number;
+  rental_earnings_as_renter: number;
+  rental_game_earnings: number;
+  earnings: number;
+  matches: number;
+  time_played: number;
+  rank: number;
+  rank_xp_previous: number;
+  rank_xp_next: number;
 }
 
 export interface WithdrawalHistory {

@@ -47,4 +47,13 @@ const PrivateItems = {
   ],
 };
 
+if (process.env.REACT_APP_GAMER_PROFILE_TOGGLE === 'true') {
+  PrivateItems.children[0].children.push({
+    id: 'gamer-profile',
+    title: 'Gamer Profile',
+    type: 'item',
+    url: '/dashboard/gamer-profile',
+  });
+}
+
 export default PrivateItems;
