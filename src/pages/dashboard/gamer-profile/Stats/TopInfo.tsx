@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Stack,
   Typography,
@@ -6,35 +6,91 @@ import {
   Box,
   IconButton,
   Skeleton,
+  TextField,
+  Button,
 } from '@mui/material';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
+import { ProfileTotal, Account } from 'types/account';
+
 import ProgressGamer from './ProgressGamer';
-import { ProfileTotal } from 'types/account';
 import { GamerProfileContext } from '../index';
 
 interface TopInfoProps {
   total?: ProfileTotal;
-  walletAddress: string;
+  account: Account | undefined;
+  updateProfileName?: (name: string) => void;
 }
-const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
+
+interface IFormInput {
+  name: string;
+}
+
+const validationSchema = yup.object({
+  name: yup.string().required(),
+});
+
+const TopInfo = ({
+  total,
+  account,
+  updateProfileName,
+}: TopInfoProps): JSX.Element => {
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isLoadingRename, setIsLoadingRename] = useState<boolean>(false);
   const theme = useTheme();
-  const { isLoadingProfile } = useContext(GamerProfileContext);
+  const { isLoadingProfile, isLoadingAccount } =
+    useContext(GamerProfileContext);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [value, copy] = useCopyToClipboard();
-  return (
-    <Stack>
-      <Stack direction="row" alignItems="center" spacing={5}>
-        <Typography width="50%" variant="h2" component="div">
-          Unknown{' '}
+  const walletAddress = account?.address;
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    setIsLoadingRename(true);
+    // setIsLoadingRename(false);
+    onRenameProfileSuccess(data.name);
+  };
+
+  const handleCancel = () => {
+    setIsEdit(false);
+    reset();
+  };
+
+  const onRenameProfileSuccess = (newName: string) => {
+    toast.success('The profile has been updated successful!', {
+      theme: 'dark',
+    });
+    // updateProfileName(newName);
+    handleCancel();
+  };
+
+  const renderNameInfo = () => {
+    if (!isEdit) {
+      return (
+        <Typography variant="h2" component="div">
+          {account?.name || 'Unknown'}{' '}
           <IconButton
             sx={{
               cursor: 'pointer',
             }}
             aria-label="edit"
-            onClick={() => null}
+            onClick={() => setIsEdit(true)}
           >
             <EditOutlinedIcon
               fontSize="small"
@@ -44,6 +100,83 @@ const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
             />
           </IconButton>
         </Typography>
+      );
+    }
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack direction="row" gap={1}>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Enter the new name"
+                variant="outlined"
+                size="small"
+                fullWidth
+                sx={{
+                  '& input': {
+                    padding: '8px 14px !important',
+                  },
+                }}
+                disabled={isLoadingRename}
+              />
+            )}
+          />
+          <Stack direction="row" gap={1}>
+            <Button
+              disabled={!!errors.name}
+              size="small"
+              variant="contained"
+              type="submit"
+            >
+              Save
+            </Button>
+            <Button variant="outlined" size="small" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </Stack>
+        </Stack>
+      </form>
+    );
+  };
+
+  const renderWalletAddress = () => {
+    if (isLoadingAccount) {
+      return <Skeleton variant="rectangular" width="30%" height="36px" />;
+    }
+    if (!isLoadingAccount && walletAddress) {
+      return (
+        <>
+          {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
+            walletAddress.length - 5,
+            walletAddress.length - 1,
+          )}`}{' '}
+          <IconButton
+            sx={{
+              cursor: 'pointer',
+            }}
+            aria-label="copy"
+            onClick={() => walletAddress && copy(walletAddress)}
+          >
+            <ContentCopyOutlinedIcon
+              fontSize="small"
+              sx={{
+                color: theme.palette.grey[400],
+              }}
+            />
+          </IconButton>
+        </>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <Stack>
+      <Stack direction="row" alignItems="center" spacing={5}>
+        <Box width="50%">{renderNameInfo()}</Box>
         <Box width="50%">
           {isLoadingProfile && (
             <Skeleton variant="rectangular" width="40%" height="25px" />
@@ -58,30 +191,7 @@ const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
           component="div"
           color={theme.palette.grey[400]}
         >
-          {walletAddress ? (
-            <>
-              {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
-                walletAddress.length - 5,
-                walletAddress.length - 1,
-              )}`}{' '}
-              <IconButton
-                sx={{
-                  cursor: 'pointer',
-                }}
-                aria-label="copy"
-                onClick={() => walletAddress && copy(walletAddress)}
-              >
-                <ContentCopyOutlinedIcon
-                  fontSize="small"
-                  sx={{
-                    color: theme.palette.grey[400],
-                  }}
-                />
-              </IconButton>
-            </>
-          ) : (
-            <Skeleton variant="rectangular" width="15%" height="36px" />
-          )}
+          {renderWalletAddress()}
         </Typography>
         <Typography width="50%" variant="h4" component="div">
           {isLoadingProfile ? (
