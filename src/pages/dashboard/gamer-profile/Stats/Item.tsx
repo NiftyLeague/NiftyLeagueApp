@@ -1,24 +1,36 @@
-import { Stack, Typography, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme, Skeleton } from '@mui/material';
 
 interface ItemProps {
   label?: string;
   value?: string | number;
   isDisable?: boolean;
+  isLoading?: boolean;
 }
 
-const Item = ({ label, value, isDisable = false }: ItemProps): JSX.Element => {
+const Item = ({
+  label,
+  value,
+  isDisable = false,
+  isLoading = true,
+}: ItemProps): JSX.Element => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent="space-between">
       <Typography color={isDisable ? theme.palette.grey[400] : 'white'}>
         {label}:
       </Typography>
-      <Typography
-        color={isDisable ? theme.palette.grey[400] : theme.palette.warning.main}
-        fontWeight="bold"
-      >
-        {value}
-      </Typography>
+      {isLoading ? (
+        <Skeleton variant="rectangular" width="15%" height="18.67px" />
+      ) : (
+        <Typography
+          color={
+            isDisable ? theme.palette.grey[400] : theme.palette.warning.main
+          }
+          fontWeight="bold"
+        >
+          {value}
+        </Typography>
+      )}
     </Stack>
   );
 };

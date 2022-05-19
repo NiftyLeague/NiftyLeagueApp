@@ -5,7 +5,7 @@ import useFetch from './useFetch';
 const usePlayerProfile = (): {
   error?: Error;
   profile?: Profile;
-  profileLoading?: boolean;
+  loadingProfile?: boolean;
 } => {
   const auth = window.localStorage.getItem('authentication-token');
   let headers;
@@ -13,7 +13,7 @@ const usePlayerProfile = (): {
   const { error, data, loading } = useFetch<Profile>(MY_PROFILE_API_URL, {
     headers,
   });
-  return { error, profile: data, profileLoading: loading };
+  return { error, profile: data, loadingProfile: loading };
 };
 
 export default usePlayerProfile;

@@ -1,11 +1,20 @@
-import { Box, IconButton, useTheme } from '@mui/material';
-import useAllRentals from 'hooks/useAllRentals';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
+import { useContext } from 'react';
+import { Box, IconButton, useTheme, Skeleton } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-const ImageProfile = (): JSX.Element => {
+import DegenImage from 'components/cards/DegenCard/DegenImage';
+
+import { Rentals } from 'types/rentals';
+import { GamerProfileContext } from './index';
+
+interface ImageProfileProps {
+  rental: Rentals | undefined;
+}
+
+const ImageProfile = ({ rental }: ImageProfileProps): JSX.Element => {
   const theme = useTheme();
-  const { rentals } = useAllRentals();
+  const { isLoadingComics } = useContext(GamerProfileContext);
+
   return (
     <Box
       sx={{
@@ -15,8 +24,11 @@ const ImageProfile = (): JSX.Element => {
       }}
       position="relative"
     >
-      {rentals && rentals.length > 0 && rentals[0].degen_id && (
-        <DegenImage tokenId={rentals[0].degen_id} />
+      {!isLoadingComics && rental?.degen_id && (
+        <DegenImage tokenId={rental?.degen_id} />
+      )}
+      {isLoadingComics && (
+        <Skeleton variant="rectangular" width="100%" height="320px" />
       )}
       <IconButton
         sx={{

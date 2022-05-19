@@ -1,35 +1,61 @@
+import { useContext, useMemo } from 'react';
 import { Stack } from '@mui/material';
 import { getHours } from 'date-fns';
 
 import { ProfileTotal } from 'types/account';
 import Item from './Item';
+import { GamerProfileContext } from '../index';
 
 interface LeftInfoProps {
   total: ProfileTotal | undefined;
 }
 
 const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
-  return (
-    <Stack flex={1} spacing={1}>
-      <Item label="Rank" value={`#${total?.rank}`} />
-      <Item label="XP" value={total?.xp} />
-      <Item label="Matches" value={total?.matches} />
-      <Item label="Wins" value={total?.wins} />
-      <Item
-        label="Win Rate"
-        value={`${
+  const leftDataMapper: {
+    label: string;
+    value: string | number | undefined;
+  }[] = useMemo(() => {
+    return [
+      {
+        label: 'Rank',
+        value: `#${total?.rank}`,
+      },
+      {
+        label: 'XP',
+        value: total?.xp,
+      },
+      {
+        label: 'Matches',
+        value: total?.matches,
+      },
+      {
+        label: 'Wins',
+        value: total?.wins,
+      },
+      {
+        label: 'Win Rate',
+        value: `${
           (total?.wins &&
             total?.matches &&
             (total?.wins / total?.matches) * 100) ||
           0
-        }%`}
-      />
-      <Item
-        label="Time Played"
-        value={`${
+        }%`,
+      },
+      {
+        label: 'Time Played',
+        value: `${
           total?.time_played && getHours(new Date(total?.time_played))
-        } Hours`}
-      />
+        } Hours`,
+      },
+    ];
+  }, [total]);
+
+  const { isLoadingProfile } = useContext(GamerProfileContext);
+  return (
+    <Stack flex={1} spacing={1}>
+      {leftDataMapper.map((child) => (
+        <Item key={child.label} {...child} isLoading={isLoadingProfile} />
+      ))}
     </Stack>
   );
 };
