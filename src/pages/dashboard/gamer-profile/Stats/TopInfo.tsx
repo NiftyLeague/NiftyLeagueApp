@@ -1,19 +1,27 @@
-import React, { useContext } from 'react';
-import { Stack, Typography, useTheme, Box, IconButton } from '@mui/material';
+import { useContext } from 'react';
+import {
+  Stack,
+  Typography,
+  useTheme,
+  Box,
+  IconButton,
+  Skeleton,
+} from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import ProgressGamer from './ProgressGamer';
 import { ProfileTotal } from 'types/account';
-import { NetworkContext } from 'NetworkProvider';
+import { GamerProfileContext } from '../index';
 
 interface TopInfoProps {
   total?: ProfileTotal;
+  walletAddress: string;
 }
-const TopInfo = ({ total }: TopInfoProps): JSX.Element => {
+const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
   const theme = useTheme();
-  const { address } = useContext(NetworkContext);
+  const { isLoadingProfile } = useContext(GamerProfileContext);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [value, copy] = useCopyToClipboard();
   return (
@@ -36,38 +44,56 @@ const TopInfo = ({ total }: TopInfoProps): JSX.Element => {
             />
           </IconButton>
         </Typography>
-        <Box width="50%">{total && <ProgressGamer total={total} />}</Box>
+        <Box width="50%">
+          {isLoadingProfile && (
+            <Skeleton variant="rectangular" width="40%" height="25px" />
+          )}
+          {!isLoadingProfile && total && <ProgressGamer total={total} />}
+        </Box>
       </Stack>
       <Stack direction="row" alignItems="center" spacing={5}>
-        {address && (
-          <Typography
-            width="50%"
-            variant="h4"
-            component="div"
-            color={theme.palette.grey[400]}
-          >
-            {`${address.slice(0, 5)}...${address.slice(
-              address.length - 5,
-              address.length - 1,
-            )}`}{' '}
-            <IconButton
-              sx={{
-                cursor: 'pointer',
-              }}
-              aria-label="copy"
-              onClick={() => address && copy(address)}
-            >
-              <ContentCopyOutlinedIcon
-                fontSize="small"
+        <Typography
+          width="50%"
+          variant="h4"
+          component="div"
+          color={theme.palette.grey[400]}
+        >
+          {walletAddress ? (
+            <>
+              {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
+                walletAddress.length - 5,
+                walletAddress.length - 1,
+              )}`}{' '}
+              <IconButton
                 sx={{
-                  color: theme.palette.grey[400],
+                  cursor: 'pointer',
                 }}
-              />
-            </IconButton>
-          </Typography>
-        )}
+                aria-label="copy"
+                onClick={() => walletAddress && copy(walletAddress)}
+              >
+                <ContentCopyOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    color: theme.palette.grey[400],
+                  }}
+                />
+              </IconButton>
+            </>
+          ) : (
+            <Skeleton variant="rectangular" width="15%" height="36px" />
+          )}
+        </Typography>
         <Typography width="50%" variant="h4" component="div">
-          {total?.xp}/{total?.rank_xp_next}{' '}
+          {isLoadingProfile ? (
+            <Skeleton
+              variant="rectangular"
+              sx={{ display: 'inline-block' }}
+              width="15%"
+              height="19.76px"
+            />
+          ) : (
+            `${total?.xp}/${total?.rank_xp_next}`
+          )}
           <Typography
             variant="h4"
             component="div"
