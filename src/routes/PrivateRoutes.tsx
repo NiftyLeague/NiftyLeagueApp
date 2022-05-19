@@ -47,14 +47,11 @@ const PrivateRoutes = {
       path: 'degens',
       element: <DashboardDegensPage />,
     },
+    {
+      path: 'gamer-profile',
+      element: <DashboardGamerProfilePage />,
+    },
   ],
 };
-
-if (process.env.REACT_APP_GAMER_PROFILE_TOGGLE === 'true') {
-  PrivateRoutes.children.push({
-    path: 'gamer-profile',
-    element: <DashboardGamerProfilePage />,
-  });
-}
 
 export default PrivateRoutes;
