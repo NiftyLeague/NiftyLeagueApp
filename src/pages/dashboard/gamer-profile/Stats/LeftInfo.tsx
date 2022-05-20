@@ -46,7 +46,7 @@ const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
       {
         label: 'Time Played',
         value: `${
-          total?.time_played && getHours(new Date(total?.time_played))
+          (total?.time_played && getHours(new Date(total?.time_played))) || 0
         } Hours`,
       },
     ];
