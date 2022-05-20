@@ -3,20 +3,10 @@ import {
   Dialog as DialogMUI,
   DialogContent as DialogContentMUI,
   DialogTitle,
-  IconButton,
-  styled,
 } from '@mui/material';
 import { DialogContext } from '.';
 import { DialogProps } from 'types/dialog';
-import { DialogDismissButton } from './DialogActions';
-import CloseIcon from '@mui/icons-material/Close';
-
-const IconButtonStyle = styled(IconButton)(({ theme }) => ({
-  position: 'absolute',
-  right: 0,
-  top: 0,
-  color: theme.palette.grey[500],
-}));
+import { CloseIconButton } from './DialogActions';
 
 const DialogContentBase = (props: DialogProps) => {
   const [isOpen, setIsOpen] = useContext(DialogContext);
@@ -35,11 +25,7 @@ const DialogContent = ({
   <DialogContentBase {...props}>
     <DialogTitle>
       {dialogTitle}
-      <DialogDismissButton>
-        <IconButtonStyle aria-label="close">
-          <CloseIcon />
-        </IconButtonStyle>
-      </DialogDismissButton>
+      <CloseIconButton />
     </DialogTitle>
     <DialogContentMUI dividers>{children}</DialogContentMUI>
   </DialogContentBase>
