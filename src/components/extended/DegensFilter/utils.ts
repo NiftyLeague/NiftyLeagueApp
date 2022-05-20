@@ -1,7 +1,7 @@
 import { SetStateAction } from 'react';
 import { Degen } from 'types/degens';
 import { DegenFilter } from 'types/degenFilter';
-import defaultFilterValues from './constants';
+import DEFAULT_STATIC_FILTER from './constants';
 
 export const tranformDataByFilter = (
   degens: Degen[],
@@ -40,6 +40,7 @@ export const tranformDataByFilter = (
         degen.owner.toLowerCase() === walletAddress.toLowerCase(),
     );
   }
+
   result = result.filter((degen: Degen) => {
     const priceMatches = prices
       ? degen.price >= prices[0] && degen.price <= prices[1]
@@ -87,6 +88,7 @@ export const tranformDataByFilter = (
 };
 
 export const updateFilterValue = (
+  defaultFilter?: DegenFilter,
   params?: {
     [key: string]: string;
   },
@@ -94,7 +96,7 @@ export const updateFilterValue = (
     [key: string]: React.Dispatch<SetStateAction<any[]>>;
   },
 ) => {
-  const newFilter: any = { ...defaultFilterValues };
+  const newFilter: any = { ...defaultFilter };
   // eslint-disable-next-line guard-for-in
   for (const key in params) {
     const value = params[key as keyof DegenFilter];
@@ -113,7 +115,9 @@ export const updateFilterValue = (
           isOverviewFilter ? Number(type) : String(type),
         );
       actions &&
-        actions[key](newValue || defaultFilterValues[key as keyof DegenFilter]);
+        actions[key](
+          newValue || DEFAULT_STATIC_FILTER[key as keyof DegenFilter],
+        );
       newFilter[key] = newValue;
     }
   }
@@ -123,38 +127,31 @@ export const updateFilterValue = (
 
 export const getDefaultFilterValueFromData = (degens: Degen[] | undefined) => {
   if (!degens?.length) {
-    return {
-      ...defaultFilterValues,
-      prices: defaultFilterValues.prices,
-      multipliers: defaultFilterValues.multipliers,
-      rentals: defaultFilterValues.rentals,
-    };
+    return DEFAULT_STATIC_FILTER;
   }
-  let minPrice = degens[0].price;
-  let maxPrice = degens[0].price;
-  let minMultiplier = degens[0].multiplier;
-  let maxMultiplier = degens[0].multiplier;
-  let minRental = degens[0].rental_count;
-  let maxRental = degens[0].rental_count;
+  let minPrice = DEFAULT_STATIC_FILTER.prices[0];
+  let maxPrice = DEFAULT_STATIC_FILTER.prices[1];
+  let minMultiplier = DEFAULT_STATIC_FILTER.multipliers[0];
+  let maxMultiplier = DEFAULT_STATIC_FILTER.multipliers[1];
+  let minRental = DEFAULT_STATIC_FILTER.rentals[0];
+  let maxRental = DEFAULT_STATIC_FILTER.rentals[1];
 
-  let defaultValue;
-  degens.reduce((prev, current) => {
-    const { price, multiplier, rental_count } = current;
+  degens.forEach((degen) => {
+    const { price, multiplier, rental_count } = degen;
     minPrice = price < minPrice ? price : minPrice;
     maxPrice = price > maxPrice ? price : maxPrice;
     minMultiplier = multiplier < minMultiplier ? multiplier : minMultiplier;
     maxMultiplier = multiplier > maxMultiplier ? multiplier : maxMultiplier;
     minRental = rental_count < minRental ? rental_count : minRental;
     maxRental = rental_count > maxRental ? rental_count : maxRental;
-    defaultValue = {
-      prices: [minPrice, maxPrice],
-      multipliers: [minMultiplier, maxMultiplier],
-      rentals: [minRental, maxRental],
-    };
-    return current;
   });
-  return {
-    ...defaultFilterValues,
-    ...defaultValue,
+
+  const newFilterValues = {
+    ...DEFAULT_STATIC_FILTER,
+    prices: [minPrice, maxPrice],
+    multipliers: [minMultiplier, maxMultiplier],
+    rentals: [minRental, maxRental],
   };
+
+  return newFilterValues;
 };
