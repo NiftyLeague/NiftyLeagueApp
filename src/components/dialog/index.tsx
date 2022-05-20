@@ -1,6 +1,10 @@
 import { useState, createContext } from 'react';
 import { DialogProps } from 'types/dialog';
-import { DialogDismissButton, DialogTrigger } from './DialogActions';
+import {
+  DialogDismissButton,
+  DialogTrigger,
+  CloseIconButton,
+} from './DialogActions';
 import { DialogContent, DialogContentBase } from './DialogContent';
 
 const defaultValue: any[] = [];
@@ -13,6 +17,7 @@ const Dialog = (props: DialogProps) => {
 };
 
 export {
+  CloseIconButton,
   DialogDismissButton,
   DialogTrigger,
   DialogContent,
