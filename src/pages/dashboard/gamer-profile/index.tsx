@@ -154,7 +154,7 @@ const GamerProfile = (): JSX.Element => {
   return (
     <Grid container gap={sectionSpacing}>
       {error && !profile && renderEmptyProfile()}
-      {renderGamerProfile()}
+      {profile && renderGamerProfile()}
     </Grid>
   );
 };
