@@ -39,9 +39,7 @@ const ProgressGamer = ({ total }: ProgressGamerProps): JSX.Element => {
       <LinearProgress
         variant="determinate"
         color="primary"
-        value={
-          ((total?.rank_xp_previous + total?.xp) / total?.rank_xp_next) * 100
-        }
+        value={(total?.xp / total?.rank_xp_next) * 100}
         sx={{
           height: '25px',
           [`&.${linearProgressClasses.colorPrimary}`]: {

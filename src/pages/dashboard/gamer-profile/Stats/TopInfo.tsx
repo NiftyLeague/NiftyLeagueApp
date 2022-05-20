@@ -48,7 +48,7 @@ const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
         </Typography>
         <Box width="50%">
           {isLoadingProfile && (
-            <Skeleton variant="rectangular" width="40%" height="25px" />
+            <Skeleton variant="rectangular" width="100%" height="25px" />
           )}
           {!isLoadingProfile && total && <ProgressGamer total={total} />}
         </Box>
