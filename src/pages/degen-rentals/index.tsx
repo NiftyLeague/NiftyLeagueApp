@@ -16,7 +16,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import DegenCard from 'components/cards/DegenCard';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
-import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
@@ -40,8 +40,8 @@ const DEGENS_PER_PAGE = 12;
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
-  const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
+  const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>();
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -68,7 +68,7 @@ const DegenRentalsPage = (): JSX.Element => {
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
       if (!isEmpty(params)) {
-        const newFilterOptions = updateFilterValue(params);
+        const newFilterOptions = updateFilterValue(defaultValues, params);
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
@@ -129,7 +129,7 @@ const DegenRentalsPage = (): JSX.Element => {
         renderDrawer={() =>
           !isEmpty(defaultValues) && (
             <DegensFilter
-              handleFilter={handleFilter}
+              onFilter={handleFilter}
               defaultFilterValues={defaultValues as DegenFilter}
             />
           )
