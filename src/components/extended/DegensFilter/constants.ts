@@ -1,6 +1,6 @@
 import { DegenFilter } from 'types/degenFilter';
 
-const defaultFilterValues: DegenFilter = {
+const DEFAULT_STATIC_FILTER: DegenFilter = {
   prices: [100, 3500],
   multipliers: [1, 10],
   rentals: [0, 10],
@@ -11,4 +11,4 @@ const defaultFilterValues: DegenFilter = {
   searchTerm: [''],
 };
 
-export default defaultFilterValues;
+export default DEFAULT_STATIC_FILTER;
