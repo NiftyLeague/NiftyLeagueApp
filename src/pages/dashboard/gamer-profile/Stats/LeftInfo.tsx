@@ -3,6 +3,8 @@ import { Stack } from '@mui/material';
 import { getHours } from 'date-fns';
 
 import { ProfileTotal } from 'types/account';
+import { formatNumberToDisplay } from 'utils/numbers';
+
 import Item from './Item';
 import { GamerProfileContext } from '../index';
 
@@ -22,7 +24,7 @@ const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
       },
       {
         label: 'XP',
-        value: total?.xp,
+        value: formatNumberToDisplay(total?.xp || 0.0),
       },
       {
         label: 'Matches',
@@ -37,7 +39,7 @@ const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
         value: `${
           (total?.wins &&
             total?.matches &&
-            (total?.wins / total?.matches) * 100) ||
+            formatNumberToDisplay((total?.wins / total?.matches) * 100)) ||
           0
         }%`,
       },
