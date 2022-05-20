@@ -9,6 +9,7 @@ export interface Account {
   session_key: string;
   session_updated_at: number;
   name: string;
+  name_cased?: string;
 }
 
 export interface Profile {
