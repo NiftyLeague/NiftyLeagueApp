@@ -3,9 +3,10 @@ import { TextField, FormControl } from '@mui/material';
 
 interface Props {
   handleSearch: (currentValue: string) => void;
+  placeholder?: string;
 }
 
-const SearchRental = ({ handleSearch }: Props): JSX.Element => {
+const SearchRental = ({ handleSearch, placeholder }: Props): JSX.Element => {
   const inputEl: any = useRef();
   let typingTimer;
   useEffect(
@@ -43,7 +44,7 @@ const SearchRental = ({ handleSearch }: Props): JSX.Element => {
   return (
     <FormControl>
       <TextField
-        placeholder="Search renter by name"
+        placeholder={placeholder || 'Search renter by name'}
         name="search"
         variant="outlined"
         fullWidth

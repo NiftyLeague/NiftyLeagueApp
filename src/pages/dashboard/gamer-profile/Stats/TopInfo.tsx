@@ -27,8 +27,7 @@ const TopInfo = ({ total, account }: TopInfoProps): JSX.Element => {
   const [accountName, setAccountName] = useState<string>('Unknown');
   const { isLoadingProfile, isLoadingAccount } =
     useContext(GamerProfileContext);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [value, copy] = useCopyToClipboard();
+  const [, copy] = useCopyToClipboard();
   const walletAddress = account?.address;
 
   useEffect(() => {
