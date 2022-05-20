@@ -28,7 +28,6 @@ const ChangeProfileNameForm = ({
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { fee, loadingFee } = useProfileRenameFee();
   const [, setIsOpen] = useContext(DialogContext);
-  // const { rentalId, degenId, renter, playerAddress } = rental;
 
   const {
     handleSubmit,
