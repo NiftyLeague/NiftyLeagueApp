@@ -11,6 +11,7 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import { ProfileTotal, Account } from 'types/account';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 import ProgressGamer from './ProgressGamer';
 import { GamerProfileContext } from '../index';
@@ -106,7 +107,7 @@ const TopInfo = ({ total, account }: TopInfoProps): JSX.Element => {
         <Box width="50%">{renderNameInfo()}</Box>
         <Box width="50%">
           {isLoadingProfile && (
-            <Skeleton variant="rectangular" width="40%" height="25px" />
+            <Skeleton variant="rectangular" width="100%" height="25px" />
           )}
           {!isLoadingProfile && total && <ProgressGamer total={total} />}
         </Box>
@@ -129,7 +130,7 @@ const TopInfo = ({ total, account }: TopInfoProps): JSX.Element => {
               height="19.76px"
             />
           ) : (
-            `${total?.xp}/${total?.rank_xp_next}`
+            `${formatNumberToDisplay(total?.xp || 0)}/${total?.rank_xp_next}`
           )}
           <Typography
             variant="h4"
