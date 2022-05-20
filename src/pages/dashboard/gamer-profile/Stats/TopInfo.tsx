@@ -11,8 +11,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
-import ProgressGamer from './ProgressGamer';
 import { ProfileTotal } from 'types/account';
+import { formatNumberToDisplay } from 'utils/numbers';
+
+import ProgressGamer from './ProgressGamer';
 import { GamerProfileContext } from '../index';
 
 interface TopInfoProps {
@@ -92,7 +94,7 @@ const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
               height="19.76px"
             />
           ) : (
-            `${total?.xp}/${total?.rank_xp_next}`
+            `${formatNumberToDisplay(total?.xp || 0)}/${total?.rank_xp_next}`
           )}
           <Typography
             variant="h4"
