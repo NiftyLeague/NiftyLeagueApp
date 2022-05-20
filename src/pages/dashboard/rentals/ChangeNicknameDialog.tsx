@@ -7,14 +7,13 @@ import {
   TextField,
   DialogActions,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { useDispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
 
 interface Props {
   rental: RentalDataGrid;
@@ -34,7 +33,7 @@ const ChangeNicknameDialog = ({
   updateNickname,
 }: Props): JSX.Element => {
   const authToken = window.localStorage.getItem('authentication-token');
-  const dispatch = useDispatch();
+
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { rentalId, degenId, renter, playerAddress } = rental;
 
@@ -68,17 +67,7 @@ const ChangeNicknameDialog = ({
   };
 
   const onRenameRentalSuccess = (newName: string) => {
-    dispatch(
-      openSnackbar({
-        open: true,
-        message: 'Rename Rental Successful',
-        variant: 'alert',
-        alert: {
-          color: 'success',
-        },
-        close: false,
-      }),
-    );
+    toast.success('Rename Rental Successful!', { theme: 'dark' });
     updateNickname(newName, rentalId);
     reset();
   };

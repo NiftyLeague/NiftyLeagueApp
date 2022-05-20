@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Stack,
   Typography,
@@ -7,45 +7,104 @@ import {
   IconButton,
   Skeleton,
 } from '@mui/material';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
-import { ProfileTotal } from 'types/account';
+import { ProfileTotal, Account } from 'types/account';
 import { formatNumberToDisplay } from 'utils/numbers';
 
 import ProgressGamer from './ProgressGamer';
 import { GamerProfileContext } from '../index';
+import ChangeProfileNameDialog from './ChangeProfileNameDialog';
 
 interface TopInfoProps {
   total?: ProfileTotal;
-  walletAddress: string;
+  account: Account | undefined;
 }
-const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
+
+const TopInfo = ({ total, account }: TopInfoProps): JSX.Element => {
   const theme = useTheme();
-  const { isLoadingProfile } = useContext(GamerProfileContext);
+  const [accountName, setAccountName] = useState<string>('Unknown');
+  const { isLoadingProfile, isLoadingAccount } =
+    useContext(GamerProfileContext);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [value, copy] = useCopyToClipboard();
-  return (
-    <Stack>
-      <Stack direction="row" alignItems="center" spacing={5}>
-        <Typography width="50%" variant="h2" component="div">
-          Unknown{' '}
+  const walletAddress = account?.address;
+
+  useEffect(() => {
+    if (account && account?.name_cased) {
+      setAccountName(account.name_cased);
+    }
+  }, [account]);
+
+  const handleUpdateNewName = (newName: string) => {
+    setAccountName(newName);
+  };
+
+  const renderNameInfo = () => {
+    if (isLoadingAccount) {
+      return (
+        <Skeleton
+          sx={{ my: '5px ' }}
+          variant="rectangular"
+          width="50%"
+          height="26px"
+        />
+      );
+    }
+    if (!isLoadingAccount && accountName) {
+      return (
+        <Typography variant="h2" component="div">
+          {accountName}{' '}
+          <ChangeProfileNameDialog handleUpdateNewName={handleUpdateNewName} />
+        </Typography>
+      );
+    }
+    return null;
+  };
+
+  const renderWalletAddress = () => {
+    if (isLoadingAccount) {
+      return (
+        <Skeleton
+          sx={{ my: '5px ' }}
+          variant="rectangular"
+          width="30%"
+          height="26px"
+        />
+      );
+    }
+    if (!isLoadingAccount && walletAddress) {
+      return (
+        <>
+          {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
+            walletAddress.length - 5,
+            walletAddress.length - 1,
+          )}`}{' '}
           <IconButton
             sx={{
               cursor: 'pointer',
             }}
-            aria-label="edit"
-            onClick={() => null}
+            aria-label="copy"
+            onClick={() => walletAddress && copy(walletAddress)}
           >
-            <EditOutlinedIcon
+            <ContentCopyOutlinedIcon
               fontSize="small"
               sx={{
                 color: theme.palette.grey[400],
               }}
             />
           </IconButton>
-        </Typography>
+        </>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <Stack>
+      <Stack direction="row" alignItems="center" spacing={5}>
+        <Box width="50%">{renderNameInfo()}</Box>
         <Box width="50%">
           {isLoadingProfile && (
             <Skeleton variant="rectangular" width="100%" height="25px" />
@@ -60,30 +119,7 @@ const TopInfo = ({ total, walletAddress }: TopInfoProps): JSX.Element => {
           component="div"
           color={theme.palette.grey[400]}
         >
-          {walletAddress ? (
-            <>
-              {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
-                walletAddress.length - 5,
-                walletAddress.length - 1,
-              )}`}{' '}
-              <IconButton
-                sx={{
-                  cursor: 'pointer',
-                }}
-                aria-label="copy"
-                onClick={() => walletAddress && copy(walletAddress)}
-              >
-                <ContentCopyOutlinedIcon
-                  fontSize="small"
-                  sx={{
-                    color: theme.palette.grey[400],
-                  }}
-                />
-              </IconButton>
-            </>
-          ) : (
-            <Skeleton variant="rectangular" width="15%" height="36px" />
-          )}
+          {renderWalletAddress()}
         </Typography>
         <Typography width="50%" variant="h4" component="div">
           {isLoadingProfile ? (

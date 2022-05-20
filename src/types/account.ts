@@ -5,6 +5,11 @@ export interface Account {
   id: string;
   update_counter?: number;
   updated_at?: number;
+  is_banned: boolean;
+  session_key: string;
+  session_updated_at: number;
+  name: string;
+  name_cased?: string;
 }
 
 export interface Profile {
