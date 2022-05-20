@@ -61,6 +61,7 @@ export interface WithdrawalHistory {
   balance_before: number;
   balance_tx_id: string;
   created_at: number;
+  expire_at: number;
   nonce: number;
   request_id: string;
   signature: string;

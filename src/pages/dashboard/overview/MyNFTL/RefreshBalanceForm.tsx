@@ -150,6 +150,29 @@ const HistoryTable = ({
   );
 };
 
+const checkRefreshDisabled = (
+  history: WithdrawalHistory[],
+  nonce: number,
+): { error: boolean; errorMsg?: string } => {
+  let error = true;
+  if (!history.length)
+    return { error, errorMsg: 'No withdrawal history found.' };
+  const pendingTxs = history.filter((tx) => tx.state === 'pending');
+  if (!pendingTxs.length)
+    return { error, errorMsg: 'No pending transactions found.' };
+  const now = Math.floor(Date.now() / 1000);
+  const elligiblePendingTxs = pendingTxs.filter((tx) => {
+    const timeDiff = (tx.expire_at - now) / 60;
+    return tx.nonce < nonce || timeDiff < 1;
+  });
+  if (!elligiblePendingTxs.length)
+    return {
+      error,
+      errorMsg: `Can only void pending transactions with nonce less than ${nonce} unless expired.`,
+    };
+  return { error: false };
+};
+
 interface RefreshFormProps {
   refreshTimeout: number;
   onRefresh: () => Promise<void>;
@@ -164,13 +187,9 @@ const RefreshForm = ({
   const [disabled, setDisabled] = useState(refreshTimeout > 0);
   const { handleSubmit, reset } = useForm();
   const { loading: historyLoading, withdrawalHistory } = useWithdrawalHistory();
-  const refreshEnabled = withdrawalHistory.length;
   const { address } = useContext(NetworkContext);
   const nonce = useBalanceManagerNonce(address);
-  const pendingTxs = withdrawalHistory.filter((tx) => tx.state === 'pending');
-  const hasPendingTxs = pendingTxs.length > 0;
-  const hasOldPendingTxs =
-    pendingTxs.filter((tx) => tx.nonce < nonce).length > 0;
+  const { error, errorMsg } = checkRefreshDisabled(withdrawalHistory, nonce);
 
   const resetForm = () => {
     reset();
@@ -192,23 +211,14 @@ const RefreshForm = ({
           <Skeleton variant="rectangular" width="100%" height={320} />
         ) : (
           <>
-            {refreshEnabled ? (
+            {withdrawalHistory.length ? (
               <HistoryTable
                 withdrawalHistory={withdrawalHistory}
                 resetForm={resetForm}
                 nonce={nonce}
               />
-            ) : (
-              <Alert severity="error">No withdrawal history found</Alert>
-            )}
-            {refreshEnabled && !hasPendingTxs ? (
-              <Alert severity="info">No pending transactions found</Alert>
             ) : null}
-            {refreshEnabled && hasPendingTxs && !hasOldPendingTxs ? (
-              <Alert severity="info">
-                Can only void pending transactions with nonce less than {nonce}
-              </Alert>
-            ) : null}
+            {error && <Alert severity="info">{errorMsg}</Alert>}
           </>
         )}
         <LoadingButton
@@ -217,7 +227,7 @@ const RefreshForm = ({
           variant="contained"
           loading={loading}
           fullWidth
-          disabled={!refreshEnabled || !hasOldPendingTxs || disabled}
+          disabled={error || disabled}
         >
           Void pending transactions
         </LoadingButton>
