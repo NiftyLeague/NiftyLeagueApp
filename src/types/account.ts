@@ -5,6 +5,11 @@ export interface Account {
   id: string;
   update_counter?: number;
   updated_at?: number;
+  is_banned: boolean;
+  session_key: string;
+  session_updated_at: number;
+  name: string;
+  name_cased?: string;
 }
 
 export interface Profile {
@@ -14,7 +19,7 @@ export interface Profile {
     nifty_smasher: {
       hits: number;
       kills: number;
-      win: number;
+      wins: number;
       earnings: number;
       suicides: number;
       round_wins: number;
@@ -23,16 +28,31 @@ export interface Profile {
       time_played: number;
       deaths: number;
       rounds: number;
-    };
-    total: {
-      xp: number;
       rental_earnings: number;
-      rental_royalty_earnings: number;
-      earnings: number;
-      matches: number;
-      time_played: number;
+      rental_earnings_as_renter: number;
+      rental_earnings_as_owner: number;
+      rank: number;
+      rank_xp_previous: number;
+      rank_xp_next: number;
     };
+    total: ProfileTotal;
   };
+}
+
+export interface ProfileTotal {
+  wins: number;
+  xp: number;
+  rental_earnings: number;
+  rental_royalty_earnings: number;
+  rental_earnings_as_owner: number;
+  rental_earnings_as_renter: number;
+  rental_game_earnings: number;
+  earnings: number;
+  matches: number;
+  time_played: number;
+  rank: number;
+  rank_xp_previous: number;
+  rank_xp_next: number;
 }
 
 export interface WithdrawalHistory {
@@ -41,6 +61,7 @@ export interface WithdrawalHistory {
   balance_before: number;
   balance_tx_id: string;
   created_at: number;
+  expire_at: number;
   nonce: number;
   request_id: string;
   signature: string;
