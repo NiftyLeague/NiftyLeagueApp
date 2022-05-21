@@ -28,7 +28,9 @@ const ProgressGamer = ({ total }: ProgressGamerProps): JSX.Element => {
           margin: 'auto',
           background: theme.palette.primary.main,
           content: `'${
-            total?.xp > total?.rank_xp_previous ? total?.rank + 1 : total?.rank
+            (total?.xp > total?.rank_xp_previous
+              ? total?.rank + 1
+              : total?.rank) || 0
           }'`,
           zIndex: 1,
           fontWeight: 'bold',

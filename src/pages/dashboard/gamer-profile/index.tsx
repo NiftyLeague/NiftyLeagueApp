@@ -3,11 +3,10 @@ import { Grid, Stack, Typography } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import { useQuery } from '@apollo/client';
 
-import usePlayerProfile from 'hooks/usePlayerProfile';
+import { useGamerProfile } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useComicsBalance from 'hooks/useComicsBalance';
 import useAllRentals from 'hooks/useAllRentals';
-import useAccount from 'hooks/useAccount';
 
 import SectionSlider from 'components/sections/SectionSlider';
 import ImageProfile from './ImageProfile';
@@ -28,18 +27,16 @@ const defaultValue: {
   isLoadingDegens: boolean | undefined;
   isLoadingComics: boolean | undefined;
   isLoadingRentals: boolean | undefined;
-  isLoadingAccount: boolean | undefined;
 } = {
   isLoadingProfile: true,
   isLoadingDegens: true,
   isLoadingComics: true,
   isLoadingRentals: true,
-  isLoadingAccount: true,
 };
 export const GamerProfileContext = createContext(defaultValue);
 
 const GamerProfile = (): JSX.Element => {
-  const { profile, error, loadingProfile } = usePlayerProfile();
+  const { profile, error, loadingProfile } = useGamerProfile();
   const { address } = useContext(NetworkContext);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const { data } = useFetch<Degen[]>(
@@ -47,7 +44,6 @@ const GamerProfile = (): JSX.Element => {
   );
 
   const { rentals, loadingRentals } = useAllRentals();
-  const { account, loadingAccount } = useAccount();
 
   const {
     loading: loadingDegens,
@@ -102,7 +98,6 @@ const GamerProfile = (): JSX.Element => {
           isLoadingDegens: loadingDegens,
           isLoadingComics: loadingComics,
           isLoadingRentals: loadingRentals,
-          isLoadingAccount: loadingAccount,
         }}
       >
         <Grid item container spacing={3}>
@@ -110,7 +105,7 @@ const GamerProfile = (): JSX.Element => {
             <ImageProfile rentals={rentals} />
           </Grid>
           <Grid item xs={12} md={8.5}>
-            <TopInfo account={account} total={profile?.stats?.total} />
+            <TopInfo profile={profile} walletAddress={address} />
             <hr />
             <Stack spacing={1}>
               <Stack>
@@ -153,8 +148,8 @@ const GamerProfile = (): JSX.Element => {
   };
   return (
     <Grid container gap={sectionSpacing}>
-      {error && !profile && renderEmptyProfile()}
-      {profile && renderGamerProfile()}
+      {error && !profile && !loadingProfile && renderEmptyProfile()}
+      {(profile || loadingProfile) && renderGamerProfile()}
     </Grid>
   );
 };
