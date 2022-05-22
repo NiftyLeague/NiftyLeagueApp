@@ -80,6 +80,8 @@ const MyRentalsDataGrid = ({
         return rentals.filter((rental) => rental.category === 'recruited');
       case 'direct-renter':
         return rentals.filter((rental) => rental.category === 'direct-renter');
+      case 'terminated':
+        return rentals.filter((rental) => rental.action === true);
       case 'all':
       default:
         return rentals;
