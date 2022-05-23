@@ -20,7 +20,7 @@ const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
     return [
       {
         label: 'Rank',
-        value: `#${total?.rank}`,
+        value: `#${total?.rank || 0}`,
       },
       {
         label: 'XP',

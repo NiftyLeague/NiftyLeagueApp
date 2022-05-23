@@ -1,5 +1,5 @@
-import { RENAME_PROFILE_NAME } from 'constants/url';
-import useFetch from './useFetch';
+import { PROFILE_RENAME_API } from 'constants/url';
+import useFetch from '../useFetch';
 
 const useProfileRenameFee = (): {
   errorFee?: Error;
@@ -12,7 +12,7 @@ const useProfileRenameFee = (): {
   const { error, data, loading } = useFetch<{
     id: string;
     price: number;
-  }>(RENAME_PROFILE_NAME, {
+  }>(PROFILE_RENAME_API, {
     headers,
   });
   return { errorFee: error, fee: data?.price, loadingFee: loading };

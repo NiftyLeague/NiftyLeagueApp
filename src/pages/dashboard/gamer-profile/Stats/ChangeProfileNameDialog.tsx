@@ -30,13 +30,12 @@ const ChangeProfileNameDialog = ({
       </DialogTrigger>
       <DialogContent
         aria-labelledby="customized-dialog-title"
-        dialogTitle="Update a new name"
+        dialogTitle="Update your username"
         sx={{
           '& h2': {
             textAlign: 'center',
           },
           '& .MuiDialogContent-root': {
-            textAlign: 'center',
             width: '300px',
           },
         }}
