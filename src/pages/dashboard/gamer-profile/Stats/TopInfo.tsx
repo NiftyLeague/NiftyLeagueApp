@@ -45,7 +45,7 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
               />
             </Typography>
           </Box>
-          <Box width="50%">{total && <ProgressGamer total={total} />}</Box>
+          <Box width="50%">{total && <ProgressGamer data={total} />}</Box>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={5}>
           <Typography

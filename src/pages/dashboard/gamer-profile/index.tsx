@@ -14,6 +14,7 @@ import RightInfo from './Stats/RightInfo';
 import LeftInfo from './Stats/LeftInfo';
 import TopInfo from './Stats/TopInfo';
 import EmptyState from 'components/EmptyState';
+import BottomInfo from './Stats/BottomInfo';
 
 import { DEGEN_BASE_API_URL } from 'constants/url';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
@@ -92,6 +93,42 @@ const GamerProfile = (): JSX.Element => {
 
   const renderTopProfile = () => {
     return (
+      <Grid item container spacing={3}>
+        <Grid item xs={12} md={3.5}>
+          <ImageProfile rentals={rentals} />
+        </Grid>
+        <Grid item xs={12} md={8.5}>
+          <TopInfo profile={profile} walletAddress={address} />
+          <hr />
+          <Stack spacing={1}>
+            <Stack>
+              <Typography variant="h3" component="div">
+                Nifty League Player Stats
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={5}>
+              <LeftInfo data={profile?.stats?.total} />
+              <RightInfo
+                degenCount={filteredDegens?.length}
+                comicCount={filteredComics?.length}
+              />
+            </Stack>
+          </Stack>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const renderBottomProfile = () => {
+    return (
+      <SectionSlider firstSection title="Player Stats by Game" isSlider={false}>
+        <BottomInfo nifty_smashers={profile?.stats?.nifty_smashers} />
+      </SectionSlider>
+    );
+  };
+
+  const renderGamerProfile = () => {
+    return (
       <GamerProfileContext.Provider
         value={{
           isLoadingProfile: loadingProfile,
@@ -100,54 +137,13 @@ const GamerProfile = (): JSX.Element => {
           isLoadingRentals: loadingRentals,
         }}
       >
-        <Grid item container spacing={3}>
-          <Grid item xs={12} md={3.5}>
-            <ImageProfile rentals={rentals} />
-          </Grid>
-          <Grid item xs={12} md={8.5}>
-            <TopInfo profile={profile} walletAddress={address} />
-            <hr />
-            <Stack spacing={1}>
-              <Stack>
-                <Typography variant="h3" component="div">
-                  Nifty League Player Stats
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={5}>
-                <LeftInfo total={profile?.stats?.total} />
-                <RightInfo
-                  degenCount={filteredDegens?.length}
-                  comicCount={filteredComics?.length}
-                />
-              </Stack>
-            </Stack>
-          </Grid>
-        </Grid>
+        {renderTopProfile()}
+        {renderBottomProfile()}
       </GamerProfileContext.Provider>
     );
   };
-
-  const renderBottomProfile = () => {
-    return (
-      <Stack gap={sectionSpacing}>
-        <SectionSlider
-          firstSection
-          title="Player Stats by Game"
-        ></SectionSlider>
-      </Stack>
-    );
-  };
-
-  const renderGamerProfile = () => {
-    return (
-      <>
-        {renderTopProfile()}
-        {renderBottomProfile()}
-      </>
-    );
-  };
   return (
-    <Grid container gap={sectionSpacing}>
+    <Grid container gap={sectionSpacing} mb="24px">
       {error && !profile && !loadingProfile && renderEmptyProfile()}
       {(profile || loadingProfile) && renderGamerProfile()}
     </Grid>
