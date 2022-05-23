@@ -6,7 +6,7 @@ import { sectionSpacing } from 'store/constant';
 import SectionTitle from './SectionTitle';
 
 interface Props {
-  title: string;
+  title: string | React.ReactNode;
   firstSection?: boolean;
   actions?: ReactNode;
   sliderSettingsOverride?: Settings;
