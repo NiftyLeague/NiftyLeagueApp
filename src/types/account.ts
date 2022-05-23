@@ -37,6 +37,8 @@ export interface Profile {
     };
     total: ProfileTotal;
   };
+  name: string;
+  name_cased: string;
 }
 
 export interface ProfileTotal {
