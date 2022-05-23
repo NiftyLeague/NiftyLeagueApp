@@ -46,67 +46,6 @@ export type MailBoxCount = {
   forums: number;
 };
 
-export interface MailDrawerProps {
-  filter: string;
-  handleFilter: (s: string) => void;
-  handleDrawerOpen: MailListHeaderProps['handleDrawerOpen'];
-  openMailSidebar: boolean | undefined;
-  unreadCounts: MailBoxCount | undefined;
-}
-
-export interface MailDetailsProps {
-  handleUserDetails: (
-    e: React.MouseEvent<HTMLButtonElement> | undefined,
-    v: MailProps | null,
-  ) => void;
-  data: MailProps | null;
-  handleStarredChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    d: MailProps | null,
-  ) => void;
-  handleImportantChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    d: MailProps | null,
-  ) => void;
-}
-
-export interface MailListProps {
-  data: MailProps[];
-  search: MailListHeaderProps['search'];
-  handleSearch: MailListHeaderProps['handleSearch'];
-  handleDrawerOpen: MailListHeaderProps['handleDrawerOpen'];
-  handleUserDetails: (e: React.SyntheticEvent, m: MailProps) => void;
-  handleStarredChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    m: MailProps,
-  ) => void;
-  handleImportantChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    m: MailProps,
-  ) => void;
-}
-
-export interface MailListHeaderProps {
-  search: string;
-  handleSearch: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-  length: number;
-  rowsPerPage: number;
-  page: number;
-  handleChangePage: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
-    newPage: number,
-  ) => void;
-  handleChangeRowsPerPage: (
-    event:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | undefined,
-  ) => void;
-  handleDrawerOpen: () => void;
-  handleDenseTable: () => void;
-}
-
 export interface MailStateProps {
   mails: MailProps[];
   error: object | string | null;

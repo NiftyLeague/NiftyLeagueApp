@@ -37,12 +37,12 @@ type FilterSource =
   | 'searchTerm';
 
 interface DegensFilterProps {
-  handleFilter: (filter: DegenFilter) => void;
+  onFilter: (filter: DegenFilter) => void;
   defaultFilterValues: DegenFilter;
 }
 
 const DegensFilter = ({
-  handleFilter,
+  onFilter,
   defaultFilterValues,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
@@ -78,32 +78,6 @@ const DegensFilter = ({
   );
   const [searchTermValue, setSearchTermValue] = useState<string[]>(
     defaultFilterValues.searchTerm,
-  );
-  const filterOptionsMemoized = useMemo(
-    () => ({
-      backgroundsValue,
-      cosmeticsValue,
-      multipliersRangeValue,
-      pricesRangeValue,
-      rentalsRangeValue,
-      searchTermValue,
-      tribesValue,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [params],
-  );
-
-  const actions = useMemo(
-    () => ({
-      prices: setPricesRangeValue,
-      multipliers: setMultipliersRangeValue,
-      rentals: setRentalsRangeValue,
-      tribes: setTribesValue,
-      backgrounds: setBackgroundsValue,
-      cosmetics: setCosmeticsValue,
-      searchTerm: setSearchTermValue,
-    }),
-    [],
   );
 
   // Set search params from filter values
@@ -211,23 +185,26 @@ const DegensFilter = ({
 
   // Update local state on mount & on filter params update
   useEffect(() => {
-    updateFilterValue(params, actions);
-    handleFilter({
-      prices: filterOptionsMemoized.pricesRangeValue,
-      multipliers: filterOptionsMemoized.multipliersRangeValue,
-      rentals: filterOptionsMemoized.rentalsRangeValue,
-      tribes: filterOptionsMemoized.tribesValue,
-      backgrounds: filterOptionsMemoized.backgroundsValue,
-      cosmetics: filterOptionsMemoized.cosmeticsValue,
-      searchTerm: filterOptionsMemoized.searchTermValue,
+    const newFilters = updateFilterValue(defaultFilterValues, params, {
+      prices: setPricesRangeValue,
+      multipliers: setMultipliersRangeValue,
+      rentals: setRentalsRangeValue,
+      tribes: setTribesValue,
+      backgrounds: setBackgroundsValue,
+      cosmetics: setCosmeticsValue,
+      searchTerm: setSearchTermValue,
     });
-  }, [
-    actions,
-    defaultFilterValues,
-    filterOptionsMemoized,
-    handleFilter,
-    params,
-  ]);
+
+    onFilter({
+      prices: newFilters.prices,
+      multipliers: newFilters.multipliers,
+      rentals: newFilters.rentals,
+      tribes: newFilters.tribes,
+      backgrounds: newFilters.backgrounds,
+      cosmetics: newFilters.cosmetics,
+      searchTerm: newFilters.searchTerm,
+    });
+  }, [defaultFilterValues, onFilter, params]);
 
   return (
     <Stack

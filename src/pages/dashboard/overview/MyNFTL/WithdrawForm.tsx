@@ -1,11 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+// import * as yup from 'yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Box,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Link,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -18,26 +15,44 @@ import { providers } from 'ethers';
 import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
-import * as yup from 'yup';
 import { DialogContext } from 'components/dialog';
 import { formatNumberToDisplay } from 'utils/numbers';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
+import useFetch from 'hooks/useFetch';
 import { WithdrawalHistory } from 'types/account';
+import { WITHDRAW_NFTL_AVAILABILITY } from 'constants/url';
+import { formatDateTime } from 'helpers/dateTime';
 
-const checkWithdrawalDisabled = (history: WithdrawalHistory[]) => {
-  if (history.length) {
-    const recent = history[0];
-    const now = Math.floor(Date.now() / 1000);
-    const differnce = (now - recent.created_at) / 60;
-    return differnce < 1;
-  }
-  return false;
+const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
+  const [withdrawDisabled, setWithdrawDisabled] = useState(false);
+  const [availableIn, setAvailableIn] = useState(0);
+  const [availableAt, setAvailableAt] = useState<number | undefined>();
+  const authToken = window.localStorage.getItem('authentication-token');
+  let headers;
+  if (authToken) headers = { authorizationToken: authToken };
+  const { loading, data } = useFetch<{
+    is_available: boolean;
+    available_in: number;
+    available_at?: number;
+  }>(WITHDRAW_NFTL_AVAILABILITY, {
+    headers,
+  });
+
+  useEffect(() => {
+    if (!loading && data) {
+      setWithdrawDisabled(!data?.is_available);
+      setAvailableIn(data.available_in);
+      setAvailableAt(data.available_at);
+    }
+  }, [loading, data]);
+
+  return { withdrawDisabled, availableIn, availableAt };
 };
 
 interface WithdrawFormProps {
   onWithdrawEarnings: (
     amount: number,
-  ) => Promise<providers.TransactionResponse | null>;
+  ) => Promise<{ txRes: providers.TransactionResponse | null; error?: Error }>;
   balance: number;
 }
 
@@ -49,18 +64,20 @@ interface IFormInput {
 
 const amountSelects: number[] = [25, 50, 75, 100];
 
-const validationSchema = yup.object({
-  isCheckedTerm: yup.bool().oneOf([true]),
-});
+// const validationSchema = yup.object({
+//   isCheckedTerm: yup.bool().oneOf([true]),
+// });
 
 const WithdrawForm = ({
   onWithdrawEarnings,
   balance,
 }: WithdrawFormProps): JSX.Element => {
   const [balanceWithdraw, setBalanceWithdraw] = useState(0);
-  const [withdrawDisabled, setWithdrawDisabled] = useState(false);
   const [, setIsOpen] = useContext(DialogContext);
   const [loading, setLoading] = useState(false);
+  const { withdrawalHistory } = useWithdrawalHistory('pending');
+  const { withdrawDisabled, availableAt } =
+    useWithdrawalDisabled(withdrawalHistory);
   const {
     handleSubmit,
     control,
@@ -71,20 +88,15 @@ const WithdrawForm = ({
     reset,
     formState: { errors },
   } = useForm<IFormInput>({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {
       amountSelected: 0,
       amountInput: '',
-      isCheckedTerm: false,
+      // isCheckedTerm: false,
     },
   });
   const theme = useTheme();
-
-  const { withdrawalHistory } = useWithdrawalHistory('pending');
-  useEffect(() => {
-    setWithdrawDisabled(checkWithdrawalDisabled(withdrawalHistory));
-  }, [withdrawalHistory]);
 
   const resetForm = () => {
     setLoading(false);
@@ -101,10 +113,17 @@ const WithdrawForm = ({
       });
       return;
     }
-    setWithdrawDisabled(true);
     setLoading(true);
-    const res = await onWithdrawEarnings(balanceWithdraw);
-    if (res) resetForm();
+    const { error } = await onWithdrawEarnings(balanceWithdraw);
+    if (error?.message) {
+      setError('amountInput', {
+        type: 'custom',
+        message: error.message.replaceAll('"', ''),
+      });
+      setLoading(false);
+      return;
+    }
+    resetForm();
   };
 
   return (
@@ -193,7 +212,7 @@ const WithdrawForm = ({
           </Typography>
           NFTL
         </Typography>
-        <Controller
+        {/* <Controller
           name="isCheckedTerm"
           control={control}
           render={({ field }) => (
@@ -229,13 +248,18 @@ const WithdrawForm = ({
               />
             </FormGroup>
           )}
-        />
+        /> */}
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
-        {withdrawDisabled && (
+        {withdrawDisabled && availableAt ? (
           <Alert severity="error">
-            Please wait 1 minute before sending another withdrawal request
+            Next withdrawal for your account is available after{' '}
+            {formatDateTime(availableAt)}
+          </Alert>
+        ) : (
+          <Alert severity="info">
+            Only 1 withdrawal per week is allowed at this time
           </Alert>
         )}
         <LoadingButton
@@ -245,9 +269,8 @@ const WithdrawForm = ({
           fullWidth
           loading={loading}
           disabled={
-            !getValues('isCheckedTerm') ||
-            balanceWithdraw === 0 ||
-            withdrawDisabled
+            // !getValues('isCheckedTerm') ||
+            balanceWithdraw === 0 || withdrawDisabled
           }
         >
           Withdraw earnings

@@ -1,5 +1,6 @@
 import {
   Alert,
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -9,23 +10,49 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Skeleton,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useContext, useState } from 'react';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { BigNumber, utils } from 'ethers';
 import { DialogContext } from 'components/dialog';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
+import useContractReader from 'hooks/useContractReader';
 import { WithdrawalHistory } from 'types/account';
 import { formatDateTime } from 'helpers/dateTime';
+import { NetworkContext } from 'NetworkProvider';
+import { GAME_ACCOUNT_CONTRACT } from 'constants/contracts';
+
+function useBalanceManagerNonce(address: string): number {
+  const { writeContracts } = useContext(NetworkContext);
+  const [nonce, setNonce] = useState(BigNumber.from(0));
+  const result = useContractReader(
+    writeContracts,
+    GAME_ACCOUNT_CONTRACT,
+    'nonce',
+    [address],
+  ) as BigNumber;
+  useEffect(() => {
+    if (result && result !== nonce) setNonce(result);
+  }, [result, nonce]);
+  return nonce.toNumber();
+}
 
 const HistoryTable = ({
   withdrawalHistory,
+  resetForm,
+  nonce,
 }: {
   withdrawalHistory: WithdrawalHistory[];
+  resetForm: () => void;
+  nonce: number;
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { writeContracts, tx } = useContext(NetworkContext);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -38,6 +65,23 @@ const HistoryTable = ({
     setPage(0);
   };
 
+  const handleRetryWithdraw = async (data) => {
+    const { amount, expire_at, signature } = data as {
+      amount: number;
+      expire_at: number;
+      signature: string;
+    };
+    const res = await tx(
+      writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
+        utils.parseEther(`${amount}`),
+        BigNumber.from(nonce),
+        expire_at,
+        signature,
+      ),
+    );
+    if (res) resetForm();
+  };
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -48,6 +92,7 @@ const HistoryTable = ({
               <TableCell align="right">Nonce</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell align="right">State</TableCell>
+              <TableCell align="right">Retry</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -64,6 +109,28 @@ const HistoryTable = ({
                   <TableCell align="right">{row.nonce}</TableCell>
                   <TableCell align="right">{row.amount}</TableCell>
                   <TableCell align="right">{row.state}</TableCell>
+                  <TableCell align="right">
+                    {row.state === 'pending' ? (
+                      <>
+                        {row.nonce === nonce ? (
+                          <IconButton
+                            aria-label="retry"
+                            onClick={() => handleRetryWithdraw(row)}
+                          >
+                            <ReplayIcon />
+                          </IconButton>
+                        ) : (
+                          <Tooltip title="Signature expired">
+                            <span>
+                              <IconButton disabled>
+                                <ReplayIcon />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        )}
+                      </>
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -83,6 +150,29 @@ const HistoryTable = ({
   );
 };
 
+const checkRefreshDisabled = (
+  history: WithdrawalHistory[],
+  nonce: number,
+): { error: boolean; errorMsg?: string } => {
+  let error = true;
+  if (!history.length)
+    return { error, errorMsg: 'No withdrawal history found.' };
+  const pendingTxs = history.filter((tx) => tx.state === 'pending');
+  if (!pendingTxs.length)
+    return { error, errorMsg: 'No pending transactions found.' };
+  const now = Math.floor(Date.now() / 1000);
+  const elligiblePendingTxs = pendingTxs.filter((tx) => {
+    const timeDiff = (tx.expire_at - now) / 60;
+    return tx.nonce < nonce || timeDiff < 1;
+  });
+  if (!elligiblePendingTxs.length)
+    return {
+      error,
+      errorMsg: `Can only void pending transactions with nonce less than ${nonce} unless expired.`,
+    };
+  return { error: false };
+};
+
 interface RefreshFormProps {
   refreshTimeout: number;
   onRefresh: () => Promise<void>;
@@ -97,9 +187,9 @@ const RefreshForm = ({
   const [disabled, setDisabled] = useState(refreshTimeout > 0);
   const { handleSubmit, reset } = useForm();
   const { loading: historyLoading, withdrawalHistory } = useWithdrawalHistory();
-  const refreshEnabled = withdrawalHistory.length;
-  const hasPendingTxs =
-    withdrawalHistory.filter((tx) => tx.state === 'pending').length > 0;
+  const { address } = useContext(NetworkContext);
+  const nonce = useBalanceManagerNonce(address);
+  const { error, errorMsg } = checkRefreshDisabled(withdrawalHistory, nonce);
 
   const resetForm = () => {
     reset();
@@ -121,14 +211,14 @@ const RefreshForm = ({
           <Skeleton variant="rectangular" width="100%" height={320} />
         ) : (
           <>
-            {refreshEnabled ? (
-              <HistoryTable withdrawalHistory={withdrawalHistory} />
-            ) : (
-              <Alert severity="error">No withdrawal history found</Alert>
-            )}
-            {refreshEnabled && !hasPendingTxs ? (
-              <Alert severity="error">No pending transactions found</Alert>
+            {withdrawalHistory.length ? (
+              <HistoryTable
+                withdrawalHistory={withdrawalHistory}
+                resetForm={resetForm}
+                nonce={nonce}
+              />
             ) : null}
+            {error && <Alert severity="info">{errorMsg}</Alert>}
           </>
         )}
         <LoadingButton
@@ -137,9 +227,9 @@ const RefreshForm = ({
           variant="contained"
           loading={loading}
           fullWidth
-          disabled={!refreshEnabled || !hasPendingTxs || disabled}
+          disabled={error || disabled}
         >
-          Refresh game balance
+          Void pending transactions
         </LoadingButton>
       </Stack>
     </form>
