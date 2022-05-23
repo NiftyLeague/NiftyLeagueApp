@@ -4,7 +4,7 @@ import EnhancedTable from 'components/leaderboards/EnhancedTable/EnhancedTable';
 import './navigation.css';
 import { DataType, TableType } from 'types/leaderboard';
 import { tables } from 'constants/leaderboard';
-import { fetchScores } from 'utils/leaderboard';
+import { fetchScores, fetchUserNames } from 'utils/leaderboard';
 import { Tabs, Tab, Stack } from '@mui/material';
 import { EmojiEvents, Paid, CrisisAlert } from '@mui/icons-material';
 import TopModal from './TopModal';
@@ -21,6 +21,22 @@ export default function LeaderBoards(): JSX.Element {
   // }, []);
   const fetchTopData = async () => {
     const arrayData: DataType[] = await fetchScores(selectedTable.key, 50);
+    let items = [];
+    for (let i = 0; i < arrayData.length; i++) {
+      if (arrayData[i].rank < 50) {
+        items.push(arrayData[i].user_id);
+      }
+    }
+    const dd: DataType[] = await fetchUserNames(items);
+    let a = Object.entries(dd);
+    for (let i = 0; i < arrayData.length; i++) {
+      for (let j = 0; j < a.length; j++) {
+        if (arrayData[i].user_id === a[j][0]) {
+          arrayData[i].user_id = a[j][1].name;
+        }
+      }
+    }
+    debugger;
     setData(arrayData);
   };
   useEffect(() => {
