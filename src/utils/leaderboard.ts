@@ -1,5 +1,22 @@
 import { DataType, Order } from 'types/leaderboard';
 import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
+import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
+
+export const fetchUserNames = async (items: any): Promise<DataType[]> => {
+  const authToken = window.localStorage.getItem('authentication-token');
+  const res = await fetch(
+    `${LEADERBOARD_USERNAMES_API_URL}?ids=${items}&include_stats=false`,
+    {
+      method: 'GET',
+      headers: { authorizationToken: authToken as string },
+    },
+  );
+  // const res = await fetch(`${LEADERBOARD_USERNAMES_API_URL}`);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return json;
+};
 
 export const fetchScores = async (
   scoreType: string,

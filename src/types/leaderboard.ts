@@ -14,7 +14,7 @@ interface Stats {
 }
 export interface DataType {
   rank: number;
-  user_id: string;
+  user_id: any;
   score: string;
   stats: Stats;
 }
