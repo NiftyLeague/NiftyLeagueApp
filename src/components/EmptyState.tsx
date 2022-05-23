@@ -26,9 +26,11 @@ const EmptyState: React.FC<
         }}
       >
         <Typography sx={{ mt: 2, color: 'white' }}>{message}</Typography>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={onClick}>
-          {buttonText}
-        </Button>
+        {buttonText && (
+          <Button variant="contained" sx={{ mt: 2 }} onClick={onClick}>
+            {buttonText}
+          </Button>
+        )}
       </Card>
     </>
   );

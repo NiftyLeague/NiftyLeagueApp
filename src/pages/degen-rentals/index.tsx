@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
@@ -16,7 +16,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import DegenCard from 'components/cards/DegenCard';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
-import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
@@ -40,8 +40,8 @@ const DEGENS_PER_PAGE = 12;
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
-  const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
+  const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>();
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -50,7 +50,6 @@ const DegenRentalsPage = (): JSX.Element => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
-  const { walletAddress } = useParams();
 
   const { data } = useFetch<{ [id: number]: Degen }>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -69,7 +68,7 @@ const DegenRentalsPage = (): JSX.Element => {
       const params = Object.fromEntries(searchParams.entries());
       let newDegens = originalDegens;
       if (!isEmpty(params)) {
-        const newFilterOptions = updateFilterValue(params);
+        const newFilterOptions = updateFilterValue(defaultValues, params);
         setFilters(newFilterOptions);
         newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
       }
@@ -87,14 +86,9 @@ const DegenRentalsPage = (): JSX.Element => {
       const newFilters = { ...filter, sort: filters.sort };
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
-      if (walletAddress) {
-        result = result.filter(
-          (degen) => degen.owner.toLowerCase() === walletAddress.toLowerCase(),
-        );
-      }
       updateNewData(result);
     },
-    [degens, filters.sort, updateNewData, walletAddress],
+    [degens, filters.sort, updateNewData],
   );
 
   const handleSort = useCallback(
@@ -135,7 +129,7 @@ const DegenRentalsPage = (): JSX.Element => {
         renderDrawer={() =>
           !isEmpty(defaultValues) && (
             <DegensFilter
-              handleFilter={handleFilter}
+              onFilter={handleFilter}
               defaultFilterValues={defaultValues as DegenFilter}
             />
           )

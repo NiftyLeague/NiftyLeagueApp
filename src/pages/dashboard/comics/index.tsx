@@ -5,7 +5,6 @@ import { Grid, Stack, Button } from '@mui/material';
 import ComicCard from 'components/cards/ComicCard';
 import EmptyState from 'components/EmptyState';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
-import ComicsClaim from 'components/extended/ComicsClaim';
 import SectionSlider from 'components/sections/SectionSlider';
 import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
 
@@ -112,7 +111,6 @@ const DashboardComicsPage = (): JSX.Element => {
           </Grid>
         </SectionSlider>
       </Stack>
-      <ComicsClaim />
       <ViewComicDialog
         comic={selectedComic}
         open={Boolean(selectedComic)}
