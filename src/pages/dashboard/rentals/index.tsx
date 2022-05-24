@@ -232,6 +232,8 @@ const DashboardRentalPage = (): JSX.Element => {
                 Non-Owned Sponsorship
               </MenuItem>
               <MenuItem value="direct-renter">Direct Renter</MenuItem>
+              <MenuItem value="terminated">Terminated</MenuItem>
+              <MenuItem value="full-history">Full History</MenuItem>
             </Select>
           </FormControl>
           <SearchRental handleSearch={handleSearch} />
