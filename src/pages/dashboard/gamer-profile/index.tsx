@@ -95,7 +95,7 @@ const GamerProfile = (): JSX.Element => {
     return (
       <Grid item container spacing={3}>
         <Grid item xs={12} md={3.5}>
-          <ImageProfile rentals={rentals} />
+          <ImageProfile avatar={profile?.avatar} rentals={rentals} />
         </Grid>
         <Grid item xs={12} md={8.5}>
           <TopInfo profile={profile} walletAddress={address} />
