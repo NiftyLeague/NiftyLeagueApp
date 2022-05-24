@@ -66,4 +66,6 @@ export type RentalType =
   | 'direct'
   | 'recruited'
   | 'owned-sponsorship'
-  | 'non-owned-sponsorship';
+  | 'non-owned-sponsorship'
+  | 'terminated'
+  | 'full-history';
