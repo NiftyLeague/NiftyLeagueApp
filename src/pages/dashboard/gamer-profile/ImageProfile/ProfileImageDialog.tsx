@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { IconButton, Box } from '@mui/material';
+import { IconButton, Box, Skeleton, Typography, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { toast } from 'react-toastify';
 
 import {
   Dialog,
@@ -11,12 +12,15 @@ import {
 } from 'components/dialog';
 import SectionSlider from 'components/sections/SectionSlider';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import SearchRental from 'pages/dashboard/rentals/SearchRental';
 
 import { Rentals } from 'types/rentals';
-import SearchRental from 'pages/dashboard/rentals/SearchRental';
+import { useProfileAvatarFee } from 'hooks/useGamerProfile';
+import { UPDATE_PROFILE_AVATAR_API } from 'constants/url';
 
 interface ProfileImageDialogProps {
   rentals: Rentals[] | undefined;
+  onChangeAvatar: (degenId: string) => void;
 }
 
 const settings = {
@@ -27,23 +31,68 @@ const settings = {
   swipe: false,
 };
 
-const ProfileImageContent = ({ handleSearch, rentalsInternal }) => {
+const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
+  const { fee, loadingFee } = useProfileAvatarFee();
   const [, setIsOpen] = useContext(DialogContext);
 
-  const handleSelectedDegen = (rental) => {
-    // TODO: Waiting the api to update profile image.
-    setIsOpen(false);
+  const handleSelectedDegen = async (rental) => {
+    const authToken = window.localStorage.getItem('authentication-token');
+    if (!rental?.degen?.id && !authToken) {
+      return;
+    }
+    try {
+      const response = await fetch(UPDATE_PROFILE_AVATAR_API, {
+        headers: { authorizationToken: authToken as string },
+        method: 'POST',
+        body: JSON.stringify({
+          avatar: rental?.degen?.id,
+        }),
+      });
+      if (!response.ok) {
+        const errMsg = await response.text();
+        toast.error(`Can not update the profile avatar: ${errMsg}`, {
+          theme: 'dark',
+        });
+        return;
+      }
+      onChangeAvatar(rental?.degen?.id);
+      setIsOpen(false);
+      // onRenameRentalSuccess(res?.name_cased);
+    } catch (error) {
+      toast.error(`Can not update the profile avatar: ${error}`, {
+        theme: 'dark',
+      });
+    }
+  };
+
+  const renderAvatarFee = () => {
+    if (loadingFee) {
+      return <Skeleton variant="rectangular" width="100%" height="37.34px" />;
+    }
+    if (!loadingFee && fee) {
+      return (
+        <Typography variant="h5" component="p">
+          There is a {fee} NFTL fee for changing your gamer profile avatar
+        </Typography>
+      );
+    }
+    return null;
   };
 
   return (
     <SectionSlider
       sliderSettingsOverride={settings}
       firstSection
-      title="Choose a new profile degen"
+      title={
+        <Stack flex={1} gap={1}>
+          <Typography variant="h2">Choose a new profile degen</Typography>
+          {renderAvatarFee()}
+        </Stack>
+      }
       actions={
         <SearchRental
           placeholder="Search degen by token # or name"
-          handleSearch={handleSearch}
+          handleSearch={onSearch}
         />
       }
     >
@@ -72,6 +121,7 @@ const ProfileImageContent = ({ handleSearch, rentalsInternal }) => {
 
 const ProfileImageDialog = ({
   rentals,
+  onChangeAvatar,
 }: ProfileImageDialogProps): JSX.Element => {
   const [rentalsInternal, setRentalsInternal] = useState<Rentals[]>([]);
   const theme = useTheme();
@@ -127,7 +177,8 @@ const ProfileImageDialog = ({
         }}
       >
         <ProfileImageContent
-          handleSearch={handleSearch}
+          onSearch={handleSearch}
+          onChangeAvatar={onChangeAvatar}
           rentalsInternal={rentalsInternal}
         />
       </DialogContent>

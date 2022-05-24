@@ -17,7 +17,11 @@ const SectionTitle: React.FC<
     gap={2}
     flexWrap="wrap"
   >
-    <Typography variant="h2">{children}</Typography>
+    {typeof children === 'string' ? (
+      <Typography variant="h2">{children}</Typography>
+    ) : (
+      children
+    )}
     {actions}
   </Stack>
 );

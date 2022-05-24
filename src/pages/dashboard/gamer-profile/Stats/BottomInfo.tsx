@@ -70,11 +70,10 @@ const BottomInfo = ({ nifty_smashers }: BottomInfoProps): JSX.Element => {
                 </Typography>
               </Stack>
               <LeftInfo data={nifty_smashers} />
-              {/* Will update the address link of View Leaderboards */}
               <Button
                 color="secondary"
                 component={Link}
-                href="#"
+                href="/leaderboard"
                 target="_blank"
               >
                 View Leaderboards

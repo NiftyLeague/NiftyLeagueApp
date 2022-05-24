@@ -15,12 +15,18 @@ export interface Account {
 export interface Profile {
   id: string;
   updated_at: number;
+  avatar?: ProfileAvatar;
   stats: {
     nifty_smashers: ProfileNiftySmsher;
     total: ProfileTotal;
   };
   name: string;
   name_cased: string;
+}
+
+export interface ProfileAvatar {
+  id: string;
+  url: string;
 }
 
 export interface ProfileTotal {
