@@ -6,21 +6,28 @@ import { GamerProfileContext } from '../index';
 import ProfileImageDialog from './ProfileImageDialog';
 
 import { Rentals } from 'types/rentals';
+import { ProfileAvatar } from 'types/account';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 
 interface ImageProfileProps {
   rentals: Rentals[] | undefined;
+  avatar?: ProfileAvatar;
 }
 
-const ImageProfile = ({ rentals }: ImageProfileProps): JSX.Element => {
+const ImageProfile = ({ rentals, avatar }: ImageProfileProps): JSX.Element => {
   const { isLoadingRentals } = useContext(GamerProfileContext);
   const [degenSelected, setDegenSelected] = useState<string>('');
 
   useEffect(() => {
+    if (avatar?.id) {
+      setDegenSelected(avatar?.id);
+      return;
+    }
     if (rentals) {
       setDegenSelected(rentals[0]?.degen?.id);
+      return;
     }
-  }, [rentals]);
+  }, [rentals, avatar]);
 
   const handleChangeAvatar = (degenId: string) => {
     if (degenId) {
