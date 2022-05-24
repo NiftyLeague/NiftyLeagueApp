@@ -1,4 +1,5 @@
 import { memo, useContext } from 'react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // material-ui
 import { Typography } from '@mui/material';
@@ -20,10 +21,26 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 
 const MenuList = () => {
   const { web3Modal } = useContext(NetworkContext);
-
-  const navItems = getMenuItemsByLoginStatus(
+  const { gamerProfile } = useFlags();
+  let lastItems: any = getMenuItemsByLoginStatus(
     Boolean(web3Modal.cachedProvider),
-  ).items.map((item) => {
+  ).items;
+  if (gamerProfile) {
+    let item = lastItems[1].children[0].children;
+    if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
+      lastItems[1].children[0].children = [
+        ...item,
+        {
+          id: 'gamer-profile',
+          title: 'Gamer Profile',
+          type: 'item',
+          url: '/dashboard/gamer-profile',
+        },
+      ];
+    }
+  }
+
+  const navItems = lastItems.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;
