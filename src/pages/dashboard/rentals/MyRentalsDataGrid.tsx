@@ -14,6 +14,7 @@ import {
   GridRenderCellParams,
   GridCallbackDetails,
   GridColumnVisibilityModel,
+  GridSortModel,
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useMemo } from 'react';
@@ -52,6 +53,7 @@ const MyRentalsDataGrid = ({
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [selectedDegen, setSelectedDegen] = useState();
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const [sort, setSort] = useState<GridSortModel>([]);
 
   const getColumnVisibilityModel = localStorage.getItem(
     RENTAL_COLUMN_VISIBILITY,
@@ -85,6 +87,24 @@ const MyRentalsDataGrid = ({
         return rentals;
     }
   }, [rentals, category]);
+
+  const sortedRows = useMemo(() => {
+    if (!sort || !sort.length) {
+      return filteredRows;
+    }
+
+    return filteredRows.sort((a, b) => {
+      const { field, sort: direction } = sort[0];
+      const aValue = a[field];
+      const bValue = b[field];
+
+      if (direction === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      }
+
+      return aValue > bValue ? -1 : 1;
+    });
+  }, [filteredRows, sort]);
 
   const handleOpenNickname = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -123,6 +143,10 @@ const MyRentalsDataGrid = ({
     });
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
+  };
+
+  const handleSortColumn = (model: GridSortModel) => {
+    setSort(model);
   };
 
   const commonColumnProp = {
@@ -322,7 +346,7 @@ const MyRentalsDataGrid = ({
     <>
       <DataGrid
         loading={loading}
-        rows={filteredRows}
+        rows={sortedRows}
         columns={columns}
         checkboxSelection={false}
         disableSelectionOnClick={true}
@@ -332,6 +356,7 @@ const MyRentalsDataGrid = ({
         columnVisibilityModel={columnVisibilityModel}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         onColumnVisibilityModelChange={handleColumnVisibilityChange}
+        onSortModelChange={handleSortColumn}
         sx={{
           '& .MuiDataGrid-row:hover': {
             '& button': {
