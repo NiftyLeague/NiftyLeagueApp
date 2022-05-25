@@ -13,6 +13,7 @@ import {
 import SectionSlider from 'components/sections/SectionSlider';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import SearchRental from 'pages/dashboard/rentals/SearchRental';
+import EmptyState from 'components/EmptyState';
 
 import { Degen } from 'types/degens';
 import { useProfileAvatarFee } from 'hooks/useGamerProfile';
@@ -79,24 +80,9 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
     return null;
   };
 
-  return (
-    <SectionSlider
-      sliderSettingsOverride={settings}
-      firstSection
-      title={
-        <Stack flex={1} gap={1}>
-          <Typography variant="h2">Choose a new profile degen</Typography>
-          {renderAvatarFee()}
-        </Stack>
-      }
-      actions={
-        <SearchRental
-          placeholder="Search degen by token # or name"
-          handleSearch={onSearch}
-        />
-      }
-    >
-      {degensInternal.map((degen) => (
+  const renderDegens = () => {
+    if (degensInternal.length > 0) {
+      return degensInternal.map((degen) => (
         <Box
           key={degen?.id}
           sx={{
@@ -114,7 +100,34 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
         >
           <DegenImage tokenId={degen?.id} />
         </Box>
-      ))}
+      ));
+    }
+    return (
+      <Stack justifyContent="center" alignItems="center">
+        <EmptyState message="No DEGENs found." />
+      </Stack>
+    );
+  };
+
+  return (
+    <SectionSlider
+      isSlider={degensInternal.length > 0}
+      sliderSettingsOverride={settings}
+      firstSection
+      title={
+        <Stack flex={1} gap={1}>
+          <Typography variant="h2">Choose a new profile degen</Typography>
+          {renderAvatarFee()}
+        </Stack>
+      }
+      actions={
+        <SearchRental
+          placeholder="Search degen by token # or name"
+          handleSearch={onSearch}
+        />
+      }
+    >
+      {renderDegens()}
     </SectionSlider>
   );
 };
@@ -133,12 +146,19 @@ const ProfileImageDialog = ({
   }, [degens]);
 
   const handleSearch = (currentValue: string) => {
-    const newDegen: any = degens?.filter(
-      (degen: any) =>
-        degen?.id.toLowerCase().includes(currentValue) ||
-        degen?.name.toLowerCase().includes(currentValue),
+    if (currentValue?.trim() === '' && degens) {
+      setDegensInternal(degens);
+      return;
+    }
+    const newCurrentValue = currentValue.toLowerCase();
+    const newDegen: Degen[] | undefined = degens?.filter(
+      (degen: Degen) =>
+        degen?.id.toLowerCase().includes(newCurrentValue) ||
+        degen?.name.toLowerCase().includes(newCurrentValue),
     );
-    setDegensInternal(newDegen);
+    if (newDegen) {
+      setDegensInternal(newDegen);
+    }
   };
 
   return (
