@@ -14,12 +14,12 @@ import SectionSlider from 'components/sections/SectionSlider';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import SearchRental from 'pages/dashboard/rentals/SearchRental';
 
-import { Rentals } from 'types/rentals';
+import { Degen } from 'types/degens';
 import { useProfileAvatarFee } from 'hooks/useGamerProfile';
 import { UPDATE_PROFILE_AVATAR_API } from 'constants/url';
 
 interface ProfileImageDialogProps {
-  rentals: Rentals[] | undefined;
+  degens: Degen[] | undefined;
   onChangeAvatar: (degenId: string) => void;
 }
 
@@ -31,13 +31,13 @@ const settings = {
   swipe: false,
 };
 
-const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
+const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
   const { fee, loadingFee } = useProfileAvatarFee();
   const [, setIsOpen] = useContext(DialogContext);
 
-  const handleSelectedDegen = async (rental) => {
+  const handleSelectedDegen = async (degen: Degen) => {
     const authToken = window.localStorage.getItem('authentication-token');
-    if (!rental?.degen?.id && !authToken) {
+    if (!degen?.id && !authToken) {
       return;
     }
     try {
@@ -45,7 +45,7 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
         headers: { authorizationToken: authToken as string },
         method: 'POST',
         body: JSON.stringify({
-          avatar: rental?.degen?.id,
+          avatar: degen?.id,
         }),
       });
       if (!response.ok) {
@@ -55,9 +55,9 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
         });
         return;
       }
-      onChangeAvatar(rental?.degen?.id);
+      toast.success('Update Profile Avatar Successful!', { theme: 'dark' });
+      onChangeAvatar(degen?.id);
       setIsOpen(false);
-      // onRenameRentalSuccess(res?.name_cased);
     } catch (error) {
       toast.error(`Can not update the profile avatar: ${error}`, {
         theme: 'dark',
@@ -96,9 +96,9 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
         />
       }
     >
-      {rentalsInternal.map((rental) => (
+      {degensInternal.map((degen) => (
         <Box
-          key={rental?.degen?.id}
+          key={degen?.id}
           sx={{
             overflow: 'hidden',
             cursor: 'pointer',
@@ -110,9 +110,9 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
               transition: 'transform .5s ease',
             },
           }}
-          onClick={() => handleSelectedDegen(rental)}
+          onClick={() => handleSelectedDegen(degen)}
         >
-          <DegenImage tokenId={rental?.degen?.id} />
+          <DegenImage tokenId={degen?.id} />
         </Box>
       ))}
     </SectionSlider>
@@ -120,28 +120,25 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, rentalsInternal }) => {
 };
 
 const ProfileImageDialog = ({
-  rentals,
+  degens,
   onChangeAvatar,
 }: ProfileImageDialogProps): JSX.Element => {
-  const [rentalsInternal, setRentalsInternal] = useState<Rentals[]>([]);
+  const [degensInternal, setDegensInternal] = useState<Degen[]>([]);
   const theme = useTheme();
 
   useEffect(() => {
-    if (rentals) {
-      setRentalsInternal(rentals);
+    if (degens) {
+      setDegensInternal(degens);
     }
-  }, [rentals]);
+  }, [degens]);
 
   const handleSearch = (currentValue: string) => {
-    const newRental: any = rentals?.filter(
-      (rental: any) =>
-        rental?.accounts?.player?.address
-          .toLowerCase()
-          .includes(currentValue) ||
-        rental?.degen?.id.toLowerCase().includes(currentValue) ||
-        rental?.accounts?.player?.name.toLowerCase().includes(currentValue),
+    const newDegen: any = degens?.filter(
+      (degen: any) =>
+        degen?.id.toLowerCase().includes(currentValue) ||
+        degen?.name.toLowerCase().includes(currentValue),
     );
-    setRentalsInternal(newRental);
+    setDegensInternal(newDegen);
   };
 
   return (
@@ -179,7 +176,7 @@ const ProfileImageDialog = ({
         <ProfileImageContent
           onSearch={handleSearch}
           onChangeAvatar={onChangeAvatar}
-          rentalsInternal={rentalsInternal}
+          degensInternal={degensInternal}
         />
       </DialogContent>
     </Dialog>

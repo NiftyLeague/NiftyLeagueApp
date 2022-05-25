@@ -5,17 +5,17 @@ import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { GamerProfileContext } from '../index';
 import ProfileImageDialog from './ProfileImageDialog';
 
-import { Rentals } from 'types/rentals';
+import { Degen } from 'types/degens';
 import { ProfileAvatar } from 'types/account';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 
 interface ImageProfileProps {
-  rentals: Rentals[] | undefined;
+  degens: Degen[] | undefined;
   avatar?: ProfileAvatar;
 }
 
-const ImageProfile = ({ rentals, avatar }: ImageProfileProps): JSX.Element => {
-  const { isLoadingRentals } = useContext(GamerProfileContext);
+const ImageProfile = ({ degens, avatar }: ImageProfileProps): JSX.Element => {
+  const { isLoadingDegens } = useContext(GamerProfileContext);
   const [degenSelected, setDegenSelected] = useState<string>('');
 
   useEffect(() => {
@@ -23,11 +23,11 @@ const ImageProfile = ({ rentals, avatar }: ImageProfileProps): JSX.Element => {
       setDegenSelected(avatar?.id);
       return;
     }
-    if (rentals) {
-      setDegenSelected(rentals[0]?.degen?.id);
+    if (degens) {
+      setDegenSelected(degens[0]?.id);
       return;
     }
-  }, [rentals, avatar]);
+  }, [degens, avatar]);
 
   const handleChangeAvatar = (degenId: string) => {
     if (degenId) {
@@ -36,7 +36,7 @@ const ImageProfile = ({ rentals, avatar }: ImageProfileProps): JSX.Element => {
   };
 
   const renderImage = () => {
-    if (isLoadingRentals) {
+    if (isLoadingDegens) {
       return <Skeleton variant="rectangular" width="100%" height="320px" />;
     } else {
       if (!degenSelected) {
@@ -64,10 +64,10 @@ const ImageProfile = ({ rentals, avatar }: ImageProfileProps): JSX.Element => {
         position="relative"
       >
         {renderImage()}
-        {rentals && rentals.length > 0 && (
+        {degens && degens.length > 0 && (
           <ProfileImageDialog
             onChangeAvatar={handleChangeAvatar}
-            rentals={rentals}
+            degens={degens}
           />
         )}
       </Box>
