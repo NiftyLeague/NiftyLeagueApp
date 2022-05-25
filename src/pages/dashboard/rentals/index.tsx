@@ -169,13 +169,14 @@ const DashboardRentalPage = (): JSX.Element => {
       setRentals(data);
       return;
     }
+    const newCurrentValue = currentValue.toLowerCase();
     const newRental: any = data?.filter(
       (rental: any) =>
         rental?.accounts?.player?.address
           .toLowerCase()
-          .includes(currentValue) ||
-        rental?.degen?.id.toLowerCase().includes(currentValue) ||
-        rental?.accounts?.player?.name.toLowerCase().includes(currentValue),
+          .includes(newCurrentValue) ||
+        rental?.degen?.id.toLowerCase().includes(newCurrentValue) ||
+        rental?.accounts?.player?.name.toLowerCase().includes(newCurrentValue),
     );
     setRentals(newRental);
   };
