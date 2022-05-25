@@ -54,7 +54,10 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
             component="div"
             color={theme.palette.grey[400]}
           >
-            {profile?.name_cased}{' '}
+            {`${walletAddress.slice(0, 5)}...${walletAddress.slice(
+              walletAddress.length - 5,
+              walletAddress.length - 1,
+            )}`}{' '}
             <IconButton
               sx={{
                 cursor: 'pointer',
