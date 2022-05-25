@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Box, Button, Grid, Dialog } from '@mui/material';
+import { Box, Button, Grid, Dialog, Stack } from '@mui/material';
 import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo, useState } from 'react';
@@ -143,6 +143,7 @@ const MyDegens = (): JSX.Element => {
   return (
     <>
       <SectionSlider
+        isSlider={degens.length > 0 && characters.length > 0}
         firstSection
         title="My DEGENs"
         sliderSettingsOverride={settings}
@@ -183,11 +184,13 @@ const MyDegens = (): JSX.Element => {
             </Box>
           ))
         ) : (
-          <EmptyState
-            message="No DEGENs found. Please check your address or go purchase a DEGEN if you have not done so already!"
-            buttonText="Buy a DEGEN"
-            onClick={handleBuyDegen}
-          />
+          <Stack justifyContent="center" alignItems="center">
+            <EmptyState
+              message="No DEGENs found. Please check your address or go purchase a DEGEN if you have not done so already!"
+              buttonText="Buy a DEGEN"
+              onClick={handleBuyDegen}
+            />
+          </Stack>
         )}
       </SectionSlider>
       <DegenDialog
