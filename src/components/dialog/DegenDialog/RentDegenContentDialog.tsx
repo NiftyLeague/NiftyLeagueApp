@@ -366,7 +366,7 @@ const RentDegenContentDialog = ({
                 label={
                   <Typography variant="caption">
                     I understand all the information regarding this rental and
-                    it&apos;s fees.
+                    its fees.
                   </Typography>
                 }
                 control={
