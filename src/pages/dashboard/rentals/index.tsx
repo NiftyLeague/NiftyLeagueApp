@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Stack, Typography, FormControl, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
+import { toast } from 'react-toastify';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
 import {
   ALL_RENTAL_API_URL,
@@ -9,8 +10,6 @@ import {
   TERMINAL_RENTAL_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
-import { useDispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
 import SearchRental from './SearchRental';
 import InputLabel from '../../../components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -18,7 +17,6 @@ import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
 
 const DashboardRentalPage = (): JSX.Element => {
-  const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
@@ -96,6 +94,9 @@ const DashboardRentalPage = (): JSX.Element => {
   );
 
   const terminalRentalById = async (rentalId: string) => {
+    if (!rentalId && !authToken) {
+      return;
+    }
     try {
       const result: any = await fetch(
         `${TERMINAL_RENTAL_API_URL}?${new URLSearchParams({
@@ -106,46 +107,22 @@ const DashboardRentalPage = (): JSX.Element => {
           headers,
         },
       );
-      const res = await result.json();
-      if (res.statusCode === 400) {
-        dispatch(
-          openSnackbar({
-            open: true,
-            message: res.body,
-            variant: 'alert',
-            alert: {
-              color: 'error',
-            },
-            close: false,
-          }),
-        );
+      if (!result.ok) {
+        const errMsg = await result.text();
+        toast.error(`Can not terminal the rental: ${errMsg}`, {
+          theme: 'dark',
+        });
         return;
       }
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Terminated success!',
-          variant: 'alert',
-          alert: {
-            color: 'success',
-          },
-          close: false,
-        }),
-      );
-
-      refetch();
+      const res = await result.json();
+      if (res) {
+        toast.success('Terminal rental successfully!', { theme: 'dark' });
+        refetch();
+      }
     } catch (error) {
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: error,
-          variant: 'alert',
-          alert: {
-            color: 'error',
-          },
-          close: false,
-        }),
-      );
+      toast.error(`Can not terminal the rental: ${error}`, {
+        theme: 'dark',
+      });
     }
   };
 
