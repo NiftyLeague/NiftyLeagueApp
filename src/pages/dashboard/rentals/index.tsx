@@ -7,7 +7,7 @@ import {
   ALL_RENTAL_API_URL,
   MY_RENTAL_API_URL,
   RENTED_FROM_ME_API_URL,
-  TERMINAL_RENTAL_API_URL,
+  TERMINATE_RENTAL_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
 import SearchRental from './SearchRental';
@@ -93,13 +93,13 @@ const DashboardRentalPage = (): JSX.Element => {
     },
   );
 
-  const terminalRentalById = async (rentalId: string) => {
+  const terminateRentalById = async (rentalId: string) => {
     if (!rentalId && !authToken) {
       return;
     }
     try {
       const result: any = await fetch(
-        `${TERMINAL_RENTAL_API_URL}?${new URLSearchParams({
+        `${TERMINATE_RENTAL_API_URL}?${new URLSearchParams({
           id: rentalId,
         })}`,
         {
@@ -109,18 +109,18 @@ const DashboardRentalPage = (): JSX.Element => {
       );
       if (!result.ok) {
         const errMsg = await result.text();
-        toast.error(`Can not terminal the rental: ${errMsg}`, {
+        toast.error(`Can not terminate the rental: ${errMsg}`, {
           theme: 'dark',
         });
         return;
       }
       const res = await result.json();
       if (res) {
-        toast.success('Terminal rental successfully!', { theme: 'dark' });
+        toast.success('Terminate rental successfully!', { theme: 'dark' });
         refetch();
       }
     } catch (error) {
-      toast.error(`Can not terminal the rental: ${error}`, {
+      toast.error(`Can not terminate the rental: ${error}`, {
         theme: 'dark',
       });
     }
@@ -223,7 +223,7 @@ const DashboardRentalPage = (): JSX.Element => {
           loading={isLoading || isFetching}
           rows={rentals}
           category={category}
-          handleTerminalRental={terminalRentalById}
+          handleTerminateRental={terminateRentalById}
           updateRentalName={updateRentalName}
         />
       </Box>
