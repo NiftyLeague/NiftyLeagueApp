@@ -1,6 +1,7 @@
 // project imports
 import MainLayout from 'components/layout/MainLayout';
 import Loadable from 'components/Loadable';
+import DegenTraitsDetailsPage from 'pages/degen-traits-details';
 import { lazy } from 'react';
 import GuestGuard from 'utils/route-guard/GuestGuard';
 
@@ -30,6 +31,10 @@ const PublicRoutes = {
     {
       path: '/degen-rentals',
       element: <DegenRentalsPage />,
+    },
+    {
+      path: '/degens/:id',
+      element: <DegenTraitsDetailsPage />,
     },
     {
       path: '/degen-rentals/:walletAddress',
