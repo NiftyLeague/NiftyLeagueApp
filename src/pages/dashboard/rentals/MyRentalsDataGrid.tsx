@@ -33,7 +33,7 @@ interface Props {
   rows: Rentals[];
   loading: boolean;
   category: RentalType;
-  handleTerminateRental: (rentalId: string) => void;
+  onTerminateRental: (rentalId: string) => void;
   updateRentalName: (name: string, id: string) => void;
 }
 
@@ -41,7 +41,7 @@ const MyRentalsDataGrid = ({
   rows,
   loading,
   category,
-  handleTerminateRental,
+  onTerminateRental,
   updateRentalName,
 }: Props): JSX.Element => {
   const { palette } = useTheme();
@@ -125,7 +125,7 @@ const MyRentalsDataGrid = ({
 
   const handleConfirmTerminateRental = () => {
     if (selectedRowForEditing) {
-      handleTerminateRental(selectedRowForEditing.rentalId);
+      onTerminateRental(selectedRowForEditing.rentalId);
       setIsTerminateRentalModalOpen(false);
     }
   };

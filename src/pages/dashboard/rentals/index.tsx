@@ -7,7 +7,6 @@ import {
   ALL_RENTAL_API_URL,
   MY_RENTAL_API_URL,
   RENTED_FROM_ME_API_URL,
-  TERMINATE_RENTAL_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
 import SearchRental from './SearchRental';
@@ -15,6 +14,7 @@ import InputLabel from '../../../components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
+import useTeminateRental from 'hooks/useTeminateRental';
 
 const DashboardRentalPage = (): JSX.Element => {
   const authToken = window.localStorage.getItem('authentication-token');
@@ -94,19 +94,10 @@ const DashboardRentalPage = (): JSX.Element => {
   );
 
   const terminateRentalById = async (rentalId: string) => {
-    if (!rentalId && !authToken) {
-      return;
-    }
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const terminalRental = useTeminateRental(rentalId);
     try {
-      const result: any = await fetch(
-        `${TERMINATE_RENTAL_API_URL}?${new URLSearchParams({
-          id: rentalId,
-        })}`,
-        {
-          method: 'POST',
-          headers,
-        },
-      );
+      const result: any = await terminalRental();
       if (!result.ok) {
         const errMsg = await result.text();
         toast.error(`Can not terminate the rental: ${errMsg}`, {
@@ -223,7 +214,7 @@ const DashboardRentalPage = (): JSX.Element => {
           loading={isLoading || isFetching}
           rows={rentals}
           category={category}
-          handleTerminateRental={terminateRentalById}
+          onTerminateRental={terminateRentalById}
           updateRentalName={updateRentalName}
         />
       </Box>
