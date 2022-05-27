@@ -10,18 +10,23 @@ const useAccount = (
   const [error, setAccError] = useState(false);
 
   const fetchAccount = useCallback(async () => {
-    if (auth) {
-      const result = await fetch(GAMER_ACCOUNT_API, {
+    if (!auth) {
+      return;
+    }
+    try {
+      const res = await fetch(GAMER_ACCOUNT_API, {
         headers: { authorizationToken: auth },
-      })
-        .then((res) => {
-          if (res.status === 404) setAccError(true);
-          return res.text();
-        })
-        .catch(() => {
-          setAccError(true);
-        });
-      if (result) setAccount(JSON.parse(result));
+      });
+      if (res.status === 404) {
+        setAccError(true);
+        return;
+      }
+      const result = await res.text();
+      if (result) {
+        setAccount(JSON.parse(result));
+      }
+    } catch (err) {
+      setAccError(err);
     }
   }, [auth]);
 
