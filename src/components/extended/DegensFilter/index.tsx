@@ -388,6 +388,7 @@ const DegensFilter = ({
                       cosmeticsValue={cosmeticsValue}
                       onCheckboxChange={handleCheckboxChange}
                       setCosmeticsValue={setCosmeticsValue}
+                      params={params}
                     />
                   </FilterAccordion>
                 </FormGroup>
