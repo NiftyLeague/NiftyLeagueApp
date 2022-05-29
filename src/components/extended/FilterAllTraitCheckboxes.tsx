@@ -8,6 +8,7 @@ const FilterAllTraitCheckboxes = ({
   setCosmeticsValue,
   traitGroup,
   categoryKey,
+  params,
 }) => (
   <FormGroup
     sx={{
@@ -47,5 +48,5 @@ export default memo(
   FilterAllTraitCheckboxes,
   (prevProps, nextProps) =>
     prevProps.cosmeticsValue === nextProps.cosmeticsValue &&
-    prevProps.onCheckboxChange === nextProps.onCheckboxChange,
+    prevProps.params === nextProps.params,
 );
