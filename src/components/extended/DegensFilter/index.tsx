@@ -106,7 +106,7 @@ const DegensFilter = ({
           keyValue = { backgrounds: value };
           break;
         case 'cosmetics':
-          keyValue = { cosmetics: value?.toString() };
+          keyValue = { cosmetics: value };
           break;
         case 'searchTerm':
           keyValue = { searchTerm: [value] };

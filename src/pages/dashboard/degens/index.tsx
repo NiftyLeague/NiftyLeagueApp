@@ -76,10 +76,7 @@ const DashboardDegensPage = (): JSX.Element => {
     data: userDegens,
   }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
     pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-    // variables: { address: address?.toLowerCase() },
-    variables: {
-      address: '0x2fA105ACe88d22060D06F50eD16f04aD74762Dad'.toLowerCase(),
-    },
+    variables: { address: address?.toLowerCase() },
     skip: !address,
   });
 
