@@ -53,7 +53,6 @@ const useStyles = makeStyles({
   },
   rankBody: {
     padding: '10px',
-    marginLeft: '-10px',
     borderRadius: '50px',
     paddingTop: '5px',
     paddingBottom: '5px',
@@ -126,7 +125,7 @@ const TableModal = ({ flag }): JSX.Element | null => {
 
   // get the top ten items
   const fetchDataItems = async () => {
-    const arrayData: DataType[] = await fetchScores(flag, 50);
+    const arrayData: DataType[] = await fetchScores(flag, 10, 0);
     setData(arrayData.filter((i: { rank: number }) => i.rank <= 10));
   };
 
@@ -192,7 +191,7 @@ const TableModal = ({ flag }): JSX.Element | null => {
               <code>RANK</code>
             </TableCell>
             <TableCell component="th" className="cell ellipsis">
-              <code>USER ID</code>
+              <code>USER NAME</code>
             </TableCell>
             {flag === 'win_rate' && (
               <TableCell component="th" className="cell ellipsis">

@@ -38,5 +38,4 @@ export interface EnhancedTableProps {
 
 export interface TableProps {
   selectedTable: TableType;
-  rows: Array<Object>;
 }
