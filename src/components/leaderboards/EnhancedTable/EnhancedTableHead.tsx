@@ -15,7 +15,7 @@ export default function EnhancedTableHead(
           RANK
         </TableCell>
         <TableCell align="left" padding="normal">
-          USER ID
+          USER NAME
         </TableCell>
         {rows.map((headCell) => (
           <TableCell key={headCell.key} align="left" padding="normal">
