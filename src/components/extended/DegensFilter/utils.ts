@@ -6,84 +6,104 @@ import DEFAULT_STATIC_FILTER from './constants';
 export const tranformDataByFilter = (
   degens: Degen[],
   {
-    prices,
-    multipliers,
-    rentals,
-    tribes,
-    backgrounds,
-    cosmetics,
+    prices = [],
+    multipliers = [],
+    rentals = [],
+    tribes = [],
+    backgrounds = [],
+    cosmetics = [],
     sort,
-    searchTerm,
+    searchTerm = [],
   }: DegenFilter,
 ): Degen[] => {
-  if (sort === 'name') {
-    degens.sort((a, b) => a.name.localeCompare(b.name));
-  }
-  if (sort === 'multiplier') {
-    degens.sort((a, b) => Number(b.multiplier) - Number(a.multiplier));
-  }
-  if (sort === 'rentals') {
-    degens.sort((a, b) => Number(b.rental_count) - Number(a.rental_count));
-  }
-  if (sort === 'price') {
-    degens.sort((a, b) => Number(b.price) - Number(a.price));
-  }
-
   const walletAddress = window.location.pathname.replace(
     /(\/(degen-rentals)|\/)/g,
     '',
   );
-  let result = degens;
-  if (walletAddress?.length > 26) {
-    result = result.filter(
-      (degen: Degen) =>
-        degen.owner.toLowerCase() === walletAddress.toLowerCase(),
-    );
-  }
+  let result = degens.filter((degen: Degen) => {
+    const {
+      price,
+      multiplier,
+      rental_count,
+      tribe,
+      background,
+      traits_string,
+      name,
+      id,
+      owner,
+    } = degen;
 
-  result = result.filter((degen: Degen) => {
-    const priceMatches = prices
-      ? degen.price >= prices[0] && degen.price <= prices[1]
-      : true;
-    const multipliersMatches = multipliers
-      ? degen.multiplier >= multipliers[0] && degen.multiplier <= multipliers[1]
-      : true;
-    const rentalsMatches = rentals
-      ? degen.rental_count >= rentals[0] && degen.rental_count <= rentals[1]
-      : true;
-    const tribesMatches =
-      tribes.length > 0
-        ? tribes.find(
-            (tribe: string) => degen.tribe === tribe.toLocaleLowerCase(),
-          )
-        : true;
-    const backgroundsMatches =
-      backgrounds.length > 0
-        ? backgrounds.find(
-            (background: string) =>
-              degen.background === background.toLocaleLowerCase(),
-          )
-        : true;
-    const cosmeticsMatches =
-      cosmetics.length > 0
-        ? cosmetics.every((cosmetic) =>
-            degen.traits_string.split(',').includes(cosmetic),
-          )
-        : true;
-    const searchTermMatches = searchTerm[0]
-      ? degen.name.toLowerCase().includes(searchTerm[0].toLowerCase()) ||
-        degen.id.toLocaleLowerCase().includes(searchTerm[0].toLowerCase())
-      : true;
-    return (
-      priceMatches &&
-      multipliersMatches &&
-      rentalsMatches &&
-      tribesMatches &&
-      backgroundsMatches &&
-      cosmeticsMatches &&
-      searchTermMatches
-    );
+    if (
+      walletAddress?.length > 26 &&
+      !(owner.toLowerCase() === walletAddress.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (prices.length === 2 && !(price >= prices[0] && price <= prices[1])) {
+      return false;
+    }
+
+    if (
+      multipliers.length === 2 &&
+      !(multiplier >= multipliers[0] && multiplier <= multipliers[1])
+    ) {
+      return false;
+    }
+
+    if (
+      rentals.length === 2 &&
+      !(rental_count >= rentals[0] && rental_count <= rentals[1])
+    ) {
+      return false;
+    }
+
+    if (
+      tribes.length > 0 &&
+      !tribes.find((trb: string) => tribe === trb.toLocaleLowerCase())
+    ) {
+      return false;
+    }
+
+    if (
+      backgrounds.length > 0 &&
+      !backgrounds.find((bg: string) => background === bg.toLocaleLowerCase())
+    ) {
+      return false;
+    }
+
+    if (
+      cosmetics.length > 0 &&
+      !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
+    ) {
+      return false;
+    }
+
+    if (
+      searchTerm.length === 1 &&
+      !(
+        name.toLowerCase().includes(searchTerm[0].toLowerCase()) ||
+        id.toLocaleLowerCase().includes(searchTerm[0].toLowerCase())
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   });
+
+  if (sort === 'name') {
+    result.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  if (sort === 'multiplier') {
+    result.sort((a, b) => Number(b.multiplier) - Number(a.multiplier));
+  }
+  if (sort === 'rentals') {
+    result.sort((a, b) => Number(b.rental_count) - Number(a.rental_count));
+  }
+  if (sort === 'price') {
+    result.sort((a, b) => Number(b.price) - Number(a.price));
+  }
   return result;
 };
 
