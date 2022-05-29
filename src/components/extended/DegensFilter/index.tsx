@@ -37,12 +37,12 @@ type FilterSource =
   | 'searchTerm';
 
 interface DegensFilterProps {
-  handleFilter: (filter: DegenFilter) => void;
+  onFilter: (filter: DegenFilter) => void;
   defaultFilterValues: DegenFilter;
 }
 
 const DegensFilter = ({
-  handleFilter,
+  onFilter,
   defaultFilterValues,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
@@ -55,6 +55,7 @@ const DegensFilter = ({
       },
     [searchParams],
   );
+
   const isParamsEmpty = isEmpty(params);
 
   // Filter states
@@ -78,19 +79,6 @@ const DegensFilter = ({
   );
   const [searchTermValue, setSearchTermValue] = useState<string[]>(
     defaultFilterValues.searchTerm,
-  );
-
-  const actions = useMemo(
-    () => ({
-      prices: setPricesRangeValue,
-      multipliers: setMultipliersRangeValue,
-      rentals: setRentalsRangeValue,
-      tribes: setTribesValue,
-      backgrounds: setBackgroundsValue,
-      cosmetics: setCosmeticsValue,
-      searchTerm: setSearchTermValue,
-    }),
-    [],
   );
 
   // Set search params from filter values
@@ -118,12 +106,13 @@ const DegensFilter = ({
           keyValue = { backgrounds: value };
           break;
         case 'cosmetics':
-          keyValue = { cosmetics: value };
+          keyValue = { cosmetics: value?.toString() };
           break;
         case 'searchTerm':
           keyValue = { searchTerm: [value] };
           break;
       }
+
       const newParams = {
         ...params,
         ...keyValue,
@@ -198,8 +187,17 @@ const DegensFilter = ({
 
   // Update local state on mount & on filter params update
   useEffect(() => {
-    const newFilters = updateFilterValue(params, actions);
-    handleFilter({
+    const newFilters = updateFilterValue(defaultFilterValues, params, {
+      prices: setPricesRangeValue,
+      multipliers: setMultipliersRangeValue,
+      rentals: setRentalsRangeValue,
+      tribes: setTribesValue,
+      backgrounds: setBackgroundsValue,
+      cosmetics: setCosmeticsValue,
+      searchTerm: setSearchTermValue,
+    });
+
+    onFilter({
       prices: newFilters.prices,
       multipliers: newFilters.multipliers,
       rentals: newFilters.rentals,
@@ -208,7 +206,7 @@ const DegensFilter = ({
       cosmetics: newFilters.cosmetics,
       searchTerm: newFilters.searchTerm,
     });
-  }, [actions, defaultFilterValues, handleFilter, params]);
+  }, [defaultFilterValues, onFilter, params]);
 
   return (
     <Stack
@@ -388,7 +386,7 @@ const DegensFilter = ({
                       traitGroup={traitGroup}
                       categoryKey={categoryKey}
                       cosmeticsValue={cosmeticsValue}
-                      handleCheckboxChange={handleCheckboxChange}
+                      onCheckboxChange={handleCheckboxChange}
                       setCosmeticsValue={setCosmeticsValue}
                     />
                   </FilterAccordion>

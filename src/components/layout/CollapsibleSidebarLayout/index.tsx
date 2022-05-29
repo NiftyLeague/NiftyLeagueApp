@@ -1,22 +1,21 @@
 import { Drawer, Stack, useMediaQuery, useTheme } from '@mui/material';
-import { useState, useEffect, ReactNode, SetStateAction } from 'react';
+import { useEffect, ReactNode, SetStateAction, useCallback } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-
-interface State {
-  isDrawerOpen: boolean;
-  setIsDrawerOpen: React.Dispatch<SetStateAction<boolean>>;
-}
 
 interface Props {
   drawerWidth?: number;
-  renderDrawer: (props: State) => ReactNode;
-  renderMain: (props: State) => ReactNode;
+  renderDrawer: () => ReactNode;
+  renderMain: () => ReactNode;
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const CollapsibleSidebarLayout = ({
   drawerWidth = 320,
   renderDrawer,
   renderMain,
+  isDrawerOpen,
+  setIsDrawerOpen,
 }: Props): JSX.Element => {
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
@@ -24,15 +23,14 @@ const CollapsibleSidebarLayout = ({
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   // toggle sidebar
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  const handleDrawerOpen = () => {
+  const handleDrawerOpen = useCallback(() => {
     setIsDrawerOpen((prevState) => !prevState);
-  };
+  }, [setIsDrawerOpen]);
 
   // close sidebar when widow size below 'md' breakpoint
   useEffect(() => {
     setIsDrawerOpen(!matchDownLG);
-  }, [matchDownLG]);
+  }, [matchDownLG, setIsDrawerOpen]);
 
   return (
     <Stack direction="row" position="relative" alignItems="start">
@@ -68,7 +66,7 @@ const CollapsibleSidebarLayout = ({
             padding: '16px',
           }}
         >
-          {renderDrawer && renderDrawer({ isDrawerOpen, setIsDrawerOpen })}
+          {renderDrawer()}
         </PerfectScrollbar>
       </Drawer>
 
@@ -102,7 +100,7 @@ const CollapsibleSidebarLayout = ({
             height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
           }}
         >
-          {renderMain && renderMain({ isDrawerOpen, setIsDrawerOpen })}
+          {renderMain()}
         </PerfectScrollbar>
       </Stack>
     </Stack>

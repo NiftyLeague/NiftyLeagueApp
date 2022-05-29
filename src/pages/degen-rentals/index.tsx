@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import DegenCard from 'components/cards/DegenCard';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
-import defaultFilterValues from 'components/extended/DegensFilter/constants';
+import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
@@ -40,8 +40,10 @@ const DEGENS_PER_PAGE = 12;
 
 const DegenRentalsPage = (): JSX.Element => {
   const [degens, setDegens] = useState<Degen[]>([]);
-  const [filters, setFilters] = useState<DegenFilter>(defaultFilterValues);
-  const [defaultValues, setDefaultValues] = useState<DegenFilter | {}>({});
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>();
+  const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -55,55 +57,55 @@ const DegenRentalsPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(degens, DEGENS_PER_PAGE);
-
-  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
+  const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
+    filteredData,
+    DEGENS_PER_PAGE,
+  );
 
   useEffect(() => {
-    if (data && !isEmpty(data)) {
-      const originalDegens: Degen[] = Object.values(data);
-      setDefaultValues(getDefaultFilterValueFromData(originalDegens));
-      setDegens(originalDegens);
-      const params = Object.fromEntries(searchParams.entries());
-      let newDegens = originalDegens;
-      if (!isEmpty(params)) {
-        const newFilterOptions = updateFilterValue(params);
-        setFilters(newFilterOptions);
-        newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
-      }
-
-      updateNewData(newDegens);
+    if (!data || !Object.values(data).length) {
+      return;
     }
+
+    const originalDegens: Degen[] = Object.values(data);
+    setDefaultValues(getDefaultFilterValueFromData(originalDegens));
+    setDegens(originalDegens);
+    const params = Object.fromEntries(searchParams.entries());
+    let newDegens = originalDegens;
+    if (!isEmpty(params)) {
+      const newFilterOptions = updateFilterValue(defaultValues, params);
+      setFilters(newFilterOptions);
+      newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
+    }
+
+    setFilteredData(newDegens);
+
     return () => {
       setDegens([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [isEmpty(data)]);
 
   const handleFilter = useCallback(
     (filter: DegenFilter) => {
       const newFilters = { ...filter, sort: filters.sort };
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
-      updateNewData(result);
+      setFilteredData(result);
     },
-    [degens, filters.sort, updateNewData],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [degens.length, filters.sort],
   );
 
   const handleSort = useCallback(
     (sort: string) => {
       const newSort = { ...filters, sort };
       setFilters(newSort);
-      updateNewData(tranformDataByFilter(degens, newSort));
+      setFilteredData(tranformDataByFilter(degens, newSort));
     },
-    [degens, filters, updateNewData],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [degens.length, filters],
   );
-
-  // const handleClickCard = (degen: Degen): void => {
-  //   setSelectedDegen(degen);
-  //   setIsEnableDisableDegenModalOpen(true);
-  // };
 
   const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
@@ -122,96 +124,128 @@ const DegenRentalsPage = (): JSX.Element => {
     setIsDegenModalOpen(true);
   }, []);
 
+  const renderSkeletonItem = useCallback(
+    () => (
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={isDrawerOpen ? 4 : 3}
+        xl={3}
+        key={uuidv4()}
+      >
+        <SkeletonDegenPlaceholder />
+      </Grid>
+    ),
+    [isDrawerOpen],
+  );
+
+  const renderDrawer = useCallback(
+    () =>
+      !isEmpty(defaultValues) && (
+        <DegensFilter
+          onFilter={handleFilter}
+          defaultFilterValues={defaultValues as DegenFilter}
+        />
+      ),
+    [defaultValues, handleFilter],
+  );
+
+  const renderDegen = useCallback(
+    (degen: Degen) => (
+      <Grid
+        key={degen.id}
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={isDrawerOpen ? 4 : 3}
+        xl={3}
+      >
+        <DegenCard
+          id={degen.id}
+          name={degen.name}
+          multiplier={degen.multiplier}
+          owner={degen.owner}
+          price={degen.price}
+          background={degen.background}
+          activeRentals={degen.rental_count}
+          onClickEditName={() => handleClickEditName(degen)}
+          onClickDetail={() => handleViewTraits(degen)}
+          onClickRent={() => handleRentDegen(degen)}
+        />
+      </Grid>
+    ),
+    [handleClickEditName, handleRentDegen, handleViewTraits, isDrawerOpen],
+  );
+
+  const renderMain = useCallback(
+    () => (
+      <Stack gap={2}>
+        {/* Main Grid title */}
+        <SectionTitle
+          firstSection
+          actions={
+            <SortButton handleSort={handleSort}>
+              <Button
+                id="demo-positioned-button"
+                aria-controls="demo-positioned-menu"
+                aria-haspopup="true"
+                sx={{ color: 'grey.500', fontWeight: 400 }}
+                endIcon={<KeyboardArrowDownIcon />}
+              />
+            </SortButton>
+          }
+        >
+          <Stack direction="row" alignItems="center" gap={1}>
+            <IconButton
+              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+              size="large"
+            >
+              {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
+            </IconButton>
+            {filteredData.length} Degens
+          </Stack>
+        </SectionTitle>
+        {/* Main grid content */}
+        <Grid container spacing={2}>
+          {!degens?.length
+            ? [...Array(8)].map(renderSkeletonItem)
+            : dataForCurrentPage.map(renderDegen)}
+        </Grid>
+        <Pagination
+          count={maxPage}
+          page={currentPage}
+          color="primary"
+          sx={{ margin: '0 auto' }}
+          onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+        />
+      </Stack>
+    ),
+    [
+      handleSort,
+      isDrawerOpen,
+      filteredData.length,
+      degens?.length,
+      renderSkeletonItem,
+      dataForCurrentPage,
+      renderDegen,
+      maxPage,
+      currentPage,
+      jump,
+    ],
+  );
+
   return (
     <>
       <CollapsibleSidebarLayout
         // Filter drawer
-        renderDrawer={() =>
-          !isEmpty(defaultValues) && (
-            <DegensFilter
-              handleFilter={handleFilter}
-              defaultFilterValues={defaultValues as DegenFilter}
-            />
-          )
-        }
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        renderDrawer={renderDrawer}
         // Main grid
-        renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
-          <Stack gap={2}>
-            {/* Main Grid title */}
-            <SectionTitle
-              firstSection
-              actions={
-                <SortButton handleSort={handleSort}>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  />
-                </SortButton>
-              }
-            >
-              <Stack direction="row" alignItems="center" gap={1}>
-                <IconButton
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                  size="large"
-                >
-                  {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
-                </IconButton>
-                {newData.length} Degens
-              </Stack>
-            </SectionTitle>
-            {/* Main grid content */}
-            <Grid container spacing={2}>
-              {!data
-                ? [...Array(8)].map(() => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={isDrawerOpen ? 4 : 3}
-                      xl={3}
-                      key={uuidv4()}
-                    >
-                      <SkeletonDegenPlaceholder />
-                    </Grid>
-                  ))
-                : currentDataMemoized.map((degen: Degen) => (
-                    <Grid
-                      key={degen.id}
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={isDrawerOpen ? 4 : 3}
-                      xl={3}
-                    >
-                      <DegenCard
-                        id={degen.id}
-                        name={degen.name}
-                        multiplier={degen.multiplier}
-                        owner={degen.owner}
-                        price={degen.price}
-                        background={degen.background}
-                        activeRentals={degen.rental_count}
-                        onClickEditName={() => handleClickEditName(degen)}
-                        onClickDetail={() => handleViewTraits(degen)}
-                        onClickRent={() => handleRentDegen(degen)}
-                      />
-                    </Grid>
-                  ))}
-            </Grid>
-            <Pagination
-              count={maxPage}
-              page={currentPage}
-              color="primary"
-              sx={{ margin: '0 auto' }}
-              onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
-            />
-          </Stack>
-        )}
+        renderMain={renderMain}
       />
       <DegenDialog
         open={isDegenModalOpen}
