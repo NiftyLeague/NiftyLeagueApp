@@ -17,6 +17,7 @@ export interface DataType {
   user_id: any;
   score: string;
   stats: Stats;
+  name: string;
 }
 
 export interface TableRowType {
@@ -32,9 +33,6 @@ export interface TableType {
 export type Order = 'asc' | 'desc';
 
 export interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  order: Order;
-  orderBy: string;
   rows: TableRowType[];
 }
 
