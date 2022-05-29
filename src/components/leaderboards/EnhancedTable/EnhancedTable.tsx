@@ -7,28 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { DataType, Order, TableProps } from 'types/leaderboard';
-import { stableSort, getComparator } from 'utils/leaderboard';
+import { DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
 
 export default function EnhancedTable(props: TableProps): JSX.Element | null {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>('rank');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { rows, selectedTable } = props;
-
-  React.useEffect(() => {
-    setOrderBy('rank');
-  }, [selectedTable]);
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof DataType,
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -54,14 +39,9 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             aria-labelledby="tableTitle"
             size="medium"
           >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rows={selectedTable.rows}
-            />
+            <EnhancedTableHead rows={selectedTable.rows} />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: DataType, index: number) => {
                   const labelId = `enhanced-table-checkbox-${index}`;

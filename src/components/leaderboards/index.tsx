@@ -21,7 +21,7 @@ export default function LeaderBoards(): JSX.Element {
   // }, []);
   const fetchTopData = async () => {
     const arrayData: DataType[] = await fetchScores(selectedTable.key, 50);
-    let items = [];
+    let items: DataType[] = [];
     for (let i = 0; i < arrayData.length; i++) {
       if (arrayData[i].rank < 50) {
         items.push(arrayData[i].user_id);
@@ -36,7 +36,6 @@ export default function LeaderBoards(): JSX.Element {
         }
       }
     }
-    debugger;
     setData(arrayData);
   };
   useEffect(() => {

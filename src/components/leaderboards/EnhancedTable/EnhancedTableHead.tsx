@@ -1,65 +1,25 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { visuallyHidden } from '@mui/utils';
 import { EnhancedTableProps } from 'types/leaderboard';
 
 export default function EnhancedTableHead(
   props: EnhancedTableProps,
 ): JSX.Element | null {
-  const { order, orderBy, onRequestSort, rows } = props;
-  const createSortHandler =
-    (property: string) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  const { rows } = props;
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-          align="left"
-          padding="normal"
-          sortDirection={orderBy === 'rank' ? order : false}
-        >
-          <TableSortLabel
-            active={orderBy === 'rank'}
-            direction={orderBy === 'rank' ? order : 'asc'}
-            onClick={createSortHandler('rank')}
-          >
-            RANK
-            {orderBy === 'rank' ? (
-              <Box component="span" sx={visuallyHidden}>
-                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-              </Box>
-            ) : null}
-          </TableSortLabel>
+        <TableCell align="left" padding="normal">
+          RANK
         </TableCell>
         <TableCell align="left" padding="normal">
-          <TableSortLabel>USER ID</TableSortLabel>
+          USER ID
         </TableCell>
         {rows.map((headCell) => (
-          <TableCell
-            key={headCell.key}
-            align="left"
-            padding="normal"
-            sortDirection={orderBy === headCell.key ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.key}
-              direction={orderBy === headCell.key ? order : 'asc'}
-              onClick={createSortHandler(headCell.key)}
-            >
-              {headCell.display}
-              {orderBy === headCell.key ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+          <TableCell key={headCell.key} align="left" padding="normal">
+            {headCell.display}
           </TableCell>
         ))}
       </TableRow>
