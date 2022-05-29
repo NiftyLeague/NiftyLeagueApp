@@ -72,9 +72,18 @@ export const tranformDataByFilter = (
       return false;
     }
 
+    // if (
+    //   cosmetics.length > 0 &&
+    //   !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
+    // ) {
+    //   return false;
+    // }
+
     if (
       cosmetics.length > 0 &&
-      !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
+      !cosmetics.every((cosmetic) =>
+        traits_string.split(',').includes(cosmetic),
+      )
     ) {
       return false;
     }
