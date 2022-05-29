@@ -1,42 +1,28 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const usePagination = (data: any, itemsPerPage: number) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [newData, setNewData] = useState(data);
 
-  const maxPage = Math.ceil(newData.length / itemsPerPage);
+  const maxPage = Math.ceil(data.length / itemsPerPage);
 
-  const currentData = useCallback(() => {
+  const dataForCurrentPage = useMemo(() => {
     const begin = (currentPage - 1) * itemsPerPage;
     const end = begin + itemsPerPage;
-    return newData.slice(begin, end);
-  }, [currentPage, itemsPerPage, newData]);
+    return data.slice(begin, end);
+  }, [currentPage, itemsPerPage, data]);
 
-  const next = () => {
-    setCurrentPage((current) => Math.min(current + 1, maxPage));
-  };
-
-  const prev = () => {
-    setCurrentPage((current) => Math.max(current - 1, 1));
-  };
-
-  const jump = (page: number) => {
-    const pageNumber = Math.max(1, page);
-    setCurrentPage(() => Math.min(pageNumber, maxPage));
-  };
-
-  const updateNewData = useCallback((datas: any) => {
-    setNewData(datas);
-  }, []);
+  const jump = useCallback(
+    (page: number) => {
+      const pageNumber = Math.max(1, page);
+      setCurrentPage(() => Math.min(pageNumber, maxPage));
+    },
+    [maxPage],
+  );
 
   return {
-    next,
-    prev,
     jump,
-    currentData,
+    dataForCurrentPage,
     currentPage,
-    updateNewData,
-    newData,
     maxPage,
   };
 };
