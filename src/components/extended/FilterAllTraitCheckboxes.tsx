@@ -4,7 +4,7 @@ import { memo } from 'react';
 
 const FilterAllTraitCheckboxes = ({
   cosmeticsValue,
-  handleCheckboxChange,
+  onCheckboxChange,
   setCosmeticsValue,
   traitGroup,
   categoryKey,
@@ -25,7 +25,7 @@ const FilterAllTraitCheckboxes = ({
               value={traitKey}
               checked={cosmeticsValue.includes(traitKey)}
               onChange={(e) =>
-                handleCheckboxChange(
+                onCheckboxChange(
                   e,
                   'cosmetics',
                   cosmeticsValue,
@@ -46,5 +46,6 @@ const FilterAllTraitCheckboxes = ({
 export default memo(
   FilterAllTraitCheckboxes,
   (prevProps, nextProps) =>
-    prevProps.cosmeticsValue === nextProps.cosmeticsValue,
+    prevProps.cosmeticsValue === nextProps.cosmeticsValue &&
+    prevProps.onCheckboxChange === nextProps.onCheckboxChange,
 );

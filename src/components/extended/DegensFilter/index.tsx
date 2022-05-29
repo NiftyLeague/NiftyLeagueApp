@@ -55,6 +55,7 @@ const DegensFilter = ({
       },
     [searchParams],
   );
+
   const isParamsEmpty = isEmpty(params);
 
   // Filter states
@@ -105,12 +106,13 @@ const DegensFilter = ({
           keyValue = { backgrounds: value };
           break;
         case 'cosmetics':
-          keyValue = { cosmetics: value };
+          keyValue = { cosmetics: value?.toString() };
           break;
         case 'searchTerm':
           keyValue = { searchTerm: [value] };
           break;
       }
+
       const newParams = {
         ...params,
         ...keyValue,
@@ -384,7 +386,7 @@ const DegensFilter = ({
                       traitGroup={traitGroup}
                       categoryKey={categoryKey}
                       cosmeticsValue={cosmeticsValue}
-                      handleCheckboxChange={handleCheckboxChange}
+                      onCheckboxChange={handleCheckboxChange}
                       setCosmeticsValue={setCosmeticsValue}
                     />
                   </FilterAccordion>

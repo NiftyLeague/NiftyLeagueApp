@@ -45,11 +45,18 @@ import DegenDialog from 'components/dialog/DegenDialog';
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
 
+const handleBuyDegen = () => {
+  window.open('https://opensea.io/collection/niftydegen', '_blank');
+};
+
 const DashboardDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
-  const [degens, setDegens] = useState<Degen[]>([]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
-  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>();
+  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(
+    DEFAULT_STATIC_FILTER,
+  );
+  const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -60,77 +67,80 @@ const DashboardDegensPage = (): JSX.Element => {
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
-  const { data } = useFetch<Degen[]>(
+  const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
   const {
-    loading,
+    loading: loadingUserDegens,
     data: userDegens,
   }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
     pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-    variables: { address: address?.toLowerCase() },
+    // variables: { address: address?.toLowerCase() },
+    variables: {
+      address: '0x2fA105ACe88d22060D06F50eD16f04aD74762Dad'.toLowerCase(),
+    },
     skip: !address,
   });
 
-  const characters = useMemo(() => {
-    const characterList = userDegens?.owner?.characters
-      ? [...userDegens.owner.characters]
-      : [];
-    return characterList.sort(
-      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
-    );
-  }, [userDegens]);
+  const loading = loadingAllRentals || loadingUserDegens;
 
-  const filteredDegens: Degen[] = useMemo(() => {
-    if (characters.length && data) {
-      const mapDegens = characters.map((character) => data[character.id]);
-      return mapDegens;
+  const { characters = [] } = userDegens?.owner || {};
+
+  const populatedDegens: Degen[] = useMemo(() => {
+    if (!characters.length || !data) {
+      return [];
     }
-    return [];
-  }, [characters, data]);
+    return characters.map((character) => data[character.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [characters.length, !!data]);
 
-  const { jump, updateNewData, currentData, newData, maxPage, currentPage } =
-    usePagination(filteredDegens, DEGENS_PER_PAGE);
-
-  const currentDataMemoized = useMemo(() => currentData(), [currentData]);
-
-  const hasData = currentDataMemoized.length > 0;
+  const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
+    filteredData,
+    DEGENS_PER_PAGE,
+  );
 
   useEffect(() => {
-    if (filteredDegens && filteredDegens.length) {
-      const originalDegens: Degen[] = Object.values(filteredDegens);
-      setDefaultValues(getDefaultFilterValueFromData(originalDegens));
-      setDegens(originalDegens);
-      const params = Object.fromEntries(searchParams.entries());
-      let newDegens = originalDegens;
-      if (!isEmpty(params)) {
-        const newFilterOptions = updateFilterValue(defaultValues, params);
-        setFilters(newFilterOptions);
-        newDegens = tranformDataByFilter(originalDegens, newFilterOptions);
-      }
-      updateNewData(newDegens);
+    if (!populatedDegens.length) {
+      return;
     }
+
+    setDefaultValues(getDefaultFilterValueFromData(populatedDegens));
+    const params = Object.fromEntries(searchParams.entries());
+    let newDegens = populatedDegens;
+    if (!isEmpty(params)) {
+      const newFilterOptions = updateFilterValue(defaultValues, params);
+      setFilters(newFilterOptions);
+      newDegens = tranformDataByFilter(populatedDegens, newFilterOptions);
+    }
+    setFilteredData(newDegens);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredDegens]);
+  }, [populatedDegens.length]);
 
   const handleFilter = useCallback(
     (filter: DegenFilter) => {
       const newFilters = { ...filter, sort: filters.sort };
-      const result = tranformDataByFilter(degens, newFilters);
+      const result = tranformDataByFilter(populatedDegens, newFilters);
       setFilters(newFilters);
-      updateNewData(result);
+      setFilteredData(result);
     },
-    [degens, filters.sort, setFilters, updateNewData],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [populatedDegens.length, filters.sort],
   );
+
+  useEffect(() => {
+    jump(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredData.length]);
 
   const handleSort = useCallback(
     (sort: string) => {
       const newSort = { ...filters, sort };
       setFilters(newSort);
-      updateNewData(tranformDataByFilter(degens, newSort));
+      setFilteredData(tranformDataByFilter(populatedDegens, newSort));
     },
-    [degens, filters, updateNewData],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [populatedDegens.length, filters],
   );
 
   const handleEnableDisable = useCallback((degen: Degen): void => {
@@ -164,120 +174,149 @@ const DashboardDegensPage = (): JSX.Element => {
     setIsDegenModalOpen(true);
   }, []);
 
-  const handleBuyDegen = () => {
-    window.open('https://opensea.io/collection/niftydegen', '_blank');
-  };
+  const renderSkeletonItem = useCallback(
+    () => (
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={isDrawerOpen ? 4 : 3}
+        xl={3}
+        key={uuidv4()}
+      >
+        <SkeletonDegenPlaceholder />
+      </Grid>
+    ),
+    [isDrawerOpen],
+  );
+
+  const renderDrawer = useCallback(
+    () => (
+      <DegensFilter
+        onFilter={handleFilter}
+        defaultFilterValues={defaultValues as DegenFilter}
+      />
+    ),
+    [defaultValues, handleFilter],
+  );
+
+  const renderDegen = useCallback(
+    (degen: Degen) => (
+      <Grid
+        key={degen.id}
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={isDrawerOpen ? 4 : 3}
+        xl={3}
+      >
+        <DegenCard
+          id={degen.id}
+          name={degen.name}
+          multiplier={degen.multiplier}
+          owner={degen.owner}
+          price={degen.price}
+          background={degen.background}
+          activeRentals={degen.rental_count}
+          isEnabled={degen.is_active}
+          isDashboardDegen
+          onEnableDisable={() => handleEnableDisable(degen)}
+          onClickDetail={() => handleViewTraits(degen)}
+          onClickEditName={() => handleClickEditName(degen)}
+          onClickClaim={() => handleClaimDegen(degen)}
+          onClickRent={() => handleRentDegen(degen)}
+        />
+      </Grid>
+    ),
+    [
+      handleClaimDegen,
+      handleClickEditName,
+      handleEnableDisable,
+      handleRentDegen,
+      handleViewTraits,
+      isDrawerOpen,
+    ],
+  );
+
+  const renderMain = useCallback(
+    () => (
+      <Stack gap={2}>
+        {/* Main Grid title */}
+        <SectionTitle
+          firstSection
+          actions={
+            <SortButton handleSort={handleSort}>
+              <Button
+                id="demo-positioned-button"
+                aria-controls="demo-positioned-menu"
+                aria-haspopup="true"
+                sx={{ color: 'grey.500', fontWeight: 400 }}
+                endIcon={<KeyboardArrowDownIcon />}
+              />
+            </SortButton>
+          }
+        >
+          <Stack direction="row" alignItems="center" gap={1}>
+            <IconButton
+              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+              size="large"
+            >
+              {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
+            </IconButton>
+            {filteredData.length} Degens
+          </Stack>
+        </SectionTitle>
+        {/* Main grid content */}
+        <Grid container spacing={2}>
+          {loading || !address ? (
+            [...Array(8)].map(renderSkeletonItem)
+          ) : dataForCurrentPage.length ? (
+            dataForCurrentPage.map(renderDegen)
+          ) : !characters?.length ? (
+            <EmptyState
+              message="No DEGENs found. Please check your address or go purchase a degen if you have not done so already!"
+              buttonText="Buy a DEGEN"
+              onClick={handleBuyDegen}
+            />
+          ) : null}
+        </Grid>
+        {dataForCurrentPage.length > 0 && (
+          <Pagination
+            count={maxPage}
+            page={currentPage}
+            color="primary"
+            sx={{ margin: '0 auto' }}
+            onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+          />
+        )}
+      </Stack>
+    ),
+    [
+      handleSort,
+      isDrawerOpen,
+      filteredData.length,
+      loading,
+      address,
+      renderSkeletonItem,
+      dataForCurrentPage,
+      renderDegen,
+      characters?.length,
+      maxPage,
+      currentPage,
+      jump,
+    ],
+  );
 
   return (
     <>
       <CollapsibleSidebarLayout
-        // Filter drawer
-        drawerWidth={hasData ? 320 : 0}
-        renderDrawer={() =>
-          hasData &&
-          !isEmpty(defaultValues) && (
-            <DegensFilter
-              onFilter={handleFilter}
-              defaultFilterValues={defaultValues as DegenFilter}
-            />
-          )
-        }
-        // Main grid
-        renderMain={({ isDrawerOpen, setIsDrawerOpen }) => (
-          <Stack gap={2}>
-            {/* Main Grid title */}
-            <SectionTitle
-              firstSection
-              actions={
-                hasData && (
-                  <SortButton handleSort={handleSort}>
-                    <Button
-                      id="demo-positioned-button"
-                      aria-controls="demo-positioned-menu"
-                      aria-haspopup="true"
-                      sx={{ color: 'grey.500', fontWeight: 400 }}
-                      endIcon={<KeyboardArrowDownIcon />}
-                    />
-                  </SortButton>
-                )
-              }
-            >
-              <Stack direction="row" alignItems="center" gap={1}>
-                {hasData && (
-                  <IconButton
-                    onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                    size="large"
-                  >
-                    {isDrawerOpen ? <IconChevronLeft /> : <IconChevronRight />}
-                  </IconButton>
-                )}
-                {newData.length} Degens
-              </Stack>
-            </SectionTitle>
-            {/* Main grid content */}
-            <Grid container spacing={2}>
-              {loading || !address ? (
-                [...Array(8)].map(() => (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={isDrawerOpen ? 4 : 3}
-                    xl={3}
-                    key={uuidv4()}
-                  >
-                    <SkeletonDegenPlaceholder />
-                  </Grid>
-                ))
-              ) : filteredDegens.length && characters.length ? (
-                currentDataMemoized.map((degen: Degen) => (
-                  <Grid
-                    key={degen.id}
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={isDrawerOpen ? 4 : 3}
-                    xl={3}
-                  >
-                    <DegenCard
-                      id={degen.id}
-                      name={degen.name}
-                      multiplier={degen.multiplier}
-                      owner={degen.owner}
-                      price={degen.price}
-                      background={degen.background}
-                      activeRentals={degen.rental_count}
-                      isEnabled={degen.is_active}
-                      isDashboardDegen
-                      onEnableDisable={() => handleEnableDisable(degen)}
-                      onClickDetail={() => handleViewTraits(degen)}
-                      onClickEditName={() => handleClickEditName(degen)}
-                      onClickClaim={() => handleClaimDegen(degen)}
-                      onClickRent={() => handleRentDegen(degen)}
-                    />
-                  </Grid>
-                ))
-              ) : (
-                <EmptyState
-                  message="No DEGENs found. Please check your address or go purchase a degen if you have not done so already!"
-                  buttonText="Buy a DEGEN"
-                  onClick={handleBuyDegen}
-                />
-              )}
-            </Grid>
-            {hasData && (
-              <Pagination
-                count={maxPage}
-                page={currentPage}
-                color="primary"
-                sx={{ margin: '0 auto' }}
-                onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
-              />
-            )}
-          </Stack>
-        )}
+        drawerWidth={320}
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        renderDrawer={renderDrawer}
+        renderMain={renderMain}
       />
       <DegenDialog
         open={isDegenModalOpen}
