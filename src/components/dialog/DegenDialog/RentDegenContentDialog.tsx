@@ -6,12 +6,14 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  Link,
   Radio,
   RadioGroup,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -25,6 +27,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { NetworkContext } from 'NetworkProvider';
 import { sendEvent } from 'utils/google-analytics';
+import TermsOfServiceDialog from '../TermsOfServiceDialog';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -36,7 +39,9 @@ const RentDegenContentDialog = ({
   onClose,
 }: RentDegenContentDialogProps) => {
   const { web3Modal } = useContext(NetworkContext);
-  const [agreement, setAgreement] = useState<boolean>(false);
+  const [agreement, setAgreement] = useState<boolean>(
+    localStorage.getItem('aggreement-accepted') === 'ACCEPTED',
+  );
   const [rentFor, setRentFor] = useState<string>('recruit');
   const [renameEnabled, setRenameEnabled] = useState<boolean>(false);
   const [ethAddress, setEthAddress] = useState<string>('');
@@ -45,6 +50,7 @@ const RentDegenContentDialog = ({
   const [nameError, setNameError] = useState<string>('');
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [openTOS, setOpenTOS] = useState<boolean>(false);
 
   const [, , rentalPassCount] = useRentalPassCount(degen?.id);
   const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
@@ -55,6 +61,8 @@ const RentDegenContentDialog = ({
     ethAddress,
     isUseRentalPass,
   );
+
+  const theme = useTheme();
 
   const handleChangeRentingFor = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -184,6 +192,28 @@ const RentDegenContentDialog = ({
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [rentalPassCount, rentalPassCountloading]);
+
+  const openTOSDialog = (event) => {
+    event.preventDefault();
+    setOpenTOS(true);
+  };
+
+  const handleTOSDialogClose = (event, reason) => {
+    if (reason === 'accepted') {
+      setAgreement(true);
+      localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+    }
+    setOpenTOS(false);
+  };
+
+  const handleAgreementChange = (event) => {
+    setAgreement(event.target.checked);
+    if (event.target.checked) {
+      localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+    } else {
+      localStorage.removeItem('aggreement-accepted');
+    }
+  };
 
   return (
     <Grid container sx={{ p: 2 }} spacing={3}>
@@ -365,18 +395,33 @@ const RentDegenContentDialog = ({
               <FormControlLabel
                 label={
                   <Typography variant="caption">
-                    I understand all the information regarding this rental and
-                    its fees.
+                    I have read the
+                    <Link
+                      sx={{
+                        mx: '4px',
+                        textDecoration: 'none',
+                        fontWeight: theme.typography.fontWeightBold,
+                      }}
+                      variant="body2"
+                      onClick={openTOSDialog}
+                    >
+                      terms &amp; conditions
+                    </Link>
+                    regarding disabling rental
                   </Typography>
                 }
                 control={
                   <Checkbox
-                    value={agreement}
-                    onChange={(event) => setAgreement(event.target.checked)}
+                    checked={agreement}
+                    onChange={handleAgreementChange}
                   />
                 }
               />
             </FormControl>
+            <TermsOfServiceDialog
+              open={openTOS}
+              onClose={handleTOSDialogClose}
+            />
           </Stack>
           <Stack direction="column" gap={1} width="100%">
             <LoadingButton
