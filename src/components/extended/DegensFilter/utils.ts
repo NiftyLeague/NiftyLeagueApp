@@ -158,12 +158,12 @@ export const getDefaultFilterValueFromData = (degens: Degen[] | undefined) => {
   if (!degens?.length) {
     return DEFAULT_STATIC_FILTER;
   }
-  let minPrice = DEFAULT_STATIC_FILTER.prices[0];
-  let maxPrice = DEFAULT_STATIC_FILTER.prices[1];
-  let minMultiplier = DEFAULT_STATIC_FILTER.multipliers[0];
-  let maxMultiplier = DEFAULT_STATIC_FILTER.multipliers[1];
-  let minRental = DEFAULT_STATIC_FILTER.rentals[0];
-  let maxRental = DEFAULT_STATIC_FILTER.rentals[1];
+  let minPrice = degens[0].price;
+  let maxPrice = degens[0].price;
+  let minMultiplier = degens[0].multiplier;
+  let maxMultiplier = degens[0].multiplier;
+  let minRental = degens[0].rental_count;
+  let maxRental = degens[0].rental_count;
 
   degens.forEach((degen) => {
     const { price, multiplier, rental_count } = degen;

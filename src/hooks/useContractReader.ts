@@ -3,7 +3,7 @@ import { useCallback, useState, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Contracts } from 'types/web3';
 import useAsyncInterval from './useAsyncInterval';
-import { DEBUG, READ_CONTRACT_DEFAULT_INTERVAL } from '../constants';
+import { READ_CONTRACT_DEFAULT_INTERVAL } from '../constants';
 
 /*
   Enables you to read values from contracts and keep track of them in the local React states
@@ -40,28 +40,28 @@ export default function useContractReader(
     if (contracts && contracts[contractName]) {
       try {
         let newValue;
-        if (DEBUG)
-          console.log(
-            'CALLING ',
-            contractName,
-            functionName,
-            'with args',
-            args,
-          );
+        // if (DEBUG)
+        //   console.log(
+        //     'CALLING ',
+        //     contractName,
+        //     functionName,
+        //     'with args',
+        //     args,
+        //   );
         if (args && args.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName](...args);
-          if (DEBUG)
-            console.log(
-              'contractName',
-              contractName,
-              'functionName',
-              functionName,
-              'args',
-              args,
-              'RESULT:',
-              newValue,
-            );
+          // if (DEBUG)
+          //   console.log(
+          //     'contractName',
+          //     contractName,
+          //     'functionName',
+          //     functionName,
+          //     'args',
+          //     args,
+          //     'RESULT:',
+          //     newValue,
+          //   );
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName]();
