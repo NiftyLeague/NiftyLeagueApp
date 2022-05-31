@@ -5,8 +5,8 @@ import './navigation.css';
 import { TableType } from 'types/leaderboard';
 import { tables } from 'constants/leaderboard';
 import { Tabs, Tab, Stack } from '@mui/material';
-import { EmojiEvents, Paid, CrisisAlert } from '@mui/icons-material';
-import TopModal from './TopModal';
+// import { EmojiEvents, Paid, CrisisAlert } from '@mui/icons-material';
+// import TopModal from './TopModal';
 
 export default function LeaderBoards(): JSX.Element {
   const [selectedTable, setTable] = useState(tables[0]);
@@ -40,7 +40,7 @@ export default function LeaderBoards(): JSX.Element {
             />
           ))}
         </Tabs>
-        <Stack
+        {/* <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center"
@@ -57,7 +57,7 @@ export default function LeaderBoards(): JSX.Element {
             flag="kills"
             ModalIcon={<CrisisAlert className="leaderboard-icon kills" />}
           />
-        </Stack>
+        </Stack> */}
       </Stack>
       <EnhancedTable selectedTable={selectedTable} />
     </div>
