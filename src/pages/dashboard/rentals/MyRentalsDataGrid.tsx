@@ -33,7 +33,7 @@ interface Props {
   rows: Rentals[];
   loading: boolean;
   category: RentalType;
-  handleTerminalRental: (rentalId: string) => void;
+  onTerminateRental: (rentalId: string) => void;
   updateRentalName: (name: string, id: string) => void;
 }
 
@@ -41,14 +41,14 @@ const MyRentalsDataGrid = ({
   rows,
   loading,
   category,
-  handleTerminalRental,
+  onTerminateRental,
   updateRentalName,
 }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
-  const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
+  const [isTerminateRentalModalOpen, setIsTerminateRentalModalOpen] =
     useState(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [selectedDegen, setSelectedDegen] = useState();
@@ -120,13 +120,13 @@ const MyRentalsDataGrid = ({
 
   const handleOpenTerminateRental = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
-    setIsTerminalRentalModalOpen(true);
+    setIsTerminateRentalModalOpen(true);
   };
 
   const handleConfirmTerminateRental = () => {
     if (selectedRowForEditing) {
-      handleTerminalRental(selectedRowForEditing.rentalId);
-      setIsTerminalRentalModalOpen(false);
+      onTerminateRental(selectedRowForEditing.rentalId);
+      setIsTerminateRentalModalOpen(false);
     }
   };
 
@@ -377,10 +377,10 @@ const MyRentalsDataGrid = ({
           rental={selectedRowForEditing}
         />
       </Dialog>
-      {/* Terminal Rental Dialog */}
+      {/* Terminate Rental Dialog */}
       <Dialog
         open={isTerminateRentalModalOpen}
-        onClose={() => setIsTerminalRentalModalOpen(false)}
+        onClose={() => setIsTerminateRentalModalOpen(false)}
       >
         <DialogContent>
           <Typography variant="h4" align="center">
@@ -396,7 +396,7 @@ const MyRentalsDataGrid = ({
               Terminate Rental
             </Button>
             <Button
-              onClick={() => setIsTerminalRentalModalOpen(false)}
+              onClick={() => setIsTerminateRentalModalOpen(false)}
               fullWidth
             >
               Cancel
