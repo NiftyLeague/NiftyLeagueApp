@@ -143,6 +143,8 @@ const MainLayout = () => {
         return pageMeta.degenRentals.title;
       case '/games':
         return pageMeta.games.title;
+      case '/leaderboards':
+        return pageMeta.leaderboards.title;
       case '/dashboard':
         return pageMeta.dashboard.title;
       case '/dashboard/degens':
