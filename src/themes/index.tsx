@@ -67,6 +67,7 @@ export default function ThemeCustomization({ children }: Props) {
       },
       typography: themeTypography,
       customShadows: themeCustomShadows,
+      spacing: 4,
     }),
     [rtlLayout, theme, themeCustomShadows, themeTypography],
   );
