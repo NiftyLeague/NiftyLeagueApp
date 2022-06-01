@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 // material-ui
 import { styled, useTheme, Theme } from '@mui/material/styles';
@@ -26,6 +27,7 @@ import { useDispatch, useSelector } from 'store';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import { pageMeta } from 'constants/page-meta';
 
 interface MainStyleProps {
   theme: Theme;
@@ -133,8 +135,32 @@ const MainLayout = () => {
     );
   };
 
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/':
+        return pageMeta.main.title;
+      case '/degen-rentals':
+        return pageMeta.degenRentals.title;
+      case '/games':
+        return pageMeta.games.title;
+      case '/dashboard':
+        return pageMeta.dashboard.title;
+      case '/dashboard/degens':
+        return pageMeta.dashboard.degens.title;
+      case '/dashboard/comics':
+        return pageMeta.dashboard.comics.title;
+      case '/dashboard/rentals':
+        return pageMeta.dashboard.rentals.title;
+      default:
+        return pageMeta.main.title;
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
+      <Helmet>
+        <title>{getPageTitle()}</title>
+      </Helmet>
       <CssBaseline />
       {/* header */}
       <AppBar
