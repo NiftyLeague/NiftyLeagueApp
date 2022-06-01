@@ -88,6 +88,104 @@ export interface CustomTypography {
     height: string;
     fontSize: string;
   };
+  displayLarge?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  displaySmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphLarge?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphMedium?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphXSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphXXSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphXXXSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2Large?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2Medium?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2Small?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2XSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2XXSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
+  paragraphP2XXXSmall?: {
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
   heading?: string;
   textDark?: string;
   grey900?: string;
