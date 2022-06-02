@@ -1,0 +1,60 @@
+// grey
+$grey50: #f0f0f3;
+$grey100: #d2d3db;
+$grey200: #b4b5c3;
+$grey300: #e0e0e0;
+$grey500: #6A6D85;
+$grey600: #5d5f74;
+$grey700: #424453;
+$grey800: #282932;
+
+// Primary
+$primaryLight: #282932;
+$primaryMain: #620EDF;
+$primaryDark: #310770;
+
+// Semantic
+$successMain: #00E080;
+$warningMain: #FFE500;
+$errorMain: #FF4900;
+
+// Shades
+$shade00: #FAFAFA;
+$shade100: #191B1F;
+
+$lightBackground: $grey50;
+$darkBackground: $grey800;
+
+:export {
+  // paper & background
+  paper: $shade00;
+
+  // primary
+  primaryLight: $primaryLight;
+  primaryMain: $primaryMain;
+  primaryDark: $primaryDark;
+
+  // success
+  successMain: $successMain;
+
+  // error
+  errorMain: $errorMain;
+
+  // warning
+  warningMain: $warningMain;
+
+  // grey
+  grey50: $grey50;
+  grey100: $grey100;
+  grey200: $grey200;
+  grey300: $grey300;
+  grey500: $grey500;
+  grey600: $grey600;
+  grey700: $grey700;
+  grey800: $grey800;
+
+  // paper & background
+  darkPaper: $shade100;
+  darkBackground: $darkBackground;
+  lightBackground: $lightBackground;
+}
