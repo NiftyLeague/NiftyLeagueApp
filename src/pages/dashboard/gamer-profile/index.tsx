@@ -105,7 +105,10 @@ const GamerProfile = (): JSX.Element => {
               <LeftInfo data={profile?.stats?.total} />
               <RightInfo
                 degenCount={filteredDegens?.length}
-                comicCount={filteredComics?.length}
+                comicCount={filteredComics?.reduce(
+                  (prev, cur) => prev + Number(cur?.balance),
+                  0,
+                )}
               />
             </Stack>
           </Stack>
