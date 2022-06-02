@@ -1,33 +1,18 @@
-import { CardContent, CardActions, Skeleton, Stack } from '@mui/material';
-import MainCard from '../MainCard';
+import { Skeleton, Stack } from '@mui/material';
 
 const DegenPlaceholder = () => (
-  <MainCard content={false} boxShadow={false} border={false}>
-    <Skeleton variant="rectangular" height={320} />
-    <CardContent sx={{ pb: 0, pt: 1 }}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        gap={1}
-        sx={{ mb: 1 }}
-      >
-        <Skeleton variant="rectangular" width={100} height={32} />
-        <Skeleton variant="rectangular" width={100} height={32} />
-        <Skeleton variant="rectangular" width={100} height={32} />
+  <Stack sx={{ p: '12px' }} gap={3}>
+    <Skeleton variant="rectangular" height={40} />
+    <Stack gap={3}>
+      <Skeleton variant="rectangular" height={294} />
+      <Stack direction="row" justifyContent="space-between">
+        <Skeleton variant="rectangular" width="40%" height={20} />
+        <Skeleton variant="rectangular" width="20%" height={20} />
       </Stack>
-      <Stack direction="row" mb="10px">
-        <Skeleton variant="rectangular" width="100%" height={20} />
-      </Stack>
-      <Stack direction="row" justifyContent="space-between" gap={1}>
-        <Skeleton variant="rectangular" width="100%" height={21} />
-        <Skeleton variant="rectangular" width="100%" height={21} />
-      </Stack>
-    </CardContent>
-    <CardActions>
       <Skeleton variant="rectangular" width="100%" height={36.5} />
-      <Skeleton variant="rectangular" width="100%" height={36.5} />
-    </CardActions>
-  </MainCard>
+    </Stack>
+    <Skeleton variant="rectangular" height={40} />
+  </Stack>
 );
 
 export default DegenPlaceholder;
