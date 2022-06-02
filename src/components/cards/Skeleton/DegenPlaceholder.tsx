@@ -2,7 +2,7 @@ import { Skeleton, Stack } from '@mui/material';
 
 const DegenPlaceholder = () => (
   <Stack sx={{ p: '12px' }} gap={3}>
-    <Skeleton variant="rectangular" height={40} />
+    <Skeleton variant="rectangular" height={24} />
     <Stack gap={3}>
       <Skeleton variant="rectangular" height={294} />
       <Stack direction="row" justifyContent="space-between">
@@ -11,7 +11,7 @@ const DegenPlaceholder = () => (
       </Stack>
       <Skeleton variant="rectangular" width="100%" height={36.5} />
     </Stack>
-    <Skeleton variant="rectangular" height={40} />
+    <Skeleton variant="rectangular" height={24} />
   </Stack>
 );
 

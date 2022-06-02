@@ -44,7 +44,13 @@ export interface DegenCardProps {
 
 const IconButton = ({ label, children, ...rest }) => {
   return (
-    <IconButtonMui {...rest} color="inherit" aria-label={label} component="div">
+    <IconButtonMui
+      {...rest}
+      color="inherit"
+      aria-label={label}
+      component="div"
+      sx={{ p: 0 }}
+    >
       {children}
     </IconButtonMui>
   );
