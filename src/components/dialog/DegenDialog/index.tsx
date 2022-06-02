@@ -128,6 +128,14 @@ const DegenDialog = ({
       fullScreen={fullScreen}
       onClose={handleClose}
       open={open}
+      PaperProps={{
+        style: {
+          backgroundColor:
+            theme.palette.mode === 'dark'
+              ? theme.palette.background.default
+              : theme.palette.background.paper,
+        },
+      }}
       {...rest}
     >
       {isClaim && (
