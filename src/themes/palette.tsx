@@ -64,6 +64,12 @@ const Palette = (navType: PaletteMode, presetColor: string) => {
       success: {
         main: colors.successMain,
       },
+      dark: {
+        main: colors.primaryDark,
+      },
+      orange: {
+        main: colors.orangeMain,
+      },
       grey: {
         50: colors.grey50,
         100: colors.grey100,
