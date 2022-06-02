@@ -8,6 +8,9 @@ export const pageMeta = {
   games: {
     title: 'NFT Games | Nifty League',
   },
+  leaderboards: {
+    title: 'Leaderboards | Nifty League',
+  },
   dashboard: {
     title: 'My Dashboard | Nifty League',
     degens: {
