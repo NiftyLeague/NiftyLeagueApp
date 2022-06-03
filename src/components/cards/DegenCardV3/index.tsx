@@ -87,6 +87,93 @@ const DegenCard: React.FC<
         }
       }
     };
+
+    const renderHeaderDegens = () => {
+      return (
+        <>
+          <IconButton label="Favorite Degen">
+            {isFavorite ? (
+              <FavoriteIcon color="primary" />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
+          </IconButton>
+          <Typography
+            variant="paragraphXSmall"
+            fontWeight="500"
+          >{`${multiplier}x`}</Typography>
+          <Typography variant="paragraphXSmall" fontWeight="500">
+            10/50/40
+          </Typography>
+          <Typography
+            variant="paragraphXSmall"
+            fontWeight="500"
+          >{`${activeRentals}r`}</Typography>
+          <IconButton onClick={onClickDownload} label="Download Degen">
+            <DownloadIcon />
+          </IconButton>
+        </>
+      );
+    };
+
+    const renderHeaderDegenRentals = () => {
+      return (
+        <>
+          <Typography
+            variant="paragraphXSmall"
+            fontWeight="500"
+          >{`${multiplier}x Multi`}</Typography>
+          <Typography variant="paragraphXSmall" fontWeight="500">
+            5/25/70
+          </Typography>
+          <Typography
+            variant="paragraphXSmall"
+            fontWeight="500"
+          >{`${activeRentals} Rentals`}</Typography>
+        </>
+      );
+    };
+
+    const renderFooterDegenRentals = () => {
+      return (
+        <>
+          <IconButton label="Traits">
+            <ViewListIcon />
+          </IconButton>
+          <Stack flex={1} flexDirection="row" justifyContent="space-between">
+            <Link variant="paragraphXSmall">Traits</Link>
+            <Typography variant="paragraphXSmall">{`${price} NFTL`}</Typography>
+          </Stack>
+        </>
+      );
+    };
+
+    const renderFooterDegens = () => {
+      return (
+        <>
+          <IconButton label="Traits">
+            <ViewListIcon />
+          </IconButton>
+          <IconButton label="Game Earnings">
+            <AltRouteIcon />
+          </IconButton>
+          <IconButton onClick={onEnableDisable} label="Enable Rentals">
+            {isEnabled ? (
+              <LockOpenIcon color="success" />
+            ) : (
+              <LockIcon color="error" />
+            )}
+          </IconButton>
+          <IconButton label="Whitelist">
+            <GroupAddIcon />
+          </IconButton>
+          <IconButton label="Niffy">
+            <NiffyIcon />
+          </IconButton>
+        </>
+      );
+    };
+
     return (
       <Stack
         sx={{
@@ -109,27 +196,7 @@ const DegenCard: React.FC<
           justifyContent="space-between"
           alignItems="center"
         >
-          <IconButton label="Favorite Degen">
-            {isFavorite ? (
-              <FavoriteIcon color="primary" />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
-          </IconButton>
-          <Typography
-            variant="paragraphXSmall"
-            fontWeight="500"
-          >{`${multiplier}x`}</Typography>
-          <Typography variant="paragraphXSmall" fontWeight="500">
-            10/50/40
-          </Typography>
-          <Typography
-            variant="paragraphXSmall"
-            fontWeight="500"
-          >{`${activeRentals}r`}</Typography>
-          <IconButton onClick={onClickDownload} label="Download Degen">
-            <DownloadIcon />
-          </IconButton>
+          {isDashboardDegen ? renderHeaderDegens() : renderHeaderDegenRentals()}
         </Stack>
         {/* Card Content */}
         <Stack gap={3}>
@@ -165,26 +232,9 @@ const DegenCard: React.FC<
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
+          gap={2}
         >
-          <IconButton label="Traits">
-            <ViewListIcon />
-          </IconButton>
-          <IconButton label="Game Earnings">
-            <AltRouteIcon />
-          </IconButton>
-          <IconButton onClick={onEnableDisable} label="Enable Rentals">
-            {isEnabled ? (
-              <LockOpenIcon color="success" />
-            ) : (
-              <LockIcon color="error" />
-            )}
-          </IconButton>
-          <IconButton label="Whitelist">
-            <GroupAddIcon />
-          </IconButton>
-          <IconButton label="Niffy">
-            <NiffyIcon />
-          </IconButton>
+          {isDashboardDegen ? renderFooterDegens() : renderFooterDegenRentals()}
         </Stack>
       </Stack>
     );
