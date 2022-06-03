@@ -5,6 +5,7 @@ import { NetworkContext } from 'NetworkProvider';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
+import { useTheme } from '@mui/material/styles';
 import { formatNumberToDisplay } from 'utils/numbers';
 
 export interface ClaimDegenContentDialogProps {
@@ -44,30 +45,52 @@ const ClaimDegenContentDialog = ({
     [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
   );
 
-  const handleClose = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClose?.(event);
-    },
-    [onClose],
-  );
-
+  const theme = useTheme();
   const amountParsed = formatNumberToDisplay(mockAccumulated);
 
   return (
-    <Stack padding={3} gap={2}>
-      <Typography
-        align="center"
-        variant="h4"
-      >{`${amountParsed} claimable for this DEGEN`}</Typography>
+    <Stack
+      sx={{
+        minWidth: '292px',
+        minHeight: '457.7px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        backgroundColor: theme.palette.background.default,
+        padding: '0px 12px',
+      }}
+      padding={3}
+      gap={2}
+    >
+      <Stack></Stack>
+      <Stack
+        sx={{
+          color:
+            theme.palette.mode === 'dark'
+              ? theme.palette.grey[50]
+              : theme.palette.grey[900],
+        }}
+      >
+        <Typography
+          align="center"
+          variant="paragraphMedium"
+        >{`${amountParsed} NFTL`}</Typography>
+        <Typography
+          align="center"
+          variant="paragraphXSmall"
+        >{`Available to Claim`}</Typography>
+      </Stack>
       <Stack gap={1}>
         <Button
           disabled={!(mockAccumulated > 0.0 && writeContracts[NFTL_CONTRACT])}
           variant="contained"
           onClick={handleClaimNFTL}
         >
-          Claim
+          <Typography align="center" variant="paragraphP2XXSmall">
+            Claim NFTL
+          </Typography>
         </Button>
-        <Button onClick={handleClose}>Cancel</Button>
       </Stack>
     </Stack>
   );
