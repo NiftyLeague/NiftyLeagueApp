@@ -322,7 +322,7 @@ export default function componentStyleOverrides(
       styleOverrides: {
         paper: {
           padding: '12px 0 12px 0',
-          backgroundColor: theme.palette.dark.main,
+          backgroundColor: theme.palette.background.default,
         },
       },
     },
