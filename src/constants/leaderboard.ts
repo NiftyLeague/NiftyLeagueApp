@@ -10,7 +10,7 @@ export const tables = [
     ],
   },
   {
-    key: 'xp',
+    key: 'earnings',
     display: 'TOP EARNERS',
     rows: [
       { key: 'earnings', display: 'TOTAL NFTL EARNED' },
