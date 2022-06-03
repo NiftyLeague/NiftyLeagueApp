@@ -1,0 +1,72 @@
+// Neutrals
+$grey50: #f0f0f3;
+$grey100: #d2d3db;
+$grey200: #b4b5c3;
+$grey500: #6a6d85;
+$grey600: #5d5f74;
+$grey700: #424453;
+$grey800: #282932;
+
+// Primary
+$primaryLight: #282932;
+$primaryMain: #620edf;
+$primaryDark: #310770;
+
+// Semantic
+$successMain: #00e080;
+$warningMain: #ffe500;
+$errorMain: #ff4900;
+
+// Shades
+$shade00: #fafafa;
+$shade100: #191b1f;
+
+// Orange
+$orangeLight: #fbe9e7;
+$orangeMain: #ffab91;
+$orangeDark: #d84315;
+
+$lightBackground: $grey50;
+$darkBackground: $grey800;
+
+:export {
+  // paper & background
+  paper: $shade00;
+
+  // shades
+  shade00: $shade00;
+  shade100: $shade100;
+
+  // primary
+  primaryLight: $primaryLight;
+  primaryMain: $primaryMain;
+  primaryDark: $primaryDark;
+
+  // success
+  successMain: $successMain;
+
+  // error
+  errorMain: $errorMain;
+
+  // warning
+  warningMain: $warningMain;
+
+  // grey
+  grey50: $grey50;
+  grey100: $grey100;
+  grey200: $grey200;
+  grey500: $grey500;
+  grey600: $grey600;
+  grey700: $grey700;
+  grey800: $grey800;
+
+  // orange
+  orangeLight: $orangeLight;
+  orangeMain: $orangeMain;
+  orangeDark: $orangeDark;
+
+  // paper & background
+  darkPaper: $shade100;
+  darkBackground: $darkBackground;
+  lightBackground: $lightBackground;
+}

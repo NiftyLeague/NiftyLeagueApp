@@ -176,7 +176,7 @@ export default function componentStyleOverrides(
             color:
               mode === 'dark'
                 ? theme.palette.text.primary + 50
-                : theme.palette.grey[300],
+                : theme.palette.grey[500],
           },
         },
         mark: {
