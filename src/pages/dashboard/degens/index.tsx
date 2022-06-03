@@ -213,9 +213,7 @@ const DashboardDegensPage = (): JSX.Element => {
           id={degen.id}
           name={degen.name}
           multiplier={degen.multiplier}
-          owner={degen.owner}
           price={degen.price}
-          background={degen.background}
           activeRentals={degen.rental_count}
           isEnabled={degen.is_active}
           isDashboardDegen
