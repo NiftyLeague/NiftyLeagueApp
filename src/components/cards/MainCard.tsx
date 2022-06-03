@@ -69,7 +69,7 @@ const MainCard = React.forwardRef(
           borderColor:
             theme.palette.mode === 'dark'
               ? theme.palette.background.default
-              : theme.palette.primary[200] + 75,
+              : theme.palette.primary.light + 75,
           ':hover': {
             boxShadow: boxShadow
               ? shadow ||

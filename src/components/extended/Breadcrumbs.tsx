@@ -158,7 +158,7 @@ const Breadcrumbs = ({
             borderColor:
               theme.palette.mode === 'dark'
                 ? theme.palette.background.default
-                : theme.palette.primary[200] + 75,
+                : theme.palette.primary.light + 75,
             background:
               card === false ? 'transparent' : theme.palette.background.default,
           }}
