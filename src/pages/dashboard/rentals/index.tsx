@@ -10,7 +10,7 @@ import {
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
 import SearchRental from './SearchRental';
-import InputLabel from '../../../components/extended/Form/InputLabel';
+import InputLabel from 'components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
