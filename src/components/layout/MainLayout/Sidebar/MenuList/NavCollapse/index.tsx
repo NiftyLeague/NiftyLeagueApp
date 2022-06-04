@@ -7,11 +7,9 @@ import {
   Collapse,
   List,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Typography,
 } from '@mui/material';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 // project imports
 import NavItem from '../NavItem';
@@ -73,23 +71,6 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
     }
   });
 
-  const Icon = menu.icon!;
-  const menuIcon = menu.icon ? (
-    <Icon
-      strokeWidth={1.5}
-      size="1.3rem"
-      style={{ marginTop: 'auto', marginBottom: 'auto' }}
-    />
-  ) : (
-    <FiberManualRecordIcon
-      sx={{
-        width: selected === menu.id ? 8 : 6,
-        height: selected === menu.id ? 8 : 6,
-      }}
-      fontSize={level > 0 ? 'inherit' : 'medium'}
-    />
-  );
-
   return (
     <>
       <ListItemButton
@@ -99,18 +80,18 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
           alignItems: 'flex-start',
           backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
           py: level > 1 ? 1 : 1.25,
-          pl: `${level * 24}px`,
+          pl: `${(level - 1) * 12}px`,
         }}
         selected={selected === menu.id}
         onClick={handleClick}
       >
-        <ListItemIcon sx={{ my: 'auto', minWidth: !menu.icon ? 18 : 36 }}>
+        {/* <ListItemIcon sx={{ my: 'auto', minWidth: !menu.icon ? 18 : 36 }}>
           {menuIcon}
-        </ListItemIcon>
+        </ListItemIcon> */}
         <ListItemText
           primary={
             <Typography
-              variant={selected === menu.id ? 'h5' : 'body1'}
+              variant={selected === menu.id ? 'body1' : 'body1'}
               color="inherit"
               sx={{ my: 'auto' }}
             >
