@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Divider, List, Typography } from '@mui/material';
+import { List, Typography } from '@mui/material';
 
 // project imports
 import NavItem from '../NavItem';
@@ -67,12 +67,13 @@ const NavGroup = ({ item }: NavGroupProps) => {
             </Typography>
           )
         }
+        sx={{ py: 0 }}
       >
         {items}
       </List>
 
       {/* group divider */}
-      <Divider sx={{ mt: 0.25, mb: 1.25 }} />
+      {/* <Divider sx={{ mt: 0.25, mb: 1.25 }} /> */}
     </>
   );
 };

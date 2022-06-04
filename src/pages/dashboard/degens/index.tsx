@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 
@@ -34,7 +34,6 @@ import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
-import { NetworkContext } from 'NetworkProvider';
 import { Owner } from 'types/graph';
 import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
@@ -50,7 +49,8 @@ const handleBuyDegen = () => {
 };
 
 const DashboardDegensPage = (): JSX.Element => {
-  const { address } = useContext(NetworkContext);
+  // const { address } = useContext(NetworkContext);
+  const address = '0x2fA105ACe88d22060D06F50eD16f04aD74762Dad';
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
   const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(

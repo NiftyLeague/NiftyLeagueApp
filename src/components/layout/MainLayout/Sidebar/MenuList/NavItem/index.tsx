@@ -12,7 +12,6 @@ import {
   Avatar,
   Chip,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Typography,
   useMediaQuery,
@@ -22,9 +21,6 @@ import {
 import useConfig from 'hooks/useConfig';
 import { useDispatch, useSelector } from 'store';
 import { activeItem, openDrawer } from 'store/slices/menu';
-
-// assets
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 // types
 import { LinkTarget, NavItemType } from 'types';
@@ -43,19 +39,6 @@ const NavItem = ({ item, level }: NavItemProps) => {
   const { borderRadius } = useConfig();
   const dispatch = useDispatch();
   const { openItem } = useSelector((state) => state.menu);
-
-  const Icon = item?.icon!;
-  const itemIcon = item?.icon ? (
-    <Icon stroke={1.5} size="1.3rem" />
-  ) : (
-    <FiberManualRecordIcon
-      sx={{
-        width: openItem.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-        height: openItem.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-      }}
-      fontSize={level > 0 ? 'inherit' : 'medium'}
-    />
-  );
 
   let itemTarget: LinkTarget = '_self';
   if (item.target) {
@@ -105,25 +88,28 @@ const NavItem = ({ item, level }: NavItemProps) => {
         alignItems: 'flex-start',
         backgroundColor: 'transparent !important',
         py: level > 1 ? 1 : 1.25,
-        pl: `${level * 24}px`,
-        '&:hover': {
-          border: '1px solid',
-          borderColor: theme.palette.secondary.main,
-        },
+        pl: `${(level - 1) * 12}px`,
       }}
       selected={openItem?.findIndex((id) => id === item.id) > -1}
       onClick={() => itemHandler(item.id!)}
     >
-      <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
+      {/* <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
         {itemIcon}
-      </ListItemIcon>
+      </ListItemIcon> */}
       <ListItemText
         primary={
           <Typography
             variant={
-              openItem?.findIndex((id) => id === item.id) > -1 ? 'h5' : 'body1'
+              openItem?.findIndex((id) => id === item.id) > -1
+                ? level > 1
+                  ? 'paragraphXXSmall'
+                  : 'body1'
+                : level > 1
+                ? 'paragraphXXSmall'
+                : 'body1'
             }
             color="inherit"
+            fontWeight={level > 1 ? '300' : '400'}
           >
             {item.title}
           </Typography>

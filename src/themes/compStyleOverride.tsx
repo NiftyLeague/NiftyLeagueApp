@@ -9,14 +9,8 @@ export default function componentStyleOverrides(
   const mode = theme.palette.mode;
   const bgColor =
     mode === 'dark' ? theme.palette.dark[800] : theme.palette.grey[50];
-  const menuSelectedBack =
-    mode === 'dark'
-      ? theme.palette.secondary.main + 15
-      : theme.palette.secondary.light;
   const menuSelected =
-    mode === 'dark'
-      ? theme.palette.secondary.main
-      : theme.palette.secondary.dark;
+    mode === 'dark' ? theme.palette.primary.main : theme.palette.secondary.dark;
 
   return {
     MuiButton: {
@@ -26,7 +20,10 @@ export default function componentStyleOverrides(
           borderRadius: '4px',
         },
         outlinedPrimary: {
-          color: '#fff',
+          color:
+            mode === 'dark'
+              ? theme.palette.grey[50]
+              : theme.palette.primary.main,
           borderColor: theme.palette.primary.main,
         },
       },
@@ -82,21 +79,22 @@ export default function componentStyleOverrides(
     MuiListItemButton: {
       styleOverrides: {
         root: {
+          border: 'none !important',
           color: theme.palette.text.primary,
           paddingTop: '10px',
           paddingBottom: '10px',
           '&.Mui-selected': {
             color: menuSelected,
-            backgroundColor: menuSelectedBack,
+            backgroundColor: 'transparent',
             '&:hover': {
-              backgroundColor: menuSelectedBack,
+              backgroundColor: 'transparent',
             },
             '& .MuiListItemIcon-root': {
               color: menuSelected,
             },
           },
           '&:hover': {
-            backgroundColor: menuSelectedBack,
+            backgroundColor: 'transparent',
             color: menuSelected,
             '& .MuiListItemIcon-root': {
               color: menuSelected,
@@ -360,6 +358,17 @@ export default function componentStyleOverrides(
       styleOverrides: {
         dividers: {
           borderColor: theme.palette.grey[800],
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textUnderlineOffset: '1px',
+          color:
+            mode === 'dark' ? theme.palette.grey[50] : theme.palette.grey[800],
+          textDecorationColor:
+            mode === 'dark' ? theme.palette.grey[50] : theme.palette.grey[800],
         },
       },
     },
