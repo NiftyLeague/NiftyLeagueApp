@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Button,
@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
+import DegenRent from 'components/degens/DegenRent';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -24,23 +25,151 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { ReactComponent as NiffyIcon } from 'assets/images/icons/niffy-icon.svg';
+import { Degen } from 'types/degens';
 
 export interface DegenCardProps {
-  activeRentals?: number;
-  id: string;
+  sx?: SxProps<Theme>;
+  degen: Degen;
   isDashboardDegen?: boolean;
   isEnabled?: boolean;
   isFavorite?: boolean;
-  multiplier?: number;
-  name?: string;
-  onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
-  onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
-  onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
-  onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onClaim?: React.MouseEventHandler<HTMLButtonElement>;
+  onDetail?: React.MouseEventHandler<HTMLButtonElement>;
+  onEditName?: React.MouseEventHandler<SVGSVGElement>;
+  onRent?: React.MouseEventHandler<HTMLButtonElement>;
   onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
-  price?: number;
-  sx?: SxProps<Theme>;
+  onOpenRentDialog?: React.MouseEventHandler<HTMLDivElement>;
 }
+
+const DegenCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
+> = memo(
+  ({
+    degen,
+    isDashboardDegen = false,
+    isFavorite,
+    isEnabled,
+    onEnableDisable,
+    onOpenRentDialog,
+    sx,
+  }): JSX.Element => {
+    const authToken = window.localStorage.getItem('authentication-token');
+    const { palette, customShadows } = useTheme();
+    const [view, setView] = useState<'rent' | 'default'>('default');
+
+    const onClickDownload = async () => {
+      if (authToken) {
+        try {
+          await downloadDegenAsZip(authToken, degen.id);
+        } catch (err) {
+          toast.error(err.message, { theme: 'dark' });
+        }
+      }
+    };
+
+    const handleReset = useCallback(() => {
+      setView('default');
+    }, []);
+
+    const handleClickRent = useCallback(() => {
+      setView('rent');
+    }, []);
+
+    switch (view) {
+      case 'rent':
+        return (
+          <DegenRent
+            degen={degen}
+            onBack={handleReset}
+            onFullScreen={onOpenRentDialog}
+          />
+        );
+      case 'default':
+      default:
+        return (
+          <Stack
+            sx={{
+              width: '100%',
+              height: '100%',
+              borderRadius: '4px',
+              p: '12px',
+              background: palette.background.paper,
+              boxShadow: customShadows.xSmall,
+              ...sx,
+            }}
+            gap={3}
+          >
+            {/* Card Header */}
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              {isDashboardDegen ? (
+                <HeaderDegens
+                  isFavorite={isFavorite}
+                  multiplier={degen.multiplier}
+                  activeRentals={degen.rental_count}
+                  onClickDownload={onClickDownload}
+                />
+              ) : (
+                <HeaderDegenRentals
+                  multiplier={degen.multiplier}
+                  activeRentals={degen.rental_count}
+                />
+              )}
+            </Stack>
+            {/* Card Content */}
+            <Stack gap={3}>
+              {degen.id && <DegenImage tokenId={degen.id} />}
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="paragraphP2XSmall">
+                  {degen.name || 'No Name DEGEN'}
+                </Typography>
+                <Link
+                  href={
+                    degen.id
+                      ? `https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${degen.id}`
+                      : '#'
+                  }
+                  target="_blank"
+                  rel="nofollow"
+                  variant="paragraphXSmall"
+                  color={palette.text.primary}
+                >
+                  {`#${degen.id}`}
+                </Link>
+              </Stack>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ minWidth: '32%' }}
+                onClick={handleClickRent}
+              >
+                Rent
+              </Button>
+            </Stack>
+            {/* Card Footer */}
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              gap={2}
+            >
+              {isDashboardDegen ? (
+                <FooterDegens
+                  onEnableDisable={onEnableDisable}
+                  isEnabled={isEnabled}
+                />
+              ) : (
+                <FooterDegenRentals price={degen.price} />
+              )}
+            </Stack>
+          </Stack>
+        );
+    }
+  },
+);
 
 const IconButton = ({ label, children, ...rest }) => {
   return (
@@ -146,122 +275,6 @@ const FooterDegens = ({ onEnableDisable, isEnabled }) => {
     </>
   );
 };
-
-const DegenCard: React.FC<
-  React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
-> = memo(
-  ({
-    activeRentals,
-    id,
-    isDashboardDegen = false,
-    isFavorite,
-    isEnabled,
-    multiplier,
-    name,
-    onClickClaim,
-    onClickDetail,
-    onClickEditName,
-    onClickRent,
-    onEnableDisable,
-    price,
-    sx,
-  }) => {
-    const { palette, customShadows } = useTheme();
-
-    const authToken = window.localStorage.getItem('authentication-token');
-    const onClickDownload = async () => {
-      if (authToken) {
-        try {
-          await downloadDegenAsZip(authToken, id);
-        } catch (err) {
-          toast.error(err.message, { theme: 'dark' });
-        }
-      }
-    };
-
-    return (
-      <Stack
-        sx={{
-          width: '100%',
-          height: '100%',
-          borderRadius: '4px',
-          p: '12px',
-          background: palette.background.paper,
-          boxShadow: customShadows.xSmall,
-          ...sx,
-        }}
-        gap={3}
-      >
-        {/* Card Header */}
-        <Stack
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          {isDashboardDegen ? (
-            <HeaderDegens
-              isFavorite={isFavorite}
-              multiplier={multiplier}
-              activeRentals={activeRentals}
-              onClickDownload={onClickDownload}
-            />
-          ) : (
-            <HeaderDegenRentals
-              multiplier={multiplier}
-              activeRentals={activeRentals}
-            />
-          )}
-        </Stack>
-        {/* Card Content */}
-        <Stack gap={3}>
-          {id && <DegenImage tokenId={id} />}
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="paragraphP2XSmall">
-              {name || 'No Name DEGEN'}
-            </Typography>
-            <Link
-              href={
-                id
-                  ? `https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${id}`
-                  : '#'
-              }
-              target="_blank"
-              rel="nofollow"
-              variant="paragraphXSmall"
-              color={palette.text.primary}
-            >
-              {`#${id}`}
-            </Link>
-          </Stack>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ minWidth: '32%' }}
-            onClick={onClickRent}
-          >
-            Rent
-          </Button>
-        </Stack>
-        {/* Card Footer */}
-        <Stack
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={2}
-        >
-          {isDashboardDegen ? (
-            <FooterDegens
-              onEnableDisable={onEnableDisable}
-              isEnabled={isEnabled}
-            />
-          ) : (
-            <FooterDegenRentals price={price} />
-          )}
-        </Stack>
-      </Stack>
-    );
-  },
-);
 
 const DegenCardInView: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
