@@ -1,31 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Checkbox,
-  Divider,
   FormControl,
   FormControlLabel,
   Stack,
   Typography,
-  IconButton,
-  Link,
-  FormGroup,
+  useTheme,
+  Input,
+  FormHelperText,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
+import { NetworkContext } from 'NetworkProvider';
+
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { Degen } from 'types/degens';
-import { getErrorForName } from 'utils/name';
-import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
 import useRentalRename from 'hooks/useRentalRename';
-import { toast } from 'react-toastify';
-import LoadingButton from '@mui/lab/LoadingButton';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { NetworkContext } from 'NetworkProvider';
+
+import { Degen } from 'types/degens';
+import { getErrorForName } from 'utils/name';
 import { sendEvent } from 'utils/google-analytics';
 
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import HeaderDegenDialog from './HeaderDegenDialog';
 import IOSSwitch from 'components/extended/IOSSwitch';
 
 export interface RentDegenDialogV3Props {
@@ -36,14 +34,15 @@ export interface RentDegenDialogV3Props {
 const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
   const { web3Modal } = useContext(NetworkContext);
   const [agreement, setAgreement] = useState<boolean>(false);
-  const [rentFor, setRentFor] = useState<string>('recruit');
+  const [rentFor, setRentFor] = useState<boolean>(false);
+  const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
   const [renameEnabled, setRenameEnabled] = useState<boolean>(false);
   const [ethAddress, setEthAddress] = useState<string>('');
   const [newDegenName, setNewDegenName] = useState<string>('');
-  const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
   const [nameError, setNameError] = useState<string>('');
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const { palette } = useTheme();
 
   const [, , rentalPassCount] = useRentalPassCount(degen?.id);
   const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
@@ -57,23 +56,27 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
 
   const handleChangeRentingFor = (
     event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
+    value: boolean,
   ) => {
     setRentFor(value);
+    setAddressError('');
+    setEthAddress('');
   };
 
   const handleChangeRenameDegen = (
     event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
+    value: boolean,
   ) => {
-    setRenameEnabled(value === 'yes');
+    setRenameEnabled(value);
+    setNewDegenName('');
+    setNameError('');
   };
 
   const handleChangeUseRentalPass = (
     event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
+    value: boolean,
   ) => {
-    setIsUseRentalPass(value === 'yes');
+    setIsUseRentalPass(value);
   };
 
   const validateName = (value: string) => {
@@ -142,7 +145,7 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
 
   const precheckRent = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (rentFor === 'recruit' && !ethAddress) {
+      if (rentFor && !ethAddress) {
         setAddressError('Please input an address.');
         return;
       }
@@ -158,69 +161,39 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
   );
 
   const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
-  const isShowRentalPassOption = () =>
-    rentalPassCount > 0 && !degen?.rental_count;
+  // const isShowRentalPassOption = rentalPassCount > 0 && !degen?.rental_count;
+  const isButtonDisabled =
+    !agreement ||
+    Boolean(nameError) ||
+    Boolean(addressError) ||
+    (rentFor && !ethAddress);
 
   useEffect(() => {
     sendEvent('add_to_cart', 'ecommerce');
   }, []);
+
+  // TODO: @Brian double check requirements. Errors should not popup everytime someone opens the rental dialog.
+  // If this feedback below is required we should disable the radio buttons and show these messages on tooltip
+  //
+  // useEffect(() => {
+  //   if (!isShowRentalPassOption() && !rentalPassCountloading) {
+  //     if (rentalPassCount > 0)
+  //       toast.error(
+  //         "Rental passes can't be added to Degens with an active rental",
+  //         { theme: 'dark' },
+  //       );
+  //     else
+  //       toast.error(
+  //         "You can't use rental pass option because you have no remaining rental pass",
+  //         { theme: 'dark' },
+  //       );
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rentalPassCount, rentalPassCountloading]);
+
   return (
-    <Stack gap={3} sx={{ p: '12px', background: '#FAFAFA' }}>
-      {/* Header */}
-      <Stack
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        gap={3}
-      >
-        <IconButton
-          color="inherit"
-          aria-label="Back"
-          component="div"
-          sx={{ p: 0 }}
-        >
-          <KeyboardArrowLeftIcon />
-        </IconButton>
-        <Stack
-          flexDirection="row"
-          alignContent="flex-start"
-          alignItems="center"
-          flex={1}
-          gap={2}
-          sx={{
-            '& img': {
-              height: '24px',
-              width: '24px',
-            },
-          }}
-        >
-          {degen?.id && <DegenImage tokenId={degen?.id} />}
-          <Typography variant="paragraphP2XXXSmall">
-            {degen?.name || 'No Name Degen'}
-          </Typography>
-        </Stack>
-        <Link
-          href={
-            degen?.id
-              ? `https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${degen?.id}`
-              : '#'
-          }
-          target="_blank"
-          rel="nofollow"
-          variant="paragraphXXSmall"
-        >
-          {`#${degen?.id}`}
-        </Link>
-        <IconButton
-          color="inherit"
-          aria-label="Fullscreen"
-          component="div"
-          sx={{ p: 0 }}
-        >
-          <OpenInFullIcon />
-        </IconButton>
-      </Stack>
-      <Divider />
+    <Stack gap={3} sx={{ p: '12px', background: palette.background.paper }}>
+      <HeaderDegenDialog degen={degen} />
       <Stack gap={4}>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="paragraphXXSmall" fontWeight="500">
@@ -248,57 +221,90 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
           </Typography>
           <Typography variant="paragraphXXSmall">10%/50%/40%</Typography>
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Sponsorship
-          </Typography>
-          {/* <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
-            <FormControlLabel
-              value="recruit"
-              control={<Radio />}
-              label="Recruit"
-            />
-            <FormControlLabel
-              value="myself"
-              control={<Radio />}
-              label="Myself"
-            />
-          </RadioGroup> */}
-          <Stack gap={2} flexDirection="row" justifyItems="center">
-            <Typography variant="paragraphXXXSmall">No</Typography>
-            <IOSSwitch
-              // checked={Boolean(rentFor)}
-              // onChange={handleChangeRentingFor}
-              inputProps={{ 'aria-label': 'controlled-direction' }}
-            />
+        <Stack gap={1}>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="paragraphXXSmall" fontWeight="500">
+              Sponsorship
+            </Typography>
+            <Stack gap={2} flexDirection="row" alignItems="center">
+              <Typography variant="labelIOSSwitch">
+                {rentFor ? 'Yes' : 'No'}
+              </Typography>
+              <IOSSwitch
+                checked={Boolean(rentFor)}
+                onChange={handleChangeRentingFor}
+                inputProps={{ 'aria-label': 'controlled-direction' }}
+              />
+            </Stack>
           </Stack>
-          {/* Inpout */}
+          {rentFor && (
+            <FormControl>
+              <Input
+                name="address"
+                placeholder="Enter recruits ETH wallet address here..."
+                value={ethAddress}
+                error={addressError !== ''}
+                onChange={(event) => validateAddress(event.target.value)}
+                aria-describedby="helper-address"
+              />
+              <FormHelperText
+                sx={{ color: palette.error.main }}
+                id="helper-address"
+              >
+                {addressError}
+              </FormHelperText>
+            </FormControl>
+          )}
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Rename Rental
-          </Typography>
-          <FormGroup>
-            <Typography variant="paragraphXXXSmall">No</Typography>
-            <IOSSwitch
-              // checked={Boolean(rentFor)}
-              // onChange={handleChangeRentingFor}
-              inputProps={{ 'aria-label': 'controlled-direction' }}
-            />
-          </FormGroup>
+        <Stack gap={1}>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="paragraphXXSmall" fontWeight="500">
+              Rename Rental
+            </Typography>
+            <Stack gap={2} flexDirection="row" alignItems="center">
+              <Typography variant="labelIOSSwitch">
+                {renameEnabled ? 'Yes' : 'No'}
+              </Typography>
+              <IOSSwitch
+                checked={Boolean(renameEnabled)}
+                onChange={handleChangeRenameDegen}
+                inputProps={{ 'aria-label': 'controlled-direction' }}
+              />
+            </Stack>
+          </Stack>
+          {renameEnabled && (
+            <FormControl>
+              <Input
+                name="degen_name"
+                placeholder="Enter the DEGEN name you’d like here..."
+                value={newDegenName}
+                error={nameError !== ''}
+                onChange={(event) => validateName(event.target.value)}
+                aria-describedby="helper-rename"
+              />
+              <FormHelperText
+                sx={{ color: palette.error.main }}
+                id="helper-rename"
+              >
+                {nameError}
+              </FormHelperText>
+            </FormControl>
+          )}
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="paragraphXXSmall" fontWeight="500">
             Rental Pass
           </Typography>
-          <FormGroup>
-            <Typography variant="paragraphXXXSmall">No</Typography>
+          <Stack gap={2} flexDirection="row" alignItems="center">
+            <Typography variant="labelIOSSwitch">
+              {isUseRentalPass ? `Yes / ${rentalPassCount} Remaining` : 'No'}
+            </Typography>
             <IOSSwitch
-              // checked={Boolean(rentFor)}
-              // onChange={handleChangeRentingFor}
+              checked={Boolean(isUseRentalPass)}
+              onChange={handleChangeUseRentalPass}
               inputProps={{ 'aria-label': 'controlled-direction' }}
             />
-          </FormGroup>
+          </Stack>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="paragraphXXSmall" fontWeight="500">
@@ -311,7 +317,7 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
         <FormControl>
           <FormControlLabel
             label={
-              <Typography variant="caption">
+              <Typography variant="termsCondition">
                 I understand all the information regarding this rental and its
                 fees.
               </Typography>
@@ -329,15 +335,10 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
         variant="contained"
         fullWidth
         onClick={precheckRent}
-        disabled={
-          !agreement ||
-          Boolean(nameError) ||
-          Boolean(addressError) ||
-          (rentFor === 'recruit' && !ethAddress)
-        }
+        disabled={isButtonDisabled}
         loading={loading}
       >
-        Rent Degen
+        {isButtonDisabled ? 'Accept Terms to Continue' : 'Confirm'}
       </LoadingButton>
     </Stack>
   );

@@ -5,7 +5,7 @@ import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
-import RentDegenContentDialog from './RentDegenDialogV3';
+import RentDegenContentDialog from './RentDegenContentDialog';
 import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
