@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { IconButton, Box, Skeleton, Typography, Stack } from '@mui/material';
+import { IconButton, Box, Typography, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { toast } from 'react-toastify';
@@ -14,14 +14,15 @@ import SectionSlider from 'components/sections/SectionSlider';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import SearchRental from 'pages/dashboard/rentals/SearchRental';
 import EmptyState from 'components/EmptyState';
+import DegenInternalImage from './DegenInternalImage';
 
 import { Degen } from 'types/degens';
-import { useProfileAvatarFee } from 'hooks/useGamerProfile';
 import { UPDATE_PROFILE_AVATAR_API } from 'constants/url';
 
 interface ProfileImageDialogProps {
   degens: Degen[] | undefined;
   onChangeAvatar: (degenId: string) => void;
+  avatarFee?: number;
 }
 
 const settings = {
@@ -32,8 +33,12 @@ const settings = {
   swipe: false,
 };
 
-const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
-  const { fee, loadingFee } = useProfileAvatarFee();
+const ProfileImageContent = ({
+  onSearch,
+  onChangeAvatar,
+  degensInternal,
+  avatarFee,
+}) => {
   const [, setIsOpen] = useContext(DialogContext);
 
   const handleSelectedDegen = async (degen: Degen) => {
@@ -66,18 +71,11 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
     }
   };
 
-  const renderAvatarFee = () => {
-    if (loadingFee) {
-      return <Skeleton variant="rectangular" width="100%" height="37.34px" />;
+  const renderDegenImage = (degen: Degen) => {
+    if (degen?.url) {
+      return <DegenInternalImage degen={degen} />;
     }
-    if (!loadingFee && fee) {
-      return (
-        <Typography variant="h5" component="p">
-          There is a {fee} NFTL fee for changing your gamer profile avatar
-        </Typography>
-      );
-    }
-    return null;
+    return <DegenImage tokenId={degen?.id} />;
   };
 
   const renderDegens = () => {
@@ -98,7 +96,7 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
           }}
           onClick={() => handleSelectedDegen(degen)}
         >
-          <DegenImage tokenId={degen?.id} />
+          {renderDegenImage(degen)}
         </Box>
       ));
     }
@@ -117,7 +115,10 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
       title={
         <Stack flex={1} gap={1}>
           <Typography variant="h2">Choose a new profile degen</Typography>
-          {renderAvatarFee()}
+          <Typography variant="h5" component="p">
+            There is a {avatarFee} NFTL fee for changing your gamer profile
+            avatar
+          </Typography>
         </Stack>
       }
       actions={
@@ -135,6 +136,7 @@ const ProfileImageContent = ({ onSearch, onChangeAvatar, degensInternal }) => {
 const ProfileImageDialog = ({
   degens,
   onChangeAvatar,
+  avatarFee,
 }: ProfileImageDialogProps): JSX.Element => {
   const [degensInternal, setDegensInternal] = useState<Degen[]>([]);
   const theme = useTheme();
@@ -197,6 +199,7 @@ const ProfileImageDialog = ({
           onSearch={handleSearch}
           onChangeAvatar={onChangeAvatar}
           degensInternal={degensInternal}
+          avatarFee={avatarFee}
         />
       </DialogContent>
     </Dialog>
