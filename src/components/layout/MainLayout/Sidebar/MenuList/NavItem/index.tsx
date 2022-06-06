@@ -99,17 +99,9 @@ const NavItem = ({ item, level }: NavItemProps) => {
       <ListItemText
         primary={
           <Typography
-            variant={
-              openItem?.findIndex((id) => id === item.id) > -1
-                ? level > 1
-                  ? 'paragraphXXSmall'
-                  : 'body1'
-                : level > 1
-                ? 'paragraphXXSmall'
-                : 'body1'
-            }
+            variant={level > 1 ? 'paragraphXSmall' : 'body1'}
             color="inherit"
-            fontWeight={level > 1 ? '300' : '400'}
+            fontWeight="500"
           >
             {item.title}
           </Typography>
