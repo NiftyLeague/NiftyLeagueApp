@@ -4,7 +4,6 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import useCopyToClipboard from 'hooks/useCopyToClipboard';
 import { Profile } from 'types/account';
-import { formatNumberToDisplay } from 'utils/numbers';
 
 import ProgressGamer from './ProgressGamer';
 import { GamerProfileContext } from '../index';
@@ -74,7 +73,7 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
             </IconButton>
           </Typography>
           <Typography width="50%" variant="h4" component="div">
-            {formatNumberToDisplay(total?.xp || 0)}/{total?.rank_xp_next}
+            {Math.round(total?.xp || 0)}/{total?.rank_xp_next}
             <Typography
               variant="h4"
               component="div"

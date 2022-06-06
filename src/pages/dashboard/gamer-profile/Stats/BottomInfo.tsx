@@ -8,7 +8,6 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import { formatNumberToDisplay } from 'utils/numbers';
 
 import ProgressGamer from './ProgressGamer';
 import GameCard from 'components/cards/GameCard';
@@ -54,7 +53,7 @@ const BottomInfo = ({ nifty_smashers }: BottomInfoProps): JSX.Element => {
                       height="19.76px"
                     />
                   ) : (
-                    `${formatNumberToDisplay(nifty_smashers?.xp || 0)}/${
+                    `${Math.round(nifty_smashers?.xp || 0)}/${
                       nifty_smashers?.rank_xp_next
                     }`
                   )}
