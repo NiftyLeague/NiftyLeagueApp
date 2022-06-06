@@ -7,7 +7,7 @@ import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
 import { useTheme } from '@mui/material/styles';
 import { formatNumberToDisplay } from 'utils/numbers';
-
+import HeaderDegenDialog from './HeaderDegenDialog';
 export interface ClaimDegenContentDialogProps {
   degen?: Degen;
   onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -45,31 +45,28 @@ const ClaimDegenContentDialog = ({
     [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
   );
 
-  const theme = useTheme();
+  const { palette } = useTheme();
   const amountParsed = formatNumberToDisplay(mockAccumulated);
-
   return (
     <Stack
       sx={{
-        minWidth: '292px',
-        minHeight: '457.7px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: palette.background.default,
         padding: '0px 12px',
       }}
+      direction="column"
+      justifyContent="space-between"
       padding={3}
-      gap={2}
+      gap={3}
+      minWidth="292px"
+      minHeight="457.7px"
+      height="100%"
     >
-      <Stack></Stack>
+      <Stack gap={1}>
+        <HeaderDegenDialog degen={degen} />
+      </Stack>
       <Stack
         sx={{
-          color:
-            theme.palette.mode === 'dark'
-              ? theme.palette.grey[50]
-              : theme.palette.grey[900],
+          color: palette.mode === 'dark' ? palette.grey[50] : palette.grey[900],
         }}
       >
         <Typography
