@@ -56,6 +56,97 @@ const IconButton = ({ label, children, ...rest }) => {
   );
 };
 
+const HeaderDegens = ({
+  isFavorite,
+  multiplier,
+  activeRentals,
+  onClickDownload,
+}) => {
+  return (
+    <>
+      <IconButton label="Favorite Degen">
+        {isFavorite ? <FavoriteIcon color="primary" /> : <FavoriteBorderIcon />}
+      </IconButton>
+      <Typography
+        variant="paragraphXSmall"
+        fontWeight="500"
+      >{`${multiplier}x`}</Typography>
+      <Typography variant="paragraphXSmall" fontWeight="500">
+        10/50/40
+      </Typography>
+      <Typography
+        variant="paragraphXSmall"
+        fontWeight="500"
+      >{`${activeRentals}r`}</Typography>
+      <IconButton onClick={onClickDownload} label="Download Degen">
+        <DownloadIcon />
+      </IconButton>
+    </>
+  );
+};
+
+const HeaderDegenRentals = ({ multiplier, activeRentals }) => {
+  return (
+    <>
+      <Typography
+        variant="paragraphXSmall"
+        fontWeight="500"
+      >{`${multiplier}x Multi`}</Typography>
+      <Typography variant="paragraphXSmall" fontWeight="500">
+        5/25/70
+      </Typography>
+      <Typography
+        variant="paragraphXSmall"
+        fontWeight="500"
+      >{`${activeRentals} Rentals`}</Typography>
+    </>
+  );
+};
+
+const FooterDegenRentals = ({ price }) => {
+  const { palette } = useTheme();
+  return (
+    <>
+      <IconButton label="Traits">
+        <ViewListIcon />
+      </IconButton>
+      <Stack flex={1} flexDirection="row" justifyContent="space-between">
+        <Link variant="paragraphXSmall" color={palette.text.primary}>
+          Traits
+        </Link>
+        <Typography variant="paragraphXSmall">{`${price} NFTL`}</Typography>
+      </Stack>
+    </>
+  );
+};
+
+const FooterDegens = ({ onEnableDisable, isEnabled }) => {
+  const { palette } = useTheme();
+  return (
+    <>
+      <IconButton label="Traits">
+        <ViewListIcon />
+      </IconButton>
+      <IconButton label="Game Earnings">
+        <AltRouteIcon />
+      </IconButton>
+      <IconButton onClick={onEnableDisable} label="Enable Rentals">
+        {isEnabled ? (
+          <LockOpenIcon sx={{ fill: palette.success.main }} />
+        ) : (
+          <LockIcon sx={{ fill: palette.success.main }} />
+        )}
+      </IconButton>
+      <IconButton label="Whitelist">
+        <GroupAddIcon />
+      </IconButton>
+      <IconButton label="Niffy">
+        <NiffyIcon />
+      </IconButton>
+    </>
+  );
+};
+
 const DegenCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
 > = memo(
@@ -75,7 +166,7 @@ const DegenCard: React.FC<
     price,
     sx,
   }) => {
-    const { palette } = useTheme();
+    const { palette, customShadows } = useTheme();
 
     const authToken = window.localStorage.getItem('authentication-token');
     const onClickDownload = async () => {
@@ -87,18 +178,16 @@ const DegenCard: React.FC<
         }
       }
     };
+
     return (
       <Stack
         sx={{
           width: '100%',
           height: '100%',
-          border: `1px solid ${palette.grey[800]}`,
           borderRadius: '4px',
-          backgroundColor: palette.background.default,
           p: '12px',
-          // TOTO: Will update the color and boxshadow after the palate color updating
-          background: '#FAFAFA',
-          boxShadow: '0px 1px 2px rgba(25, 27, 31, 0.05)',
+          background: palette.background.paper,
+          boxShadow: customShadows.xSmall,
           ...sx,
         }}
         gap={3}
@@ -109,27 +198,19 @@ const DegenCard: React.FC<
           justifyContent="space-between"
           alignItems="center"
         >
-          <IconButton label="Favorite Degen">
-            {isFavorite ? (
-              <FavoriteIcon color="primary" />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
-          </IconButton>
-          <Typography
-            variant="paragraphXSmall"
-            fontWeight="500"
-          >{`${multiplier}x`}</Typography>
-          <Typography variant="paragraphXSmall" fontWeight="500">
-            10/50/40
-          </Typography>
-          <Typography
-            variant="paragraphXSmall"
-            fontWeight="500"
-          >{`${activeRentals}r`}</Typography>
-          <IconButton onClick={onClickDownload} label="Download Degen">
-            <DownloadIcon />
-          </IconButton>
+          {isDashboardDegen ? (
+            <HeaderDegens
+              isFavorite={isFavorite}
+              multiplier={multiplier}
+              activeRentals={activeRentals}
+              onClickDownload={onClickDownload}
+            />
+          ) : (
+            <HeaderDegenRentals
+              multiplier={multiplier}
+              activeRentals={activeRentals}
+            />
+          )}
         </Stack>
         {/* Card Content */}
         <Stack gap={3}>
@@ -147,6 +228,7 @@ const DegenCard: React.FC<
               target="_blank"
               rel="nofollow"
               variant="paragraphXSmall"
+              color={palette.text.primary}
             >
               {`#${id}`}
             </Link>
@@ -165,26 +247,16 @@ const DegenCard: React.FC<
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
+          gap={2}
         >
-          <IconButton label="Traits">
-            <ViewListIcon />
-          </IconButton>
-          <IconButton label="Game Earnings">
-            <AltRouteIcon />
-          </IconButton>
-          <IconButton onClick={onEnableDisable} label="Enable Rentals">
-            {isEnabled ? (
-              <LockOpenIcon color="success" />
-            ) : (
-              <LockIcon color="error" />
-            )}
-          </IconButton>
-          <IconButton label="Whitelist">
-            <GroupAddIcon />
-          </IconButton>
-          <IconButton label="Niffy">
-            <NiffyIcon />
-          </IconButton>
+          {isDashboardDegen ? (
+            <FooterDegens
+              onEnableDisable={onEnableDisable}
+              isEnabled={isEnabled}
+            />
+          ) : (
+            <FooterDegenRentals price={price} />
+          )}
         </Stack>
       </Stack>
     );
