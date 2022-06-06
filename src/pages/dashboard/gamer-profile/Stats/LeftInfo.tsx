@@ -24,7 +24,7 @@ const LeftInfo = ({ data }: LeftInfoProps): JSX.Element => {
       },
       {
         label: 'XP',
-        value: formatNumberToDisplay(data?.xp || 0.0),
+        value: Math.round(data?.xp || 0),
       },
       {
         label: 'Matches',
