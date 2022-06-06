@@ -1,7 +1,8 @@
 import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { NFT_CONTRACT } from 'constants/contracts';
-import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
+// TODO: Please remove the comment if you want to use the following code.
+// import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
@@ -35,17 +36,20 @@ const DegenDialog = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const { readContracts } = useContext(NetworkContext);
-  const [degenDetail, setDegenDetail] = useState<GetDegenResponse>();
-  const [character, setCharacter] = useState<CharacterType>({
+  // TODO: Please add `degenDetail` after you implement the function.
+  const [, setDegenDetail] = useState<GetDegenResponse>();
+  // TODO: Please add `character` after you implement the function.
+  const [, setCharacter] = useState<CharacterType>({
     name: null,
     owner: null,
     traitList: [],
   });
-  const { name, traitList } = character as unknown as {
-    name: string;
-    owner: string;
-    traitList: number[];
-  };
+  // TODO: Please remove the comment if you want to use the following code.
+  // const { name, traitList } = character as unknown as {
+  //   name: string;
+  //   owner: string;
+  //   traitList: number[];
+  // };
   const resetDialog = () => {
     setCharacter({
       name: null,
@@ -108,17 +112,17 @@ const DegenDialog = ({
     }
   }, [tokenId, readContracts, open]);
 
-  const displayName = name || 'No Name DEGEN';
-  const traits: { [traitType: string]: number } = traitList.reduce(
-    (acc, trait, i) => ({ ...acc, [TRAIT_INDEXES[i]]: trait }),
-    {},
-  );
+  // TODO: Please remove the comment if you want to use the following code.
+  // const displayName = name || 'No Name DEGEN';
+  // const traits: { [traitType: string]: number } = traitList.reduce(
+  //   (acc, trait, i) => ({ ...acc, [TRAIT_INDEXES[i]]: trait }),
+  //   {},
+  // );
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
     onClose?.(event, 'backdropClick');
   };
-  // TODO: Please remove this after implement the new design
-  console.log({ degenDetail, displayName, traits });
+
   return (
     <Dialog
       maxWidth="xs"
