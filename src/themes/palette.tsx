@@ -62,6 +62,11 @@ const Palette = (navType: PaletteMode, presetColor: string) => {
         primary: navType === 'dark' ? colors.shade00 : colors.shade100,
         secondary: navType === 'dark' ? colors.grey50 : colors.shade100,
       },
+      shades: {
+        main: navType === 'dark' ? colors.shade00 : colors.shade100,
+        light: colors.shade00,
+        dark: colors.shade100,
+      },
       divider: navType === 'dark' ? colors.shade00 : colors.shade100,
       background: {
         paper: navType === 'dark' ? colors.shade100 : colors.shade00,

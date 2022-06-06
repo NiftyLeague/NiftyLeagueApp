@@ -44,7 +44,7 @@ const Customization = () => {
             position: 'fixed',
             right: 10,
             zIndex: theme.zIndex.speedDial,
-            boxShadow: theme.customShadows.secondary,
+            boxShadow: theme.customShadows.xSmall,
           }}
         >
           <AnimateButton type="rotate">
