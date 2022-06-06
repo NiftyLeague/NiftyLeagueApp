@@ -165,6 +165,24 @@ const Typography = (
     lineHeight: '48px',
     letterSpacing: '-0.02em',
   },
+  termsCondition: {
+    fontSize: '10px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[500]
+        : theme.palette.grey[600],
+  },
+  labelIOSSwitch: {
+    fontSize: '8px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[600]
+        : theme.palette.grey[200],
+  },
   paragraphLarge: {
     fontSize: '18px',
     lineHeight: '28px',

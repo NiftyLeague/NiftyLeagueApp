@@ -13,6 +13,8 @@ declare module '@mui/material/styles/createTypography' {
   export type Variant =
     | 'displayLarge'
     | 'displaySmall'
+    | 'termsCondition'
+    | 'labelIOSSwitch'
     | 'paragraphLarge'
     | 'paragraphMedium'
     | 'paragraphSmall'
@@ -40,6 +42,8 @@ declare module '@mui/material/styles/createTypography' {
     > {
     displayLarge?: TypographyStyleOptions;
     displaySmall?: TypographyStyleOptions;
+    termsCondition?: TypographyStyleOptions;
+    labelIOSSwitch?: TypographyStyleOptions;
     paragraphLarge?: TypographyStyleOptions;
     paragraphMedium?: TypographyStyleOptions;
     paragraphSmall?: TypographyStyleOptions;
@@ -68,6 +72,8 @@ declare module '@mui/material/styles/createTypography' {
       TypographyUtils {
     displayLarge: TypographyStyle;
     displaySmall: TypographyStyle;
+    termsCondition: TypographyStyle;
+    labelIOSSwitch: TypographyStyle;
     paragraphLarge: TypographyStyle;
     paragraphMedium: TypographyStyle;
     paragraphSmall: TypographyStyle;
@@ -95,6 +101,8 @@ declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     displayLarge: true;
     displaySmall: true;
+    termsCondition: true;
+    labelIOSSwitch: true;
     paragraphLarge: true;
     paragraphMedium: true;
     paragraphSmall: true;
