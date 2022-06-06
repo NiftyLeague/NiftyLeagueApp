@@ -52,7 +52,7 @@ const CardStyle = styled(Card)(({ theme }) => ({
     background:
       theme.palette.mode === 'dark'
         ? theme.palette.dark.dark
-        : theme.palette.primary[200],
+        : theme.palette.primary.light,
     borderRadius: '50%',
     top: '-105px',
     right: '-96px',
