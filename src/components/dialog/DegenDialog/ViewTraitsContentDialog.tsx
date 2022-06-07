@@ -17,7 +17,7 @@ export interface ViewTraitsContentDialogProps {
   displayName?: string;
   onRent?: () => void;
   onClaim?: () => void;
-  onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ViewTraitsContentDialog = ({
@@ -124,9 +124,11 @@ const ViewTraitsContentDialog = ({
             <Button variant="contained" fullWidth onClick={onRent || onClaim}>
               {onRent ? 'Rent Degen' : 'Claim Degen'}
             </Button>
-            <Button fullWidth onClick={onClose}>
-              Close
-            </Button>
+            {onClose && (
+              <Button fullWidth onClick={onClose}>
+                Close
+              </Button>
+            )}
           </Stack>
         </Stack>
       </Grid>
