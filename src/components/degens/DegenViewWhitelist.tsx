@@ -26,7 +26,7 @@ import DegenContainer from './DegenContainer';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 
-export interface DegenWhitelistProps {
+export interface DegenViewWhitelistProps {
   degen?: Degen;
   isDialog?: boolean;
   onClose?: React.MouseEventHandler<HTMLDivElement>;
@@ -34,13 +34,13 @@ export interface DegenWhitelistProps {
   onFullScreen?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const DegenWhitelist = ({
+const DegenViewWhitelist = ({
   degen,
   isDialog,
   onClose,
   onBack,
   onFullScreen,
-}: DegenWhitelistProps) => {
+}: DegenViewWhitelistProps) => {
   const tokenId = degen?.id || 0;
   const typographySetting: SxProps<Theme> = { textDecoration: 'underline ' };
   const { readContracts } = useContext(NetworkContext);
@@ -195,4 +195,4 @@ const DegenWhitelist = ({
   );
 };
 
-export default DegenWhitelist;
+export default DegenViewWhitelist;
