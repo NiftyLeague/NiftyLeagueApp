@@ -4,7 +4,6 @@ import Definitions from 'components/Definitions';
 const TermsOfServiceContent = () => {
   return (
     <Container>
-      <h2>Terms and Conditions</h2>
       <p>
         Last updated: <strong>March 15th, 2022</strong>
       </p>
