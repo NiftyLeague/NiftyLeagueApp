@@ -41,7 +41,7 @@ const DegenImage = memo(
       };
     }
 
-    return <CardMedia sx={{ ...sx }} {...setting} />;
+    return <CardMedia sx={{ objectFit: 'cover', ...sx }} {...setting} />;
   },
 );
 
