@@ -25,7 +25,8 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { ReactComponent as NiffyIcon } from 'assets/images/icons/niffy-icon.svg';
-import { Degen } from 'types/degens';
+import { Degen, DegenViewType } from 'types/degens';
+import DegenTraits from 'components/degens/DegenTraits';
 
 export interface DegenCardProps {
   sx?: SxProps<Theme>;
@@ -34,28 +35,30 @@ export interface DegenCardProps {
   isEnabled?: boolean;
   isFavorite?: boolean;
   onClaim?: React.MouseEventHandler<HTMLButtonElement>;
-  onDetail?: React.MouseEventHandler<HTMLButtonElement>;
+  onTraits?: React.MouseEventHandler<HTMLButtonElement>;
   onEditName?: React.MouseEventHandler<SVGSVGElement>;
   onRent?: React.MouseEventHandler<HTMLButtonElement>;
   onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
   onOpenRentDialog?: React.MouseEventHandler<HTMLDivElement>;
+  onOpenTraitsDialog?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const DegenCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
 > = memo(
   ({
+    sx,
     degen,
     isDashboardDegen = false,
     isFavorite,
     isEnabled,
     onEnableDisable,
     onOpenRentDialog,
-    sx,
+    onOpenTraitsDialog,
   }): JSX.Element => {
     const authToken = window.localStorage.getItem('authentication-token');
     const { palette, customShadows } = useTheme();
-    const [view, setView] = useState<'rent' | 'default'>('default');
+    const [view, setView] = useState<DegenViewType>('default');
 
     const onClickDownload = async () => {
       if (authToken) {
@@ -75,6 +78,10 @@ const DegenCard: React.FC<
       setView('rent');
     }, []);
 
+    const handleClickTraits = useCallback(() => {
+      setView('traits');
+    }, []);
+
     switch (view) {
       case 'rent':
         return (
@@ -82,6 +89,14 @@ const DegenCard: React.FC<
             degen={degen}
             onBack={handleReset}
             onFullScreen={onOpenRentDialog}
+          />
+        );
+      case 'traits':
+        return (
+          <DegenTraits
+            degen={degen}
+            onBack={handleReset}
+            onFullScreen={onOpenTraitsDialog}
           />
         );
       case 'default':
@@ -162,7 +177,10 @@ const DegenCard: React.FC<
                   isEnabled={isEnabled}
                 />
               ) : (
-                <FooterDegenRentals price={degen.price} />
+                <FooterDegenRentals
+                  price={degen.price}
+                  onViewTraits={handleClickTraits}
+                />
               )}
             </Stack>
           </Stack>
@@ -232,15 +250,19 @@ const HeaderDegenRentals = ({ multiplier, activeRentals }) => {
   );
 };
 
-const FooterDegenRentals = ({ price }) => {
+const FooterDegenRentals = ({ price, onViewTraits }) => {
   const { palette } = useTheme();
   return (
     <>
-      <IconButton label="Traits">
+      <IconButton label="Traits" onClick={onViewTraits}>
         <ViewListIcon />
       </IconButton>
       <Stack flex={1} flexDirection="row" justifyContent="space-between">
-        <Link variant="paragraphXSmall" color={palette.text.primary}>
+        <Link
+          variant="paragraphXSmall"
+          color={palette.text.primary}
+          onClick={onViewTraits}
+        >
           Traits
         </Link>
         <Typography variant="paragraphXSmall">{`${price} NFTL`}</Typography>

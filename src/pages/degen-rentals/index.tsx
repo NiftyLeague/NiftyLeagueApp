@@ -34,6 +34,7 @@ import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialogV3';
+import { DegenViewType } from '../../types/degens';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -45,12 +46,13 @@ const DegenRentalsPage = (): JSX.Element => {
   const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>();
   const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
+  const [degenDialogView, setDegenDialogView] =
+    useState<DegenViewType>('default');
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
   const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
-  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
   const { data } = useFetch<{ [id: number]: Degen }>(
@@ -114,14 +116,14 @@ const DegenRentalsPage = (): JSX.Element => {
 
   const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsRentDialog(false);
     setIsDegenModalOpen(true);
+    setDegenDialogView('traits');
   }, []);
 
   const handleRentDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsRentDialog(true);
     setIsDegenModalOpen(true);
+    setDegenDialogView('rent');
   }, []);
 
   const renderSkeletonItem = useCallback(
@@ -166,9 +168,10 @@ const DegenRentalsPage = (): JSX.Element => {
         <DegenCard
           degen={degen}
           onEditName={() => handleClickEditName(degen)}
-          onDetail={() => handleViewTraits(degen)}
+          onTraits={() => handleViewTraits(degen)}
           onRent={() => handleRentDegen(degen)}
           onOpenRentDialog={() => handleRentDegen(degen)}
+          onOpenTraitsDialog={() => handleViewTraits(degen)}
         />
       </Grid>
     ),
@@ -245,8 +248,7 @@ const DegenRentalsPage = (): JSX.Element => {
       <DegenDialog
         open={isDegenModalOpen}
         degen={selectedDegen}
-        isRent={isRentDialog}
-        setIsRent={setIsRentDialog}
+        view={degenDialogView}
         onClose={() => setIsDegenModalOpen(false)}
       />
       <Dialog
