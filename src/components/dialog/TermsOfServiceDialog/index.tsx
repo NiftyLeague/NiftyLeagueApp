@@ -35,10 +35,34 @@ const TermsOfServiceDialog = ({
       open={open}
       {...rest}
     >
-      <Stack overflow={'scroll'} direction="column" gap={1} width="100%">
+      <Stack
+        sx={{
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
+        overflow={'scroll'}
+        direction="column"
+        gap={0}
+        width="100%"
+      >
+        <Container
+          sx={{
+            position: 'sticky',
+            top: 0,
+            background: theme.palette.dark.main,
+          }}
+        >
+          <h2>Terms and Conditions</h2>
+        </Container>
         <TermsOfServiceContent />
-
-        <Container>
+        <Container
+          sx={{
+            position: 'sticky',
+            bottom: 0,
+            background: theme.palette.dark.main,
+          }}
+        >
           <Button
             fullWidth
             variant="contained"
