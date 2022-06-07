@@ -51,3 +51,5 @@ export interface GetDegenResponse {
   update_counter: number;
   updated_at: number;
 }
+
+export type DegenViewType = 'rent' | 'default' | 'traits';
