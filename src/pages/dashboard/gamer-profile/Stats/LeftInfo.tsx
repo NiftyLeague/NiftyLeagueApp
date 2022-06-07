@@ -19,12 +19,12 @@ const LeftInfo = ({ data }: LeftInfoProps): JSX.Element => {
   }[] = useMemo(() => {
     return [
       {
-        label: 'Rank',
-        value: `#${data?.rank || 0}`,
+        label: 'XP Rank',
+        value: data?.rank || 0,
       },
       {
         label: 'XP',
-        value: formatNumberToDisplay(data?.xp || 0.0),
+        value: Math.round(data?.xp || 0),
       },
       {
         label: 'Matches',

@@ -18,6 +18,7 @@ export interface Degen {
   owner: string;
   earning_cap: number;
   earning_cap_daily: number;
+  url?: string;
 }
 
 export interface CharacterType {
