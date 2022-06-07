@@ -1,11 +1,3 @@
-// assets
-import { IconDashboard } from '@tabler/icons';
-
-// constant
-const icons = {
-  IconDashboard,
-};
-
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const PrivateItems = {
@@ -14,9 +6,9 @@ const PrivateItems = {
   children: [
     {
       id: 'dashboard',
-      title: 'My Dashboard',
+      title: 'Dashboard',
       type: 'collapse',
-      icon: icons.IconDashboard,
+      // icon: icons.IconDashboard,
       children: [
         {
           id: 'dashboard',
@@ -26,19 +18,22 @@ const PrivateItems = {
         },
         {
           id: 'degens',
-          title: 'DEGENs',
+          // title: 'DEGENs',
+          title: 'Rental Stats',
           type: 'item',
           url: '/dashboard/degens',
         },
         {
           id: 'comics',
-          title: 'Comics & Items',
+          // title: 'Comics & Items',
+          title: 'Gamer Profile',
           type: 'item',
           url: '/dashboard/comics',
         },
         {
           id: 'rentals',
-          title: 'Rentals',
+          // title: 'Rentals',
+          title: 'Inventory',
           type: 'item',
           url: '/dashboard/rentals',
         },

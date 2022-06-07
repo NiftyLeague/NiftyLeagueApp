@@ -1,13 +1,3 @@
-// assets
-import { IconDeviceGamepad, IconTag, IconLayoutGrid } from '@tabler/icons';
-
-// constant
-const icons = {
-  IconDeviceGamepad,
-  IconTag,
-  IconLayoutGrid,
-};
-
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const PublicItems = {
@@ -15,27 +5,29 @@ const PublicItems = {
   type: 'group',
   children: [
     {
-      id: '',
-      title: 'Nifty League App',
-      type: 'item',
-      url: '/',
-      icon: icons.IconLayoutGrid,
-      breadcrumbs: false,
-    },
-    {
-      id: 'degen-rentals',
-      title: 'DEGEN Rentals',
-      type: 'item',
-      url: '/degen-rentals',
-      icon: icons.IconTag,
-      breadcrumbs: false,
-    },
-    {
       id: 'games',
       title: 'Games',
       type: 'item',
       url: '/games',
-      icon: icons.IconDeviceGamepad,
+      // icon: icons.IconDeviceGamepad,
+      breadcrumbs: false,
+    },
+    {
+      id: '',
+      // title: 'Nifty League App',
+      title: 'Rentals',
+      type: 'item',
+      url: '/',
+      // icon: icons.IconLayoutGrid,
+      breadcrumbs: false,
+    },
+    {
+      id: 'degen-rentals',
+      // title: 'DEGEN Rentals',
+      title: 'Leaderboards',
+      type: 'item',
+      url: '/degen-rentals',
+      // icon: icons.IconTag,
       breadcrumbs: false,
     },
   ],

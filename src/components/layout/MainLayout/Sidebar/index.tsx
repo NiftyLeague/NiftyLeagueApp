@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Drawer, useMediaQuery, Stack, Box } from '@mui/material';
+import { Drawer, useMediaQuery, Stack, Box, Skeleton } from '@mui/material';
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -13,8 +13,9 @@ import LogoSection from '../LogoSection';
 import { openDrawer } from 'store/slices/menu';
 import { useDispatch, useSelector } from 'store';
 import { drawerWidth } from 'store/constant';
-import UserProfile from './UserProfile';
-import LogoutButton from './LogoutButton';
+import Connect from './Connect';
+import ThemeSwitch from './ThemeSwitch';
+import FooterLinks from './FooterLinks';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -46,17 +47,24 @@ const Sidebar = ({ window }: SidebarProps) => {
         component="div"
         style={{
           height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
-          paddingLeft: '16px',
-          paddingRight: '16px',
+          paddingLeft: '48px',
+          paddingRight: '48px',
         }}
       >
         <Stack justifyContent="space-between" height="100%">
           <Box>
-            <UserProfile />
+            {/* <UserProfile /> */}
+            <Skeleton
+              sx={{ height: 245, mb: 18 }}
+              animation="wave"
+              variant="rectangular"
+            />
             <MenuList />
           </Box>
-          <Stack alignItems="center">
-            <LogoutButton sx={{ marginBottom: 3, width: '85%' }} />
+          <Stack alignItems="center" sx={{ mt: 12, mb: 12 }}>
+            <FooterLinks />
+            <ThemeSwitch />
+            <Connect />
           </Stack>
         </Stack>
       </PerfectScrollbar>
