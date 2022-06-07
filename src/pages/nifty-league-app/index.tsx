@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, Box, Dialog } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
-import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCardV3';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
@@ -145,16 +145,10 @@ const NiftyLeagueAppPage = () => {
           : degens.map((degen) => (
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
-                  activeRentals={degen.rental_count}
-                  background={degen.background}
-                  id={degen.id}
-                  multiplier={degen.multiplier}
-                  name={degen.name}
-                  onClickDetail={() => handleViewTraits(degen)}
-                  onClickEditName={() => handleClickEditName(degen)}
-                  onClickRent={() => handleRentDegen(degen)}
-                  owner={degen.owner}
-                  price={degen.price}
+                  degen={degen}
+                  onDetail={() => handleViewTraits(degen)}
+                  onEditName={() => handleClickEditName(degen)}
+                  onRent={() => handleRentDegen(degen)}
                 />
               </Box>
             ))}

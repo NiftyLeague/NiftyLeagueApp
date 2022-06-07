@@ -7,8 +7,10 @@ import { NetworkContext } from 'NetworkProvider';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
+import { useTheme } from '@mui/material/styles';
 import { formatNumberToDisplay } from 'utils/numbers';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import HeaderDegenDialog from './HeaderDegenDialog';
 
 const useStyles = makeStyles({
   root: {
@@ -103,6 +105,9 @@ const ClaimDegenContentDialog = ({
   const { palette } = useTheme();
   return (
     <Stack className={classes.root}>
+      <Stack gap={1}>
+        <HeaderDegenDialog degen={degen} />
+      </Stack>
       <Stack className={classes.header}>
         <Stack className={classes.subHeader}>
           {tokenId && <DegenImage tokenId={tokenId} imageHeight={29} />}
