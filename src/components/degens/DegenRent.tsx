@@ -23,15 +23,24 @@ import { Degen } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { sendEvent } from 'utils/google-analytics';
 
-import HeaderDegenDialog from './HeaderDegenDialog';
+import HeaderDegen from './HeaderDegen';
 import IOSSwitch from 'components/extended/IOSSwitch';
 
-export interface RentDegenDialogV3Props {
+export interface DegenRentProps {
   degen?: Degen;
-  onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  isDialog?: boolean;
+  onClose?: React.MouseEventHandler<HTMLDivElement>;
+  onBack?: React.MouseEventHandler<HTMLDivElement>;
+  onFullScreen?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
+const DegenRent = ({
+  degen,
+  isDialog,
+  onClose,
+  onBack,
+  onFullScreen,
+}: DegenRentProps) => {
   const { web3Modal } = useContext(NetworkContext);
   const [agreement, setAgreement] = useState<boolean>(false);
   const [rentFor, setRentFor] = useState<boolean>(false);
@@ -125,7 +134,7 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
         }
         setLoading(false);
         toast.success('Rent successfully!', { theme: 'dark' });
-        onClose?.(event);
+        onClose?.(event as any);
 
         sendEvent('purchase', 'ecommerce');
       } catch (err: any) {
@@ -193,7 +202,13 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
 
   return (
     <Stack gap={3} sx={{ p: '12px', background: palette.background.paper }}>
-      <HeaderDegenDialog degen={degen} />
+      <HeaderDegen
+        degen={degen}
+        isDialog={isDialog}
+        onBack={onBack}
+        onFullScreen={onFullScreen}
+        onClose={onClose}
+      />
       <Stack gap={4}>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="paragraphXXSmall" fontWeight="500">
@@ -344,4 +359,4 @@ const RentDegenDialogV3 = ({ degen, onClose }: RentDegenDialogV3Props) => {
   );
 };
 
-export default RentDegenDialogV3;
+export default DegenRent;

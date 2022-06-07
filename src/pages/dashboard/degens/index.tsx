@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
-import DegenCard from 'components/cards/DegenCard';
+import DegenCard from 'components/cards/DegenCardV3';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
 import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
@@ -210,18 +210,14 @@ const DashboardDegensPage = (): JSX.Element => {
         xl={3}
       >
         <DegenCard
-          id={degen.id}
-          name={degen.name}
-          multiplier={degen.multiplier}
-          price={degen.price}
-          activeRentals={degen.rental_count}
+          degen={degen}
           isEnabled={degen.is_active}
           isDashboardDegen
           onEnableDisable={() => handleEnableDisable(degen)}
-          onClickDetail={() => handleViewTraits(degen)}
-          onClickEditName={() => handleClickEditName(degen)}
-          onClickClaim={() => handleClaimDegen(degen)}
-          onClickRent={() => handleRentDegen(degen)}
+          onDetail={() => handleViewTraits(degen)}
+          onEditName={() => handleClickEditName(degen)}
+          onClaim={() => handleClaimDegen(degen)}
+          onRent={() => handleRentDegen(degen)}
         />
       </Grid>
     ),
