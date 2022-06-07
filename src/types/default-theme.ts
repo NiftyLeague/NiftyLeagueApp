@@ -91,6 +91,14 @@ export interface CustomTypography {
     fontFamily?: Property.FontFamily;
     letterSpacing?: string;
   };
+  termsCondition?: {
+    color: string;
+    fontSize: string;
+    fontWeight?: string;
+    lineHeight: string;
+    fontFamily?: Property.FontFamily;
+    letterSpacing?: string;
+  };
   paragraphLarge?: {
     fontSize: string;
     fontWeight?: string;

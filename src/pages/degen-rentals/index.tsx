@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
-import DegenCard from 'components/cards/DegenCard';
+import DegenCard from 'components/cards/DegenCardV3';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
 import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
@@ -33,7 +33,7 @@ import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
-import DegenDialog from 'components/dialog/DegenDialog';
+import DegenDialog from 'components/dialog/DegenDialogV3';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -164,14 +164,11 @@ const DegenRentalsPage = (): JSX.Element => {
         xl={3}
       >
         <DegenCard
-          id={degen.id}
-          name={degen.name}
-          multiplier={degen.multiplier}
-          price={degen.price}
-          activeRentals={degen.rental_count}
-          onClickEditName={() => handleClickEditName(degen)}
-          onClickDetail={() => handleViewTraits(degen)}
-          onClickRent={() => handleRentDegen(degen)}
+          degen={degen}
+          onEditName={() => handleClickEditName(degen)}
+          onDetail={() => handleViewTraits(degen)}
+          onRent={() => handleRentDegen(degen)}
+          onOpenRentDialog={() => handleRentDegen(degen)}
         />
       </Grid>
     ),

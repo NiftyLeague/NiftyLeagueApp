@@ -22,8 +22,13 @@ export default function componentStyleOverrides(
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: 500,
-          borderRadius: '4px',
+          fontSize: '10px',
+          lineHeight: '20px',
+          color: theme.palette.grey[50],
+          '&.Mui-disabled': {
+            color: theme.palette.grey[50],
+            background: theme.palette.grey[500],
+          },
         },
         outlinedPrimary: {
           color: '#fff',
@@ -122,12 +127,34 @@ export default function componentStyleOverrides(
     },
     MuiInputBase: {
       styleOverrides: {
-        input: {
-          color: theme.palette.text.dark,
-          '&::placeholder': {
-            color: theme.palette.text.secondary,
-            fontSize: '0.875rem',
+        root: {
+          '&::before': {
+            borderBottom: `1px solid ${theme.palette.grey[800]}`,
           },
+        },
+        input: {
+          color: theme.palette.text.primary,
+          fontSize: '8px',
+          lineHeight: '20px',
+          fontFamily: `'IBM Plex Mono', monospace`,
+          padding: '4px',
+          '&::placeholder': {
+            color:
+              theme.palette.mode === 'dark'
+                ? theme.palette.grey[600]
+                : theme.palette.grey[200],
+          },
+        },
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: 0,
+          marginTop: '4px',
+          fontSize: '8px',
+          lineHeight: '20px',
+          fontFamily: `'IBM Plex Mono', monospace`,
         },
       },
     },
@@ -220,7 +247,6 @@ export default function componentStyleOverrides(
       styleOverrides: {
         root: {
           borderColor: theme.palette.divider,
-          opacity: mode === 'dark' ? 0.2 : 1,
         },
       },
     },
@@ -322,7 +348,7 @@ export default function componentStyleOverrides(
       styleOverrides: {
         paper: {
           padding: '12px 0 12px 0',
-          backgroundColor: theme.palette.background.default,
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },
