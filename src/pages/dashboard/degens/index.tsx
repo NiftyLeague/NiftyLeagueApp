@@ -40,7 +40,8 @@ import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
 import EmptyState from 'components/EmptyState';
-import DegenDialog from 'components/dialog/DegenDialog';
+import DegenDialog from 'components/dialog/DegenDialogV3';
+import { DegenViewType } from '../../../types/degens';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -63,8 +64,8 @@ const DashboardDegensPage = (): JSX.Element => {
   const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
-  const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
-  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const [degenDialogView, setDegenDialogView] =
+    useState<DegenViewType>('default');
   const [searchParams] = useSearchParams();
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
@@ -152,23 +153,19 @@ const DashboardDegensPage = (): JSX.Element => {
 
   const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsClaimDialog(false);
-    setIsRentDialog(false);
     setIsDegenModalOpen(true);
+    setDegenDialogView('traits');
   }, []);
 
   const handleClaimDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsClaimDialog(true);
-    setIsRentDialog(false);
     setIsDegenModalOpen(true);
   }, []);
 
   const handleRentDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsRentDialog(true);
-    setIsClaimDialog(false);
     setIsDegenModalOpen(true);
+    setDegenDialogView('rent');
   }, []);
 
   const renderSkeletonItem = useCallback(
@@ -214,10 +211,12 @@ const DashboardDegensPage = (): JSX.Element => {
           isEnabled={degen.is_active}
           isDashboardDegen
           onEnableDisable={() => handleEnableDisable(degen)}
-          onDetail={() => handleViewTraits(degen)}
+          onTraits={() => handleViewTraits(degen)}
           onEditName={() => handleClickEditName(degen)}
           onClaim={() => handleClaimDegen(degen)}
           onRent={() => handleRentDegen(degen)}
+          onOpenRentDialog={() => handleRentDegen(degen)}
+          onOpenTraitsDialog={() => handleViewTraits(degen)}
         />
       </Grid>
     ),
@@ -312,9 +311,7 @@ const DashboardDegensPage = (): JSX.Element => {
       <DegenDialog
         open={isDegenModalOpen}
         degen={selectedDegen}
-        isClaim={isClaimDialog}
-        isRent={isRentDialog}
-        setIsRent={setIsRentDialog}
+        view={degenDialogView}
         onClose={() => setIsDegenModalOpen(false)}
       />
       <Dialog

@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
 import { DegenCardInView as DegenCard } from 'components/cards/DegenCardV3';
 import SectionSlider from 'components/sections/SectionSlider';
-import { Degen } from 'types/degens';
+import { Degen, DegenViewType } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
 import GameList from 'pages/games/GameList';
-import DegenDialog from 'components/dialog/DegenDialog';
+import DegenDialog from 'components/dialog/DegenDialogV3';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import { sendEvent } from 'utils/google-analytics';
 
@@ -20,7 +20,8 @@ const NiftyLeagueAppPage = () => {
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
-  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const [degenDialogView, setDegenDialogView] =
+    useState<DegenViewType>('default');
 
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -47,14 +48,14 @@ const NiftyLeagueAppPage = () => {
 
   const handleViewTraits = (degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsRentDialog(false);
     setIsDegenModalOpen(true);
+    setDegenDialogView('traits');
   };
 
   const handleRentDegen = (degen: Degen): void => {
     setSelectedDegen(degen);
-    setIsRentDialog(true);
     setIsDegenModalOpen(true);
+    setDegenDialogView('rent');
   };
 
   const handleViewAllTraits = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -146,9 +147,11 @@ const NiftyLeagueAppPage = () => {
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
                   degen={degen}
-                  onDetail={() => handleViewTraits(degen)}
+                  onTraits={() => handleViewTraits(degen)}
                   onEditName={() => handleClickEditName(degen)}
                   onRent={() => handleRentDegen(degen)}
+                  onOpenRentDialog={() => handleRentDegen(degen)}
+                  onOpenTraitsDialog={() => handleViewTraits(degen)}
                 />
               </Box>
             ))}
@@ -156,8 +159,7 @@ const NiftyLeagueAppPage = () => {
       <DegenDialog
         open={isDegenModalOpen}
         degen={selectedDegen}
-        isRent={isRentDialog}
-        setIsRent={setIsRentDialog}
+        view={degenDialogView}
         onClose={() => setIsDegenModalOpen(false)}
       />
       <Dialog

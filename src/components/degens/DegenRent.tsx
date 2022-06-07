@@ -25,6 +25,7 @@ import { sendEvent } from 'utils/google-analytics';
 
 import HeaderDegen from './HeaderDegen';
 import IOSSwitch from 'components/extended/IOSSwitch';
+import DegenContainer from './DegenContainer';
 
 export interface DegenRentProps {
   degen?: Degen;
@@ -201,7 +202,7 @@ const DegenRent = ({
   // }, [rentalPassCount, rentalPassCountloading]);
 
   return (
-    <Stack gap={3} sx={{ p: '12px', background: palette.background.paper }}>
+    <DegenContainer>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}
@@ -220,7 +221,7 @@ const DegenRent = ({
           <Typography variant="paragraphXXSmall" fontWeight="500">
             Week 1 Fee
           </Typography>
-          <Typography variant="paragraphXXSmall">{degenPrice}</Typography>
+          <Typography variant="paragraphXXSmall">{degenPrice} NFTL</Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="paragraphXXSmall" fontWeight="500">
@@ -355,7 +356,7 @@ const DegenRent = ({
       >
         {isButtonDisabled ? 'Accept Terms to Continue' : 'Confirm'}
       </LoadingButton>
-    </Stack>
+    </DegenContainer>
   );
 };
 
