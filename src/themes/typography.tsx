@@ -6,36 +6,60 @@ const Typography = (
   borderRadius: number,
   fontFamily: string,
 ): TypographyOptions => ({
-  fontFamily,
-  h6: {
-    fontWeight: 500,
-    color: theme.palette.grey[600],
-    fontSize: '0.75rem',
-  },
-  h5: {
-    fontSize: '0.875rem',
-    color: theme.palette.grey[600],
-    fontWeight: 500,
-  },
-  h4: {
-    fontSize: '1rem',
-    color: theme.palette.grey[600],
-    fontWeight: 600,
-  },
-  h3: {
-    fontSize: '1.25rem',
-    color: theme.palette.grey[600],
-    fontWeight: 600,
+  fontFamily: `'Press Start 2P', cursive`,
+  h1: {
+    fontSize: '40px',
+    lineHeight: '48px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '36px',
+      lineHeight: '44px',
+    },
   },
   h2: {
-    fontSize: '1.5rem',
-    color: theme.palette.grey[600],
-    fontWeight: 700,
+    fontSize: '36px',
+    lineHeight: '44px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '32px',
+      lineHeight: '40px',
+    },
   },
-  h1: {
-    fontSize: '2.125rem',
-    color: theme.palette.grey[600],
-    fontWeight: 700,
+  h3: {
+    fontSize: '32px',
+    lineHeight: '40px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '28px',
+      lineHeight: '36px',
+    },
+  },
+  h4: {
+    fontSize: '28px',
+    lineHeight: '36px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '24px',
+      lineHeight: '32px',
+    },
+  },
+  h5: {
+    fontSize: '24px',
+    lineHeight: '32px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '20px',
+      lineHeight: '28px',
+    },
+  },
+  h6: {
+    fontSize: '20px',
+    lineHeight: '28px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '18px',
+      lineHeight: '24px',
+    },
   },
   subtitle1: {
     fontSize: '0.875rem',
@@ -53,9 +77,9 @@ const Typography = (
     fontWeight: 400,
   },
   body1: {
-    fontSize: '0.875rem',
+    fontSize: '0.625rem',
     fontWeight: 400,
-    lineHeight: '1.334em',
+    lineHeight: '2.5em',
   },
   body2: {
     letterSpacing: '0em',
@@ -90,7 +114,7 @@ const Typography = (
   mainContent: {
     backgroundColor:
       theme.palette.mode === 'dark'
-        ? theme.palette.dark[800]
+        ? theme.palette.primary.dark[800]
         : theme.palette.primary.light,
     width: '100%',
     minHeight: 'calc(100vh - 88px)',
@@ -130,6 +154,88 @@ const Typography = (
     width: '44px',
     height: '44px',
     fontSize: '1.5rem',
+  },
+  displayLarge: {
+    fontSize: '52px',
+    lineHeight: '56px',
+    letterSpacing: '-0.02em',
+  },
+  displaySmall: {
+    fontSize: '44px',
+    lineHeight: '48px',
+    letterSpacing: '-0.02em',
+  },
+  termsCondition: {
+    fontSize: '10px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[500]
+        : theme.palette.grey[600],
+  },
+  labelIOSSwitch: {
+    fontSize: '8px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[600]
+        : theme.palette.grey[200],
+  },
+  paragraphLarge: {
+    fontSize: '18px',
+    lineHeight: '28px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphMedium: {
+    fontSize: '16px',
+    lineHeight: '24px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphSmall: {
+    fontSize: '14px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphXSmall: {
+    fontSize: '12px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphXXSmall: {
+    fontSize: '10px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphXXXSmall: {
+    fontSize: '8px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+  },
+  paragraphP2Large: {
+    fontSize: '18px',
+    lineHeight: '28px',
+  },
+  paragraphP2Medium: {
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
+  paragraphP2Small: {
+    fontSize: '14px',
+    lineHeight: '20px',
+  },
+  paragraphP2XSmall: {
+    fontSize: '12px',
+    lineHeight: '20px',
+  },
+  paragraphP2XXSmall: {
+    fontSize: '10px',
+    lineHeight: '20px',
+  },
+  paragraphP2XXXSmall: {
+    fontSize: '8px',
+    lineHeight: '20px',
   },
 });
 

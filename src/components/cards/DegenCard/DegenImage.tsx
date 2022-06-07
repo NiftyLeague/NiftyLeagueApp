@@ -10,7 +10,7 @@ const IMAGE_HEIGHT = 320;
 const DegenImage = memo(
   ({
     tokenId,
-    imageHeight,
+    imageHeight = IMAGE_HEIGHT,
   }: {
     tokenId: string | number;
     imageHeight?: number;
@@ -18,9 +18,12 @@ const DegenImage = memo(
     const { loading, error, background } = useBackgroundType(tokenId);
     const imageURL = `${DEGEN_BASE_IMAGE_URL}/mainnet/images/${tokenId}`;
     let setting: any = {
-      height: imageHeight || IMAGE_HEIGHT,
+      height: imageHeight,
       component: 'img',
       image: `${imageURL}.png`,
+      sx: {
+        borderRadius: '4px',
+      },
     };
 
     if (error) setting = { ...setting, image: UnavailableImg };
@@ -30,7 +33,7 @@ const DegenImage = memo(
         <ImagePlaceholder
           sx={{
             overflow: 'hidden',
-            height: IMAGE_HEIGHT,
+            height: imageHeight,
           }}
         />
       );
@@ -47,13 +50,12 @@ const DegenImage = memo(
       };
     }
 
-    return (
-      <CardMedia
-        {...setting}
-        sx={{ width: imageHeight ? '32px !important' : '100%' }}
-      />
+    return (	
+      <CardMedia	
+        {...setting}	
+        sx={{ width: imageHeight ? '32px !important' : '100%' }}	
+      />	
     );
-  },
-);
+});
 
 export default DegenImage;

@@ -9,24 +9,26 @@ export default function componentStyleOverrides(
   const mode = theme.palette.mode;
   const bgColor =
     mode === 'dark' ? theme.palette.dark[800] : theme.palette.grey[50];
-  const menuSelectedBack =
-    mode === 'dark'
-      ? theme.palette.secondary.main + 15
-      : theme.palette.secondary.light;
   const menuSelected =
-    mode === 'dark'
-      ? theme.palette.secondary.main
-      : theme.palette.secondary.dark;
+    mode === 'dark' ? theme.palette.primary.main : theme.palette.secondary.dark;
 
   return {
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: 500,
-          borderRadius: '4px',
+          fontSize: '10px',
+          lineHeight: '20px',
+          color: theme.palette.grey[50],
+          '&.Mui-disabled': {
+            color: theme.palette.grey[50],
+            background: theme.palette.grey[500],
+          },
         },
         outlinedPrimary: {
-          color: '#fff',
+          color:
+            mode === 'dark'
+              ? theme.palette.grey[50]
+              : theme.palette.primary.main,
           borderColor: theme.palette.primary.main,
         },
       },
@@ -82,21 +84,22 @@ export default function componentStyleOverrides(
     MuiListItemButton: {
       styleOverrides: {
         root: {
+          border: 'none !important',
           color: theme.palette.text.primary,
           paddingTop: '10px',
           paddingBottom: '10px',
           '&.Mui-selected': {
             color: menuSelected,
-            backgroundColor: menuSelectedBack,
+            backgroundColor: 'transparent',
             '&:hover': {
-              backgroundColor: menuSelectedBack,
+              backgroundColor: 'transparent',
             },
             '& .MuiListItemIcon-root': {
               color: menuSelected,
             },
           },
           '&:hover': {
-            backgroundColor: menuSelectedBack,
+            backgroundColor: 'transparent',
             color: menuSelected,
             '& .MuiListItemIcon-root': {
               color: menuSelected,
@@ -122,12 +125,34 @@ export default function componentStyleOverrides(
     },
     MuiInputBase: {
       styleOverrides: {
-        input: {
-          color: theme.palette.text.dark,
-          '&::placeholder': {
-            color: theme.palette.text.secondary,
-            fontSize: '0.875rem',
+        root: {
+          '&::before': {
+            borderBottom: `1px solid ${theme.palette.grey[800]}`,
           },
+        },
+        input: {
+          color: theme.palette.text.primary,
+          fontSize: '8px',
+          lineHeight: '20px',
+          fontFamily: `'IBM Plex Mono', monospace`,
+          padding: '4px',
+          '&::placeholder': {
+            color:
+              theme.palette.mode === 'dark'
+                ? theme.palette.grey[600]
+                : theme.palette.grey[200],
+          },
+        },
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: 0,
+          marginTop: '4px',
+          fontSize: '8px',
+          lineHeight: '20px',
+          fontFamily: `'IBM Plex Mono', monospace`,
         },
       },
     },
@@ -176,7 +201,7 @@ export default function componentStyleOverrides(
             color:
               mode === 'dark'
                 ? theme.palette.text.primary + 50
-                : theme.palette.grey[300],
+                : theme.palette.grey[500],
           },
         },
         mark: {
@@ -220,7 +245,6 @@ export default function componentStyleOverrides(
       styleOverrides: {
         root: {
           borderColor: theme.palette.divider,
-          opacity: mode === 'dark' ? 0.2 : 1,
         },
       },
     },
@@ -322,7 +346,7 @@ export default function componentStyleOverrides(
       styleOverrides: {
         paper: {
           padding: '12px 0 12px 0',
-          backgroundColor: theme.palette.dark.main,
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },
@@ -360,6 +384,17 @@ export default function componentStyleOverrides(
       styleOverrides: {
         dividers: {
           borderColor: theme.palette.grey[800],
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textUnderlineOffset: '1px',
+          color:
+            mode === 'dark' ? theme.palette.grey[50] : theme.palette.grey[800],
+          textDecorationColor:
+            mode === 'dark' ? theme.palette.grey[50] : theme.palette.grey[800],
         },
       },
     },

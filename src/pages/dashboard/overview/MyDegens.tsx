@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Box, Button, Grid, Dialog, Stack } from '@mui/material';
-import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
+import { DegenCardInView as DegenCard } from 'components/cards/DegenCardV3';
 import SectionSlider from 'components/sections/SectionSlider';
 import { useContext, useMemo, useState } from 'react';
 import { NetworkContext } from 'NetworkProvider';
@@ -166,19 +166,13 @@ const MyDegens = (): JSX.Element => {
           degens.map((degen) => (
             <Box sx={BoxDegenStyles} key={degen.id}>
               <DegenCard
-                id={degen.id}
-                name={degen.name}
+                degen={degen}
                 isDashboardDegen
                 isEnabled={degen.is_active}
-                multiplier={degen.multiplier}
-                owner={degen.owner}
-                price={degen.price}
-                background={degen.background}
-                activeRentals={degen.rental_count}
-                onClickDetail={() => handleViewTraits(degen)}
-                onClickEditName={() => handleClickEditName(degen)}
-                onClickClaim={() => handleClaimDegen(degen)}
-                onClickRent={() => handleRentDegen(degen)}
+                onDetail={() => handleViewTraits(degen)}
+                onEditName={() => handleClickEditName(degen)}
+                onClaim={() => handleClaimDegen(degen)}
+                onRent={() => handleRentDegen(degen)}
                 onEnableDisable={() => handleEnableDisable(degen)}
               />
             </Box>
