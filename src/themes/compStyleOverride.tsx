@@ -347,6 +347,7 @@ export default function componentStyleOverrides(
     MuiDialog: {
       styleOverrides: {
         paper: {
+          padding: '12px 0 12px 0',
           backgroundColor: theme.palette.background.paper,
         },
       },
