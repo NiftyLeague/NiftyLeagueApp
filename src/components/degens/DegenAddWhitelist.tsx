@@ -17,7 +17,7 @@ import HeaderDegen from './HeaderDegen';
 import IOSSwitch from 'components/extended/IOSSwitch';
 import DegenContainer from './DegenContainer';
 
-export interface DegenWhitelistProps {
+export interface DegenAddWhitelistProps {
   degen?: Degen;
   isDialog?: boolean;
   onClose?: React.MouseEventHandler<HTMLDivElement>;
@@ -27,14 +27,14 @@ export interface DegenWhitelistProps {
     React.MouseEventHandler<HTMLSpanElement>;
 }
 
-const DegenWhitelist = ({
+const DegenAddWhitelist = ({
   degen,
   isDialog,
   onClose,
   onBack,
   onFullScreen,
   onViewAll,
-}: DegenWhitelistProps) => {
+}: DegenAddWhitelistProps) => {
   const [loading] = useState<boolean>(false);
   const [agreement, setAgreement] = useState<boolean>(false);
   const [isWhitelist, setIsWhitelist] = useState<boolean>(false);
@@ -117,4 +117,4 @@ const DegenWhitelist = ({
   );
 };
 
-export default DegenWhitelist;
+export default DegenAddWhitelist;
