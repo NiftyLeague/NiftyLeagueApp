@@ -29,13 +29,13 @@ const TermsOfServiceDialog = ({
   return (
     <Dialog
       maxWidth="sm"
-      scroll="body"
+      scroll="paper"
       fullScreen={fullScreen}
       onClose={onClose}
       open={open}
       {...rest}
     >
-      <Stack direction="column" gap={1} width="100%">
+      <Stack overflow={'scroll'} direction="column" gap={1} width="100%">
         <TermsOfServiceContent />
 
         <Container>
