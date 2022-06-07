@@ -7,7 +7,6 @@ import { NetworkContext } from 'NetworkProvider';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
-import { useTheme } from '@mui/material/styles';
 import { formatNumberToDisplay } from 'utils/numbers';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import HeaderDegenDialog from './HeaderDegenDialog';

@@ -50,12 +50,13 @@ const DegenImage = memo(
       };
     }
 
-    return (	
-      <CardMedia	
-        {...setting}	
-        sx={{ width: imageHeight ? '32px !important' : '100%' }}	
-      />	
+    return (
+      <CardMedia
+        {...setting}
+        sx={{ width: imageHeight ? '32px !important' : '100%' }}
+      />
     );
-});
+  },
+);
 
 export default DegenImage;
