@@ -37,11 +37,9 @@ const TermsOfServiceDialog = ({
     >
       <Stack
         sx={{
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
+          overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
-        overflow={'scroll'}
         direction="column"
         gap={0}
         width="100%"
@@ -61,6 +59,7 @@ const TermsOfServiceDialog = ({
             position: 'sticky',
             bottom: 0,
             background: theme.palette.dark.main,
+            pt: '1.2em',
           }}
         >
           <Button

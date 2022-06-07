@@ -61,10 +61,23 @@ const TermsOfServiceContent = () => {
         Service. By accessing or using the Service You agree to be bound by
         these Terms and Conditions. Your access to and use of the Service is
         also conditioned on Your acceptance of and compliance with our{' '}
-        <a href="https://niftyleague.com/disclaimer">Disclaimer</a> and{' '}
-        <a href="https://niftyleague.com/privacy-policy">Privacy Policy</a>. If
-        You disagree with any part of these Terms and Conditions, Disclaimer, or
-        Privacy Policy then You may not access our Application.
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/disclaimer"
+        >
+          Disclaimer
+        </a>{' '}
+        and{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/privacy-policy"
+        >
+          Privacy Policy
+        </a>
+        . If You disagree with any part of these Terms and Conditions,
+        Disclaimer, or Privacy Policy then You may not access our Application.
       </p>
       <p>
         The Site is intended for users who are at least 18 years old. People
@@ -216,7 +229,14 @@ const TermsOfServiceContent = () => {
         You represent and warrant that: (i) You have the legal right to use the
         payment method in connection with any Order; and that (ii) You are not
         residing in a country excluded by the{' '}
-        <a href="https://niftyleague.com/disclaimer">Disclaimer</a>.
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/disclaimer"
+        >
+          Disclaimer
+        </a>
+        .
       </p>
       <h4>Order Cancellation</h4>
       <p>
@@ -431,7 +451,14 @@ const TermsOfServiceContent = () => {
         delimit the scope of rights and obligations that may be exercised or
         enforced, and is hereby incorporated by this reference into these Terms.
         You agree to the warnings and expectations outlined in our{' '}
-        <a href="https://niftyleague.com/disclaimer">Disclaimer</a>.
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/disclaimer"
+        >
+          Disclaimer
+        </a>
+        .
       </p>
       <h3>Governing Law</h3>
       <p>
@@ -523,8 +550,15 @@ const TermsOfServiceContent = () => {
         designated by the United States government as a &quot;terrorist
         supporting&quot; country, and (ii) You are not listed on any United
         States government list of prohibited or restricted parties. Please read
-        our <a href="https://niftyleague.com/disclaimer">Disclaimer</a> for more
-        details.
+        our{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/disclaimer"
+        >
+          Disclaimer
+        </a>{' '}
+        for more details.
       </p>
       <h3>Severability and Waiver</h3>
       <h4>Severability</h4>
@@ -571,7 +605,14 @@ const TermsOfServiceContent = () => {
       </p>
       <h3>Privacy Policy</h3>
       <p>
-        Our <a href="https://niftyleague.com/privacy-policy">Privacy Policy</a>{' '}
+        Our{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://niftyleague.com/privacy-policy"
+        >
+          Privacy Policy
+        </a>{' '}
         describes the ways we collect, use, store and disclose Your personal
         information, and is hereby incorporated by this reference into these
         Terms. You agree to the collection, use, storage, and disclosure of Your
@@ -609,8 +650,14 @@ const TermsOfServiceContent = () => {
       <p>
         If You have any questions about these Terms and Conditions, You can
         contact us at{' '}
-        <a href="mailto:team@niftyleague.com">team@niftyleague.com</a> or by
-        reaching out to one of our team members on{' '}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="mailto:team@niftyleague.com"
+        >
+          team@niftyleague.com
+        </a>{' '}
+        or by reaching out to one of our team members on{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
