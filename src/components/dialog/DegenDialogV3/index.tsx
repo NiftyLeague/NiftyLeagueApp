@@ -1,15 +1,21 @@
-import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
+import { Dialog, DialogProps, useMediaQuery, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { NFT_CONTRACT } from 'constants/contracts';
 // TODO: Please remove the comment if you want to use the following code.
 // import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
-import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
+import {
+  CharacterType,
+  Degen,
+  DegenViewType,
+  GetDegenResponse,
+} from 'types/degens';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { toast } from 'react-toastify';
 import DegenRent from 'components/degens/DegenRent';
+import DegenTraits from 'components/degens/DegenTraits';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -18,6 +24,7 @@ export interface DegenDialogProps extends DialogProps {
   isClaim?: boolean;
   setIsClaim?: React.Dispatch<React.SetStateAction<boolean>>;
   onRent?: (degen: Degen) => void;
+  view: DegenViewType;
 }
 
 const DegenDialog = ({
@@ -29,6 +36,7 @@ const DegenDialog = ({
   setIsClaim,
   onRent,
   onClose,
+  view = 'rent',
   ...rest
 }: DegenDialogProps) => {
   const theme = useTheme();
@@ -123,6 +131,22 @@ const DegenDialog = ({
     onClose?.(event, 'backdropClick');
   };
 
+  const renderView = () => {
+    switch (view) {
+      case 'rent':
+        return <DegenRent isDialog degen={degen} onClose={handleClose} />;
+      case 'traits':
+        return <DegenTraits isDialog degen={degen} onClose={handleClose} />;
+      case 'default':
+      default:
+        return (
+          <Typography>
+            Please close this dialog and try open it again.
+          </Typography>
+        );
+    }
+  };
+
   return (
     <Dialog
       maxWidth="xs"
@@ -131,34 +155,10 @@ const DegenDialog = ({
       fullScreen={fullScreen}
       onClose={handleClose}
       open={open}
+      PaperProps={{ sx: { paddingY: 0 } }}
       {...rest}
     >
-      {/* {isClaim && (
-        <ClaimDegenContentDialog degen={degen} onClose={handleClose} />
-      )} */}
-      {isRent && <DegenRent isDialog degen={degen} onClose={handleClose} />}
-      {/* {!isRent && !isClaim && setIsRent && (
-        <ViewTraitsContentDialog
-          degen={degen}
-          degenDetail={degenDetail}
-          character={character}
-          traits={traits}
-          displayName={displayName}
-          onRent={() => setIsRent(true)}
-          onClose={handleClose}
-        />
-      )}
-      {!isRent && !isClaim && setIsClaim && (
-        <ViewTraitsContentDialog
-          degen={degen}
-          degenDetail={degenDetail}
-          character={character}
-          traits={traits}
-          displayName={displayName}
-          onClaim={() => setIsClaim(true)}
-          onClose={handleClose}
-        />
-      )} */}
+      {renderView()}
     </Dialog>
   );
 };
