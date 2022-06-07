@@ -12,9 +12,14 @@ import UnavailableImg from 'assets/images/unavailable-image.png';
 interface ImageProfileProps {
   degens: Degen[] | undefined;
   avatar?: ProfileAvatar;
+  avatarFee?: number;
 }
 
-const ImageProfile = ({ degens, avatar }: ImageProfileProps): JSX.Element => {
+const ImageProfile = ({
+  degens,
+  avatar,
+  avatarFee,
+}: ImageProfileProps): JSX.Element => {
   const { isLoadingDegens } = useContext(GamerProfileContext);
   const [degenSelected, setDegenSelected] = useState<string>('');
 
@@ -68,6 +73,7 @@ const ImageProfile = ({ degens, avatar }: ImageProfileProps): JSX.Element => {
           <ProfileImageDialog
             onChangeAvatar={handleChangeAvatar}
             degens={degens}
+            avatarFee={avatarFee}
           />
         )}
       </Box>

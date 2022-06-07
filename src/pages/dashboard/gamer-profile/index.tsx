@@ -2,10 +2,12 @@ import { useContext, useMemo, createContext } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import { useQuery } from '@apollo/client';
+import _ from 'lodash';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useComicsBalance from 'hooks/useComicsBalance';
+import { useProfileAvatarFee } from 'hooks/useGamerProfile';
 
 import SectionSlider from 'components/sections/SectionSlider';
 import ImageProfile from './ImageProfile';
@@ -36,6 +38,7 @@ export const GamerProfileContext = createContext(defaultValue);
 const GamerProfile = (): JSX.Element => {
   const { profile, error, loadingProfile } = useGamerProfile();
   const { address } = useContext(NetworkContext);
+  const { avatarsAndFee } = useProfileAvatarFee();
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -90,7 +93,15 @@ const GamerProfile = (): JSX.Element => {
     return (
       <Grid item container spacing={3}>
         <Grid item xs={12} md={3.5}>
-          <ImageProfile avatar={profile?.avatar} degens={filteredDegens} />
+          <ImageProfile
+            avatar={profile?.avatar}
+            avatarFee={avatarsAndFee?.price}
+            degens={
+              filteredDegens &&
+              avatarsAndFee?.avatars &&
+              _.merge(filteredDegens, avatarsAndFee?.avatars)
+            }
+          />
         </Grid>
         <Grid item xs={12} md={8.5}>
           <TopInfo profile={profile} walletAddress={address} />
@@ -105,7 +116,10 @@ const GamerProfile = (): JSX.Element => {
               <LeftInfo data={profile?.stats?.total} />
               <RightInfo
                 degenCount={filteredDegens?.length}
-                comicCount={filteredComics?.length}
+                comicCount={filteredComics?.reduce(
+                  (prev, cur) => prev + Number(cur?.balance),
+                  0,
+                )}
               />
             </Stack>
           </Stack>
