@@ -23,6 +23,8 @@ export interface DegenWhitelistProps {
   onClose?: React.MouseEventHandler<HTMLDivElement>;
   onBack?: React.MouseEventHandler<HTMLDivElement>;
   onFullScreen?: React.MouseEventHandler<HTMLDivElement>;
+  onViewAll?: React.MouseEventHandler<HTMLAnchorElement> &
+    React.MouseEventHandler<HTMLSpanElement>;
 }
 
 const DegenWhitelist = ({
@@ -31,6 +33,7 @@ const DegenWhitelist = ({
   onClose,
   onBack,
   onFullScreen,
+  onViewAll,
 }: DegenWhitelistProps) => {
   const [loading] = useState<boolean>(false);
   const [agreement, setAgreement] = useState<boolean>(false);
@@ -81,7 +84,7 @@ const DegenWhitelist = ({
           />
         </FormControl>
         <Stack direction="row" justifyContent="center" paddingY={0.5}>
-          <Link href="#" color="inherit">
+          <Link href="#" color="inherit" onClick={onViewAll}>
             <Typography variant="paragraphXXSmall">View & Edit All</Typography>
           </Link>
         </Stack>
