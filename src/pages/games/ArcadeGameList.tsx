@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import GameCard from 'components/cards/GameCard';
-import WenThumbnail from 'assets/images/games/wen.png';
 import useArcadeBalance from 'hooks/useArcadeBalance';
+import { sendEvent } from 'utils/google-analytics';
+import WenThumbnail from 'assets/images/games/wen.png';
 
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();
-  const { web3Modal } = useContext(NetworkContext);
+  const { loadWeb3Modal, web3Modal } = useContext(NetworkContext);
   const { arcadeBalance } = useArcadeBalance();
 
   const goToPlayOnGame = useCallback(() => {
@@ -18,6 +19,11 @@ const ArcadeGameList: React.FC = () => {
       // TODO: Show Buy Arcade Token Modal being developed by @Diego
     }
   }, [arcadeBalance, navigate]);
+
+  const handleConnectWallet = useCallback(() => {
+    sendEvent('login', 'engagement', 'method');
+    loadWeb3Modal();
+  }, [loadWeb3Modal]);
 
   return (
     <>
@@ -37,10 +43,17 @@ const ArcadeGameList: React.FC = () => {
                   sx={{ minWidth: 80, flex: 1 }}
                   onClick={goToPlayOnGame}
                 >
-                  Play in Browser
+                  {Number(arcadeBalance) > 0
+                    ? 'Play in Browser'
+                    : 'Buy Arcade Tokens'}
                 </Button>
               ) : (
-                <Button variant="contained" fullWidth disabled color="inherit">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  onClick={handleConnectWallet}
+                >
                   Connect wallet to play
                 </Button>
               )}
