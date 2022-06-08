@@ -1,4 +1,4 @@
-import { DataType, Order } from 'types/leaderboard';
+import { DataType, ReturnDataType, Order } from 'types/leaderboard';
 import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
 import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
 
@@ -28,7 +28,7 @@ export const fetchScores = async (
   scoreType: string,
   count: number,
   offset: number,
-): Promise<DataType[]> => {
+): Promise<ReturnDataType> => {
   const res = await fetch(
     `${
       LEADERBOARD_SCORE_API_URL as string
@@ -36,7 +36,7 @@ export const fetchScores = async (
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
-  const addAvg = json.map((data: DataType) => {
+  const addAvg = json.data.map((data: DataType) => {
     let earnings = Math.round(parseFloat(data.stats.earnings) * 10) / 10;
     let avg =
       Math.round(
@@ -61,8 +61,8 @@ export const fetchScores = async (
   const authToken = window.localStorage.getItem('authentication-token');
   if (authToken) {
     let items: DataType[] = [];
-    for (let i = 0; i < json.length; i++) {
-      items.push(json[i].user_id);
+    for (let i = 0; i < json.data.length; i++) {
+      items.push(json.data[i].user_id);
     }
     const dd: DataType[] = await fetchUserNames(items, authToken);
     let a = Object.entries(dd);
@@ -76,7 +76,7 @@ export const fetchScores = async (
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return addAvg;
+  return { data: addAvg, count: json.count };
 };
 
 function descendingComparator(a: DataType, b: DataType, orderBy: any) {

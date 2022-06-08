@@ -45,10 +45,10 @@ const PublicItems = {
       breadcrumbs: false,
     },
     {
-      id: 'leaderboard',
-      title: 'Leaderboard',
+      id: 'leaderboards',
+      title: 'Leaderboards',
       type: 'item',
-      url: '/leaderboard',
+      url: '/leaderboards',
       icon: icons.IconListNumbers,
       breadcrumbs: false,
     },

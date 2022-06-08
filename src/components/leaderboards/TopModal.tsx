@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import CustomModal from './CustomModal';
 import makeStyles from '@mui/styles/makeStyles';
 import { fetchScores } from 'utils/leaderboard';
-import { DataType } from 'types/leaderboard';
+import { DataType, ReturnDataType } from 'types/leaderboard';
 import './navigation.css';
 import {
   TableBody,
@@ -125,8 +125,8 @@ const TableModal = ({ flag }): JSX.Element | null => {
 
   // get the top ten items
   const fetchDataItems = async () => {
-    const arrayData: DataType[] = await fetchScores(flag, 10, 0);
-    setData(arrayData.filter((i: { rank: number }) => i.rank <= 10));
+    const ret: ReturnDataType = await fetchScores(flag, 10, 0);
+    setData(ret.data.filter((i: { rank: number }) => i.rank <= 10));
   };
 
   useEffect(() => {

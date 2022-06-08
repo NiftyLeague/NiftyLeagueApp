@@ -12,6 +12,11 @@ interface Stats {
   deaths: string;
   rounds: string;
 }
+
+export interface ReturnDataType {
+  data: DataType[];
+  count: number;
+}
 export interface DataType {
   rank: number;
   user_id: any;
