@@ -2,17 +2,10 @@ import { DataType, ReturnDataType, Order } from 'types/leaderboard';
 import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
 import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
 
-export const fetchUserNames = async (
-  items: any,
-  authToken: string,
-): Promise<DataType[]> => {
+export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
     const res = await fetch(
       `${LEADERBOARD_USERNAMES_API_URL}?ids=${items}&include_stats=false`,
-      {
-        method: 'GET',
-        headers: { authorizationToken: authToken as string },
-      },
     );
     // const res = await fetch(`${LEADERBOARD_USERNAMES_API_URL}`);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -58,19 +51,16 @@ export const fetchScores = async (
     };
   });
   // get names
-  const authToken = window.localStorage.getItem('authentication-token');
-  if (authToken) {
-    let items: DataType[] = [];
-    for (let i = 0; i < json.data.length; i++) {
-      items.push(json.data[i].user_id);
-    }
-    const dd: DataType[] = await fetchUserNames(items, authToken);
-    let a = Object.entries(dd);
-    for (let i = 0; i < addAvg.length; i++) {
-      for (let j = 0; j < a.length; j++) {
-        if (addAvg[i].user_id === a[j][0]) {
-          addAvg[i].user_id = a[j][1].name;
-        }
+  let items: DataType[] = [];
+  for (let i = 0; i < json.data.length; i++) {
+    items.push(json.data[i].user_id);
+  }
+  const dd: DataType[] = await fetchUserNames(items);
+  let a = Object.entries(dd);
+  for (let i = 0; i < addAvg.length; i++) {
+    for (let j = 0; j < a.length; j++) {
+      if (addAvg[i].user_id === a[j][0]) {
+        addAvg[i].user_id = a[j][1].name;
       }
     }
   }
