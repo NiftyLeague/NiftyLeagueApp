@@ -248,3 +248,17 @@ body {
 .slick-track {
   margin-left: 0;
 }
+
+.leaderboard-icon {
+  margin: 0rem 1rem;
+  cursor: pointer;
+}
+.leaderboard-icon.win-rate {
+  fill:gold;
+}
+.leaderboard-icon.xp {
+  fill:white;
+}
+.leaderboard-icon.kills {
+  fill:greenyellow;
+}

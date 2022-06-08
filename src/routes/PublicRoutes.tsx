@@ -9,6 +9,7 @@ import GuestGuard from 'utils/route-guard/GuestGuard';
 const NiftyLeagueAppPage = Loadable(
   lazy(() => import('pages/nifty-league-app')),
 );
+const LeaderboardPage = Loadable(lazy(() => import('pages/leaderboard')));
 const GamesPage = Loadable(lazy(() => import('pages/games')));
 const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
@@ -27,6 +28,10 @@ const PublicRoutes = {
     {
       path: '/',
       element: <NiftyLeagueAppPage />,
+    },
+    {
+      path: '/leaderboards',
+      element: <LeaderboardPage />,
     },
     {
       path: '/degen-rentals',
