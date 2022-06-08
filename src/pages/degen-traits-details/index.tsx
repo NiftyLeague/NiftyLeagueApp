@@ -124,6 +124,7 @@ const DegenTraitsDetailsPage = (): JSX.Element => {
         traits={traits}
         displayName={displayName}
         onRent={() => setOpenDialog(true)}
+        degenImageSx={{ objectFit: 'contain', height: 400 }}
       />
       <DegenDialog
         open={openDialog}

@@ -1,10 +1,9 @@
 import { memo } from 'react';
-import { CardMedia } from '@mui/material';
+import { CardMedia, SxProps } from '@mui/material';
 import useBackgroundType from 'hooks/useBackgroundType';
 import ImagePlaceholder from 'components/cards/Skeleton/ImagePlaceholder';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
-import { SxProps } from '@mui/material';
 const IMAGE_HEIGHT = 320;
 
 const DegenImage = memo(
@@ -41,7 +40,7 @@ const DegenImage = memo(
       };
     }
 
-    return <CardMedia sx={{ ...sx }} {...setting} />;
+    return <CardMedia sx={{ objectFit: 'cover', ...sx }} {...setting} />;
   },
 );
 
