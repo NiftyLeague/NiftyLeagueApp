@@ -219,7 +219,9 @@ const RentDegenContentDialog = ({
     <Grid container sx={{ p: 2 }} spacing={3}>
       <Grid item xs={12} sm={12} md={6}>
         <Stack direction="row" justifyContent="center">
-          {degen?.id && <DegenImage tokenId={degen.id} />}
+          {degen?.id && (
+            <DegenImage sx={{ objectFit: 'contain' }} tokenId={degen.id} />
+          )}
         </Stack>
         <Stack direction="column" alignItems="center" gap={1} sx={{ my: 2 }}>
           <Typography color="gray">
