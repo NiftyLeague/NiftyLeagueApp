@@ -35,29 +35,28 @@ const TermsOfServiceDialog = ({
       open={open}
       {...rest}
     >
-      <Stack
-        sx={{
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-        }}
-        direction="column"
-        gap={0}
-        width="100%"
-      >
+      <Stack sx={{ overflow: 'none' }} direction="column" gap={0} width="100%">
         <Container
           sx={{
-            position: 'sticky',
-            top: 0,
             background: theme.palette.dark.main,
           }}
         >
           <h2>Terms and Conditions</h2>
         </Container>
-        <TermsOfServiceContent />
+        <Stack
+          sx={{
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            height: fullScreen ? 'calc(100vh - 184px)' : '65vh',
+          }}
+          direction="column"
+          gap={0}
+          width="100%"
+        >
+          <TermsOfServiceContent />
+        </Stack>
         <Container
           sx={{
-            position: 'sticky',
-            bottom: 0,
             background: theme.palette.dark.main,
             pt: '1.2em',
           }}
