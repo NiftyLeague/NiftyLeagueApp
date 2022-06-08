@@ -10,7 +10,7 @@ import {
   Paper,
   CircularProgress,
 } from '@mui/material';
-import { DataType, TableProps } from 'types/leaderboard';
+import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
 import { fetchScores } from 'utils/leaderboard';
 import makeStyles from '@mui/styles/makeStyles';
@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 
 export default function EnhancedTable(props: TableProps): JSX.Element | null {
   const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { selectedTable } = props;
   const [rows, setData] = useState<DataType[]>();
@@ -36,12 +37,13 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
 
   const fetchTopData = async () => {
     setPage(0);
-    const arrayData: DataType[] = await fetchScores(
+    const returnValue: ReturnDataType = await fetchScores(
       selectedTable.key,
       rowsPerPage * 3,
       0,
     );
-    setData(arrayData);
+    setData(returnValue.data);
+    setCount(returnValue.count);
   };
   useEffect(() => {
     void fetchTopData();
@@ -50,12 +52,13 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
 
   const handleChangePage = async (event: unknown, newPage: number) => {
     if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
-      const arrayData: DataType[] = await fetchScores(
+      const returnValue: ReturnDataType = await fetchScores(
         selectedTable.key,
         rowsPerPage,
         (newPage + 2) * rowsPerPage,
       );
-      setData([...rows, ...arrayData]);
+      setData([...rows, ...returnValue.data]);
+      setCount(returnValue.count);
     }
     setPage(newPage);
   };
@@ -75,14 +78,14 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
     : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box>
       {!rows ? (
         <Box className={classes.loadingBox}>
           <CircularProgress />
         </Box>
       ) : (
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <TableContainer>
+        <Paper sx={{ width: '100%', overflowX: 'auto', mb: 2 }}>
+          <TableContainer sx={{ minWidth: '850px' }}>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
@@ -131,9 +134,10 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             </Table>
           </TableContainer>
           <TablePagination
+            sx={{ minWidth: '850px' }}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rows.length}
+            count={count}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

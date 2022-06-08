@@ -29,7 +29,7 @@ const PublicRoutes = {
       element: <NiftyLeagueAppPage />,
     },
     {
-      path: '/leaderboard',
+      path: '/leaderboards',
       element: <LeaderboardPage />,
     },
     {
