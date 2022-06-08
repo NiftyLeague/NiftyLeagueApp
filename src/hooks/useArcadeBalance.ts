@@ -22,20 +22,22 @@ export default function useArcadeBalance(): {
 
   useEffect(() => {
     async function getArcadeBalance() {
-      const value: BigNumber = await readContracts[ARCADE_CONTRACT].balanceOf(
-        address,
-      );
-      setBalance(formatBalance(value, 18, 6));
+      if (address && readContracts && readContracts[ARCADE_CONTRACT]) {
+        const value: BigNumber = await readContracts[ARCADE_CONTRACT].balanceOf(
+          address,
+        );
+        setBalance(formatBalance(value, 18, 6));
+      }
     }
     if (!address) {
       setBalance('');
     }
 
+    getArcadeBalance();
     const interval = setInterval(() => {
-      if (address && readContracts && readContracts[ARCADE_CONTRACT]) {
-        getArcadeBalance();
-      }
+      getArcadeBalance();
     }, 10000);
+
     return () => clearInterval(interval);
   }, [address, readContracts]);
 
