@@ -191,7 +191,7 @@ const TableModal = ({ flag }): JSX.Element | null => {
               <code>RANK</code>
             </TableCell>
             <TableCell component="th" className="cell ellipsis">
-              <code>USER NAME</code>
+              <code>USERNAME</code>
             </TableCell>
             {flag === 'win_rate' && (
               <TableCell component="th" className="cell ellipsis">
