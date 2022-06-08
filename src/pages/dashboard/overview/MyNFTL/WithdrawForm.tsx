@@ -9,6 +9,10 @@ import {
   Typography,
   useTheme,
   Stack,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Link,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { providers } from 'ethers';
@@ -22,6 +26,7 @@ import useFetch from 'hooks/useFetch';
 import { WithdrawalHistory } from 'types/account';
 import { WITHDRAW_NFTL_AVAILABILITY } from 'constants/url';
 import { formatDateTime } from 'helpers/dateTime';
+import TermsOfServiceDialog from 'components/dialog/TermsOfServiceDialog';
 
 const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
   const [withdrawDisabled, setWithdrawDisabled] = useState(false);
@@ -73,6 +78,7 @@ const WithdrawForm = ({
   balance,
 }: WithdrawFormProps): JSX.Element => {
   const [balanceWithdraw, setBalanceWithdraw] = useState(0);
+  const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [, setIsOpen] = useContext(DialogContext);
   const [loading, setLoading] = useState(false);
   const { withdrawalHistory } = useWithdrawalHistory('pending');
@@ -86,6 +92,7 @@ const WithdrawForm = ({
     setError,
     clearErrors,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<IFormInput>({
     // resolver: yupResolver(validationSchema),
@@ -93,7 +100,7 @@ const WithdrawForm = ({
     defaultValues: {
       amountSelected: 0,
       amountInput: '',
-      // isCheckedTerm: false,
+      isCheckedTerm: localStorage.getItem('aggreement-accepted') === 'ACCEPTED',
     },
   });
   const theme = useTheme();
@@ -124,6 +131,19 @@ const WithdrawForm = ({
       return;
     }
     resetForm();
+  };
+
+  const openTOSDialog = (event) => {
+    event.preventDefault();
+    setOpenTOS(true);
+  };
+
+  const handleTOSDialogClose = (event, reason) => {
+    if (reason === 'accepted') {
+      setValue('isCheckedTerm', true);
+      localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+    }
+    setOpenTOS(false);
   };
 
   return (
@@ -212,7 +232,7 @@ const WithdrawForm = ({
           </Typography>
           NFTL
         </Typography>
-        {/* <Controller
+        <Controller
           name="isCheckedTerm"
           control={control}
           render={({ field }) => (
@@ -224,6 +244,11 @@ const WithdrawForm = ({
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
+                      if (e.target.checked) {
+                        localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+                      } else {
+                        localStorage.removeItem('aggreement-accepted');
+                      }
                     }}
                   />
                 }
@@ -235,10 +260,9 @@ const WithdrawForm = ({
                   >
                     I have read the
                     <Link
-                      color="inherit"
                       sx={{ mx: '4px' }}
                       variant="body1"
-                      href="#"
+                      onClick={openTOSDialog}
                     >
                       terms &amp; conditions
                     </Link>
@@ -248,7 +272,8 @@ const WithdrawForm = ({
               />
             </FormGroup>
           )}
-        /> */}
+        />
+        <TermsOfServiceDialog open={openTOS} onClose={handleTOSDialogClose} />
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
@@ -269,8 +294,9 @@ const WithdrawForm = ({
           fullWidth
           loading={loading}
           disabled={
-            // !getValues('isCheckedTerm') ||
-            balanceWithdraw === 0 || withdrawDisabled
+            !getValues('isCheckedTerm') ||
+            balanceWithdraw === 0 ||
+            withdrawDisabled
           }
         >
           Withdraw earnings
