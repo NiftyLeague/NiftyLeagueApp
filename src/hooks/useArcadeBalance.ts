@@ -35,7 +35,7 @@ export default function useArcadeBalance(): {
       if (address && readContracts && readContracts[ARCADE_CONTRACT]) {
         getArcadeBalance();
       }
-    }, 3000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [address, readContracts]);
 
