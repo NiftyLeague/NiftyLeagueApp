@@ -5,37 +5,64 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button, Stack } from '@mui/material';
 import Unity, { UnityContext } from 'react-unity-webgl';
+import { Button, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
+import useArcadeBalance from 'hooks/useArcadeBalance';
 import withVerification from 'components/Authentication';
 import { NETWORK_NAME } from 'constants/networks';
-import Preloader from './Preloader';
 import { DEBUG } from 'constants/index';
+import Preloader from './Preloader';
+import ArcadeTokensRequired from './ArcadeTokensRequired';
 
-const baseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
-const buildVersion = process.env
+const smashersBaseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
+const smashersBuildVersion = process.env
   .REACT_APP_UNITY_SMASHERS_BASE_VERSION as string;
+const smashersCompanyName = process.env
+  .REACT_APP_UNITY_SMASHERS_COMPANY_NAME as string;
+const smashersProductName = process.env
+  .REACT_APP_UNITY_SMASHERS_PRODUCT_NAME as string;
+
+const wenBaseUrl = process.env.REACT_APP_UNITY_WEN_BASE_URL as string;
+const wenBuildVersion = process.env.REACT_APP_UNITY_WEN_BASE_VERSION as string;
+const wenCompanyName = process.env.REACT_APP_UNITY_WEN_COMPANY_NAME as string;
+const wenProductName = process.env.REACT_APP_UNITY_WEN_PRODUCT_NAME as string;
 
 export const smashersContext = new UnityContext({
-  loaderUrl: `${baseUrl}/Build/${buildVersion}.loader.js`,
-  dataUrl: `${baseUrl}/Build/${buildVersion}.data.br`,
-  frameworkUrl: `${baseUrl}/Build/${buildVersion}.framework.js.br`,
-  codeUrl: `${baseUrl}/Build/${buildVersion}.wasm.br`,
-  streamingAssetsUrl: `${baseUrl}/StreamingAssets`,
-  companyName: 'NiftyLeague',
-  productName: 'NiftySmashers',
-  productVersion: buildVersion,
+  loaderUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.loader.js`,
+  dataUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.data.br`,
+  frameworkUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.framework.js.br`,
+  codeUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.wasm.br`,
+  streamingAssetsUrl: `${smashersBaseUrl}/StreamingAssets`,
+  companyName: smashersCompanyName,
+  productName: smashersProductName,
+  productVersion: smashersBuildVersion,
 });
+
+export const wenContext = new UnityContext({
+  loaderUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.loader.js`,
+  dataUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.data.br`,
+  frameworkUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.framework.js.br`,
+  codeUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.wasm.br`,
+  streamingAssetsUrl: `${wenBaseUrl}/StreamingAssets`,
+  companyName: wenCompanyName,
+  productName: wenProductName,
+  productVersion: wenBuildVersion,
+});
+
+interface GameProps {
+  auth: string;
+  unityContext: UnityContext;
+  arcadeTokenRequired?: boolean;
+}
 
 const Game = ({
   auth,
   unityContext,
-}: {
-  auth: string;
-  unityContext: UnityContext;
-}) => {
+  arcadeTokenRequired = false,
+}: GameProps) => {
   const { address, targetNetwork } = useContext(NetworkContext);
+  const { arcadeBalance } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
   const authMsg = `true,${address || '0x0'},Vitalik,${auth},${favs}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
@@ -114,6 +141,10 @@ const Game = ({
     (window as any).unityInstance.setFullscreen(true);
   };
 
+  if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
+    return <ArcadeTokensRequired />;
+  }
+
   return (
     <>
       <Preloader ready={isLoaded} progress={progress} />
@@ -145,8 +176,6 @@ const Game = ({
   );
 };
 
-const GameWithAuth = withVerification(
-  (props: { auth: string; unityContext: UnityContext }) => Game(props),
-);
+const GameWithAuth = withVerification((props: GameProps) => Game(props));
 
 export default GameWithAuth;
