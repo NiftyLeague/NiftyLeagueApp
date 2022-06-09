@@ -15,7 +15,8 @@ const DegenContainer = ({ children, sx }: DegenContainerProps) => {
         p: '12px',
         boxShadow: customShadows.xSmall,
         background: palette.background.paper,
-        minHeight: '462px',
+        minHeight: '466px',
+        borderRadius: '4px',
         position: 'relative',
         ...sx,
       }}

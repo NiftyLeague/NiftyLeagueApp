@@ -1,25 +1,29 @@
 import {
   Stack,
   Typography,
-  SxProps,
   Skeleton,
-  IconButton,
+  Pagination,
+  PaginationItem,
 } from '@mui/material';
+import { useState, useEffect, useContext, useMemo } from 'react';
+import { NetworkContext } from 'NetworkProvider';
+import { sendEvent } from 'utils/google-analytics';
+import { v4 as uuidv4 } from 'uuid';
+
 import { CharacterType, Degen } from 'types/degens';
 import HeaderDegen from './HeaderDegen';
-import { Theme } from '@mui/material/styles';
-import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
-import { NetworkContext } from 'NetworkProvider';
 import { NFT_CONTRACT } from 'constants/contracts';
 import {
   TRAIT_INDEXES,
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
 } from 'constants/cosmeticsFilters';
-import { sendEvent } from 'utils/google-analytics';
-import { v4 as uuidv4 } from 'uuid';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import usePagination from 'hooks/usePagination';
+
 import DegenContainer from './DegenContainer';
+
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 export interface DegenTraitsProps {
   degen?: Degen;
@@ -37,12 +41,7 @@ const DegenTraits = ({
   onFullScreen,
 }: DegenTraitsProps) => {
   const tokenId = degen?.id || 0;
-  const typographySetting: SxProps<Theme> = { textDecoration: 'underline ' };
   const { readContracts } = useContext(NetworkContext);
-  const [pagination, setPagination] = useState<{
-    limit: number;
-    offset: number;
-  }>({ limit: 10, offset: 0 });
   const [character, setCharacter] = useState<CharacterType>({
     name: null,
     owner: null,
@@ -92,21 +91,10 @@ const DegenTraits = ({
     [traits],
   );
 
-  const handleNext = useCallback(() => {
-    setPagination({
-      ...pagination,
-      offset: pagination.offset + pagination.limit,
-    });
-  }, [pagination]);
-
-  const handlePrevious = useCallback(() => {
-    if (pagination.offset - pagination.limit >= 0) {
-      setPagination({
-        ...pagination,
-        offset: pagination.offset - pagination.limit,
-      });
-    }
-  }, [pagination]);
+  const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
+    traitsData,
+    12,
+  );
 
   return (
     <DegenContainer>
@@ -117,7 +105,7 @@ const DegenTraits = ({
         onFullScreen={onFullScreen}
         onClose={onClose}
       />
-      {!traitList.length
+      {!dataForCurrentPage.length
         ? [...Array(10)].map(() => (
             <Stack gap={4} key={uuidv4()}>
               <Stack direction="row" justifyContent="space-between">
@@ -126,40 +114,58 @@ const DegenTraits = ({
               </Stack>
             </Stack>
           ))
-        : traitsData
-            .slice(pagination.offset, pagination.offset + pagination.limit)
-            .map(({ label, value }) => (
-              <Stack gap={4} key={`${label}-${value}`}>
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="paragraphXXSmall" fontWeight="500">
-                    {label}
-                  </Typography>
-                  <Typography variant="paragraphXXSmall" sx={typographySetting}>
-                    {value}
-                  </Typography>
-                </Stack>
+        : dataForCurrentPage.map(({ label, value }) => (
+            <Stack gap={4} key={`${label}-${value}`}>
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="paragraphXXSmall" fontWeight="500">
+                  {label}
+                </Typography>
+                <Typography
+                  variant="paragraphXXSmall"
+                  sx={{ textDecoration: 'underline ' }}
+                >
+                  {value}
+                </Typography>
               </Stack>
-            ))}
-      <Stack
-        gap={1}
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        position="absolute"
-        sx={{ left: 0, right: 0, bottom: '12px' }}
-      >
-        <IconButton disabled={pagination.offset === 0} onClick={handlePrevious}>
-          <ArrowCircleDownIcon sx={{ transform: 'rotate(90deg)' }} />
-        </IconButton>
-        <IconButton
-          disabled={
-            traitsData.length < pagination.offset + (pagination.limit + 1)
-          }
-          onClick={handleNext}
+            </Stack>
+          ))}
+      {dataForCurrentPage.length > 0 && (
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
+          sx={{ left: 0, right: 0, bottom: '4px' }}
         >
-          <ArrowCircleDownIcon sx={{ transform: 'rotate(-0.25turn)' }} />
-        </IconButton>
-      </Stack>
+          <Pagination
+            count={maxPage}
+            page={currentPage}
+            color="primary"
+            sx={{
+              '& ul': {
+                '& li': {
+                  display: 'none',
+                  '& button': {
+                    margin: 0,
+                  },
+                },
+                '& li:first-child, & li:last-child': {
+                  display: 'block',
+                },
+              },
+            }}
+            onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
+            renderItem={(item) => (
+              <PaginationItem
+                components={{
+                  previous: ArrowCircleLeftIcon,
+                  next: ArrowCircleRightIcon,
+                }}
+                {...item}
+              />
+            )}
+          />
+        </Stack>
+      )}
     </DegenContainer>
   );
 };

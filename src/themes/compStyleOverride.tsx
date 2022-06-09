@@ -16,6 +16,7 @@ export default function componentStyleOverrides(
     MuiButton: {
       styleOverrides: {
         root: {
+          padding: '6px 14px',
           fontSize: '10px',
           lineHeight: '20px',
           color: theme.palette.grey[50],
