@@ -1,26 +1,50 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Box, Skeleton, CardMedia } from '@mui/material';
 
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-
-import { Rentals } from 'types/rentals';
 import { GamerProfileContext } from '../index';
 import ProfileImageDialog from './ProfileImageDialog';
+
+import { Degen } from 'types/degens';
+import { ProfileAvatar } from 'types/account';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 
 interface ImageProfileProps {
-  rentals: Rentals[] | undefined;
+  degens: Degen[] | undefined;
+  avatar?: ProfileAvatar;
+  avatarFee?: number;
 }
 
-const ImageProfile = ({ rentals }: ImageProfileProps): JSX.Element => {
-  const { isLoadingRentals } = useContext(GamerProfileContext);
-  const rental = rentals && rentals[0];
+const ImageProfile = ({
+  degens,
+  avatar,
+  avatarFee,
+}: ImageProfileProps): JSX.Element => {
+  const { isLoadingDegens } = useContext(GamerProfileContext);
+  const [degenSelected, setDegenSelected] = useState<string>('');
+
+  useEffect(() => {
+    if (avatar?.id) {
+      setDegenSelected(avatar?.id);
+      return;
+    }
+    if (degens) {
+      setDegenSelected(degens[0]?.id);
+      return;
+    }
+  }, [degens, avatar]);
+
+  const handleChangeAvatar = (degenId: string) => {
+    if (degenId) {
+      setDegenSelected(degenId);
+    }
+  };
 
   const renderImage = () => {
-    if (isLoadingRentals) {
+    if (isLoadingDegens) {
       return <Skeleton variant="rectangular" width="100%" height="320px" />;
     } else {
-      if (!rental?.degen_id) {
+      if (!degenSelected) {
         return (
           <CardMedia
             component="img"
@@ -30,7 +54,7 @@ const ImageProfile = ({ rentals }: ImageProfileProps): JSX.Element => {
           />
         );
       }
-      return <DegenImage tokenId={rental?.degen_id} />;
+      return <DegenImage tokenId={degenSelected} />;
     }
   };
 
@@ -45,8 +69,12 @@ const ImageProfile = ({ rentals }: ImageProfileProps): JSX.Element => {
         position="relative"
       >
         {renderImage()}
-        {rentals && rentals.length > 0 && (
-          <ProfileImageDialog rentals={rentals} />
+        {degens && degens.length > 0 && (
+          <ProfileImageDialog
+            onChangeAvatar={handleChangeAvatar}
+            degens={degens}
+            avatarFee={avatarFee}
+          />
         )}
       </Box>
     </>

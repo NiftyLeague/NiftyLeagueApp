@@ -6,10 +6,10 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { RENAME_PROFILE_NAME } from 'constants/url';
+import { PROFILE_RENAME_API } from 'constants/url';
 import { DialogContext } from 'components/dialog';
 
-import useProfileRenameFee from 'hooks/useProfileRenameFee';
+import { useProfileRenameFee } from 'hooks/useGamerProfile';
 
 interface ChangeProfileNameFormProps {
   updateNewName: (name: string) => void;
@@ -50,7 +50,7 @@ const ChangeProfileNameForm = ({
 
     try {
       setLoadingRename(true);
-      const response = await fetch(RENAME_PROFILE_NAME, {
+      const response = await fetch(PROFILE_RENAME_API, {
         headers: { authorizationToken: authToken as string },
         method: 'POST',
         body: JSON.stringify({
@@ -90,7 +90,7 @@ const ChangeProfileNameForm = ({
     if (!loadingFee && fee) {
       return (
         <Typography variant="h5" component="p">
-          There is a {fee} NFTL fee for renaming
+          There is a {fee} NFTL fee for changing your gamer profile username
         </Typography>
       );
     }

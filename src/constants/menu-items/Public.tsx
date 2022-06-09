@@ -1,11 +1,17 @@
 // assets
-import { IconDeviceGamepad, IconTag, IconLayoutGrid } from '@tabler/icons';
+import {
+  IconDeviceGamepad,
+  IconTag,
+  IconLayoutGrid,
+  IconListNumbers,
+} from '@tabler/icons';
 
 // constant
 const icons = {
   IconDeviceGamepad,
   IconTag,
   IconLayoutGrid,
+  IconListNumbers,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -36,6 +42,14 @@ const PublicItems = {
       type: 'item',
       url: '/games',
       icon: icons.IconDeviceGamepad,
+      breadcrumbs: false,
+    },
+    {
+      id: 'leaderboards',
+      title: 'Leaderboards',
+      type: 'item',
+      url: '/leaderboards',
+      icon: icons.IconListNumbers,
       breadcrumbs: false,
     },
   ],

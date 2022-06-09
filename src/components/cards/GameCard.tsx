@@ -11,6 +11,90 @@ import {
   Typography,
 } from '@mui/material';
 
+const CardGameContent = ({
+  title,
+  isComingSoon,
+  description,
+  actions,
+  onPlayOnDesktopClick,
+  onPlayOnWebClick,
+}) => {
+  const theme = useTheme();
+  return (
+    <Stack justifyContent="space-between" flexGrow={1}>
+      <CardContent
+        sx={{
+          padding: '24px 24px 0',
+        }}
+      >
+        <Stack direction="row" justifyContent="space-between">
+          <Typography gutterBottom variant="h3" component="div">
+            {title}
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="body2"
+            component="div"
+            sx={{
+              color: isComingSoon
+                ? theme.palette.warning.main
+                : theme.palette.success.main,
+            }}
+          >
+            {isComingSoon && 'coming soon'}
+          </Typography>
+        </Stack>
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        {isComingSoon ? (
+          <Button variant="contained" fullWidth disabled color="inherit">
+            Coming Soon
+          </Button>
+        ) : (
+          <Stack
+            direction="row"
+            flexWrap="wrap"
+            columnGap={1}
+            rowGap={2}
+            width="100%"
+          >
+            {actions || (
+              <>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    minWidth: 80,
+                    flex: 1,
+                  }}
+                  onClick={onPlayOnDesktopClick}
+                >
+                  Play on Desktop
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{
+                    minWidth: 80,
+                    flex: 1,
+                  }}
+                  onClick={onPlayOnWebClick}
+                >
+                  Play on Web
+                </Button>
+              </>
+            )}
+          </Stack>
+        )}
+      </CardActions>
+    </Stack>
+  );
+};
+
 export interface GameCardProps {
   title?: string;
   description?: string;
@@ -21,6 +105,7 @@ export interface GameCardProps {
   onPlayOnDesktopClick?: React.MouseEventHandler<HTMLButtonElement>;
   onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
   actions?: React.ReactNode;
+  contents?: React.ReactNode;
 }
 
 const GameCard: React.FC<
@@ -35,6 +120,7 @@ const GameCard: React.FC<
   onPlayOnDesktopClick,
   onPlayOnWebClick,
   actions,
+  contents,
 }) => {
   const theme = useTheme();
 
@@ -51,67 +137,16 @@ const GameCard: React.FC<
       }}
     >
       <CardMedia component="img" height="auto" image={image} alt={title} />
-      <Stack justifyContent="space-between" flexGrow={1}>
-        <CardContent sx={{ padding: '24px 24px 0' }}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography gutterBottom variant="h3" component="div">
-              {title}
-            </Typography>
-            <Typography
-              gutterBottom
-              variant="body2"
-              component="div"
-              sx={{
-                color: isComingSoon
-                  ? theme.palette.warning.main
-                  : theme.palette.success.main,
-              }}
-            >
-              {isComingSoon && 'coming soon'}
-            </Typography>
-          </Stack>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          {isComingSoon ? (
-            <Button variant="contained" fullWidth disabled color="inherit">
-              Coming Soon
-            </Button>
-          ) : (
-            <Stack
-              direction="row"
-              flexWrap="wrap"
-              columnGap={1}
-              rowGap={2}
-              width="100%"
-            >
-              {actions || (
-                <>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    sx={{ minWidth: 80, flex: 1 }}
-                    onClick={onPlayOnDesktopClick}
-                  >
-                    Play on Desktop
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    sx={{ minWidth: 80, flex: 1 }}
-                    onClick={onPlayOnWebClick}
-                  >
-                    Play on Web
-                  </Button>
-                </>
-              )}
-            </Stack>
-          )}
-        </CardActions>
-      </Stack>
+      {contents || (
+        <CardGameContent
+          title={title}
+          isComingSoon={isComingSoon}
+          description={description}
+          actions={actions}
+          onPlayOnDesktopClick={onPlayOnDesktopClick}
+          onPlayOnWebClick={onPlayOnWebClick}
+        />
+      )}
     </Card>
   );
 };

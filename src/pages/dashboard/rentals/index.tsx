@@ -1,24 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Stack, Typography, FormControl, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
+import { toast } from 'react-toastify';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
 import {
   ALL_RENTAL_API_URL,
   MY_RENTAL_API_URL,
   RENTED_FROM_ME_API_URL,
-  TERMINAL_RENTAL_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
-import { useDispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
 import SearchRental from './SearchRental';
 import InputLabel from '../../../components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
+import useTeminateRental from 'hooks/useTeminateRental';
 
 const DashboardRentalPage = (): JSX.Element => {
-  const dispatch = useDispatch();
   const authToken = window.localStorage.getItem('authentication-token');
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
@@ -95,57 +93,27 @@ const DashboardRentalPage = (): JSX.Element => {
     },
   );
 
-  const terminalRentalById = async (rentalId: string) => {
+  const terminateRentalById = async (rentalId: string) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const terminalRental = useTeminateRental(rentalId);
     try {
-      const result: any = await fetch(
-        `${TERMINAL_RENTAL_API_URL}?${new URLSearchParams({
-          id: rentalId,
-        })}`,
-        {
-          method: 'POST',
-          headers,
-        },
-      );
-      const res = await result.json();
-      if (res.statusCode === 400) {
-        dispatch(
-          openSnackbar({
-            open: true,
-            message: res.body,
-            variant: 'alert',
-            alert: {
-              color: 'error',
-            },
-            close: false,
-          }),
-        );
+      const result: any = await terminalRental();
+      if (!result.ok) {
+        const errMsg = await result.text();
+        toast.error(`Can not terminate the rental: ${errMsg}`, {
+          theme: 'dark',
+        });
         return;
       }
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Terminated success!',
-          variant: 'alert',
-          alert: {
-            color: 'success',
-          },
-          close: false,
-        }),
-      );
-
-      refetch();
+      const res = await result.json();
+      if (res) {
+        toast.success('Terminate rental successfully!', { theme: 'dark' });
+        refetch();
+      }
     } catch (error) {
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: error,
-          variant: 'alert',
-          alert: {
-            color: 'error',
-          },
-          close: false,
-        }),
-      );
+      toast.error(`Can not terminate the rental: ${error}`, {
+        theme: 'dark',
+      });
     }
   };
 
@@ -169,13 +137,14 @@ const DashboardRentalPage = (): JSX.Element => {
       setRentals(data);
       return;
     }
+    const newCurrentValue = currentValue.toLowerCase();
     const newRental: any = data?.filter(
       (rental: any) =>
         rental?.accounts?.player?.address
           .toLowerCase()
-          .includes(currentValue) ||
-        rental?.degen?.id.toLowerCase().includes(currentValue) ||
-        rental?.accounts?.player?.name.toLowerCase().includes(currentValue),
+          .includes(newCurrentValue) ||
+        rental?.degen?.id.toLowerCase().includes(newCurrentValue) ||
+        rental?.accounts?.player?.name.toLowerCase().includes(newCurrentValue),
     );
     setRentals(newRental);
   };
@@ -232,6 +201,8 @@ const DashboardRentalPage = (): JSX.Element => {
                 Non-Owned Sponsorship
               </MenuItem>
               <MenuItem value="direct-renter">Direct Renter</MenuItem>
+              <MenuItem value="terminated">Terminated</MenuItem>
+              <MenuItem value="full-history">Full History</MenuItem>
             </Select>
           </FormControl>
           <SearchRental handleSearch={handleSearch} />
@@ -243,7 +214,7 @@ const DashboardRentalPage = (): JSX.Element => {
           loading={isLoading || isFetching}
           rows={rentals}
           category={category}
-          handleTerminalRental={terminalRentalById}
+          onTerminateRental={terminateRentalById}
           updateRentalName={updateRentalName}
         />
       </Box>

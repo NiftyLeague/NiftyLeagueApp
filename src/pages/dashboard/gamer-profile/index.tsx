@@ -2,12 +2,12 @@ import { useContext, useMemo, createContext } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import { useQuery } from '@apollo/client';
+import _ from 'lodash';
 
-import usePlayerProfile from 'hooks/usePlayerProfile';
+import { useGamerProfile } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useComicsBalance from 'hooks/useComicsBalance';
-import useAllRentals from 'hooks/useAllRentals';
-import useAccount from 'hooks/useAccount';
+import { useProfileAvatarFee } from 'hooks/useGamerProfile';
 
 import SectionSlider from 'components/sections/SectionSlider';
 import ImageProfile from './ImageProfile';
@@ -15,6 +15,7 @@ import RightInfo from './Stats/RightInfo';
 import LeftInfo from './Stats/LeftInfo';
 import TopInfo from './Stats/TopInfo';
 import EmptyState from 'components/EmptyState';
+import BottomInfo from './Stats/BottomInfo';
 
 import { DEGEN_BASE_API_URL } from 'constants/url';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
@@ -27,27 +28,21 @@ const defaultValue: {
   isLoadingProfile: boolean | undefined;
   isLoadingDegens: boolean | undefined;
   isLoadingComics: boolean | undefined;
-  isLoadingRentals: boolean | undefined;
-  isLoadingAccount: boolean | undefined;
 } = {
   isLoadingProfile: true,
   isLoadingDegens: true,
   isLoadingComics: true,
-  isLoadingRentals: true,
-  isLoadingAccount: true,
 };
 export const GamerProfileContext = createContext(defaultValue);
 
 const GamerProfile = (): JSX.Element => {
-  const { profile, error, loadingProfile } = usePlayerProfile();
+  const { profile, error, loadingProfile } = useGamerProfile();
   const { address } = useContext(NetworkContext);
+  const { avatarsAndFee } = useProfileAvatarFee();
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
-
-  const { rentals, loadingRentals } = useAllRentals();
-  const { account, loadingAccount } = useAccount();
 
   const {
     loading: loadingDegens,
@@ -80,6 +75,8 @@ const GamerProfile = (): JSX.Element => {
     [comicsBalance],
   );
 
+  const degenCount = userDegens?.owner?.characterCount || 0;
+
   const renderEmptyProfile = () => {
     return (
       <Grid
@@ -96,65 +93,70 @@ const GamerProfile = (): JSX.Element => {
 
   const renderTopProfile = () => {
     return (
-      <GamerProfileContext.Provider
-        value={{
-          isLoadingProfile: loadingProfile,
-          isLoadingDegens: loadingDegens,
-          isLoadingComics: loadingComics,
-          isLoadingRentals: loadingRentals,
-          isLoadingAccount: loadingAccount,
-        }}
-      >
-        <Grid item container spacing={3}>
-          <Grid item xs={12} md={3.5}>
-            <ImageProfile rentals={rentals} />
-          </Grid>
-          <Grid item xs={12} md={8.5}>
-            <TopInfo account={account} total={profile?.stats?.total} />
-            <hr />
-            <Stack spacing={1}>
-              <Stack>
-                <Typography variant="h3" component="div">
-                  Nifty League Player Stats
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={5}>
-                <LeftInfo total={profile?.stats?.total} />
-                <RightInfo
-                  degenCount={filteredDegens?.length}
-                  comicCount={filteredComics?.length}
-                />
-              </Stack>
-            </Stack>
-          </Grid>
+      <Grid item container spacing={3}>
+        <Grid item xs={12} md={3.5}>
+          <ImageProfile
+            avatar={profile?.avatar}
+            avatarFee={avatarsAndFee?.price}
+            degens={
+              filteredDegens &&
+              avatarsAndFee?.avatars &&
+              _.merge(filteredDegens, avatarsAndFee?.avatars)
+            }
+          />
         </Grid>
-      </GamerProfileContext.Provider>
+        <Grid item xs={12} md={8.5}>
+          <TopInfo profile={profile} walletAddress={address} />
+          <hr />
+          <Stack spacing={1}>
+            <Stack>
+              <Typography variant="h3" component="div">
+                Nifty League Player Stats
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={5}>
+              <LeftInfo data={profile?.stats?.total} />
+              <RightInfo
+                degenCount={degenCount}
+                rentalCount={filteredDegens.length - degenCount}
+                comicCount={filteredComics?.reduce(
+                  (prev, cur) => prev + Number(cur?.balance),
+                  0,
+                )}
+              />
+            </Stack>
+          </Stack>
+        </Grid>
+      </Grid>
     );
   };
 
   const renderBottomProfile = () => {
     return (
-      <Stack gap={sectionSpacing}>
-        <SectionSlider
-          firstSection
-          title="Player Stats by Game"
-        ></SectionSlider>
-      </Stack>
+      <SectionSlider firstSection title="Player Stats by Game" isSlider={false}>
+        <BottomInfo nifty_smashers={profile?.stats?.nifty_smashers} />
+      </SectionSlider>
     );
   };
 
   const renderGamerProfile = () => {
     return (
-      <>
+      <GamerProfileContext.Provider
+        value={{
+          isLoadingProfile: loadingProfile,
+          isLoadingDegens: loadingDegens,
+          isLoadingComics: loadingComics,
+        }}
+      >
         {renderTopProfile()}
         {renderBottomProfile()}
-      </>
+      </GamerProfileContext.Provider>
     );
   };
   return (
-    <Grid container gap={sectionSpacing}>
-      {error && !profile && renderEmptyProfile()}
-      {renderGamerProfile()}
+    <Grid container gap={sectionSpacing} mb="24px">
+      {error && !profile && !loadingProfile && renderEmptyProfile()}
+      {(profile || loadingProfile) && renderGamerProfile()}
     </Grid>
   );
 };

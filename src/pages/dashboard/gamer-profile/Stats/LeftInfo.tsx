@@ -2,55 +2,55 @@ import { useContext, useMemo } from 'react';
 import { Stack } from '@mui/material';
 import { getHours } from 'date-fns';
 
-import { ProfileTotal } from 'types/account';
+import { ProfileTotal, ProfileNiftySmsher } from 'types/account';
 import { formatNumberToDisplay } from 'utils/numbers';
 
 import Item from './Item';
 import { GamerProfileContext } from '../index';
 
 interface LeftInfoProps {
-  total: ProfileTotal | undefined;
+  data: ProfileTotal | ProfileNiftySmsher | undefined;
 }
 
-const LeftInfo = ({ total }: LeftInfoProps): JSX.Element => {
+const LeftInfo = ({ data }: LeftInfoProps): JSX.Element => {
   const leftDataMapper: {
     label: string;
     value: string | number | undefined;
   }[] = useMemo(() => {
     return [
       {
-        label: 'Rank',
-        value: `#${total?.rank}`,
+        label: 'XP Rank',
+        value: data?.rank || 0,
       },
       {
         label: 'XP',
-        value: formatNumberToDisplay(total?.xp || 0.0),
+        value: Math.round(data?.xp || 0),
       },
       {
         label: 'Matches',
-        value: total?.matches,
+        value: data?.matches,
       },
       {
         label: 'Wins',
-        value: total?.wins,
+        value: data?.wins,
       },
       {
         label: 'Win Rate',
         value: `${
-          (total?.wins &&
-            total?.matches &&
-            formatNumberToDisplay((total?.wins / total?.matches) * 100)) ||
+          (data?.wins &&
+            data?.matches &&
+            formatNumberToDisplay((data?.wins / data?.matches) * 100)) ||
           0
         }%`,
       },
       {
         label: 'Time Played',
         value: `${
-          (total?.time_played && getHours(new Date(total?.time_played))) || 0
+          (data?.time_played && getHours(new Date(data?.time_played))) || 0
         } Hours`,
       },
     ];
-  }, [total]);
+  }, [data]);
 
   const { isLoadingProfile } = useContext(GamerProfileContext);
   return (

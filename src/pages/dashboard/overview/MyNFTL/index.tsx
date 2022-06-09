@@ -22,7 +22,7 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
-import useGameBalance from 'hooks/useGameBalance';
+import useAccount from 'hooks/useAccount';
 // import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
@@ -44,7 +44,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   // const { profile, error: profileError } = usePlayerProfile();
-  const { gameBal, error: accError } = useGameBalance(refreshAccKey);
+  const { account, error: accError } = useAccount(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
     address,
     BALANCE_INTERVAL,
@@ -309,7 +309,11 @@ const MyNFTL = (): JSX.Element => {
               primary={`${
                 accError
                   ? 'Error fetching balance'
-                  : `${formatNumberToDisplay(gameBal) || '0.00'} NFTL`
+                  : `${
+                      account
+                        ? formatNumberToDisplay(account?.balance!)
+                        : '0.00'
+                    } NFTL`
               }`}
               isLoading={loading}
               customStyle={{
@@ -340,7 +344,7 @@ const MyNFTL = (): JSX.Element => {
                       }}
                     >
                       <WithdrawForm
-                        balance={gameBal}
+                        balance={account?.balance! || 0}
                         onWithdrawEarnings={handleWithdrawNFTL}
                       />
                     </DialogContent>
