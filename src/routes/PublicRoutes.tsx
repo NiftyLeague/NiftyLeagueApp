@@ -11,7 +11,12 @@ const NiftyLeagueAppPage = Loadable(
 );
 const LeaderboardPage = Loadable(lazy(() => import('pages/leaderboard')));
 const GamesPage = Loadable(lazy(() => import('pages/games')));
-const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
+const PlayOnGamePage = Loadable(
+  lazy(() => import('pages/games/PlayOnGame/SmashersGame')),
+);
+const WenGamePage = Loadable(
+  lazy(() => import('pages/games/PlayOnGame/WenGame')),
+);
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 
@@ -52,6 +57,10 @@ const PublicRoutes = {
     {
       path: '/games/play-on-game',
       element: <PlayOnGamePage />,
+    },
+    {
+      path: '/games/play-on-game/wen-game',
+      element: <WenGamePage />,
     },
     {
       path: '/verification',

@@ -14,6 +14,7 @@ import {
 const CardGameContent = ({
   title,
   isComingSoon,
+  required,
   description,
   actions,
   onPlayOnDesktopClick,
@@ -44,6 +45,17 @@ const CardGameContent = ({
             {isComingSoon && 'coming soon'}
           </Typography>
         </Stack>
+        {required && (
+          <Typography
+            variant="body2"
+            gutterBottom
+            sx={{
+              color: theme.palette.warning.main,
+            }}
+          >
+            {required}
+          </Typography>
+        )}
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
@@ -97,6 +109,7 @@ const CardGameContent = ({
 
 export interface GameCardProps {
   title?: string;
+  required?: string;
   description?: string;
   onlineCounter?: number;
   image?: string;
@@ -112,6 +125,7 @@ const GameCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<GameCardProps>>
 > = ({
   title,
+  required,
   description,
   onlineCounter,
   image,
@@ -140,6 +154,7 @@ const GameCard: React.FC<
       {contents || (
         <CardGameContent
           title={title}
+          required={required}
           isComingSoon={isComingSoon}
           description={description}
           actions={actions}
