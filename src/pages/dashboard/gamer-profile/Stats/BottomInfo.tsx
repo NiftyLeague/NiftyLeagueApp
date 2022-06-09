@@ -72,7 +72,7 @@ const BottomInfo = ({ nifty_smashers }: BottomInfoProps): JSX.Element => {
               <Button
                 color="secondary"
                 component={Link}
-                href="/leaderboard"
+                href="/leaderboards"
                 target="_blank"
               >
                 View Leaderboards
