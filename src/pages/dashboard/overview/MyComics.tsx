@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useMemo, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import ComicCard from 'components/cards/ComicCard';
@@ -69,6 +69,7 @@ const MyComics = (): JSX.Element => {
   return (
     <>
       <SectionSlider
+        isSlider={filteredComics.length > 0}
         firstSection
         title="My Comics"
         sliderSettingsOverride={settings}
@@ -107,11 +108,13 @@ const MyComics = (): JSX.Element => {
             </Box>
           ))
         ) : (
-          <EmptyState
-            message="No Comics found. Please check your address or go purchase some if you have not done so already!"
-            buttonText="Buy Comics"
-            onClick={handleBuyComics}
-          />
+          <Stack justifyContent="center" alignItems="center">
+            <EmptyState
+              message="No Comics found. Please check your address or go purchase some if you have not done so already!"
+              buttonText="Buy Comics"
+              onClick={handleBuyComics}
+            />
+          </Stack>
         )}
       </SectionSlider>
       <ViewComicDialog

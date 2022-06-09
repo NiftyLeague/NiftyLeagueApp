@@ -1,6 +1,7 @@
 // project imports
 import MainLayout from 'components/layout/MainLayout';
 import Loadable from 'components/Loadable';
+import DegenTraitsDetailsPage from 'pages/degen-traits-details';
 import { lazy } from 'react';
 import GuestGuard from 'utils/route-guard/GuestGuard';
 
@@ -8,6 +9,7 @@ import GuestGuard from 'utils/route-guard/GuestGuard';
 const NiftyLeagueAppPage = Loadable(
   lazy(() => import('pages/nifty-league-app')),
 );
+const LeaderboardPage = Loadable(lazy(() => import('pages/leaderboard')));
 const GamesPage = Loadable(lazy(() => import('pages/games')));
 const PlayOnGamePage = Loadable(lazy(() => import('pages/games/PlayOnGame')));
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
@@ -28,8 +30,16 @@ const PublicRoutes = {
       element: <NiftyLeagueAppPage />,
     },
     {
+      path: '/leaderboards',
+      element: <LeaderboardPage />,
+    },
+    {
       path: '/degen-rentals',
       element: <DegenRentalsPage />,
+    },
+    {
+      path: '/degens/:id',
+      element: <DegenTraitsDetailsPage />,
     },
     {
       path: '/degen-rentals/:walletAddress',

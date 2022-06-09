@@ -69,7 +69,6 @@ function useFetch<T = unknown>(
           textOnly ? await response.text() : await response.json()
         ) as T;
         cache.current[url] = data;
-        if (cancelRequest.current) return;
 
         dispatch({ type: 'fetched', payload: data });
       } catch (error) {

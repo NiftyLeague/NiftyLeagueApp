@@ -14,6 +14,7 @@ import {
   GridRenderCellParams,
   GridCallbackDetails,
   GridColumnVisibilityModel,
+  GridSortModel,
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useMemo } from 'react';
@@ -32,7 +33,7 @@ interface Props {
   rows: Rentals[];
   loading: boolean;
   category: RentalType;
-  handleTerminalRental: (rentalId: string) => void;
+  onTerminateRental: (rentalId: string) => void;
   updateRentalName: (name: string, id: string) => void;
 }
 
@@ -40,18 +41,19 @@ const MyRentalsDataGrid = ({
   rows,
   loading,
   category,
-  handleTerminalRental,
+  onTerminateRental,
   updateRentalName,
 }: Props): JSX.Element => {
   const { palette } = useTheme();
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
-  const [isTerminateRentalModalOpen, setIsTerminalRentalModalOpen] =
+  const [isTerminateRentalModalOpen, setIsTerminateRentalModalOpen] =
     useState(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [selectedDegen, setSelectedDegen] = useState();
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const [sort, setSort] = useState<GridSortModel>([]);
 
   const getColumnVisibilityModel = localStorage.getItem(
     RENTAL_COLUMN_VISIBILITY,
@@ -80,11 +82,31 @@ const MyRentalsDataGrid = ({
         return rentals.filter((rental) => rental.category === 'recruited');
       case 'direct-renter':
         return rentals.filter((rental) => rental.category === 'direct-renter');
+      case 'terminated':
+        return rentals.filter((rental) => rental.action === true);
       case 'all':
       default:
         return rentals;
     }
   }, [rentals, category]);
+
+  const sortedRows = useMemo(() => {
+    if (!sort || !sort.length) {
+      return filteredRows;
+    }
+
+    return filteredRows.sort((a, b) => {
+      const { field, sort: direction } = sort[0];
+      const aValue = a[field];
+      const bValue = b[field];
+
+      if (direction === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      }
+
+      return aValue > bValue ? -1 : 1;
+    });
+  }, [filteredRows, sort]);
 
   const handleOpenNickname = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
@@ -98,13 +120,13 @@ const MyRentalsDataGrid = ({
 
   const handleOpenTerminateRental = (params: GridRenderCellParams) => {
     setSelectedRowForEditing(params.row);
-    setIsTerminalRentalModalOpen(true);
+    setIsTerminateRentalModalOpen(true);
   };
 
   const handleConfirmTerminateRental = () => {
     if (selectedRowForEditing) {
-      handleTerminalRental(selectedRowForEditing.rentalId);
-      setIsTerminalRentalModalOpen(false);
+      onTerminateRental(selectedRowForEditing.rentalId);
+      setIsTerminateRentalModalOpen(false);
     }
   };
 
@@ -123,6 +145,10 @@ const MyRentalsDataGrid = ({
     });
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
+  };
+
+  const handleSortColumn = (model: GridSortModel) => {
+    setSort(model);
   };
 
   const commonColumnProp = {
@@ -322,7 +348,7 @@ const MyRentalsDataGrid = ({
     <>
       <DataGrid
         loading={loading}
-        rows={filteredRows}
+        rows={sortedRows}
         columns={columns}
         checkboxSelection={false}
         disableSelectionOnClick={true}
@@ -332,6 +358,7 @@ const MyRentalsDataGrid = ({
         columnVisibilityModel={columnVisibilityModel}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         onColumnVisibilityModelChange={handleColumnVisibilityChange}
+        onSortModelChange={handleSortColumn}
         sx={{
           '& .MuiDataGrid-row:hover': {
             '& button': {
@@ -350,10 +377,10 @@ const MyRentalsDataGrid = ({
           rental={selectedRowForEditing}
         />
       </Dialog>
-      {/* Terminal Rental Dialog */}
+      {/* Terminate Rental Dialog */}
       <Dialog
         open={isTerminateRentalModalOpen}
-        onClose={() => setIsTerminalRentalModalOpen(false)}
+        onClose={() => setIsTerminateRentalModalOpen(false)}
       >
         <DialogContent>
           <Typography variant="h4" align="center">
@@ -369,7 +396,7 @@ const MyRentalsDataGrid = ({
               Terminate Rental
             </Button>
             <Button
-              onClick={() => setIsTerminalRentalModalOpen(false)}
+              onClick={() => setIsTerminateRentalModalOpen(false)}
               fullWidth
             >
               Cancel

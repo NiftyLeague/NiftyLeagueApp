@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Skeleton,
+  Stack,
+  Typography,
+  SxProps,
+} from '@mui/material';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import {
   TRAIT_KEY_VALUE_MAP,
@@ -17,7 +25,8 @@ export interface ViewTraitsContentDialogProps {
   displayName?: string;
   onRent?: () => void;
   onClaim?: () => void;
-  onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  degenImageSx?: SxProps<{}>;
 }
 
 const ViewTraitsContentDialog = ({
@@ -29,6 +38,7 @@ const ViewTraitsContentDialog = ({
   onRent,
   onClaim,
   onClose,
+  degenImageSx,
 }: ViewTraitsContentDialogProps) => {
   const { traitList } = character;
 
@@ -40,7 +50,9 @@ const ViewTraitsContentDialog = ({
     <Grid container>
       <Grid item xs={12} sm={12} md={6} sx={{ py: 1, px: 2 }}>
         <Stack direction="row" justifyContent="center">
-          {degen?.id && <DegenImage tokenId={degen.id} />}
+          {degen?.id && (
+            <DegenImage sx={{ ...degenImageSx }} tokenId={degen.id} />
+          )}
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           {!traitList.length ? (
@@ -124,9 +136,11 @@ const ViewTraitsContentDialog = ({
             <Button variant="contained" fullWidth onClick={onRent || onClaim}>
               {onRent ? 'Rent Degen' : 'Claim Degen'}
             </Button>
-            <Button fullWidth onClick={onClose}>
-              Close
-            </Button>
+            {onClose && (
+              <Button fullWidth onClick={onClose}>
+                Close
+              </Button>
+            )}
           </Stack>
         </Stack>
       </Grid>

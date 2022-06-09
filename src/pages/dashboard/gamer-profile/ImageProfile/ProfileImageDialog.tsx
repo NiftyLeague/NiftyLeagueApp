@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { IconButton, Box } from '@mui/material';
+import { IconButton, Box, Typography, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { toast } from 'react-toastify';
 
 import {
   Dialog,
@@ -11,12 +12,17 @@ import {
 } from 'components/dialog';
 import SectionSlider from 'components/sections/SectionSlider';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-
-import { Rentals } from 'types/rentals';
 import SearchRental from 'pages/dashboard/rentals/SearchRental';
+import EmptyState from 'components/EmptyState';
+import DegenInternalImage from './DegenInternalImage';
+
+import { Degen } from 'types/degens';
+import { UPDATE_PROFILE_AVATAR_API } from 'constants/url';
 
 interface ProfileImageDialogProps {
-  rentals: Rentals[] | undefined;
+  degens: Degen[] | undefined;
+  onChangeAvatar: (degenId: string) => void;
+  avatarFee?: number;
 }
 
 const settings = {
@@ -27,29 +33,56 @@ const settings = {
   swipe: false,
 };
 
-const ProfileImageContent = ({ handleSearch, rentalsInternal }) => {
+const ProfileImageContent = ({
+  onSearch,
+  onChangeAvatar,
+  degensInternal,
+  avatarFee,
+}) => {
   const [, setIsOpen] = useContext(DialogContext);
 
-  const handleSelectedDegen = (rental) => {
-    // TODO: Waiting the api to update profile image.
-    setIsOpen(false);
+  const handleSelectedDegen = async (degen: Degen) => {
+    const authToken = window.localStorage.getItem('authentication-token');
+    if (!degen?.id && !authToken) {
+      return;
+    }
+    try {
+      const response = await fetch(UPDATE_PROFILE_AVATAR_API, {
+        headers: { authorizationToken: authToken as string },
+        method: 'POST',
+        body: JSON.stringify({
+          avatar: degen?.id,
+        }),
+      });
+      if (!response.ok) {
+        const errMsg = await response.text();
+        toast.error(`Can not update the profile avatar: ${errMsg}`, {
+          theme: 'dark',
+        });
+        return;
+      }
+      toast.success('Update Profile Avatar Successful!', { theme: 'dark' });
+      onChangeAvatar(degen?.id);
+      setIsOpen(false);
+    } catch (error) {
+      toast.error(`Can not update the profile avatar: ${error}`, {
+        theme: 'dark',
+      });
+    }
   };
 
-  return (
-    <SectionSlider
-      sliderSettingsOverride={settings}
-      firstSection
-      title="Choose a new profile degen"
-      actions={
-        <SearchRental
-          placeholder="Search degen by token # or name"
-          handleSearch={handleSearch}
-        />
-      }
-    >
-      {rentalsInternal.map((rental) => (
+  const renderDegenImage = (degen: Degen) => {
+    if (degen?.url) {
+      return <DegenInternalImage degen={degen} />;
+    }
+    return <DegenImage tokenId={degen?.id} />;
+  };
+
+  const renderDegens = () => {
+    if (degensInternal.length > 0) {
+      return degensInternal.map((degen) => (
         <Box
-          key={rental?.degen?.id}
+          key={degen?.id}
           sx={{
             overflow: 'hidden',
             cursor: 'pointer',
@@ -61,37 +94,73 @@ const ProfileImageContent = ({ handleSearch, rentalsInternal }) => {
               transition: 'transform .5s ease',
             },
           }}
-          onClick={() => handleSelectedDegen(rental)}
+          onClick={() => handleSelectedDegen(degen)}
         >
-          <DegenImage tokenId={rental?.degen?.id} />
+          {renderDegenImage(degen)}
         </Box>
-      ))}
+      ));
+    }
+    return (
+      <Stack justifyContent="center" alignItems="center">
+        <EmptyState message="No DEGENs found." />
+      </Stack>
+    );
+  };
+
+  return (
+    <SectionSlider
+      isSlider={degensInternal.length > 0}
+      sliderSettingsOverride={settings}
+      firstSection
+      title={
+        <Stack flex={1} gap={1}>
+          <Typography variant="h2">Choose a new profile degen</Typography>
+          <Typography variant="h5" component="p">
+            There is a {avatarFee} NFTL fee for changing your gamer profile
+            avatar
+          </Typography>
+        </Stack>
+      }
+      actions={
+        <SearchRental
+          placeholder="Search degen by token # or name"
+          handleSearch={onSearch}
+        />
+      }
+    >
+      {renderDegens()}
     </SectionSlider>
   );
 };
 
 const ProfileImageDialog = ({
-  rentals,
+  degens,
+  onChangeAvatar,
+  avatarFee,
 }: ProfileImageDialogProps): JSX.Element => {
-  const [rentalsInternal, setRentalsInternal] = useState<Rentals[]>([]);
+  const [degensInternal, setDegensInternal] = useState<Degen[]>([]);
   const theme = useTheme();
 
   useEffect(() => {
-    if (rentals) {
-      setRentalsInternal(rentals);
+    if (degens) {
+      setDegensInternal(degens);
     }
-  }, [rentals]);
+  }, [degens]);
 
   const handleSearch = (currentValue: string) => {
-    const newRental: any = rentals?.filter(
-      (rental: any) =>
-        rental?.accounts?.player?.address
-          .toLowerCase()
-          .includes(currentValue) ||
-        rental?.degen?.id.toLowerCase().includes(currentValue) ||
-        rental?.accounts?.player?.name.toLowerCase().includes(currentValue),
+    if (currentValue?.trim() === '' && degens) {
+      setDegensInternal(degens);
+      return;
+    }
+    const newCurrentValue = currentValue.toLowerCase();
+    const newDegen: Degen[] | undefined = degens?.filter(
+      (degen: Degen) =>
+        degen?.id.toLowerCase().includes(newCurrentValue) ||
+        degen?.name.toLowerCase().includes(newCurrentValue),
     );
-    setRentalsInternal(newRental);
+    if (newDegen) {
+      setDegensInternal(newDegen);
+    }
   };
 
   return (
@@ -127,8 +196,10 @@ const ProfileImageDialog = ({
         }}
       >
         <ProfileImageContent
-          handleSearch={handleSearch}
-          rentalsInternal={rentalsInternal}
+          onSearch={handleSearch}
+          onChangeAvatar={onChangeAvatar}
+          degensInternal={degensInternal}
+          avatarFee={avatarFee}
         />
       </DialogContent>
     </Dialog>

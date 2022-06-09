@@ -15,28 +15,18 @@ export interface Account {
 export interface Profile {
   id: string;
   updated_at: number;
+  avatar?: ProfileAvatar;
   stats: {
-    nifty_smasher: {
-      hits: number;
-      kills: number;
-      wins: number;
-      earnings: number;
-      suicides: number;
-      round_wins: number;
-      xp: number;
-      matchs: number;
-      time_played: number;
-      deaths: number;
-      rounds: number;
-      rental_earnings: number;
-      rental_earnings_as_renter: number;
-      rental_earnings_as_owner: number;
-      rank: number;
-      rank_xp_previous: number;
-      rank_xp_next: number;
-    };
+    nifty_smashers: ProfileNiftySmsher;
     total: ProfileTotal;
   };
+  name: string;
+  name_cased: string;
+}
+
+export interface ProfileAvatar {
+  id: string;
+  url: string;
 }
 
 export interface ProfileTotal {
@@ -53,6 +43,15 @@ export interface ProfileTotal {
   rank: number;
   rank_xp_previous: number;
   rank_xp_next: number;
+}
+
+export interface ProfileNiftySmsher extends ProfileTotal {
+  hits: number;
+  kills: number;
+  suicides: number;
+  round_wins: number;
+  deaths: number;
+  rounds: number;
 }
 
 export interface WithdrawalHistory {

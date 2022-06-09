@@ -1,14 +1,17 @@
-import React from 'react';
 import { Box, LinearProgress, useTheme } from '@mui/material';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 
-import { ProfileTotal } from 'types/account';
+import { ProfileTotal, ProfileNiftySmsher } from 'types/account';
 
 interface ProgressGamerProps {
-  total: ProfileTotal;
+  data: ProfileTotal | ProfileNiftySmsher;
+  size?: 'sm' | 'md';
 }
 
-const ProgressGamer = ({ total }: ProgressGamerProps): JSX.Element => {
+const ProgressGamer = ({
+  data,
+  size = 'md',
+}: ProgressGamerProps): JSX.Element => {
   const theme = useTheme();
   return (
     <Box
@@ -16,8 +19,8 @@ const ProgressGamer = ({ total }: ProgressGamerProps): JSX.Element => {
         position: 'relative',
         '&:before': {
           position: 'absolute',
-          width: '54px',
-          height: '54px',
+          width: size === 'md' ? '54px' : '34px',
+          height: size === 'md' ? '54px' : '34px',
           borderRadius: '50%',
           display: 'flex',
           justifyContent: 'center',
@@ -28,20 +31,21 @@ const ProgressGamer = ({ total }: ProgressGamerProps): JSX.Element => {
           margin: 'auto',
           background: theme.palette.primary.main,
           content: `'${
-            total?.xp > total?.rank_xp_previous ? total?.rank + 1 : total?.rank
+            (data?.xp > data?.rank_xp_previous ? data?.rank + 1 : data?.rank) ||
+            0
           }'`,
           zIndex: 1,
           fontWeight: 'bold',
-          fontSize: '18px',
+          fontSize: size === 'md' ? '18px' : '14px',
         },
       }}
     >
       <LinearProgress
         variant="determinate"
         color="primary"
-        value={(total?.xp / total?.rank_xp_next) * 100}
+        value={(data?.xp / data?.rank_xp_next) * 100}
         sx={{
-          height: '25px',
+          height: size === 'md' ? '25px' : '14px',
           [`&.${linearProgressClasses.colorPrimary}`]: {
             backgroundColor: theme.palette.grey[400],
           },
