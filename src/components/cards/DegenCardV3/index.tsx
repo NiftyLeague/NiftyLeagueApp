@@ -11,11 +11,18 @@ import {
   IconButton as IconButtonMui,
 } from '@mui/material';
 import { toast } from 'react-toastify';
+
+import { downloadDegenAsZip } from 'utils/file';
+import { Degen, DegenViewType } from 'types/degens';
+
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegenImage from './DegenImage';
-import { downloadDegenAsZip } from 'utils/file';
+import DegenTraits from 'components/degens/DegenTraits';
+import DegenAddWhitelist from 'components/degens/DegenAddWhitelist';
 import DegenRent from 'components/degens/DegenRent';
+import DegenInGameEarning from 'components/degens/DegenInGameEarning';
 
+import { ReactComponent as NiffyIcon } from 'assets/images/icons/niffy-icon.svg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -24,9 +31,6 @@ import AltRouteIcon from '@mui/icons-material/AltRoute';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { ReactComponent as NiffyIcon } from 'assets/images/icons/niffy-icon.svg';
-import { Degen, DegenViewType } from 'types/degens';
-import DegenTraits from 'components/degens/DegenTraits';
 
 export interface DegenCardProps {
   sx?: SxProps<Theme>;
@@ -41,6 +45,7 @@ export interface DegenCardProps {
   onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
   onOpenRentDialog?: React.MouseEventHandler<HTMLDivElement>;
   onOpenTraitsDialog?: React.MouseEventHandler<HTMLDivElement>;
+  onOpenAddWhitelistDialog?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const DegenCard: React.FC<
@@ -55,6 +60,7 @@ const DegenCard: React.FC<
     onEnableDisable,
     onOpenRentDialog,
     onOpenTraitsDialog,
+    onOpenAddWhitelistDialog,
   }): JSX.Element => {
     const authToken = window.localStorage.getItem('authentication-token');
     const { palette, customShadows } = useTheme();
@@ -82,6 +88,14 @@ const DegenCard: React.FC<
       setView('traits');
     }, []);
 
+    const handleClickAddWhiteList = useCallback(() => {
+      setView('addWhiteList');
+    }, []);
+
+    const handleClickInGameEarning = useCallback(() => {
+      setView('inGameEarning');
+    }, []);
+
     switch (view) {
       case 'rent':
         return (
@@ -97,6 +111,22 @@ const DegenCard: React.FC<
             degen={degen}
             onBack={handleReset}
             onFullScreen={onOpenTraitsDialog}
+          />
+        );
+      case 'addWhiteList':
+        return (
+          <DegenAddWhitelist
+            degen={degen}
+            onBack={handleReset}
+            onFullScreen={handleClickInGameEarning}
+          />
+        );
+      case 'inGameEarning':
+        return (
+          <DegenInGameEarning
+            degen={degen}
+            onBack={handleReset}
+            onFullScreen={onOpenAddWhitelistDialog}
           />
         );
       case 'default':
@@ -175,6 +205,9 @@ const DegenCard: React.FC<
                 <FooterDegens
                   onEnableDisable={onEnableDisable}
                   isEnabled={isEnabled}
+                  onViewTraits={handleClickTraits}
+                  onViewAddWhiteList={handleClickAddWhiteList}
+                  onViewInGameEarning={handleClickInGameEarning}
                 />
               ) : (
                 <FooterDegenRentals
@@ -271,14 +304,20 @@ const FooterDegenRentals = ({ price, onViewTraits }) => {
   );
 };
 
-const FooterDegens = ({ onEnableDisable, isEnabled }) => {
+const FooterDegens = ({
+  onEnableDisable,
+  isEnabled,
+  onViewTraits,
+  onViewAddWhiteList,
+  onViewInGameEarning,
+}) => {
   const { palette } = useTheme();
   return (
     <>
-      <IconButton label="Traits">
+      <IconButton label="Traits" onClick={onViewTraits}>
         <ViewListIcon />
       </IconButton>
-      <IconButton label="Game Earnings">
+      <IconButton label="Game Earnings" onClick={onViewInGameEarning}>
         <AltRouteIcon />
       </IconButton>
       <IconButton onClick={onEnableDisable} label="Enable Rentals">
@@ -288,7 +327,7 @@ const FooterDegens = ({ onEnableDisable, isEnabled }) => {
           <LockIcon sx={{ fill: palette.success.main }} />
         )}
       </IconButton>
-      <IconButton label="Whitelist">
+      <IconButton onClick={onViewAddWhiteList} label="Whitelist">
         <GroupAddIcon />
       </IconButton>
       <IconButton label="Niffy">

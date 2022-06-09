@@ -5,7 +5,7 @@ import ImagePlaceholder from 'components/cards/Skeleton/ImagePlaceholder';
 import UnavailableImg from 'assets/images/unavailable-image.png';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 
-const IMAGE_HEIGHT = 320;
+const IMAGE_HEIGHT = 294;
 
 const DegenImage = memo(
   ({
@@ -50,12 +50,7 @@ const DegenImage = memo(
       };
     }
 
-    return (
-      <CardMedia
-        {...setting}
-        sx={{ width: imageHeight ? '32px !important' : '100%' }}
-      />
-    );
+    return <CardMedia {...setting} sx={{ borderRadius: '4px' }} />;
   },
 );
 

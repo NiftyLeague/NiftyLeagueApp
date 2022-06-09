@@ -52,4 +52,9 @@ export interface GetDegenResponse {
   updated_at: number;
 }
 
-export type DegenViewType = 'rent' | 'default' | 'traits';
+export type DegenViewType =
+  | 'rent'
+  | 'default'
+  | 'traits'
+  | 'addWhiteList'
+  | 'inGameEarning';
