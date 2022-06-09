@@ -9,6 +9,7 @@ import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
+import ArcadeGameList from 'pages/games/ArcadeGameList';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
@@ -117,6 +118,16 @@ const NiftyLeagueAppPage = () => {
           spacing={cardSpacing}
         >
           <GameList />
+        </Grid>
+      </SectionSlider>
+      <SectionSlider isSlider={false} title="Arcade Games">
+        <Grid
+          container
+          flexDirection="row"
+          flexWrap="wrap"
+          spacing={cardSpacing}
+        >
+          <ArcadeGameList />
         </Grid>
       </SectionSlider>
       <SectionSlider
