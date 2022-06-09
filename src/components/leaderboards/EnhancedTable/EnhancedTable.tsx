@@ -14,6 +14,7 @@ import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
 import { fetchScores } from 'utils/leaderboard';
 import makeStyles from '@mui/styles/makeStyles';
+import './custom.css';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -84,8 +85,8 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
           <CircularProgress />
         </Box>
       ) : (
-        <Paper sx={{ width: '100%', overflowX: 'auto', mb: 2 }}>
-          <TableContainer sx={{ minWidth: '850px' }}>
+        <Paper>
+          <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
@@ -134,7 +135,6 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             </Table>
           </TableContainer>
           <TablePagination
-            sx={{ minWidth: '850px' }}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={count}
