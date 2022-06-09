@@ -54,15 +54,17 @@ const HeaderDegen = ({
           alignContent="flex-start"
           alignItems="center"
           flex={1}
-          gap={2}
+          gap={isDialog ? 4 : 2}
           sx={{
-            '& img': {
+            '& img, & video': {
               width: '24px',
             },
           }}
         >
           {degen?.id && <DegenImage imageHeight={24} tokenId={degen?.id} />}
-          <Typography variant="paragraphP2XXXSmall">
+          <Typography
+            variant={isDialog ? 'paragraphP2XSmall' : 'paragraphP2XXXSmall'}
+          >
             {degen?.name || 'No Name Degen'}
           </Typography>
         </Stack>
@@ -74,7 +76,7 @@ const HeaderDegen = ({
           }
           target="_blank"
           rel="nofollow"
-          variant="paragraphXXSmall"
+          variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
           color={palette.text.primary}
         >
           {`#${degen?.id}`}

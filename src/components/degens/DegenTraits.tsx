@@ -96,8 +96,17 @@ const DegenTraits = ({
     12,
   );
 
+  let degenContainerStyle = {};
+  if (isDialog) {
+    degenContainerStyle = {
+      gap: 6,
+      minHeight: '652px',
+      padding: '24px',
+    };
+  }
+
   return (
-    <DegenContainer>
+    <DegenContainer sx={degenContainerStyle}>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}
@@ -107,22 +116,27 @@ const DegenTraits = ({
       />
       {!dataForCurrentPage.length
         ? [...Array(10)].map(() => (
-            <Stack gap={4} key={uuidv4()}>
-              <Stack direction="row" justifyContent="space-between">
-                <Skeleton animation="wave" width={60} />
-                <Skeleton animation="wave" width={40} />
-              </Stack>
+            <Stack
+              key={uuidv4()}
+              direction="row"
+              justifyContent="space-between"
+            >
+              <Skeleton animation="wave" width={60} />
+              <Skeleton animation="wave" width={40} />
             </Stack>
           ))
         : dataForCurrentPage.map(({ label, value }) => (
-            <Stack gap={4} key={`${label}-${value}`}>
+            <Stack key={`${label}-${value}`}>
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="paragraphXXSmall" fontWeight="500">
+                <Typography
+                  variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
+                  fontWeight="500"
+                >
                   {label}
                 </Typography>
                 <Typography
-                  variant="paragraphXXSmall"
-                  sx={{ textDecoration: 'underline ' }}
+                  variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
+                  sx={{ textDecoration: 'underline' }}
                 >
                   {value}
                 </Typography>
