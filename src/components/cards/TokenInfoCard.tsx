@@ -2,8 +2,6 @@
 import { Box, Grid, Skeleton, Typography } from '@mui/material';
 import { GenericCardProps } from 'types';
 
-// ============================|| HOVER DATA CARD ||============================ //
-
 interface TokenInfoCardProps extends GenericCardProps {
   customStyle?: React.CSSProperties;
   actions?: React.ReactNode;
