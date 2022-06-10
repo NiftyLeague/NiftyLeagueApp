@@ -234,8 +234,8 @@ const MyNFTL = (): JSX.Element => {
               direction="row"
               alignItems="center"
               spacing={1}
-              paddingX={1}
-              paddingY={0.5}
+              paddingX={{ xl: 1, xs: 3 }}
+              paddingY={{ xl: 0.5, xs: 1.5 }}
             >
               <Button
                 fullWidth
