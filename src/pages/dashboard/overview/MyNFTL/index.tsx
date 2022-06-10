@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -20,6 +21,7 @@ import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import { NetworkContext } from 'NetworkProvider';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
+import useArcadeBalance from 'hooks/useArcadeBalance';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
 import useAccount from 'hooks/useAccount';
@@ -35,11 +37,14 @@ import { WITHDRAW_NFTL_SIGN, WITHDRAW_NFTL_REFRESH } from 'constants/url';
 import DepositForm from './DepositForm';
 import RefreshBalanceForm from './RefreshBalanceForm';
 import WithdrawForm from './WithdrawForm';
+import TokenInfoCard from 'components/cards/TokenInfoCard';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
   const auth = window.localStorage.getItem('authentication-token');
+  const navigate = useNavigate();
   const { address, writeContracts, tx } = useContext(NetworkContext);
+  const { arcadeBalance, loading: arcadeBalanceLoading } = useArcadeBalance();
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
@@ -177,6 +182,14 @@ const MyNFTL = (): JSX.Element => {
     }
   }, [auth]);
 
+  const handleBuyArcadeTokens = () => {
+    // TODO: Integrate Buy Arcade Tokens here
+  };
+
+  const handlePlayArcade = useCallback(() => {
+    navigate('/games');
+  }, [navigate]);
+
   return (
     <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
@@ -202,8 +215,41 @@ const MyNFTL = (): JSX.Element => {
             </Stack>
           }
         >
-          My NFTL
+          My Tokens
         </SectionTitle>
+      </Grid>
+      <Grid item xs={12}>
+        <TokenInfoCard
+          title="Arcade Token Balance"
+          secondary={`${Number(arcadeBalance ?? '0').toLocaleString()} Tokens`}
+          isLoading={arcadeBalanceLoading}
+          customStyle={{
+            backgroundColor: theme.palette.background.default,
+            border: '1px solid',
+            borderColor: theme.palette.grey[800],
+            borderRadius: '8px',
+          }}
+          actions={
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              paddingX={{ xl: 1, xs: 3 }}
+              paddingY={{ xl: 0.5, xs: 1.5 }}
+            >
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleBuyArcadeTokens}
+              >
+                Buy Tokens
+              </Button>
+              <Button fullWidth variant="outlined" onClick={handlePlayArcade}>
+                Play Arcade
+              </Button>
+            </Stack>
+          }
+        />
       </Grid>
       {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>

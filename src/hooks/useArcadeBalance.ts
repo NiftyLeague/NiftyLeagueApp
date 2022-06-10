@@ -16,8 +16,10 @@ import { ARCADE_CONTRACT } from 'constants/contracts';
 
 export default function useArcadeBalance(): {
   arcadeBalance: string;
+  loading: boolean;
 } {
   const [balance, setBalance] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
   const { address, readContracts } = useContext(NetworkContext);
 
   useEffect(() => {
@@ -26,11 +28,13 @@ export default function useArcadeBalance(): {
         const value: BigNumber = await readContracts[ARCADE_CONTRACT].balanceOf(
           address,
         );
-        setBalance(formatBalance(value, 18, 6));
+        setBalance(formatBalance(value));
+        setLoading(false);
       }
     }
     if (!address) {
       setBalance('');
+      setLoading(false);
     }
 
     getArcadeBalance();
@@ -41,5 +45,5 @@ export default function useArcadeBalance(): {
     return () => clearInterval(interval);
   }, [address, readContracts]);
 
-  return { arcadeBalance: balance };
+  return { arcadeBalance: balance, loading };
 }

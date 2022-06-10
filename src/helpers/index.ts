@@ -26,13 +26,13 @@ export const formatBalance = (
   maxFraction = 0,
 ): string => {
   const formatted = utils.formatUnits(value, decimals);
+  const split = formatted.split('.');
   if (maxFraction > 0) {
-    const split = formatted.split('.');
     if (split.length > 1) {
       return `${split[0]}.${split[1].substring(0, maxFraction)}`;
     }
   }
-  return formatted;
+  return split[0];
 };
 
 export const parseBalance = (value: string, decimals = 18): BigNumber =>
