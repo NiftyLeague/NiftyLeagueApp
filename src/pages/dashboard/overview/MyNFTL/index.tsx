@@ -311,7 +311,7 @@ const MyNFTL = (): JSX.Element => {
                   ? 'Error fetching balance'
                   : `${
                       account
-                        ? formatNumberToDisplay(account?.balance!)
+                        ? formatNumberToDisplay(account?.balance! ?? 0)
                         : '0.00'
                     } NFTL`
               }`}
