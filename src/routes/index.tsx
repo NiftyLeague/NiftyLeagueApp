@@ -20,9 +20,9 @@ const DashboardGamerProfilePage = Loadable(
 export default function ThemeRoutes() {
   let privateRoutes = PrivateRoutes;
   useGoogleAnalytics();
-  const { gamerProfile } = useFlags();
+  const { displayGamerProfile } = useFlags();
 
-  if (gamerProfile) {
+  if (displayGamerProfile) {
     privateRoutes = {
       ...PrivateRoutes,
       children: [

@@ -21,11 +21,11 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 
 const MenuList = () => {
   const { web3Modal } = useContext(NetworkContext);
-  const { gamerProfile } = useFlags();
+  const { displayGamerProfile } = useFlags();
   let lastItems: any = getMenuItemsByLoginStatus(
     Boolean(web3Modal.cachedProvider),
   ).items;
-  if (gamerProfile) {
+  if (displayGamerProfile) {
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
       lastItems[1].children[0].children = [
