@@ -14,7 +14,7 @@ const ArcadeGameList: React.FC = () => {
 
   const goToPlayOnGame = useCallback(() => {
     if (Number(arcadeBalance) > 0) {
-      navigate('/games/play-on-game/wen-game');
+      navigate('/games/wen-game');
     } else {
       // TODO: Show Buy Arcade Token Modal being developed by @Diego
     }

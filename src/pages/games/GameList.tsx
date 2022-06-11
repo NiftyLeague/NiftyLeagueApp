@@ -10,7 +10,7 @@ const GameList = () => {
   const navigate = useNavigate();
 
   const goToPlayOnGame = () => {
-    navigate('/games/play-on-game');
+    navigate('/games/smashers');
   };
 
   return (
