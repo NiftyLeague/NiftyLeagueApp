@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Grid, Button, Box, Dialog } from '@mui/material';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Link } from 'react-router-dom';
 import { cardSpacing } from 'store/constant';
 import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
@@ -9,6 +10,7 @@ import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
+import ArcadeGameList from 'pages/games/ArcadeGameList';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
@@ -21,6 +23,7 @@ const NiftyLeagueAppPage = () => {
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const { enableWenGame } = useFlags();
 
   const { data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -119,6 +122,18 @@ const NiftyLeagueAppPage = () => {
           <GameList />
         </Grid>
       </SectionSlider>
+      {enableWenGame && (
+        <SectionSlider isSlider={false} title="Arcade Games">
+          <Grid
+            container
+            flexDirection="row"
+            flexWrap="wrap"
+            spacing={cardSpacing}
+          >
+            <ArcadeGameList />
+          </Grid>
+        </SectionSlider>
+      )}
       <SectionSlider
         title="Popular Degen Rentals"
         actions={
