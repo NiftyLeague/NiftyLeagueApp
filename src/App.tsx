@@ -1,5 +1,6 @@
 // routing
 import Routes from 'routes';
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
 // project imports
 import Locales from 'components/Locales';
@@ -27,4 +28,6 @@ const App = () => (
   </ThemeCustomization>
 );
 
-export default App;
+export default withLDProvider({
+  clientSideID: process.env.REACT_APP_LAUNCHDARKLY_SDK_CLIENT!,
+})(App);

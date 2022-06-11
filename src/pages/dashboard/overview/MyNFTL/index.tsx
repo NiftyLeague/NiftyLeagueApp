@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -48,6 +49,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
+  const { enableWenGame } = useFlags();
   // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
@@ -218,39 +220,43 @@ const MyNFTL = (): JSX.Element => {
           My Tokens
         </SectionTitle>
       </Grid>
-      <Grid item xs={12}>
-        <TokenInfoCard
-          title="Arcade Token Balance"
-          secondary={`${Number(arcadeBalance ?? '0').toLocaleString()} Tokens`}
-          isLoading={arcadeBalanceLoading}
-          customStyle={{
-            backgroundColor: theme.palette.background.default,
-            border: '1px solid',
-            borderColor: theme.palette.grey[800],
-            borderRadius: '8px',
-          }}
-          actions={
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={1}
-              paddingX={{ xl: 1, xs: 3 }}
-              paddingY={{ xl: 0.5, xs: 1.5 }}
-            >
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={handleBuyArcadeTokens}
+      {enableWenGame && (
+        <Grid item xs={12}>
+          <TokenInfoCard
+            title="Arcade Token Balance"
+            secondary={`${Number(
+              arcadeBalance ?? '0',
+            ).toLocaleString()} Tokens`}
+            isLoading={arcadeBalanceLoading}
+            customStyle={{
+              backgroundColor: theme.palette.background.default,
+              border: '1px solid',
+              borderColor: theme.palette.grey[800],
+              borderRadius: '8px',
+            }}
+            actions={
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                paddingX={{ xl: 1, xs: 3 }}
+                paddingY={{ xl: 0.5, xs: 1.5 }}
               >
-                Buy Tokens
-              </Button>
-              <Button fullWidth variant="outlined" onClick={handlePlayArcade}>
-                Play Arcade
-              </Button>
-            </Stack>
-          }
-        />
-      </Grid>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={handleBuyArcadeTokens}
+                >
+                  Buy Tokens
+                </Button>
+                <Button fullWidth variant="outlined" onClick={handlePlayArcade}>
+                  Play Arcade
+                </Button>
+              </Stack>
+            }
+          />
+        </Grid>
+      )}
       {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
           <Grid item sm={6} xs={12}>
