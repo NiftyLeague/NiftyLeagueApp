@@ -42,12 +42,6 @@ const PrivateItems = {
           type: 'item',
           url: '/dashboard/rentals',
         },
-        {
-          id: 'gamer-profile',
-          title: 'Gamer Profile',
-          type: 'item',
-          url: '/dashboard/gamer-profile',
-        },
       ],
     },
   ],
