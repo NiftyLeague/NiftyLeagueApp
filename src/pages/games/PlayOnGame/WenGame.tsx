@@ -16,7 +16,7 @@ export const wenContext = new UnityContext({
 });
 
 const WenGame = () => (
-  <GameWithAuth unityContext={wenContext} arcadeTokenRequired={true} />
+  <GameWithAuth unityContext={wenContext} arcadeTokenRequired />
 );
 
 export default WenGame;
