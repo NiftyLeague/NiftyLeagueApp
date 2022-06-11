@@ -11,7 +11,6 @@ import {
 import { Provider } from 'types/web3';
 
 export * from './dateTime';
-export * from './ipfs';
 
 /**
  * Returns true if the string value is zero in hex

@@ -15,18 +15,14 @@ import { DEBUG } from 'constants/index';
 import Preloader from './Preloader';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
 
+const companyName = 'NiftyLeague';
+
 const smashersBaseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
 const smashersBuildVersion = process.env
   .REACT_APP_UNITY_SMASHERS_BASE_VERSION as string;
-const smashersCompanyName = process.env
-  .REACT_APP_UNITY_SMASHERS_COMPANY_NAME as string;
-const smashersProductName = process.env
-  .REACT_APP_UNITY_SMASHERS_PRODUCT_NAME as string;
 
 const wenBaseUrl = process.env.REACT_APP_UNITY_WEN_BASE_URL as string;
 const wenBuildVersion = process.env.REACT_APP_UNITY_WEN_BASE_VERSION as string;
-const wenCompanyName = process.env.REACT_APP_UNITY_WEN_COMPANY_NAME as string;
-const wenProductName = process.env.REACT_APP_UNITY_WEN_PRODUCT_NAME as string;
 
 export const smashersContext = new UnityContext({
   loaderUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.loader.js`,
@@ -34,8 +30,8 @@ export const smashersContext = new UnityContext({
   frameworkUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.framework.js.br`,
   codeUrl: `${smashersBaseUrl}/Build/${smashersBuildVersion}.wasm.br`,
   streamingAssetsUrl: `${smashersBaseUrl}/StreamingAssets`,
-  companyName: smashersCompanyName,
-  productName: smashersProductName,
+  companyName,
+  productName: 'NiftySmashers',
   productVersion: smashersBuildVersion,
 });
 
@@ -45,8 +41,8 @@ export const wenContext = new UnityContext({
   frameworkUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.framework.js.br`,
   codeUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.wasm.br`,
   streamingAssetsUrl: `${wenBaseUrl}/StreamingAssets`,
-  companyName: wenCompanyName,
-  productName: wenProductName,
+  companyName,
+  productName: 'WenGame',
   productVersion: wenBuildVersion,
 });
 
