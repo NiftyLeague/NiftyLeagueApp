@@ -1,5 +1,6 @@
 import { Grid, Button } from '@mui/material';
 import SectionSlider from 'components/sections/SectionSlider';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { cardSpacing } from 'store/constant';
 import useVersion from 'hooks/useVersion';
 import ArcadeGameList from './ArcadeGameList';
@@ -7,6 +8,7 @@ import GameList from './GameList';
 
 const GamesPage = () => {
   const { isWindows, downloadURL, version } = useVersion();
+  const { enableWenGame } = useFlags();
   return (
     <>
       <SectionSlider
@@ -36,16 +38,18 @@ const GamesPage = () => {
           <GameList />
         </Grid>
       </SectionSlider>
-      <SectionSlider isSlider={false} title="Arcade Games">
-        <Grid
-          container
-          flexDirection="row"
-          flexWrap="wrap"
-          spacing={cardSpacing}
-        >
-          <ArcadeGameList />
-        </Grid>
-      </SectionSlider>
+      {enableWenGame && (
+        <SectionSlider isSlider={false} title="Arcade Games">
+          <Grid
+            container
+            flexDirection="row"
+            flexWrap="wrap"
+            spacing={cardSpacing}
+          >
+            <ArcadeGameList />
+          </Grid>
+        </SectionSlider>
+      )}
     </>
   );
 };
