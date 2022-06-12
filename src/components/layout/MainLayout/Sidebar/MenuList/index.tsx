@@ -26,6 +26,10 @@ const MenuList = () => {
     Boolean(web3Modal.cachedProvider),
   ).items;
   if (displayGamerProfile) {
+    if (lastItems.length < 2) {
+      return <></>;
+    }
+
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
       lastItems[1].children[0].children = [
