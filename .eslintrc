@@ -10,7 +10,6 @@
       "node": {
         "moduleDirectory": ["node_modules", "src/"]
       },
-      "caseSensitive": false,
       "typescript": {
         "alwaysTryTypes": true
       }
