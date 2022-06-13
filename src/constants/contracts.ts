@@ -1,8 +1,6 @@
 import { ChainId } from '@sushiswap/sdk';
 import { LOCAL_CHAIN_ID } from './networks';
 
-export const ARCADE_CONTRACT = 'Arcade';
-
 export const NFT_CONTRACT = 'NiftyDegen';
 
 export const NFTL_CONTRACT = 'NFTLToken';

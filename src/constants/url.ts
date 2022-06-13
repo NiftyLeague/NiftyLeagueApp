@@ -37,3 +37,6 @@ export const GET_GAMER_PROFILE_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}?incl
 export const PROFILE_RENAME_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}/rename`;
 export const GET_PROFILE_AVATARS_AND_COST_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}/avatars`;
 export const UPDATE_PROFILE_AVATAR_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}/avatar`;
+
+// Arcade API
+export const GET_ARCADE_TOKEN_BALANCE_API = `${BASE_API_URL}/accounts/account/inventory?id=arcade-token`;
