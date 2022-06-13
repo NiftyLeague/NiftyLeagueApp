@@ -2,20 +2,21 @@ import { Stack, useTheme, SxProps } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 
 interface DegenContainerProps {
+  isDialog?: boolean;
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
 }
 
-const DegenContainer = ({ children, sx }: DegenContainerProps) => {
+const DegenContainer = ({ isDialog, children, sx }: DegenContainerProps) => {
   const { palette, customShadows } = useTheme();
   return (
     <Stack
       gap={3}
       sx={{
-        p: '12px',
+        p: isDialog ? '24px' : '12px',
         boxShadow: customShadows.xSmall,
         background: palette.background.paper,
-        minHeight: '466px',
+        minHeight: isDialog ? '652px' : '466px',
         borderRadius: '4px',
         position: 'relative',
         ...sx,

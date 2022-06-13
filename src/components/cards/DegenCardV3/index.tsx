@@ -39,13 +39,12 @@ export interface DegenCardProps {
   isEnabled?: boolean;
   isFavorite?: boolean;
   onClaim?: React.MouseEventHandler<HTMLButtonElement>;
-  onTraits?: React.MouseEventHandler<HTMLButtonElement>;
   onEditName?: React.MouseEventHandler<SVGSVGElement>;
-  onRent?: React.MouseEventHandler<HTMLButtonElement>;
   onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
   onOpenRentDialog?: React.MouseEventHandler<HTMLDivElement>;
   onOpenTraitsDialog?: React.MouseEventHandler<HTMLDivElement>;
   onOpenAddWhitelistDialog?: React.MouseEventHandler<HTMLDivElement>;
+  onOpenInGameEarningDialog?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const DegenCard: React.FC<
@@ -61,6 +60,7 @@ const DegenCard: React.FC<
     onOpenRentDialog,
     onOpenTraitsDialog,
     onOpenAddWhitelistDialog,
+    onOpenInGameEarningDialog,
   }): JSX.Element => {
     const authToken = window.localStorage.getItem('authentication-token');
     const { palette, customShadows } = useTheme();
@@ -118,7 +118,7 @@ const DegenCard: React.FC<
           <DegenAddWhitelist
             degen={degen}
             onBack={handleReset}
-            onFullScreen={handleClickInGameEarning}
+            onFullScreen={onOpenAddWhitelistDialog}
           />
         );
       case 'inGameEarning':
@@ -126,7 +126,7 @@ const DegenCard: React.FC<
           <DegenInGameEarning
             degen={degen}
             onBack={handleReset}
-            onFullScreen={onOpenAddWhitelistDialog}
+            onFullScreen={onOpenInGameEarningDialog}
           />
         );
       case 'default':

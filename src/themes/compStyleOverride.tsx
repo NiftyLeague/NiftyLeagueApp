@@ -126,6 +126,12 @@ export default function componentStyleOverrides(
     },
     MuiInputBase: {
       styleOverrides: {
+        sizeSmall: {
+          input: {
+            fontSize: '8px',
+            padding: '4px',
+          },
+        },
         root: {
           '&::before': {
             borderBottom: `1px solid ${theme.palette.grey[800]}`,
@@ -133,10 +139,10 @@ export default function componentStyleOverrides(
         },
         input: {
           color: theme.palette.text.primary,
-          fontSize: '8px',
+          fontSize: '12px',
           lineHeight: '20px',
           fontFamily: `'IBM Plex Mono', monospace`,
-          padding: '4px',
+          padding: '8px',
           '&::placeholder': {
             color:
               theme.palette.mode === 'dark'
@@ -148,10 +154,13 @@ export default function componentStyleOverrides(
     },
     MuiFormHelperText: {
       styleOverrides: {
+        sizeSmall: {
+          fontSize: '8px',
+        },
         root: {
           margin: 0,
           marginTop: '4px',
-          fontSize: '8px',
+          fontSize: '12px',
           lineHeight: '20px',
           fontFamily: `'IBM Plex Mono', monospace`,
         },
@@ -178,10 +187,11 @@ export default function componentStyleOverrides(
         input: {
           fontWeight: 500,
           background: outlinedFilled ? bgColor : 'transparent',
-          padding: '15.5px 14px',
+          padding: '16px',
+          textAlign: 'center',
           borderRadius: `${borderRadius}px`,
           '&.MuiInputBase-inputSizeSmall': {
-            padding: '10px 14px',
+            fontSize: '8px',
             '&.MuiInputBase-inputAdornedStart': {
               paddingLeft: 0,
             },

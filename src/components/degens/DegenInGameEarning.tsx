@@ -17,6 +17,8 @@ import { sendEvent } from 'utils/google-analytics';
 import HeaderDegen from './HeaderDegen';
 import IOSSwitch from 'components/extended/IOSSwitch';
 import DegenContainer from './DegenContainer';
+import ContentWithTwoLabels from './ContentWithTwoLabels';
+import FormControlDegen from './FormControlDegen';
 
 export interface DegenInGameEarningProps {
   degen?: Degen;
@@ -56,7 +58,7 @@ const DegenInGameEarning = ({
   };
 
   return (
-    <DegenContainer>
+    <DegenContainer isDialog={isDialog} sx={{ minHeight: '500px' }}>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}
@@ -68,35 +70,44 @@ const DegenInGameEarning = ({
         <Stack gap={isCustomEarning ? 6 : 11}>
           <Typography></Typography>
           <Stack gap={4}>
-            <Typography variant="paragraphXXSmall">
+            <Typography
+              variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
+            >
               As the owner of this degen, you are able to set custom in-game
               earning splits for the Owner, Sponsor, and Recruits.
             </Typography>
-            <Typography variant="paragraphXXSmall">
+            <Typography
+              variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
+            >
               The standard O/S/R split is 10% Owner, 50% Sponsor, 40% Recruit.
               Utilize the custom earning splits feature to make your degens more
               attractive to renters.
             </Typography>
           </Stack>
           <Stack gap={4}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="paragraphXXSmall" fontWeight="500">
-                Custom Earning Splits
-              </Typography>
-              <Stack gap={2} flexDirection="row" alignItems="center">
-                <Typography variant="labelIOSSwitch">
-                  {isCustomEarning ? 'Yes' : 'No'}
-                </Typography>
-                <IOSSwitch
-                  checked={Boolean(isCustomEarning)}
-                  onChange={() => setIsCustomEarning(Boolean(!isCustomEarning))}
-                  inputProps={{ 'aria-label': 'controlled-direction' }}
-                />
-              </Stack>
-            </Stack>
+            <ContentWithTwoLabels
+              firstText="Custom Earning Splits"
+              secondText={
+                <Stack gap={2} flexDirection="row" alignItems="center">
+                  <Typography
+                    variant={isDialog ? 'formTextMedium' : 'formTextSmall'}
+                  >
+                    {isCustomEarning ? 'Yes' : 'No'}
+                  </Typography>
+                  <IOSSwitch
+                    size={isDialog ? 'medium' : 'small'}
+                    checked={Boolean(isCustomEarning)}
+                    onChange={() =>
+                      setIsCustomEarning(Boolean(!isCustomEarning))
+                    }
+                    inputProps={{ 'aria-label': 'controlled-direction' }}
+                  />
+                </Stack>
+              }
+            />
             {isCustomEarning && (
               <Stack gap={9} justifyContent="space-between" flexDirection="row">
-                <FormControl>
+                <FormControlDegen>
                   <Input
                     name="owner"
                     placeholder="Owner %"
@@ -106,8 +117,8 @@ const DegenInGameEarning = ({
                       validatecustomEarning(event.target.value)
                     }
                   />
-                </FormControl>
-                <FormControl>
+                </FormControlDegen>
+                <FormControlDegen>
                   <Input
                     name="sponsor"
                     placeholder="Sponsor %"
@@ -117,8 +128,8 @@ const DegenInGameEarning = ({
                       validatecustomEarning(event.target.value)
                     }
                   />
-                </FormControl>
-                <FormControl>
+                </FormControlDegen>
+                <FormControlDegen>
                   <Input
                     name="recruit"
                     placeholder="Recruit %"
@@ -128,7 +139,7 @@ const DegenInGameEarning = ({
                       validatecustomEarning(event.target.value)
                     }
                   />
-                </FormControl>
+                </FormControlDegen>
                 {customEarningError && (
                   <FormHelperText sx={{ color: palette.error.main }}>
                     {customEarningError}
@@ -140,7 +151,11 @@ const DegenInGameEarning = ({
           <FormControl>
             <FormControlLabel
               label={
-                <Typography variant="termsCondition">
+                <Typography
+                  variant={
+                    isDialog ? 'termsConditionMedium' : 'termsConditionSmall'
+                  }
+                >
                   I accept and understand the above terms, conditions, and
                   information.
                 </Typography>
