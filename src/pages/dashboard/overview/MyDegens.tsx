@@ -167,10 +167,8 @@ const MyDegens = (): JSX.Element => {
                 degen={degen}
                 isDashboardDegen
                 isEnabled={degen.is_active}
-                onTraits={() => handleViewTraits(degen)}
                 onEditName={() => handleClickEditName(degen)}
                 onClaim={() => handleClaimDegen(degen)}
-                onRent={() => handleRentDegen(degen)}
                 onEnableDisable={() => handleEnableDisable(degen)}
                 onOpenRentDialog={() => handleRentDegen(degen)}
                 onOpenTraitsDialog={() => handleViewTraits(degen)}
