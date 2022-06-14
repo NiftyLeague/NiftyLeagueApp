@@ -147,9 +147,7 @@ const NiftyLeagueAppPage = () => {
               <Box paddingRight={2} key={degen.id}>
                 <DegenCard
                   degen={degen}
-                  onTraits={() => handleViewTraits(degen)}
                   onEditName={() => handleClickEditName(degen)}
-                  onRent={() => handleRentDegen(degen)}
                   onOpenRentDialog={() => handleRentDegen(degen)}
                   onOpenTraitsDialog={() => handleViewTraits(degen)}
                 />
