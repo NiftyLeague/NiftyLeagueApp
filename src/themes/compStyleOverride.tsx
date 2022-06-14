@@ -188,7 +188,6 @@ export default function componentStyleOverrides(
           fontWeight: 500,
           background: outlinedFilled ? bgColor : 'transparent',
           padding: '16px',
-          textAlign: 'center',
           borderRadius: `${borderRadius}px`,
           '&.MuiInputBase-inputSizeSmall': {
             fontSize: '8px',
