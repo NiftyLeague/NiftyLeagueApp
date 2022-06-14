@@ -1,10 +1,4 @@
-import {
-  Stack,
-  Typography,
-  Skeleton,
-  Pagination,
-  PaginationItem,
-} from '@mui/material';
+import { Stack, Skeleton, Pagination, PaginationItem } from '@mui/material';
 import { useState, useEffect, useContext, useMemo } from 'react';
 import { NetworkContext } from 'NetworkProvider';
 import { sendEvent } from 'utils/google-analytics';
@@ -21,6 +15,7 @@ import {
 import usePagination from 'hooks/usePagination';
 
 import DegenContainer from './DegenContainer';
+import ContentWithTwoLabels from './ContentWithTwoLabels';
 
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
@@ -100,13 +95,11 @@ const DegenTraits = ({
   if (isDialog) {
     degenContainerStyle = {
       gap: 6,
-      minHeight: '652px',
-      padding: '24px',
     };
   }
 
   return (
-    <DegenContainer sx={degenContainerStyle}>
+    <DegenContainer isDialog={isDialog} sx={degenContainerStyle}>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}
@@ -127,20 +120,11 @@ const DegenTraits = ({
           ))
         : dataForCurrentPage.map(({ label, value }) => (
             <Stack key={`${label}-${value}`}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography
-                  variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
-                  fontWeight="500"
-                >
-                  {label}
-                </Typography>
-                <Typography
-                  variant={isDialog ? 'paragraphSmall' : 'paragraphXXSmall'}
-                  sx={{ textDecoration: 'underline' }}
-                >
-                  {value}
-                </Typography>
-              </Stack>
+              <ContentWithTwoLabels
+                firstText={label}
+                secondTextUnderline
+                secondText={value}
+              />
             </Stack>
           ))}
       {dataForCurrentPage.length > 0 && (

@@ -168,6 +168,18 @@ const DashboardDegensPage = (): JSX.Element => {
     setDegenDialogView('rent');
   }, []);
 
+  const handleViewAddWhiteList = useCallback((degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsDegenModalOpen(true);
+    setDegenDialogView('addWhiteList');
+  }, []);
+
+  const handleViewInGameEarning = useCallback((degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsDegenModalOpen(true);
+    setDegenDialogView('inGameEarning');
+  }, []);
+
   const renderSkeletonItem = useCallback(
     () => (
       <Grid
@@ -211,12 +223,12 @@ const DashboardDegensPage = (): JSX.Element => {
           isEnabled={degen.is_active}
           isDashboardDegen
           onEnableDisable={() => handleEnableDisable(degen)}
-          onTraits={() => handleViewTraits(degen)}
           onEditName={() => handleClickEditName(degen)}
           onClaim={() => handleClaimDegen(degen)}
-          onRent={() => handleRentDegen(degen)}
           onOpenRentDialog={() => handleRentDegen(degen)}
           onOpenTraitsDialog={() => handleViewTraits(degen)}
+          onOpenAddWhitelistDialog={() => handleViewAddWhiteList(degen)}
+          onOpenInGameEarningDialog={() => handleViewInGameEarning(degen)}
         />
       </Grid>
     ),
@@ -226,6 +238,8 @@ const DashboardDegensPage = (): JSX.Element => {
       handleEnableDisable,
       handleRentDegen,
       handleViewTraits,
+      handleViewAddWhiteList,
+      handleViewInGameEarning,
       isDrawerOpen,
     ],
   );

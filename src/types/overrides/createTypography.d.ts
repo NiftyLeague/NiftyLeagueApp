@@ -13,8 +13,10 @@ declare module '@mui/material/styles/createTypography' {
   export type Variant =
     | 'displayLarge'
     | 'displaySmall'
-    | 'termsCondition'
-    | 'labelIOSSwitch'
+    | 'termsConditionSmall'
+    | 'termsConditionMedium'
+    | 'formTextSmall'
+    | 'formTextMedium'
     | 'paragraphLarge'
     | 'paragraphMedium'
     | 'paragraphSmall'
@@ -42,8 +44,10 @@ declare module '@mui/material/styles/createTypography' {
     > {
     displayLarge?: TypographyStyleOptions;
     displaySmall?: TypographyStyleOptions;
-    termsCondition?: TypographyStyleOptions;
-    labelIOSSwitch?: TypographyStyleOptions;
+    termsConditionSmall?: TypographyStyleOptions;
+    termsConditionMedium?: TypographyStyleOptions;
+    formTextSmall?: TypographyStyleOptions;
+    formTextMedium?: TypographyStyleOptions;
     paragraphLarge?: TypographyStyleOptions;
     paragraphMedium?: TypographyStyleOptions;
     paragraphSmall?: TypographyStyleOptions;
@@ -72,8 +76,10 @@ declare module '@mui/material/styles/createTypography' {
       TypographyUtils {
     displayLarge: TypographyStyle;
     displaySmall: TypographyStyle;
-    termsCondition: TypographyStyle;
-    labelIOSSwitch: TypographyStyle;
+    termsConditionSmall: TypographyStyle;
+    termsConditionMedium: TypographyStyle;
+    formTextSmall: TypographyStyle;
+    formTextMedium: TypographyStyle;
     paragraphLarge: TypographyStyle;
     paragraphMedium: TypographyStyle;
     paragraphSmall: TypographyStyle;
@@ -101,8 +107,10 @@ declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     displayLarge: true;
     displaySmall: true;
-    termsCondition: true;
-    labelIOSSwitch: true;
+    termsConditionSmall: true;
+    termsConditionMedium: true;
+    formTextSmall: true;
+    formTextMedium: true;
     paragraphLarge: true;
     paragraphMedium: true;
     paragraphSmall: true;
