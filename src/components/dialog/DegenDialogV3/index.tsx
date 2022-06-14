@@ -18,14 +18,10 @@ import DegenRent from 'components/degens/DegenRent';
 import DegenTraits from 'components/degens/DegenTraits';
 import DegenAddWhitelist from 'components/degens/DegenAddWhitelist';
 import DegenInGameEarning from 'components/degens/DegenInGameEarning';
+import DegenClaim from 'components/degens/DegenClaim';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
-  isRent?: boolean;
-  setIsRent?: React.Dispatch<React.SetStateAction<boolean>>;
-  isClaim?: boolean;
-  setIsClaim?: React.Dispatch<React.SetStateAction<boolean>>;
-  onRent?: (degen: Degen) => void;
   view: DegenViewType;
 }
 
@@ -36,11 +32,6 @@ export const DialogDegenContext = createContext({
 const DegenDialog = ({
   open,
   degen,
-  isRent,
-  setIsRent,
-  isClaim,
-  setIsClaim,
-  onRent,
   onClose,
   view = 'rent',
   ...rest
@@ -152,6 +143,8 @@ const DegenDialog = ({
         return <DegenAddWhitelist {...degenProps} />;
       case 'inGameEarning':
         return <DegenInGameEarning {...degenProps} />;
+      case 'claim':
+        return <DegenClaim {...degenProps} />;
       case 'default':
       default:
         return (
@@ -165,7 +158,6 @@ const DegenDialog = ({
   return (
     <Dialog
       maxWidth="xs"
-      fullWidth={isClaim ? false : true}
       scroll="body"
       fullScreen={fullScreen}
       onClose={handleClose}
