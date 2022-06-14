@@ -1,8 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { BigNumber } from 'ethers';
-import { NetworkContext } from 'NetworkProvider';
-import { formatBalance } from 'helpers';
-import { ARCADE_CONTRACT } from 'constants/contracts';
+import { useEffect, useState } from 'react';
+import { GET_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 
 /*
   ~ What it does? ~
@@ -11,39 +8,45 @@ import { ARCADE_CONTRACT } from 'constants/contracts';
 
   ~ How can I use? ~
 
-  const {balance, loading} = useArcadeBalance();
+  const {arcadeBalance, refetch, loading} = useArcadeBalance();
 */
 
-export default function useArcadeBalance(): {
+interface ArcadeBalanceInfo {
   arcadeBalance: string;
   loading: boolean;
-} {
+  refetch: () => void;
+}
+
+export default function useArcadeBalance(): ArcadeBalanceInfo {
   const [balance, setBalance] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const { address, readContracts } = useContext(NetworkContext);
 
-  useEffect(() => {
-    async function getArcadeBalance() {
-      if (address && readContracts && readContracts[ARCADE_CONTRACT]) {
-        const value: BigNumber = await readContracts[ARCADE_CONTRACT].balanceOf(
-          address,
-        );
-        setBalance(formatBalance(value));
-        setLoading(false);
+  const fetchBalance = async () => {
+    try {
+      const auth = window.localStorage.getItem('authentication-token');
+      if (!auth) {
+        return;
       }
-    }
-    if (!address) {
-      setBalance('');
+      setLoading(true);
+      const res = await fetch(GET_ARCADE_TOKEN_BALANCE_API, {
+        headers: { authorizationToken: auth },
+      });
+      if (res.status === 200) {
+        const amount = await res.text();
+        if (amount && amount !== 'null') setBalance(amount);
+        else setBalance('');
+      } else {
+        setBalance('');
+      }
+    } catch (err) {
+    } finally {
       setLoading(false);
     }
+  };
 
-    getArcadeBalance();
-    const interval = setInterval(() => {
-      getArcadeBalance();
-    }, 10000);
+  useEffect(() => {
+    fetchBalance();
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [address, readContracts]);
-
-  return { arcadeBalance: balance, loading };
+  return { arcadeBalance: balance, refetch: fetchBalance, loading };
 }
