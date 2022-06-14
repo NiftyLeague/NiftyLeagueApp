@@ -26,6 +26,8 @@ import { sendEvent } from 'utils/google-analytics';
 import HeaderDegen from './HeaderDegen';
 import IOSSwitch from 'components/extended/IOSSwitch';
 import DegenContainer from './DegenContainer';
+import ContentWithTwoLabels from './ContentWithTwoLabels';
+import FormControlDegen from './FormControlDegen';
 
 export interface DegenRentProps {
   degen?: Degen;
@@ -200,9 +202,12 @@ const DegenRent = ({
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [rentalPassCount, rentalPassCountloading]);
-
+  let containerGap: number = rentFor || renameEnabled ? 2.5 : 4;
+  if (isDialog) {
+    containerGap = rentFor || renameEnabled ? 7 : 9;
+  }
   return (
-    <DegenContainer>
+    <DegenContainer isDialog={isDialog}>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}
@@ -210,51 +215,41 @@ const DegenRent = ({
         onFullScreen={onFullScreen}
         onClose={onClose}
       />
-      <Stack gap={4}>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Rental Term
-          </Typography>
-          <Typography variant="paragraphXXSmall">1 Week</Typography>
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Week 1 Fee
-          </Typography>
-          <Typography variant="paragraphXXSmall">{degenPrice} NFTL</Typography>
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Daily Fee After Week 1
-          </Typography>
-          <Typography variant="paragraphXXSmall">
-            {degen?.price_daily} NFTL
-          </Typography>
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            O/S/R Game Earning Splits
-          </Typography>
-          <Typography variant="paragraphXXSmall">10%/50%/40%</Typography>
-        </Stack>
+      <Stack gap={containerGap} flex="1" justifyContent="space-between">
+        <ContentWithTwoLabels firstText="Rental Term" secondText="1 Week" />
+        <ContentWithTwoLabels
+          firstText="Week 1 Fee"
+          secondText={`${degenPrice} NFTL`}
+        />
+        <ContentWithTwoLabels
+          firstText="Daily Fee After Week 1"
+          secondText={`${degen?.price_daily} NFTL`}
+        />
+        <ContentWithTwoLabels
+          firstText="O/S/R Game Earning Splits"
+          secondText="10%/50%/40%"
+        />
         <Stack gap={1}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="paragraphXXSmall" fontWeight="500">
-              Sponsorship
-            </Typography>
-            <Stack gap={2} flexDirection="row" alignItems="center">
-              <Typography variant="labelIOSSwitch">
-                {rentFor ? 'Yes' : 'No'}
-              </Typography>
-              <IOSSwitch
-                checked={Boolean(rentFor)}
-                onChange={handleChangeRentingFor}
-                inputProps={{ 'aria-label': 'controlled-direction' }}
-              />
-            </Stack>
-          </Stack>
+          <ContentWithTwoLabels
+            firstText="Sponsorship"
+            secondText={
+              <Stack gap={2} flexDirection="row" alignItems="center">
+                <Typography
+                  variant={isDialog ? 'formTextMedium' : 'formTextSmall'}
+                >
+                  {rentFor ? 'Yes' : 'No'}
+                </Typography>
+                <IOSSwitch
+                  size={isDialog ? 'medium' : 'small'}
+                  checked={Boolean(rentFor)}
+                  onChange={handleChangeRentingFor}
+                  inputProps={{ 'aria-label': 'controlled-direction' }}
+                />
+              </Stack>
+            }
+          />
           {rentFor && (
-            <FormControl>
+            <FormControlDegen>
               <Input
                 name="address"
                 placeholder="Enter recruits ETH wallet address here..."
@@ -269,27 +264,30 @@ const DegenRent = ({
               >
                 {addressError}
               </FormHelperText>
-            </FormControl>
+            </FormControlDegen>
           )}
         </Stack>
         <Stack gap={1}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="paragraphXXSmall" fontWeight="500">
-              Rename Rental
-            </Typography>
-            <Stack gap={2} flexDirection="row" alignItems="center">
-              <Typography variant="labelIOSSwitch">
-                {renameEnabled ? 'Yes' : 'No'}
-              </Typography>
-              <IOSSwitch
-                checked={Boolean(renameEnabled)}
-                onChange={handleChangeRenameDegen}
-                inputProps={{ 'aria-label': 'controlled-direction' }}
-              />
-            </Stack>
-          </Stack>
+          <ContentWithTwoLabels
+            firstText="Rename Rental"
+            secondText={
+              <Stack gap={2} flexDirection="row" alignItems="center">
+                <Typography
+                  variant={isDialog ? 'formTextMedium' : 'formTextSmall'}
+                >
+                  {renameEnabled ? 'Yes' : 'No'}
+                </Typography>
+                <IOSSwitch
+                  size={isDialog ? 'medium' : 'small'}
+                  checked={Boolean(renameEnabled)}
+                  onChange={handleChangeRenameDegen}
+                  inputProps={{ 'aria-label': 'controlled-direction' }}
+                />
+              </Stack>
+            }
+          />
           {renameEnabled && (
-            <FormControl>
+            <FormControlDegen>
               <Input
                 name="degen_name"
                 placeholder="Enter the DEGEN name you’d like here..."
@@ -304,38 +302,42 @@ const DegenRent = ({
               >
                 {nameError}
               </FormHelperText>
-            </FormControl>
+            </FormControlDegen>
           )}
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Rental Pass
-          </Typography>
-          <Stack gap={2} flexDirection="row" alignItems="center">
-            <Typography variant="labelIOSSwitch">
-              {isUseRentalPass ? `Yes / ${rentalPassCount} Remaining` : 'No'}
-            </Typography>
-            <IOSSwitch
-              checked={Boolean(isUseRentalPass)}
-              onChange={handleChangeUseRentalPass}
-              inputProps={{ 'aria-label': 'controlled-direction' }}
-            />
-          </Stack>
-        </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="paragraphXXSmall" fontWeight="500">
-            Total Due Now
-          </Typography>
-          <Typography variant="paragraphXXSmall">{`${
+        <ContentWithTwoLabels
+          firstText="Rental Pass"
+          secondText={
+            <Stack gap={2} flexDirection="row" alignItems="center">
+              <Typography
+                variant={isDialog ? 'formTextMedium' : 'formTextSmall'}
+              >
+                {isUseRentalPass ? `Yes / ${rentalPassCount} Remaining` : 'No'}
+              </Typography>
+              <IOSSwitch
+                checked={Boolean(isUseRentalPass)}
+                onChange={handleChangeUseRentalPass}
+                inputProps={{ 'aria-label': 'controlled-direction' }}
+              />
+            </Stack>
+          }
+        />
+        <ContentWithTwoLabels
+          firstText="Total Due Now"
+          secondText={`${`${
             renameEnabled ? degenPrice + renameFee : degenPrice
-          } NFTL`}</Typography>
-        </Stack>
+          } NFTL`}`}
+        />
         <FormControl>
           <FormControlLabel
             label={
-              <Typography variant="termsCondition">
-                I understand all the information regarding this rental and its
-                fees.
+              <Typography
+                variant={
+                  isDialog ? 'termsConditionMedium' : 'termsConditionSmall'
+                }
+              >
+                I accept and understand the above terms, conditions, and
+                information.
               </Typography>
             }
             control={

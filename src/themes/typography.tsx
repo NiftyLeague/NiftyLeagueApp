@@ -165,7 +165,7 @@ const Typography = (
     lineHeight: '48px',
     letterSpacing: '-0.02em',
   },
-  termsCondition: {
+  termsConditionSmall: {
     fontSize: '10px',
     lineHeight: '20px',
     fontFamily: `'IBM Plex Mono', monospace`,
@@ -174,8 +174,26 @@ const Typography = (
         ? theme.palette.grey[500]
         : theme.palette.grey[600],
   },
-  labelIOSSwitch: {
+  termsConditionMedium: {
+    fontSize: '14px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[500]
+        : theme.palette.grey[600],
+  },
+  formTextSmall: {
     fontSize: '8px',
+    lineHeight: '20px',
+    fontFamily: `'IBM Plex Mono', monospace`,
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[600]
+        : theme.palette.grey[200],
+  },
+  formTextMedium: {
+    fontSize: '12px',
     lineHeight: '20px',
     fontFamily: `'IBM Plex Mono', monospace`,
     color:

@@ -168,8 +168,6 @@ const DegenRentalsPage = (): JSX.Element => {
         <DegenCard
           degen={degen}
           onEditName={() => handleClickEditName(degen)}
-          onTraits={() => handleViewTraits(degen)}
-          onRent={() => handleRentDegen(degen)}
           onOpenRentDialog={() => handleRentDegen(degen)}
           onOpenTraitsDialog={() => handleViewTraits(degen)}
         />

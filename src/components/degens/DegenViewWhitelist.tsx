@@ -102,7 +102,7 @@ const DegenViewWhitelist = ({
   );
 
   return (
-    <DegenContainer>
+    <DegenContainer isDialog={isDialog}>
       <HeaderDegen
         degen={degen}
         isDialog={isDialog}

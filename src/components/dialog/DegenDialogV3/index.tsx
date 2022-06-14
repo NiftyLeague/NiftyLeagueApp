@@ -4,7 +4,7 @@ import { NFT_CONTRACT } from 'constants/contracts';
 // TODO: Please remove the comment if you want to use the following code.
 // import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, createContext } from 'react';
 import {
   CharacterType,
   Degen,
@@ -16,6 +16,8 @@ import { DEBUG } from 'constants/index';
 import { toast } from 'react-toastify';
 import DegenRent from 'components/degens/DegenRent';
 import DegenTraits from 'components/degens/DegenTraits';
+import DegenAddWhitelist from 'components/degens/DegenAddWhitelist';
+import DegenInGameEarning from 'components/degens/DegenInGameEarning';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -26,6 +28,10 @@ export interface DegenDialogProps extends DialogProps {
   onRent?: (degen: Degen) => void;
   view: DegenViewType;
 }
+
+export const DialogDegenContext = createContext({
+  isDialog: false,
+});
 
 const DegenDialog = ({
   open,
@@ -132,11 +138,20 @@ const DegenDialog = ({
   };
 
   const renderView = () => {
+    const degenProps = {
+      isDialog: true,
+      degen,
+      onClose: handleClose,
+    };
     switch (view) {
       case 'rent':
-        return <DegenRent isDialog degen={degen} onClose={handleClose} />;
+        return <DegenRent {...degenProps} />;
       case 'traits':
-        return <DegenTraits isDialog degen={degen} onClose={handleClose} />;
+        return <DegenTraits {...degenProps} />;
+      case 'addWhiteList':
+        return <DegenAddWhitelist {...degenProps} />;
+      case 'inGameEarning':
+        return <DegenInGameEarning {...degenProps} />;
       case 'default':
       default:
         return (
@@ -158,7 +173,13 @@ const DegenDialog = ({
       PaperProps={{ sx: { paddingY: 0 } }}
       {...rest}
     >
-      {renderView()}
+      <DialogDegenContext.Provider
+        value={{
+          isDialog: true,
+        }}
+      >
+        {renderView()}
+      </DialogDegenContext.Provider>
     </Dialog>
   );
 };
