@@ -39,11 +39,13 @@ type FilterSource =
 interface DegensFilterProps {
   onFilter: (filter: DegenFilter) => void;
   defaultFilterValues: DegenFilter;
+  isDegenOwner?: boolean;
 }
 
 const DegensFilter = ({
   onFilter,
   defaultFilterValues,
+  isDegenOwner,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +74,7 @@ const DegensFilter = ({
     defaultFilterValues.tribes,
   );
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
-    defaultFilterValues.backgrounds,
+    isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
   );
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
@@ -160,10 +162,12 @@ const DegensFilter = ({
     setMultipliersRangeValue(defaultFilterValues.multipliers);
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
-    setBackgroundsValue(defaultFilterValues.backgrounds);
+    setBackgroundsValue(
+      isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
+    );
     setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchTermValue(defaultFilterValues.searchTerm);
-  }, [defaultFilterValues]);
+  }, [defaultFilterValues, isDegenOwner]);
 
   const handleReset = () => {
     if (isParamsEmpty) return;
