@@ -57,4 +57,5 @@ export type DegenViewType =
   | 'default'
   | 'traits'
   | 'addWhiteList'
-  | 'inGameEarning';
+  | 'inGameEarning'
+  | 'claim';

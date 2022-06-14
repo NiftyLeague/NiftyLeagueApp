@@ -21,8 +21,10 @@ import DegenTraits from 'components/degens/DegenTraits';
 import DegenAddWhitelist from 'components/degens/DegenAddWhitelist';
 import DegenRent from 'components/degens/DegenRent';
 import DegenInGameEarning from 'components/degens/DegenInGameEarning';
+import DegenClaim from 'components/degens/DegenClaim';
 
-import { ReactComponent as NiffyIcon } from 'assets/images/icons/niffy-icon.svg';
+import { ReactComponent as NiffyIconBlack } from 'assets/images/icons/niffy-icon-black.svg';
+import { ReactComponent as NiffyIconWhite } from 'assets/images/icons/niffy-icon-white.svg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -45,6 +47,7 @@ export interface DegenCardProps {
   onOpenTraitsDialog?: React.MouseEventHandler<HTMLDivElement>;
   onOpenAddWhitelistDialog?: React.MouseEventHandler<HTMLDivElement>;
   onOpenInGameEarningDialog?: React.MouseEventHandler<HTMLDivElement>;
+  onOpenClaimDialog?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const DegenCard: React.FC<
@@ -61,6 +64,7 @@ const DegenCard: React.FC<
     onOpenTraitsDialog,
     onOpenAddWhitelistDialog,
     onOpenInGameEarningDialog,
+    onOpenClaimDialog,
   }): JSX.Element => {
     const authToken = window.localStorage.getItem('authentication-token');
     const { palette, customShadows } = useTheme();
@@ -96,6 +100,10 @@ const DegenCard: React.FC<
       setView('inGameEarning');
     }, []);
 
+    const handleClickClaim = useCallback(() => {
+      setView('claim');
+    }, []);
+
     switch (view) {
       case 'rent':
         return (
@@ -127,6 +135,14 @@ const DegenCard: React.FC<
             degen={degen}
             onBack={handleReset}
             onFullScreen={onOpenInGameEarningDialog}
+          />
+        );
+      case 'claim':
+        return (
+          <DegenClaim
+            degen={degen}
+            onBack={handleReset}
+            onFullScreen={onOpenClaimDialog}
           />
         );
       case 'default':
@@ -208,6 +224,7 @@ const DegenCard: React.FC<
                   onViewTraits={handleClickTraits}
                   onViewAddWhiteList={handleClickAddWhiteList}
                   onViewInGameEarning={handleClickInGameEarning}
+                  onViewClaim={handleClickClaim}
                 />
               ) : (
                 <FooterDegenRentals
@@ -310,6 +327,7 @@ const FooterDegens = ({
   onViewTraits,
   onViewAddWhiteList,
   onViewInGameEarning,
+  onViewClaim,
 }) => {
   const { palette } = useTheme();
   return (
@@ -330,8 +348,8 @@ const FooterDegens = ({
       <IconButton onClick={onViewAddWhiteList} label="Whitelist">
         <GroupAddIcon />
       </IconButton>
-      <IconButton label="Niffy">
-        <NiffyIcon />
+      <IconButton onClick={onViewClaim} label="Claim">
+        {palette.mode === 'dark' ? <NiffyIconWhite /> : <NiffyIconBlack />}
       </IconButton>
     </>
   );
