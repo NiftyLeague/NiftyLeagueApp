@@ -1,11 +1,4 @@
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
   Container,
   Dialog,
@@ -32,16 +25,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { NetworkContext } from 'NetworkProvider';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { useQuery } from 'react-query';
-import { useQuery as useGraphQuery } from '@apollo/client';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
-import { Owner } from 'types/graph';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
+import useAccount from 'hooks/useAccount';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -60,35 +48,10 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   const [showError, setShowError] = useState<boolean>(false);
   const [isPending /*, setIsPending*/] = useState<boolean>(false);
   const [tokenCount, setTokenCount] = useState<number>(1);
-  const { address, writeContracts } = useContext(NetworkContext);
-  const { /*loading,*/ data }: { loading: boolean; data?: { owner: Owner } } =
-    useGraphQuery(OWNER_QUERY, {
-      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-      variables: { address: address?.toLowerCase() },
-      skip: !address,
-    });
-  const characters = useMemo(() => {
-    const characterList = data?.owner?.characters
-      ? [...data.owner.characters]
-      : [];
-    return characterList.sort(
-      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
-    );
-  }, [data]);
 
-  const tokenIndices = useMemo(
-    () => characters.map((char) => parseInt(char.id, 10)),
-    [characters],
-  );
-
-  const [mockAccumulated, setMockAccumulated] = useState(0);
-  // const [refreshKey, setRefreshKey] = useState(0);
-  const totalAccumulated = useClaimableNFTL(
-    writeContracts,
-    tokenIndices,
-    0,
-    // refreshKey,
-  );
+  const [refreshAccKey, setRefreshAccKey] = useState(0);
+  const { account } = useAccount(refreshAccKey);
+  const accountBalance = account?.balance ?? 0;
 
   const fetchArcadeTokenDetails = useCallback(async () => {
     const response = await fetch(GET_PRODUCT(PRODUCT_ID, 'nftl'), {
@@ -103,9 +66,6 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
     return body;
   }, []);
 
-  useEffect(() => {
-    if (totalAccumulated) setMockAccumulated(totalAccumulated);
-  }, [totalAccumulated]);
   useEffect(() => {
     if (open) {
       sendEvent('Buy Arcade Token Started', 'marketplace');
@@ -147,6 +107,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
         throw new Error(response.statusText);
       }
       sendEvent('Buy Arcade Token Complete', 'marketplace');
+      setRefreshAccKey(Math.random());
       onClose();
     } catch {
       setShowError(true);
@@ -258,16 +219,16 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
               >
                 <Typography
                   color={
-                    mockAccumulated &&
-                    mockAccumulated > tokenCount * details.price
+                    accountBalance &&
+                    accountBalance > tokenCount * details.price
                       ? palette.success.main
                       : palette.dark.light
                   }
                   fontWeight="500"
                 >
                   Bal:{' '}
-                  {mockAccumulated
-                    ? formatNumberToDisplay(mockAccumulated)
+                  {accountBalance
+                    ? formatNumberToDisplay(accountBalance)
                     : '0.00'}{' '}
                   NFTL
                 </Typography>
@@ -282,8 +243,8 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   />{' '}
                   {tokenCount * details.items['arcade-token']} Arcade Tokens
                 </Typography>
-                {mockAccumulated > 0 &&
-                  mockAccumulated < tokenCount * details.price && (
+                {accountBalance > 0 &&
+                  accountBalance < tokenCount * details.price && (
                     <Typography
                       variant="caption"
                       color={palette.warning.main}
@@ -292,7 +253,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                       Balance is too low, <Link>buy NFTL</Link>
                     </Typography>
                   )}
-                {!mockAccumulated && (
+                {!accountBalance && (
                   <Typography
                     variant="caption"
                     color={palette.error.main}
@@ -324,8 +285,8 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 onClick={purchaseArcadeToken}
                 disabled={
                   !agreement ||
-                  !mockAccumulated ||
-                  mockAccumulated < tokenCount * details.price
+                  !accountBalance ||
+                  accountBalance < tokenCount * details.price
                 }
                 loading={isPending}
                 sx={{ mb: 2 }}
