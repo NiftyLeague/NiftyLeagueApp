@@ -47,7 +47,11 @@ const MyNFTL = (): JSX.Element => {
   const auth = window.localStorage.getItem('authentication-token');
   const navigate = useNavigate();
   const { address, writeContracts, tx } = useContext(NetworkContext);
-  const { arcadeBalance, loading: arcadeBalanceLoading } = useArcadeBalance();
+  const {
+    arcadeBalance,
+    loading: arcadeBalanceLoading,
+    refetch: refetchArcadeBal,
+  } = useArcadeBalance();
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
@@ -265,7 +269,10 @@ const MyNFTL = (): JSX.Element => {
           </Grid>
           <BuyArcadeTokensDialog
             open={openBuyAT}
-            onClose={() => setOpenBuyAT(false)}
+            onClose={() => {
+              setOpenBuyAT(false);
+              refetchArcadeBal();
+            }}
           />
         </>
       )}
