@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Box,
   Table,
@@ -9,11 +9,17 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Typography,
+  Stack,
+  useTheme,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
-import { fetchScores } from 'utils/leaderboard';
+import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
 import makeStyles from '@mui/styles/makeStyles';
+import { NetworkContext } from 'NetworkProvider';
+import usePlayerProfile from 'hooks/usePlayerProfile';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -40,6 +46,9 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { selectedTable } = props;
   const [rows, setData] = useState<DataType[]>();
+  const { web3Modal } = useContext(NetworkContext);
+  const { palette } = useTheme();
+  const { profile } = usePlayerProfile();
 
   const classes = useStyles();
 
@@ -53,6 +62,7 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
     setData(returnValue.data);
     setCount(returnValue.count);
   };
+
   useEffect(() => {
     void fetchTopData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,6 +86,37 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleCheckYourRank = async () => {
+    // Call API here
+    if (profile?.id) {
+      try {
+        const result: any = await fetchRankByUserId(profile?.id);
+        if (!result.ok) {
+          const errMsg = await result.text();
+          toast.error(errMsg, {
+            theme: 'dark',
+          });
+          return;
+        }
+        const res = await result.json();
+        if (res < 1) {
+          toast.error(
+            'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.',
+            {
+              theme: 'dark',
+            },
+          );
+          return;
+        }
+        // TODO: will implement FE-362
+      } catch (error) {
+        toast.error(error, {
+          theme: 'dark',
+        });
+      }
+    }
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -150,7 +191,29 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            labelDisplayedRows={({ from, to }) => `${from}–${to}`}
+            labelDisplayedRows={({ from, to }) => (
+              <Stack
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="center"
+                gap={2}
+              >
+                {!!web3Modal.cachedProvider && (
+                  <Typography
+                    variant="body2"
+                    color={palette.primary.main}
+                    sx={{
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleCheckYourRank}
+                  >
+                    CHECK YOUR RANK
+                  </Typography>
+                )}
+                {`${from}–${to}`}
+              </Stack>
+            )}
           />
         </Paper>
       )}

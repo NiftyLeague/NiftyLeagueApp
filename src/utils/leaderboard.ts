@@ -1,6 +1,7 @@
 import { DataType, ReturnDataType, Order } from 'types/leaderboard';
 import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
 import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
+import { GET_RANK_BY_USER_ID_API } from 'constants/url';
 
 export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
@@ -108,4 +109,19 @@ export const stableSort = <T>(
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
+};
+
+export const fetchRankByUserId = async (userId: string): Promise<any> => {
+  try {
+    const res = await fetch(
+      `${GET_RANK_BY_USER_ID_API}?${new URLSearchParams({
+        user_id: userId,
+        game: 'wen_game',
+        time_window: 'all_time',
+      })}`,
+    );
+    return res;
+  } catch (e) {
+    return e;
+  }
 };
