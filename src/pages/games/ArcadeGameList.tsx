@@ -5,7 +5,7 @@ import { NetworkContext } from 'NetworkProvider';
 import GameCard from 'components/cards/GameCard';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import { sendEvent } from 'utils/google-analytics';
-import WenThumbnail from 'assets/images/games/wen.png';
+import WenThumbnail from 'assets/images/games/wen.gif';
 
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();
