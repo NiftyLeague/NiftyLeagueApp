@@ -180,7 +180,13 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
           </Stack>
           <Divider />
           {(isDetailsPending || error) && (
-            <Stack direction="row" justifyContent="center" alignItems="center">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              width="390px"
+              height="300px"
+            >
               <>
                 {isDetailsPending && <CircularProgress />}
                 {error && (
@@ -208,7 +214,11 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 mb={3}
               >
                 <RemoveIcon
-                  sx={{ fontSize: 50, fill: palette.grey[400] }}
+                  sx={{
+                    fontSize: 50,
+                    fill: palette.grey[400],
+                    cursor: 'pointer',
+                  }}
                   onClick={() => updateTokenCount(tokenCount - 1)}
                 />
                 <TextField
@@ -217,20 +227,26 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                     width: '100px',
                   }}
                   InputProps={{
-                    inputMode: 'numeric',
-                    pattern: '[0-9]*',
                     endAdornment: (
                       <InputAdornment position="end">PACK</InputAdornment>
                     ),
-                    style: {
-                      textAlign: 'center',
+                    inputProps: {
+                      inputMode: 'numeric',
+                      pattern: '[0-9]*',
+                      style: {
+                        textAlign: 'center',
+                      },
                     },
                   }}
                   value={tokenCount}
                   onChange={(e) => updateTokenCount(e.target.value)}
                 />
                 <AddIcon
-                  sx={{ fontSize: 50, fill: palette.grey[400] }}
+                  sx={{
+                    fontSize: 50,
+                    fill: palette.grey[400],
+                    cursor: 'pointer',
+                  }}
                   onClick={() => updateTokenCount(tokenCount + 1)}
                 />
               </Stack>
@@ -312,6 +328,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   mockAccumulated < tokenCount * details.price
                 }
                 loading={isPending}
+                sx={{ mb: 2 }}
               >
                 {!agreement ? 'Accept Terms to Continue' : 'Buy'}
               </LoadingButton>
