@@ -250,7 +250,8 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   NFTL
                 </Typography>
                 <Typography fontWeight="500">
-                  Total: {tokenCount * details.items['arcade-token']} AT
+                  Total: {tokenCount * details.items['arcade-token']} Arcade
+                  Tokens
                 </Typography>
                 {mockAccumulated > 0 &&
                   mockAccumulated < tokenCount * details.price && (
