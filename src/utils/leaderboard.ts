@@ -33,16 +33,18 @@ export const fetchScores = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
   const addAvg = json.data.map((data: DataType) => {
-    let earnings = Math.round(parseFloat(data.stats.earnings) * 10) / 10;
+    const { earnings, matches, wins } = data?.stats || {};
+    let earningsParsed = earnings
+      ? Math.round(parseFloat(earnings) * 10) / 10
+      : 0;
     let avg =
-      Math.round(
-        (parseFloat(data.stats.earnings) * 100) /
-          parseFloat(data.stats.matches),
-      ) / 100;
+      earnings && matches
+        ? Math.round((parseFloat(earnings) * 100) / parseFloat(matches)) / 100
+        : 0;
     let rate =
-      Math.round(
-        (parseFloat(data.stats.wins) * 10000) / parseFloat(data.stats.matches),
-      ) / 100;
+      wins && matches
+        ? Math.round((parseFloat(wins) * 10000) / parseFloat(matches)) / 100
+        : 0;
     return {
       ...data,
       stats: {
@@ -50,7 +52,7 @@ export const fetchScores = async (
         score: data.score,
         'avg_NFTL/match': avg,
         win_rate: `${rate}%`,
-        earnings,
+        earnings: earningsParsed,
       },
     };
   });
