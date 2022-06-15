@@ -106,32 +106,37 @@ export default function EnhancedTable({
   const handleCheckYourRank = async () => {
     sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
     // Call API here
-    if (profile?.id) {
-      try {
-        const result: any = await fetchRankByUserId(profile?.id);
-        if (!result.ok) {
-          const errMsg = await result.text();
-          toast.error(errMsg, {
-            theme: 'dark',
-          });
-          return;
-        }
-        const res = await result.json();
-        if (res < 1) {
-          toast.error(
-            'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.',
-            {
-              theme: 'dark',
-            },
-          );
-          return;
-        }
-        document?.querySelector('.wen-game-modal')?.parentElement?.click();
-      } catch (error) {
-        toast.error(error, {
+    const errorMes =
+      'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
+
+    if (!profile?.id) {
+      toast.error(errorMes, {
+        theme: 'dark',
+      });
+      return;
+    }
+    try {
+      const result: any = await fetchRankByUserId(profile?.id);
+      if (!result.ok) {
+        const errMsg = await result.text();
+        toast.error(errMsg, {
           theme: 'dark',
         });
+        return;
       }
+      const res = await result.json();
+      if (res < 1) {
+        toast.error(errorMes, {
+          theme: 'dark',
+        });
+        return;
+      }
+      document?.querySelector('.wen-game-modal')?.parentElement?.click();
+    } catch (error) {
+      toast.error(error, {
+        theme: 'dark',
+      });
+      return;
     }
   };
 
