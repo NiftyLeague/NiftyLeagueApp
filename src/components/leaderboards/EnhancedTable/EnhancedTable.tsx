@@ -228,7 +228,7 @@ export default function EnhancedTable({
                       CHECK YOUR RANK
                     </Typography>
                     <TopModal
-                      flag="wen_game"
+                      flag="score"
                       ModalIcon={
                         <Box
                           className="wen-game-modal"

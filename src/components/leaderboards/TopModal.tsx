@@ -220,7 +220,7 @@ const TableModal = ({
                 <code>TOTALNFTLEARNED</code>
               </TableCell>
             )}
-            {flag !== 'wen_game' && (
+            {flag !== 'score' && (
               <TableCell
                 component="th"
                 className="cell ellipsis"
@@ -234,12 +234,12 @@ const TableModal = ({
                 <code>AVG,NFTL/MATCH</code>
               </TableCell>
             )}
-            {flag !== 'win_rate' && flag !== 'wen_game' && (
+            {flag !== 'win_rate' && flag !== 'score' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>KILLS</code>
               </TableCell>
             )}
-            {flag === 'wen_game' && (
+            {flag === 'score' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>HIGH SCORE</code>
               </TableCell>

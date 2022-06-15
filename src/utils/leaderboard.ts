@@ -21,8 +21,11 @@ export const fetchScores = async (
   count: number,
   offset: number,
 ): Promise<ReturnDataType> => {
-  const res = await fetch(
-    `${
+  let url = `${
+    LEADERBOARD_SCORE_API_URL as string
+  }?score_type=${scoreType}&count=${count}&offset=${offset}`;
+  if (scoreType === 'score') {
+    url = `${
       LEADERBOARD_SCORE_API_URL as string
     }?game=${gameType}&score_type=${scoreType}&time_window=${timeFilter}&count=${count}&offset=${offset}`,
   );
