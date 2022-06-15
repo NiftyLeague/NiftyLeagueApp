@@ -220,21 +220,28 @@ const TableModal = ({
                 <code>TOTALNFTLEARNED</code>
               </TableCell>
             )}
-            <TableCell
-              component="th"
-              className="cell ellipsis"
-              style={{ fontSize: 12 }}
-            >
-              <code>MATCHES PLAYED</code>
-            </TableCell>
+            {flag !== 'wen_game' && (
+              <TableCell
+                component="th"
+                className="cell ellipsis"
+                style={{ fontSize: 12 }}
+              >
+                <code>MATCHES PLAYED</code>
+              </TableCell>
+            )}
             {flag === 'xp' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>AVG,NFTL/MATCH</code>
               </TableCell>
             )}
-            {flag !== 'win_rate' && (
+            {flag !== 'win_rate' && flag !== 'wen_game' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>KILLS</code>
+              </TableCell>
+            )}
+            {flag === 'wen_game' && (
+              <TableCell component="th" className="cell ellipsis">
+                <code>HIGH SCORE</code>
               </TableCell>
             )}
           </TableRow>
@@ -339,6 +346,7 @@ const TopModal = ({
           selectedTimeFilter={selectedTimeFilter}
         />
       }
+      flag={flag}
     />
   );
 };

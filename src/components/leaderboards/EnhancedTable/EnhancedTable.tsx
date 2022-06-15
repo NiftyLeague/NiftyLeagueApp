@@ -26,6 +26,7 @@ import {
   LEADERBOARD_CATEGORY,
   LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
 } from 'constants/analytics';
+import TopModal from '../TopModal';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -125,7 +126,7 @@ export default function EnhancedTable({
           );
           return;
         }
-        // TODO: will implement FE-362
+        document?.querySelector('.wen-game-modal')?.parentElement?.click();
       } catch (error) {
         toast.error(error, {
           theme: 'dark',
@@ -213,19 +214,32 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {/* {!!web3Modal.cachedProvider && (
-                  <Typography
-                    variant="body2"
-                    color={palette.primary.main}
-                    sx={{
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                    }}
-                    onClick={handleCheckYourRank}
-                  >
-                    CHECK YOUR RANK
-                  </Typography>
-                )} */}
+                {!!web3Modal.cachedProvider && (
+                  <>
+                    <Typography
+                      variant="body2"
+                      color={palette.primary.main}
+                      sx={{
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleCheckYourRank}
+                    >
+                      CHECK YOUR RANK
+                    </Typography>
+                    <TopModal
+                      flag="wen_game"
+                      ModalIcon={
+                        <Box
+                          className="wen-game-modal"
+                          sx={{ display: 'none' }}
+                        >
+                          N/A
+                        </Box>
+                      }
+                    />
+                  </>
+                )}
                 {`${from}–${to}`}
               </Stack>
             )}
