@@ -29,7 +29,7 @@ const ArcadeGameList: React.FC = () => {
     <>
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
-          title="Wen Game"
+          title="WEN Game"
           required="Arcade Tokens Required"
           description="Play this single-player baseball inspired arcade game and rank as high as you can!"
           image={WenThumbnail}
