@@ -18,8 +18,6 @@ const ArcadeGameList: React.FC = () => {
     if (Number(arcadeBalance) > 0) {
       navigate('/games/wen-game');
     } else {
-      // TODO: Show Buy Arcade Token Modal being developed by @Diego
-
       setOpenBuyAT(true);
     }
   }, [arcadeBalance, navigate]);
