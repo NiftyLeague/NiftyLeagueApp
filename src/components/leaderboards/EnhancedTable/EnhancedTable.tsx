@@ -24,6 +24,14 @@ const useStyles = makeStyles({
     display: 'flex',
     height: '70%',
   },
+  paperStyle: {
+    width: '100%',
+    overflowX: 'auto',
+    mb: 2,
+    '& .MuiTablePagination-selectLabel, & .MuiInputBase-root': {
+      display: 'none',
+    },
+  },
 });
 
 export default function EnhancedTable(props: TableProps): JSX.Element | null {
@@ -84,7 +92,7 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
           <CircularProgress />
         </Box>
       ) : (
-        <Paper sx={{ width: '100%', overflowX: 'auto', mb: 2 }}>
+        <Paper className={classes.paperStyle}>
           <TableContainer sx={{ minWidth: '850px' }}>
             <Table
               sx={{ minWidth: 750 }}
@@ -142,6 +150,7 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            labelDisplayedRows={({ from, to }) => `${from}–${to}`}
           />
         </Paper>
       )}
