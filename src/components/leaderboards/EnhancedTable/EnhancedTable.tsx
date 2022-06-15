@@ -228,6 +228,8 @@ export default function EnhancedTable({
                       CHECK YOUR RANK
                     </Typography>
                     <TopModal
+                      selectedGame="wen_game"
+                      selectedTimeFilter="all_time"
                       flag="score"
                       ModalIcon={
                         <Box
