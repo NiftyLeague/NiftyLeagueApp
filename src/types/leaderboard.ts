@@ -42,5 +42,7 @@ export interface EnhancedTableProps {
 }
 
 export interface TableProps {
+  selectedGame: string;
   selectedTable: TableType;
+  selectedTimeFilter: string;
 }
