@@ -229,9 +229,7 @@ const MyNFTL = (): JSX.Element => {
           <Grid item xs={12}>
             <TokenInfoCard
               title="Arcade Token Balance"
-              secondary={`${Number(
-                arcadeBalance ?? '0',
-              ).toLocaleString()} Tokens`}
+              secondary={`${arcadeBalance} Tokens`}
               isLoading={arcadeBalanceLoading}
               customStyle={{
                 backgroundColor: theme.palette.background.default,
