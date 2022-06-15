@@ -185,6 +185,7 @@ const TableModal = ({
   };
 
   // shorten user id letters
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleShortenUserId = (userId: string) => {
     const firstChar = userId.slice(-4);
     const lastChar = userId.slice(0, 4);
@@ -265,7 +266,7 @@ const TableModal = ({
                   style={handleSetBackground(i.rank)}
                   className="cell ellipsis"
                 >
-                  {handleShortenUserId(i.user_id)}
+                  {i.user_id}
                   {i.rank === 1 && <Box className={classes.lineTop} />}
                   {i.rank === 10 && <Box className={classes.lineBottom} />}
                 </TableCell>

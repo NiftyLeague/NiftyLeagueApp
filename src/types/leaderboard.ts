@@ -23,6 +23,7 @@ export interface DataType {
   score: string;
   stats: Stats;
   name: string;
+  name_cased: string;
 }
 
 export interface TableRowType {
