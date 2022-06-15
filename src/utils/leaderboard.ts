@@ -19,14 +19,16 @@ export const fetchUserNames = async (items: any): Promise<DataType[]> => {
 };
 
 export const fetchScores = async (
+  gameType: string,
   scoreType: string,
+  timeFilter: string,
   count: number,
   offset: number,
 ): Promise<ReturnDataType> => {
   const res = await fetch(
     `${
       LEADERBOARD_SCORE_API_URL as string
-    }?score_type=${scoreType}&count=${count}&offset=${offset}`,
+    }?game=${gameType}&score_type=${scoreType}&time_window=${timeFilter}&count=${count}&offset=${offset}`,
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
@@ -45,6 +47,7 @@ export const fetchScores = async (
       ...data,
       stats: {
         ...data.stats,
+        score: data.score,
         'avg_NFTL/match': avg,
         win_rate: `${rate}%`,
         earnings,

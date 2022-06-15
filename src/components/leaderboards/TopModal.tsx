@@ -117,7 +117,17 @@ const useStyles = makeStyles({
   },
 });
 
-const TableModal = ({ flag }): JSX.Element | null => {
+interface TableModalProps {
+  selectedGame: string;
+  flag: string;
+  selectedTimeFilter: string;
+}
+
+const TableModal = ({
+  selectedGame,
+  flag,
+  selectedTimeFilter,
+}: TableModalProps): JSX.Element | null => {
   let d = new Date(),
     t = d.toDateString().split(' ');
   const classes = useStyles();
@@ -125,7 +135,14 @@ const TableModal = ({ flag }): JSX.Element | null => {
 
   // get the top ten items
   const fetchDataItems = async () => {
-    const ret: ReturnDataType = await fetchScores(flag, 10, 0);
+    // TODO: We should update game and time_window param later accordingly
+    const ret: ReturnDataType = await fetchScores(
+      selectedGame,
+      flag,
+      selectedTimeFilter,
+      10,
+      0,
+    );
     setData(ret.data.filter((i: { rank: number }) => i.rank <= 10));
   };
 
@@ -302,9 +319,27 @@ const TableModal = ({ flag }): JSX.Element | null => {
   );
 };
 
-const TopModal = ({ ModalIcon, flag }): JSX.Element | null => {
+interface TopModalProps extends TableModalProps {
+  ModalIcon: JSX.Element;
+}
+
+const TopModal = ({
+  ModalIcon,
+  selectedGame,
+  flag,
+  selectedTimeFilter,
+}: TopModalProps): JSX.Element | null => {
   return (
-    <CustomModal ModalIcon={ModalIcon} child={<TableModal flag={flag} />} />
+    <CustomModal
+      ModalIcon={ModalIcon}
+      child={
+        <TableModal
+          selectedGame={selectedGame}
+          flag={flag}
+          selectedTimeFilter={selectedTimeFilter}
+        />
+      }
+    />
   );
 };
 export default TopModal;
