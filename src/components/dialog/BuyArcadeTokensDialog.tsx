@@ -24,6 +24,7 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  InputAdornment,
 } from '@mui/material';
 import { DialogProps } from 'types/dialog';
 import { sendEvent } from 'utils/google-analytics';
@@ -40,6 +41,7 @@ import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
 import { Owner } from 'types/graph';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
+import arcadeToken from 'assets/images/icons/arcade_token.png';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -203,6 +205,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 justifyContent="center"
                 alignItems="center"
                 spacing={1}
+                mb={3}
               >
                 <RemoveIcon
                   sx={{ fontSize: 50, fill: palette.grey[400] }}
@@ -213,9 +216,12 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   sx={{
                     width: '100px',
                   }}
-                  inputProps={{
+                  InputProps={{
                     inputMode: 'numeric',
                     pattern: '[0-9]*',
+                    endAdornment: (
+                      <InputAdornment position="end">PACK</InputAdornment>
+                    ),
                     style: {
                       textAlign: 'center',
                     },
@@ -249,18 +255,33 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                     : '0.00'}{' '}
                   NFTL
                 </Typography>
-                <Typography fontWeight="500">
-                  Total: {tokenCount * details.items['arcade-token']} Arcade
-                  Tokens
+                <Typography fontWeight="500" display="flex">
+                  Total:{' '}
+                  <Box
+                    component="img"
+                    src={arcadeToken}
+                    alt=""
+                    width="16px"
+                    mx={0.5}
+                  />{' '}
+                  {tokenCount * details.items['arcade-token']} Arcade Tokens
                 </Typography>
                 {mockAccumulated > 0 &&
                   mockAccumulated < tokenCount * details.price && (
-                    <Typography variant="caption" color={palette.warning.main}>
+                    <Typography
+                      variant="caption"
+                      color={palette.warning.main}
+                      my={1}
+                    >
                       Balance is too low, <Link>buy NFTL</Link>
                     </Typography>
                   )}
                 {!mockAccumulated && (
-                  <Typography variant="caption" color={palette.error.main}>
+                  <Typography
+                    variant="caption"
+                    color={palette.error.main}
+                    my={1}
+                  >
                     You have zero balance; <Link>buy NFTL</Link>
                   </Typography>
                 )}
