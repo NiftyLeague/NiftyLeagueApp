@@ -1,13 +1,13 @@
 // Event
-export const WEN_GAME_LEADERBOARD_VIEWED_EVENT = 'WEN Game Leaderboard Viewed';
+export const WEN_GAME_LEADERBOARD_VIEWED_EVENT = 'wen_game_leaderboard_viewed';
 export const NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT =
-  'Nifty Smashers Leaderboard Viewed';
+  'nifty_smashers_leaderboard_viewed';
 export const LEADERBOARD_GAME_FILTER_CHANGED_EVENT =
-  'Leaderboard Game Filter Changed';
+  'leaderboard_game_filter_changed';
 export const LEADERBOARD_TYPE_FILTER_CHANGED_EVENT =
-  'Leaderboard Type Filter Changed';
+  'leaderboard_type_filter_changed';
 export const LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT =
-  'Check Your Rank Clicked';
+  'check_your_rank_clicked';
 
 // Category
 export const LEADERBOARD_CATEGORY = 'leaderboard';
