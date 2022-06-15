@@ -26,6 +26,7 @@ import {
   Alert,
 } from '@mui/material';
 import { DialogProps } from 'types/dialog';
+import { sendEvent } from 'utils/google-analytics';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -103,6 +104,11 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   useEffect(() => {
     if (totalAccumulated) setMockAccumulated(totalAccumulated);
   }, [totalAccumulated]);
+  useEffect(() => {
+    if (open) {
+      sendEvent('Buy Arcade Token Started', 'marketplace');
+    }
+  }, [open]);
 
   const {
     data: details,
@@ -138,6 +144,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       if (!response.ok) {
         throw new Error(response.statusText);
       }
+      sendEvent('Buy Arcade Token Complete', 'marketplace');
       onClose();
     } catch {
       setShowError(true);
