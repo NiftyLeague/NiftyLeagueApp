@@ -1,4 +1,11 @@
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Container,
   Dialog,
@@ -14,6 +21,9 @@ import {
   FormControlLabel,
   Checkbox,
   Link,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { DialogProps } from 'types/dialog';
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,11 +32,15 @@ import AddIcon from '@mui/icons-material/Add';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NetworkContext } from 'NetworkProvider';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import { useQuery } from '@apollo/client';
+import { useQuery } from 'react-query';
+import { useQuery as useGraphQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
 import { Owner } from 'types/graph';
 import { formatNumberToDisplay } from 'utils/numbers';
+import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
+
+const PRODUCT_ID = 'arcade-token-four-pack';
 
 interface BuyArcadeTokensDialogProps extends DialogProps {
   open: boolean;
@@ -40,11 +54,12 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
 }) => {
   const { palette } = useTheme();
   const [agreement, setAgreement] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
   const [isPending /*, setIsPending*/] = useState<boolean>(false);
   const [tokenCount, setTokenCount] = useState<number>(1);
   const { address, writeContracts } = useContext(NetworkContext);
   const { /*loading,*/ data }: { loading: boolean; data?: { owner: Owner } } =
-    useQuery(OWNER_QUERY, {
+    useGraphQuery(OWNER_QUERY, {
       pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
       variables: { address: address?.toLowerCase() },
       skip: !address,
@@ -72,9 +87,30 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
     // refreshKey,
   );
 
+  const fetchArcadeTokenDetails = useCallback(async () => {
+    const response = await fetch(GET_PRODUCT(PRODUCT_ID, 'nftl'), {
+      method: 'GET',
+      headers: {
+        authorizationToken: window.localStorage.getItem(
+          'authentication-token',
+        ) as string,
+      },
+    });
+    const body = await response.json();
+    return body;
+  }, []);
+
   useEffect(() => {
     if (totalAccumulated) setMockAccumulated(totalAccumulated);
   }, [totalAccumulated]);
+
+  const {
+    data: details,
+    isLoading: isDetailsPending,
+    error,
+  } = useQuery<any>('arcade-token-details', fetchArcadeTokenDetails, {
+    enabled: open,
+  });
 
   const updateTokenCount = (v: number | string) => {
     const value = Number(v);
@@ -83,131 +119,189 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
     }
   };
 
+  const purchaseArcadeToken = useCallback(async () => {
+    try {
+      const response = await fetch(PURCHASE_ARCADE_TOKEN_BALANCE_API, {
+        method: 'post',
+        headers: {
+          authorizationToken: window.localStorage.getItem(
+            'authentication-token',
+          ) as string,
+        },
+        body: JSON.stringify({
+          id: PRODUCT_ID,
+          currency: details.currency,
+          price: details.price,
+          quantity: tokenCount,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      onClose();
+    } catch {
+      setShowError(true);
+    }
+  }, [tokenCount, details, onClose]);
+  const handleHideError = () => {
+    setShowError(false);
+  };
+
   return (
     <Dialog open={open} {...rest} maxWidth="xs">
       <Container>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-          position="relative"
-        >
-          <DialogTitle>Buy Arcade Token</DialogTitle>
-          <Icon
-            sx={{
-              position: 'absolute',
-              right: 0,
-            }}
-            onClick={onClose}
+        <>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            position="relative"
           >
-            <CloseIcon />
-          </Icon>
-        </Stack>
-        <Divider />
-        <Typography textAlign="center" mt={2}>
-          <Typography>
-            Arcade tokens give you an all-access pass to play arcade games. This
-            is a one-way purchase. Arcade tokens{' '}
-            <span
-              style={{
-                color: palette.error.main,
+            <DialogTitle>Buy Arcade Token</DialogTitle>
+            <Icon
+              sx={{
+                position: 'absolute',
+                right: 0,
               }}
+              onClick={onClose}
             >
-              cannot
-            </span>{' '}
-            be redeemed back for NFTL
-          </Typography>
-          <Typography my={2}>1000 NFTL Each</Typography>
-        </Typography>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
-          <RemoveIcon
-            sx={{ fontSize: 50, fill: palette.grey[400] }}
-            onClick={() => updateTokenCount(tokenCount - 1)}
-          />
-          <TextField
-            variant="outlined"
-            sx={{
-              width: '100px',
-            }}
-            inputProps={{
-              inputMode: 'numeric',
-              pattern: '[0-9]*',
-              style: {
-                textAlign: 'center',
-              },
-            }}
-            value={tokenCount}
-            onChange={(e) => updateTokenCount(e.target.value)}
-          />
-          <AddIcon
-            sx={{ fontSize: 50, fill: palette.grey[400] }}
-            onClick={() => updateTokenCount(tokenCount + 1)}
-          />
-        </Stack>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-          }}
-        >
-          <Typography
-            color={
-              mockAccumulated && mockAccumulated > tokenCount * 1000
-                ? palette.success.main
-                : palette.dark.light
-            }
-          >
-            Bal:{' '}
-            {mockAccumulated ? formatNumberToDisplay(mockAccumulated) : '0.00'}{' '}
-            NFTL
-          </Typography>
-          <Typography>Total: {tokenCount} AT</Typography>
-          {mockAccumulated > 0 && mockAccumulated < tokenCount * 1000 && (
-            <Typography variant="caption" color={palette.warning.main}>
-              Balance is too low, <Link color="#2f80ed">buy NFTL</Link>
-            </Typography>
+              <CloseIcon />
+            </Icon>
+          </Stack>
+          <Divider />
+          {(isDetailsPending || error) && (
+            <Stack direction="row" justifyContent="center" alignItems="center">
+              <>
+                {isDetailsPending && <CircularProgress />}
+                {error && (
+                  <Typography variant="h4">Something went wrong!</Typography>
+                )}
+              </>
+            </Stack>
           )}
-          {!mockAccumulated && (
-            <Typography variant="caption" color={palette.error.main}>
-              You have zero balance; <Link color="#2f80ed">buy NFTL</Link>
-            </Typography>
-          )}
-        </Box>
-        <FormControl sx={{ my: 2 }}>
-          <FormControlLabel
-            label={
-              <Typography variant="caption">
-                I understand all the information above about the arcade token
-                purchase
+          {!error && !isDetailsPending && details && (
+            <>
+              <Typography textAlign="center" mt={2}>
+                <Typography>
+                  To play an arcade game, you need at least 1 arcade token.
+                  Arcade tokens are sold in packs containing{' '}
+                  {details.items['arcade-token']} tokens (i.e 1 pack ={' '}
+                  {details.items['arcade-token']} tokens)
+                </Typography>
+                <Typography my={2}>{details.price} NFTL Each</Typography>
               </Typography>
-            }
-            control={
-              <Checkbox
-                value={agreement}
-                onChange={(event) => setAgreement(event.target.checked)}
-              />
-            }
-          />
-        </FormControl>
-        <LoadingButton
-          variant="contained"
-          fullWidth
-          onClick={() => {}}
-          disabled={
-            !agreement ||
-            !mockAccumulated ||
-            mockAccumulated < tokenCount * 1000
-          }
-          loading={isPending}
-        >
-          {!agreement ? 'Accept Terms to Continue' : 'Buy'}
-        </LoadingButton>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <RemoveIcon
+                  sx={{ fontSize: 50, fill: palette.grey[400] }}
+                  onClick={() => updateTokenCount(tokenCount - 1)}
+                />
+                <TextField
+                  variant="outlined"
+                  sx={{
+                    width: '100px',
+                  }}
+                  inputProps={{
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                    style: {
+                      textAlign: 'center',
+                    },
+                  }}
+                  value={tokenCount}
+                  onChange={(e) => updateTokenCount(e.target.value)}
+                />
+                <AddIcon
+                  sx={{ fontSize: 50, fill: palette.grey[400] }}
+                  onClick={() => updateTokenCount(tokenCount + 1)}
+                />
+              </Stack>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr auto',
+                }}
+              >
+                <Typography
+                  color={
+                    mockAccumulated &&
+                    mockAccumulated > tokenCount * details.price
+                      ? palette.success.main
+                      : palette.dark.light
+                  }
+                  fontWeight="500"
+                >
+                  Bal:{' '}
+                  {mockAccumulated
+                    ? formatNumberToDisplay(mockAccumulated)
+                    : '0.00'}{' '}
+                  NFTL
+                </Typography>
+                <Typography fontWeight="500">
+                  Total: {tokenCount * details.items['arcade-token']} AT
+                </Typography>
+                {mockAccumulated > 0 &&
+                  mockAccumulated < tokenCount * details.price && (
+                    <Typography variant="caption" color={palette.warning.main}>
+                      Balance is too low, <Link>buy NFTL</Link>
+                    </Typography>
+                  )}
+                {!mockAccumulated && (
+                  <Typography variant="caption" color={palette.error.main}>
+                    You have zero balance; <Link>buy NFTL</Link>
+                  </Typography>
+                )}
+              </Box>
+              <FormControl sx={{ my: 2 }}>
+                <FormControlLabel
+                  label={
+                    <Typography variant="caption">
+                      I understand all the information above about the arcade
+                      token purchase
+                    </Typography>
+                  }
+                  control={
+                    <Checkbox
+                      value={agreement}
+                      onChange={(event) => setAgreement(event.target.checked)}
+                    />
+                  }
+                />
+              </FormControl>
+              <LoadingButton
+                variant="contained"
+                fullWidth
+                onClick={purchaseArcadeToken}
+                disabled={
+                  !agreement ||
+                  !mockAccumulated ||
+                  mockAccumulated < tokenCount * details.price
+                }
+                loading={isPending}
+              >
+                {!agreement ? 'Accept Terms to Continue' : 'Buy'}
+              </LoadingButton>
+            </>
+          )}
+          <Snackbar
+            open={showError}
+            autoHideDuration={6000}
+            onClose={handleHideError}
+          >
+            <Alert
+              onClose={handleHideError}
+              severity="error"
+              sx={{ width: '100%' }}
+            >
+              Something went wrong!
+            </Alert>
+          </Snackbar>
+        </>
       </Container>
     </Dialog>
   );
