@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   FormControl,
@@ -13,8 +13,17 @@ import {
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 // import { makeStyles } from '@mui/styles';
+import { sendEvent } from 'utils/google-analytics';
 import { TableType } from 'types/leaderboard';
 import {
+  LEADERBOARD_CATEGORY,
+  LEADERBOARD_GAME_FILTER_CHANGED_EVENT,
+  LEADERBOARD_TYPE_FILTER_CHANGED_EVENT,
+  NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT,
+  WEN_GAME_LEADERBOARD_VIEWED_EVENT,
+} from 'constants/analytics';
+import {
+  Game,
   LEADERBOARD_GAME_LIST,
   LEADERBOARD_TIME_FILTERS,
   NiftySmashersTables,
@@ -45,9 +54,23 @@ export default function LeaderBoards(): JSX.Element {
   //   LEADERBOARD_TIME_FILTERS[2].key,
   // );
 
+  useEffect(() => {
+    sendEvent(
+      selectedGame === 'nifty_smashers'
+        ? NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT
+        : WEN_GAME_LEADERBOARD_VIEWED_EVENT,
+      LEADERBOARD_CATEGORY,
+    );
+  }, [selectedGame]);
+
   const handleChangeGame = (event: SelectChangeEvent) => {
     const game = event.target.value;
     setGame(game);
+    sendEvent(
+      LEADERBOARD_GAME_FILTER_CHANGED_EVENT,
+      LEADERBOARD_CATEGORY,
+      game === 'nifty_smashers' ? Game.NiftySmashers : Game.WenGame,
+    );
     if (game === 'nifty_smashers') {
       setTable(NiftySmashersTables[0]);
       setType(NiftySmashersTables[0].key);
@@ -64,6 +87,11 @@ export default function LeaderBoards(): JSX.Element {
     if (table) {
       setTable(table);
       setType(table.key);
+      sendEvent(
+        LEADERBOARD_TYPE_FILTER_CHANGED_EVENT,
+        LEADERBOARD_CATEGORY,
+        table.display,
+      );
     }
   };
 

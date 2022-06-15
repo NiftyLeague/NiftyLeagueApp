@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { toast } from 'react-toastify';
 import {
   Box,
   Table,
@@ -13,13 +14,17 @@ import {
   Stack,
   useTheme,
 } from '@mui/material';
-import { toast } from 'react-toastify';
+import makeStyles from '@mui/styles/makeStyles';
+import { sendEvent } from 'utils/google-analytics';
 import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
 import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
-import makeStyles from '@mui/styles/makeStyles';
 import { NetworkContext } from 'NetworkProvider';
 import usePlayerProfile from 'hooks/usePlayerProfile';
+import {
+  LEADERBOARD_CATEGORY,
+  LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
+} from 'constants/analytics';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -97,6 +102,7 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
+    sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
     // Call API here
     if (profile?.id) {
       try {
