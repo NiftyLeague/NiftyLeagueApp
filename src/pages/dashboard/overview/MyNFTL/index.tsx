@@ -39,6 +39,7 @@ import DepositForm from './DepositForm';
 import RefreshBalanceForm from './RefreshBalanceForm';
 import WithdrawForm from './WithdrawForm';
 import TokenInfoCard from 'components/cards/TokenInfoCard';
+import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
@@ -50,6 +51,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { enableWenGame } = useFlags();
+  const [openBuyAT, setOpenBuyAT] = useState(false);
   // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
@@ -185,7 +187,7 @@ const MyNFTL = (): JSX.Element => {
   }, [auth]);
 
   const handleBuyArcadeTokens = () => {
-    // TODO: Integrate Buy Arcade Tokens here
+    setOpenBuyAT(true);
   };
 
   const handlePlayArcade = useCallback(() => {
@@ -221,41 +223,51 @@ const MyNFTL = (): JSX.Element => {
         </SectionTitle>
       </Grid>
       {enableWenGame && (
-        <Grid item xs={12}>
-          <TokenInfoCard
-            title="Arcade Token Balance"
-            secondary={`${Number(
-              arcadeBalance ?? '0',
-            ).toLocaleString()} Tokens`}
-            isLoading={arcadeBalanceLoading}
-            customStyle={{
-              backgroundColor: theme.palette.background.default,
-              border: '1px solid',
-              borderColor: theme.palette.grey[800],
-              borderRadius: '8px',
-            }}
-            actions={
-              <Stack
-                direction="row"
-                alignItems="center"
-                spacing={1}
-                paddingX={{ xl: 1, xs: 3 }}
-                paddingY={{ xl: 0.5, xs: 1.5 }}
-              >
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={handleBuyArcadeTokens}
+        <>
+          <Grid item xs={12}>
+            <TokenInfoCard
+              title="Arcade Token Balance"
+              secondary={`${Number(
+                arcadeBalance ?? '0',
+              ).toLocaleString()} Tokens`}
+              isLoading={arcadeBalanceLoading}
+              customStyle={{
+                backgroundColor: theme.palette.background.default,
+                border: '1px solid',
+                borderColor: theme.palette.grey[800],
+                borderRadius: '8px',
+              }}
+              actions={
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  paddingX={{ xl: 1, xs: 3 }}
+                  paddingY={{ xl: 0.5, xs: 1.5 }}
                 >
-                  Buy Tokens
-                </Button>
-                <Button fullWidth variant="outlined" onClick={handlePlayArcade}>
-                  Play Arcade
-                </Button>
-              </Stack>
-            }
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleBuyArcadeTokens}
+                  >
+                    Buy Tokens
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={handlePlayArcade}
+                  >
+                    Play Arcade
+                  </Button>
+                </Stack>
+              }
+            />
+          </Grid>
+          <BuyArcadeTokensDialog
+            open={openBuyAT}
+            onClose={() => setOpenBuyAT(false)}
           />
-        </Grid>
+        </>
       )}
       {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
