@@ -40,12 +40,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EnhancedTable(props: TableProps): JSX.Element | null {
+export default function EnhancedTable({
+  selectedGame,
+  selectedTable,
+  selectedTimeFilter,
+}: TableProps): JSX.Element | null {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { selectedTable } = props;
-  const [rows, setData] = useState<DataType[]>();
+  const [rows, setData] = useState<DataType[] | null>();
   const { web3Modal } = useContext(NetworkContext);
   const { palette } = useTheme();
   const { profile } = usePlayerProfile();
@@ -55,7 +58,9 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
   const fetchTopData = async () => {
     setPage(0);
     const returnValue: ReturnDataType = await fetchScores(
+      selectedGame,
       selectedTable.key,
+      selectedTimeFilter,
       rowsPerPage * 3,
       0,
     );
@@ -64,14 +69,17 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
   };
 
   useEffect(() => {
-    void fetchTopData();
+    setData(null);
+    fetchTopData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTable.key]);
+  }, [selectedGame, selectedTable.key, selectedTimeFilter]);
 
   const handleChangePage = async (event: unknown, newPage: number) => {
     if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
       const returnValue: ReturnDataType = await fetchScores(
+        selectedGame,
         selectedTable.key,
+        selectedTimeFilter,
         rowsPerPage,
         (newPage + 2) * rowsPerPage,
       );
