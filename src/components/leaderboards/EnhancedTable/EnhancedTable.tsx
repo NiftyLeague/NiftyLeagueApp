@@ -110,33 +110,25 @@ export default function EnhancedTable({
       'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
 
     if (!profile?.id) {
-      toast.error(errorMes, {
-        theme: 'dark',
-      });
+      toast.error(errorMes, { theme: 'dark' });
       return;
     }
     try {
       const result: any = await fetchRankByUserId(profile?.id);
       if (!result.ok) {
         const errMsg = await result.text();
-        toast.error(errMsg, {
-          theme: 'dark',
-        });
+        toast.error(errMsg, { theme: 'dark' });
         return;
       }
       const res = await result.json();
       if (res < 1) {
-        toast.error(errorMes, {
-          theme: 'dark',
-        });
+        toast.error(errorMes, { theme: 'dark' });
         return;
       }
       setMyRank(res);
       document?.querySelector('.wen-game-modal')?.parentElement?.click();
     } catch (error) {
-      toast.error(error, {
-        theme: 'dark',
-      });
+      toast.error(error, { theme: 'dark' });
       return;
     }
   };
@@ -220,7 +212,7 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {!!web3Modal.cachedProvider && (
+                {!!web3Modal.cachedProvider && selectedGame === 'wen_game' && (
                   <>
                     <Typography
                       variant="body2"
