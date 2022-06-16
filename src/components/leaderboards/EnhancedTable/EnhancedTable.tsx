@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState, useEffect, useContext } from 'react';
+import { toast } from 'react-toastify';
 import {
   Box,
   Table,
@@ -9,11 +11,21 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Typography,
+  Stack,
+  useTheme,
 } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { sendEvent } from 'utils/google-analytics';
 import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
 import EnhancedTableHead from './EnhancedTableHead';
-import { fetchScores } from 'utils/leaderboard';
-import makeStyles from '@mui/styles/makeStyles';
+import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
+import { NetworkContext } from 'NetworkProvider';
+import usePlayerProfile from 'hooks/usePlayerProfile';
+import {
+  LEADERBOARD_CATEGORY,
+  LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
+} from 'constants/analytics';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -24,36 +36,56 @@ const useStyles = makeStyles({
     display: 'flex',
     height: '70%',
   },
+  paperStyle: {
+    width: '100%',
+    overflowX: 'auto',
+    mb: 2,
+    '& .MuiTablePagination-selectLabel, & .MuiInputBase-root': {
+      display: 'none',
+    },
+  },
 });
 
-export default function EnhancedTable(props: TableProps): JSX.Element | null {
+export default function EnhancedTable({
+  selectedGame,
+  selectedTable,
+  selectedTimeFilter,
+}: TableProps): JSX.Element | null {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { selectedTable } = props;
-  const [rows, setData] = useState<DataType[]>();
+  const [rows, setData] = useState<DataType[] | null>();
+  const { web3Modal } = useContext(NetworkContext);
+  const { palette } = useTheme();
+  const { profile } = usePlayerProfile();
 
   const classes = useStyles();
 
   const fetchTopData = async () => {
     setPage(0);
     const returnValue: ReturnDataType = await fetchScores(
+      selectedGame,
       selectedTable.key,
+      selectedTimeFilter,
       rowsPerPage * 3,
       0,
     );
     setData(returnValue.data);
     setCount(returnValue.count);
   };
+
   useEffect(() => {
-    void fetchTopData();
+    setData(null);
+    fetchTopData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTable.key]);
+  }, [selectedGame, selectedTable.key, selectedTimeFilter]);
 
   const handleChangePage = async (event: unknown, newPage: number) => {
     if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
       const returnValue: ReturnDataType = await fetchScores(
+        selectedGame,
         selectedTable.key,
+        selectedTimeFilter,
         rowsPerPage,
         (newPage + 2) * rowsPerPage,
       );
@@ -70,6 +102,38 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
     setPage(0);
   };
 
+  const handleCheckYourRank = async () => {
+    sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
+    // Call API here
+    if (profile?.id) {
+      try {
+        const result: any = await fetchRankByUserId(profile?.id);
+        if (!result.ok) {
+          const errMsg = await result.text();
+          toast.error(errMsg, {
+            theme: 'dark',
+          });
+          return;
+        }
+        const res = await result.json();
+        if (res < 1) {
+          toast.error(
+            'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.',
+            {
+              theme: 'dark',
+            },
+          );
+          return;
+        }
+        // TODO: will implement FE-362
+      } catch (error) {
+        toast.error(error, {
+          theme: 'dark',
+        });
+      }
+    }
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = rows
     ? page > 0
@@ -84,7 +148,7 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
           <CircularProgress />
         </Box>
       ) : (
-        <Paper sx={{ width: '100%', overflowX: 'auto', mb: 2 }}>
+        <Paper className={classes.paperStyle}>
           <TableContainer sx={{ minWidth: '850px' }}>
             <Table
               sx={{ minWidth: 750 }}
@@ -142,6 +206,29 @@ export default function EnhancedTable(props: TableProps): JSX.Element | null {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            labelDisplayedRows={({ from, to }) => (
+              <Stack
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="center"
+                gap={2}
+              >
+                {/* {!!web3Modal.cachedProvider && (
+                  <Typography
+                    variant="body2"
+                    color={palette.primary.main}
+                    sx={{
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleCheckYourRank}
+                  >
+                    CHECK YOUR RANK
+                  </Typography>
+                )} */}
+                {`${from}–${to}`}
+              </Stack>
+            )}
           />
         </Paper>
       )}
