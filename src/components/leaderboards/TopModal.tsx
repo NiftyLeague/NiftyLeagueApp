@@ -13,8 +13,10 @@ import {
   Table,
   TableCell,
   CircularProgress,
+  Typography,
 } from '@mui/material';
 
+import { ReactComponent as TwitterIcon } from 'assets/images/icons/twitter.svg';
 const useStyles = makeStyles({
   title: {
     position: 'absolute',
@@ -115,21 +117,38 @@ const useStyles = makeStyles({
       },
     },
   },
+  twitter: {
+    color: '#5E72EB',
+    fontWeight: 600,
+    display: 'flex',
+    fontSize: '14px',
+    lineHeight: '20px',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    width: '525px',
+    marginTop: '10px',
+    gap: '10px',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
 });
 
 interface TableModalProps {
   selectedGame: string;
   flag: string;
   selectedTimeFilter: string;
+  myRank?: number;
 }
 
 const TableModal = ({
   selectedGame,
   flag,
   selectedTimeFilter,
+  myRank,
 }: TableModalProps): JSX.Element | null => {
-  let d = new Date(),
-    t = d.toDateString().split(' ');
+  // let d = new Date(),
+  //   t = d.toDateString().split(' ');
   const classes = useStyles();
   const [data, setData] = useState<DataType[]>();
 
@@ -185,11 +204,26 @@ const TableModal = ({
   };
 
   // shorten user id letters
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleShortenUserId = (userId: string) => {
     const firstChar = userId.slice(-4);
     const lastChar = userId.slice(0, 4);
     const user = lastChar.concat('***', firstChar);
     return user;
+  };
+
+  const handleShareOnTwitter = () => {
+    const obj = {
+      original_referer: 'https://app.niftyleague.com/',
+      ref_src: 'twsrc^tfw|twcamp^buttonembed|twterm^share|twgr^',
+      text: `I ranked #${myRank} on the WEN Game Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
+      hashtags:
+        'NFT,GAMEFI,NFTGAMING,GAMING,CRYPTO,DEGENS,NIFTYLEAGUE,NFT,GAMEFI,NFTGAMING,GAMING,CRYPTO,DEGENS,NIFTYLEAGUE',
+    };
+    window.open(
+      `https://twitter.com/intent/tweet?${`${new URLSearchParams(obj)}`}`,
+      '_blank',
+    );
   };
 
   return (
@@ -220,21 +254,28 @@ const TableModal = ({
                 <code>TOTALNFTLEARNED</code>
               </TableCell>
             )}
-            <TableCell
-              component="th"
-              className="cell ellipsis"
-              style={{ fontSize: 12 }}
-            >
-              <code>MATCHES PLAYED</code>
-            </TableCell>
+            {flag !== 'score' && (
+              <TableCell
+                component="th"
+                className="cell ellipsis"
+                style={{ fontSize: 12 }}
+              >
+                <code>MATCHES PLAYED</code>
+              </TableCell>
+            )}
             {flag === 'xp' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>AVG,NFTL/MATCH</code>
               </TableCell>
             )}
-            {flag !== 'win_rate' && (
+            {flag !== 'win_rate' && flag !== 'score' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>KILLS</code>
+              </TableCell>
+            )}
+            {flag === 'score' && (
+              <TableCell component="th" className="cell ellipsis">
+                <code>HIGH SCORE</code>
               </TableCell>
             )}
           </TableRow>
@@ -258,7 +299,7 @@ const TableModal = ({
                   style={handleSetBackground(i.rank)}
                   className="cell ellipsis"
                 >
-                  {handleShortenUserId(i.user_id)}
+                  {i.user_id}
                   {i.rank === 1 && <Box className={classes.lineTop} />}
                   {i.rank === 10 && <Box className={classes.lineBottom} />}
                 </TableCell>
@@ -308,10 +349,19 @@ const TableModal = ({
               <CircularProgress />
             </Box>
           )}
-          {data && (
+          {/* {data && (
             <code className={classes.time}>
               {t[2] + ' ' + t[1] + ' ' + t[3]}
             </code>
+          )} */}
+          {data && (
+            <Typography
+              variant="body2"
+              className={classes.twitter}
+              onClick={handleShareOnTwitter}
+            >
+              Share on twitter <TwitterIcon />
+            </Typography>
           )}
         </TableBody>
       </Table>
@@ -328,6 +378,7 @@ const TopModal = ({
   selectedGame,
   flag,
   selectedTimeFilter,
+  myRank,
 }: TopModalProps): JSX.Element | null => {
   return (
     <CustomModal
@@ -337,8 +388,10 @@ const TopModal = ({
           selectedGame={selectedGame}
           flag={flag}
           selectedTimeFilter={selectedTimeFilter}
+          myRank={myRank}
         />
       }
+      flag={flag}
     />
   );
 };

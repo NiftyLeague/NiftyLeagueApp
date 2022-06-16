@@ -4,6 +4,7 @@ import { styled, Box } from '@mui/system';
 import ModalUnstyled from '@mui/base/ModalUnstyled';
 
 import BgImage from 'assets/images/leadboard.jpg';
+import WenLeaderBoardBG from 'assets/images/wen_leaderboard.png';
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -36,7 +37,6 @@ const style = {
   p: 2,
   px: 4,
   pb: 3,
-  backgroundImage: `url(${BgImage})`,
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
   backgroundColor: '#181425',
@@ -45,9 +45,10 @@ const style = {
 interface ModalProps {
   ModalIcon: JSX.Element;
   child: JSX.Element;
+  flag?: string;
 }
 const CustomModal = (props: ModalProps): JSX.Element | null => {
-  const { ModalIcon, child } = props;
+  const { ModalIcon, child, flag } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -61,7 +62,16 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
         onClose={handleClose}
         BackdropComponent={Backdrop}
       >
-        <Box sx={style}>{child}</Box>
+        <Box
+          sx={{
+            ...style,
+            backgroundImage: `url(${
+              flag === 'score' ? WenLeaderBoardBG : BgImage
+            })`,
+          }}
+        >
+          {child}
+        </Box>
       </StyledModal>
     </>
   );
