@@ -35,11 +35,13 @@ const PRODUCT_ID = 'arcade-token-four-pack';
 
 interface BuyArcadeTokensDialogProps extends DialogProps {
   open: boolean;
-  onClose: any;
+  onSuccess: () => void;
+  onClose: () => void;
 }
 
 const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   open,
+  onSuccess,
   onClose,
   ...rest
 }) => {
@@ -108,11 +110,12 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       }
       sendEvent('Buy Arcade Token Complete', 'marketplace');
       setRefreshAccKey(Math.random());
-      onClose();
+      onSuccess();
     } catch {
       setShowError(true);
     }
-  }, [tokenCount, details, onClose]);
+  }, [tokenCount, details, onSuccess]);
+
   const handleHideError = () => {
     setShowError(false);
   };
