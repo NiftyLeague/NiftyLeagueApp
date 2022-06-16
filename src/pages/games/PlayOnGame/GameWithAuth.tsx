@@ -27,7 +27,7 @@ const Game = ({
   arcadeTokenRequired = false,
 }: GameProps) => {
   const { address, targetNetwork } = useContext(NetworkContext);
-  const { arcadeBalance } = useArcadeBalance();
+  const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
   const authMsg = `true,${address || '0x0'},Vitalik,${auth},${favs}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
@@ -107,7 +107,7 @@ const Game = ({
   };
 
   if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
-    return <ArcadeTokensRequired />;
+    return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
   }
 
   return (
