@@ -196,7 +196,7 @@ const MyNFTL = (): JSX.Element => {
   };
 
   const handlePlayArcade = useCallback(() => {
-    sendEvent('Play Arcade Games Button Tapped', 'arcade');
+    sendEvent('play_arcade_games_button_tapped', 'arcade');
     navigate('/games');
   }, [navigate]);
 

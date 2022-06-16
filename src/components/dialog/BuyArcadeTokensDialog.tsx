@@ -68,7 +68,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      sendEvent('Buy Arcade Token Started', 'marketplace');
+      sendEvent('buy_arcade_token_started', 'marketplace');
     }
   }, [open]);
 
@@ -106,7 +106,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      sendEvent('Buy Arcade Token Complete', 'marketplace');
+      sendEvent('buy_arcade_token_complete', 'marketplace');
       setRefreshAccKey(Math.random());
       onClose();
     } catch {
