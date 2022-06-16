@@ -118,7 +118,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} {...rest} maxWidth="xs">
+    <Dialog open={open} onClose={onClose} {...rest} maxWidth="xs">
       <Container>
         <>
           <Stack
