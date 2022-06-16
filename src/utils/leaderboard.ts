@@ -1,52 +1,54 @@
 import { DataType, ReturnDataType, Order } from 'types/leaderboard';
 import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
 import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
+import { GET_RANK_BY_USER_ID_API } from 'constants/url';
 
 export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
     const res = await fetch(
       `${LEADERBOARD_USERNAMES_API_URL}?ids=${items}&include_stats=false`,
     );
-    // const res = await fetch(`${LEADERBOARD_USERNAMES_API_URL}`);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const json = await res.json();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return json;
+    return await res.json();
   } catch (e) {
     return [];
   }
 };
 
 export const fetchScores = async (
+  gameType: string,
   scoreType: string,
+  timeFilter: string,
   count: number,
   offset: number,
 ): Promise<ReturnDataType> => {
   const res = await fetch(
     `${
       LEADERBOARD_SCORE_API_URL as string
-    }?score_type=${scoreType}&count=${count}&offset=${offset}`,
+    }?game=${gameType}&score_type=${scoreType}&time_window=${timeFilter}&count=${count}&offset=${offset}`,
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
   const addAvg = json.data.map((data: DataType) => {
-    let earnings = Math.round(parseFloat(data.stats.earnings) * 10) / 10;
+    const { earnings, matches, wins } = data?.stats || {};
+    let earningsParsed = earnings
+      ? Math.round(parseFloat(earnings) * 10) / 10
+      : 0;
     let avg =
-      Math.round(
-        (parseFloat(data.stats.earnings) * 100) /
-          parseFloat(data.stats.matches),
-      ) / 100;
+      earnings && matches
+        ? Math.round((parseFloat(earnings) * 100) / parseFloat(matches)) / 100
+        : 0;
     let rate =
-      Math.round(
-        (parseFloat(data.stats.wins) * 10000) / parseFloat(data.stats.matches),
-      ) / 100;
+      wins && matches
+        ? Math.round((parseFloat(wins) * 10000) / parseFloat(matches)) / 100
+        : 0;
     return {
       ...data,
       stats: {
         ...data.stats,
+        score: data.score,
         'avg_NFTL/match': avg,
         win_rate: `${rate}%`,
-        earnings,
+        earnings: earningsParsed,
       },
     };
   });
@@ -108,4 +110,19 @@ export const stableSort = <T>(
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
+};
+
+export const fetchRankByUserId = async (userId: string): Promise<any> => {
+  try {
+    const res = await fetch(
+      `${GET_RANK_BY_USER_ID_API}?${new URLSearchParams({
+        user_id: userId,
+        game: 'wen_game',
+        time_window: 'all_time',
+      })}`,
+    );
+    return res;
+  } catch (e) {
+    return e;
+  }
 };

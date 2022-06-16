@@ -1,22 +1,24 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import GameCard from 'components/cards/GameCard';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import { sendEvent } from 'utils/google-analytics';
-import WenThumbnail from 'assets/images/games/wen.png';
+import WenThumbnail from 'assets/images/games/wen.gif';
+import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();
   const { loadWeb3Modal, web3Modal } = useContext(NetworkContext);
   const { arcadeBalance } = useArcadeBalance();
+  const [openBuyAT, setOpenBuyAT] = useState(false);
 
   const goToPlayOnGame = useCallback(() => {
     if (Number(arcadeBalance) > 0) {
       navigate('/games/wen-game');
     } else {
-      // TODO: Show Buy Arcade Token Modal being developed by @Diego
+      setOpenBuyAT(true);
     }
   }, [arcadeBalance, navigate]);
 
@@ -29,7 +31,7 @@ const ArcadeGameList: React.FC = () => {
     <>
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
-          title="Wen Game"
+          title="WEN Game"
           required="Arcade Tokens Required"
           description="Play this single-player baseball inspired arcade game and rank as high as you can!"
           image={WenThumbnail}
@@ -61,6 +63,10 @@ const ArcadeGameList: React.FC = () => {
           }
         />
       </Grid>
+      <BuyArcadeTokensDialog
+        open={openBuyAT}
+        onClose={() => setOpenBuyAT(false)}
+      />
     </>
   );
 };

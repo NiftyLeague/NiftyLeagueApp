@@ -40,3 +40,11 @@ export const UPDATE_PROFILE_AVATAR_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}/
 
 // Arcade API
 export const GET_ARCADE_TOKEN_BALANCE_API = `${BASE_API_URL}/accounts/account/inventory?id=arcade-token`;
+
+// Get Rank API
+export const GET_RANK_BY_USER_ID_API = `${BASE_API_URL}/GetRank`;
+
+// Marketplace API
+export const PURCHASE_ARCADE_TOKEN_BALANCE_API = `${BASE_API_URL}/marketplace/product/purchase`;
+export const GET_PRODUCT = (productId: string, currency: string) =>
+  `${BASE_API_URL}/marketplace/product?id=${productId}&currency=${currency}`;
