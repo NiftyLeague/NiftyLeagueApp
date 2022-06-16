@@ -3,7 +3,13 @@ import { Button, Grid, Typography } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 
-const ArcadeTokensRequired: React.FC = () => {
+interface ArcadeTokensRequiredProps {
+  refetchArcadeBal: () => void;
+}
+
+const ArcadeTokensRequired: React.FC<ArcadeTokensRequiredProps> = ({
+  refetchArcadeBal,
+}) => {
   const [openBuyAT, setOpenBuyAT] = useState(false);
 
   const handleBuyArcadeTokens = () => {
@@ -35,6 +41,10 @@ const ArcadeTokensRequired: React.FC = () => {
       </Grid>
       <BuyArcadeTokensDialog
         open={openBuyAT}
+        onSuccess={() => {
+          setOpenBuyAT(false);
+          refetchArcadeBal();
+        }}
         onClose={() => setOpenBuyAT(false)}
       />
     </>
