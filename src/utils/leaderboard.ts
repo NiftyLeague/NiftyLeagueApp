@@ -8,11 +8,7 @@ export const fetchUserNames = async (items: any): Promise<DataType[]> => {
     const res = await fetch(
       `${LEADERBOARD_USERNAMES_API_URL}?ids=${items}&include_stats=false`,
     );
-    // const res = await fetch(`${LEADERBOARD_USERNAMES_API_URL}`);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const json = await res.json();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return json;
+    return await res.json();
   } catch (e) {
     return [];
   }

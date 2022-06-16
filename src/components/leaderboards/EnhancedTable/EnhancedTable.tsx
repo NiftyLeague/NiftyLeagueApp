@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -212,7 +213,7 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {!!web3Modal.cachedProvider && (
+                {/* {!!web3Modal.cachedProvider && (
                   <Typography
                     variant="body2"
                     color={palette.primary.main}
@@ -224,7 +225,7 @@ export default function EnhancedTable({
                   >
                     CHECK YOUR RANK
                   </Typography>
-                )}
+                )} */}
                 {`${from}–${to}`}
               </Stack>
             )}
