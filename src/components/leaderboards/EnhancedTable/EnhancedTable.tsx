@@ -56,6 +56,7 @@ export default function EnhancedTable({
   const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState<DataType[] | null>();
+  const [myRank, setMyRank] = useState<number>();
   const { web3Modal } = useContext(NetworkContext);
   const { palette } = useTheme();
   const { profile } = usePlayerProfile();
@@ -105,7 +106,6 @@ export default function EnhancedTable({
 
   const handleCheckYourRank = async () => {
     sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
-    // Call API here
     const errorMes =
       'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
 
@@ -131,6 +131,7 @@ export default function EnhancedTable({
         });
         return;
       }
+      setMyRank(res);
       document?.querySelector('.wen-game-modal')?.parentElement?.click();
     } catch (error) {
       toast.error(error, {
@@ -244,6 +245,7 @@ export default function EnhancedTable({
                           N/A
                         </Box>
                       }
+                      myRank={myRank}
                     />
                   </>
                 )}
