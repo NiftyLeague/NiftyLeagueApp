@@ -30,6 +30,10 @@ import { formatNumberToDisplay } from 'utils/numbers';
 import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
+import {
+  BUY_ARCADE_TOKEN_STARTED,
+  BUY_ARCADE_TOKEN_COMPLETE,
+} from 'constants/analytics';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -68,7 +72,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      sendEvent('Buy Arcade Token Started', 'marketplace');
+      sendEvent(BUY_ARCADE_TOKEN_STARTED, 'marketplace');
     }
   }, [open]);
 
@@ -106,7 +110,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      sendEvent('Buy Arcade Token Complete', 'marketplace');
+      sendEvent(BUY_ARCADE_TOKEN_COMPLETE, 'marketplace');
       setRefreshAccKey(Math.random());
       onClose();
     } catch {
