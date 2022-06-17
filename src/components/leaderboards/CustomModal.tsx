@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import { styled, Box } from '@mui/system';
+import { styled, Box, useTheme } from '@mui/system';
 import ModalUnstyled from '@mui/base/ModalUnstyled';
 
 import BgImage from 'assets/images/leadboard.jpg';
@@ -29,19 +29,42 @@ const Backdrop = styled('div')`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const style = {
+const style = (theme) => ({
   width: '772px',
   height: '1024px',
   bgcolor: 'background.paper',
   border: '2px solid #000',
-  p: 2,
+  pt: 2,
   px: 4,
   pb: 3,
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
   backgroundColor: '#181425',
   backgroundPosition: 'center',
-};
+  [theme.breakpoints.down('sm')]: {
+    backgroundSize: 'cover',
+    width: '90%',
+    height: '90%',
+    '& .title-header': {
+      fontSize: '24px',
+      top: '-28px',
+    },
+    '& .modal-table': {
+      margin: '286px auto auto',
+      width: '280px',
+    },
+    '& .box-table': {
+      marginTop: '18px',
+    },
+    '& .modal-table .body .row .cell': {
+      height: '33px !important',
+    },
+    '& p.MuiTypography-body2': {
+      width: '100%',
+      marginTop: '4px',
+    },
+  },
+});
 interface ModalProps {
   ModalIcon: JSX.Element;
   child: JSX.Element;
@@ -52,6 +75,7 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const theme = useTheme();
   return (
     <>
       <div onClick={handleOpen}>{ModalIcon}</div>
@@ -64,7 +88,7 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
       >
         <Box
           sx={{
-            ...style,
+            ...style(theme),
             backgroundImage: `url(${
               flag === 'score' ? WenLeaderBoardBG : BgImage
             })`,

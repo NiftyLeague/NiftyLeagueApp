@@ -228,11 +228,13 @@ const TableModal = ({
 
   return (
     <Box className={classes.root}>
-      <code className={classes.title}>
+      <code className={`${classes.title} title-header`}>
         {flag === 'win_rate'
           ? 'WIN RATE'
           : flag === 'xp'
           ? 'TOP EARNERS'
+          : flag === 'score'
+          ? 'ALL-TIME SCORES'
           : 'TOP KILLS'}
       </code>
       <Table className="modal-table">
@@ -280,7 +282,7 @@ const TableModal = ({
             )}
           </TableRow>
         </TableHead>
-        <Box sx={{ marginTop: '50px' }} />
+        <Box className="box-table" sx={{ marginTop: '50px' }} />
         <TableBody className="body">
           {data ? (
             data.map((i) => (
