@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -48,6 +49,7 @@ const DegensFilter = ({
   isDegenOwner,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
+  const mountedRef = useRef(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const params = useMemo(
@@ -191,16 +193,34 @@ const DegensFilter = ({
 
   // Update local state on mount & on filter params update
   useEffect(() => {
-    const newFilters = updateFilterValue(defaultFilterValues, params, {
-      prices: setPricesRangeValue,
-      multipliers: setMultipliersRangeValue,
-      rentals: setRentalsRangeValue,
-      tribes: setTribesValue,
-      backgrounds: setBackgroundsValue,
-      cosmetics: setCosmeticsValue,
-      searchTerm: setSearchTermValue,
-    });
-
+    // Once mounted, show only DEGENs with Common backgrounds if non DEGEN owner
+    const newFilters = updateFilterValue(
+      !params.backgrounds && !mountedRef.current
+        ? {
+            ...defaultFilterValues,
+            backgrounds: isDegenOwner
+              ? defaultFilterValues.backgrounds
+              : ['Common'],
+          }
+        : defaultFilterValues,
+      params,
+      {
+        prices: setPricesRangeValue,
+        multipliers: setMultipliersRangeValue,
+        rentals: setRentalsRangeValue,
+        tribes: setTribesValue,
+        backgrounds: setBackgroundsValue,
+        cosmetics: setCosmeticsValue,
+        searchTerm: setSearchTermValue,
+      },
+    );
+    if (!params.backgrounds && !mountedRef.current && !isDegenOwner) {
+      setSearchParams({
+        ...params,
+        backgrounds: ['Common'],
+      });
+    }
+    mountedRef.current = true;
     onFilter({
       prices: newFilters.prices,
       multipliers: newFilters.multipliers,
@@ -210,7 +230,7 @@ const DegensFilter = ({
       cosmetics: newFilters.cosmetics,
       searchTerm: newFilters.searchTerm,
     });
-  }, [defaultFilterValues, onFilter, params]);
+  }, [defaultFilterValues, isDegenOwner, onFilter, params, setSearchParams]);
 
   return (
     <Stack
