@@ -12,10 +12,12 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTheme } from '@mui/material/styles';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useQuery } from '@apollo/client';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
@@ -261,12 +263,29 @@ const RentDegenContentDialog = ({
           </Typography>
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          <Typography>What are you renting for?</Typography>
+          <Typography>Who are you renting for?</Typography>
           <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
             <FormControlLabel
               value="recruit"
               control={<Radio />}
-              label="Recruit"
+              label={
+                <Box display="flex" alignItems="center">
+                  <Typography>Recruit</Typography>
+                  {disabledRentFor && (
+                    <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
+                      <InfoOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          ml: 0.5,
+                          mt: -1.5,
+                          width: '16px',
+                          height: '16px',
+                        }}
+                      />
+                    </Tooltip>
+                  )}
+                </Box>
+              }
               disabled={disabledRentFor}
             />
             <FormControlLabel
