@@ -1,4 +1,4 @@
-export const MAX_ACTIVE_SPENSORSHIPS = [
+export const MAX_ACTIVE_SPONSORSHIPS = [
   {
     key: 'common',
     value: 5,
