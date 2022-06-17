@@ -63,24 +63,25 @@ const useStyles = makeStyles({
     color: '#9ba5bf !important',
   },
   loadingBox: {
+    width: '100%',
+    height: '80%',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '525px',
     position: 'absolute',
     display: 'flex',
-    height: '255px',
   },
   root: {
-    width: '100%',
-    height: '100%',
+    width: '80%',
+    height: '57%',
+    margin: '56.6% auto 0',
     position: 'relative',
+    overflow: 'hidden',
     '& thead': {
       position: 'initial !important',
       display: 'contents !important',
     },
     '& table': {
-      width: 525,
-      margin: '397px auto auto',
+      width: '100%',
     },
     '& .cell': {
       height: '40px !important',
@@ -92,7 +93,6 @@ const useStyles = makeStyles({
       maxWidth: '60px !important',
     },
     '& tbody': {
-      maxWidth: 525,
       position: 'initial !important',
       '& tr': {
         '&:first-child': {
@@ -118,6 +118,8 @@ const useStyles = makeStyles({
     },
   },
   twitter: {
+    width: '100%',
+    background: 'white',
     color: '#5E72EB',
     fontWeight: 600,
     display: 'flex',
@@ -126,7 +128,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    width: '525px',
+    bottom: '0px',
     marginTop: '10px',
     gap: '10px',
     textDecoration: 'underline',
@@ -154,20 +156,23 @@ const TableModal = ({
 
   // get the top ten items
   const fetchDataItems = async () => {
-    // TODO: We should update game and time_window param later accordingly
+    if (!myRank) {
+      return;
+    }
+
     const ret: ReturnDataType = await fetchScores(
       selectedGame,
       flag,
       selectedTimeFilter,
       10,
-      0,
+      myRank < 3 ? 0 : myRank - 3,
     );
-    setData(ret.data.filter((i: { rank: number }) => i.rank <= 10));
+    setData(ret.data);
   };
 
   useEffect(() => {
     fetchDataItems();
-  }, []);
+  }, [myRank]);
 
   const handleSetBackground = (rate: number) => {
     if (rate === 1) {
@@ -228,15 +233,6 @@ const TableModal = ({
 
   return (
     <Box className={classes.root}>
-      <code className={`${classes.title} title-header`}>
-        {flag === 'win_rate'
-          ? 'WIN RATE'
-          : flag === 'xp'
-          ? 'TOP EARNERS'
-          : flag === 'score'
-          ? 'ALL-TIME SCORES'
-          : 'TOP KILLS'}
-      </code>
       <Table className="modal-table">
         <TableHead className="header">
           <TableRow className="row">
@@ -282,7 +278,7 @@ const TableModal = ({
             )}
           </TableRow>
         </TableHead>
-        <Box className="box-table" sx={{ marginTop: '50px' }} />
+        <Box className="box-table" sx={{ marginTop: '20px' }} />
         <TableBody className="body">
           {data ? (
             data.map((i) => (
