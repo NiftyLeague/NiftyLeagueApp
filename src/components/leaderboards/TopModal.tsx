@@ -217,8 +217,7 @@ const TableModal = ({
       original_referer: 'https://app.niftyleague.com/',
       ref_src: 'twsrc^tfw|twcamp^buttonembed|twterm^share|twgr^',
       text: `I ranked #${myRank} on the WEN Game Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
-      hashtags:
-        'NFT,GAMEFI,NFTGAMING,GAMING,CRYPTO,DEGENS,NIFTYLEAGUE,NFT,GAMEFI,NFTGAMING,GAMING,CRYPTO,DEGENS,NIFTYLEAGUE',
+      hashtags: 'NiftyLeague,NFT,NFTGaming',
     };
     window.open(
       `https://twitter.com/intent/tweet?${`${new URLSearchParams(obj)}`}`,
