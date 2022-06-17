@@ -159,24 +159,6 @@ export default function LeaderBoards(): JSX.Element {
           ))}
         </List> */}
       </Stack>
-      {/* <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <TopModal
-            flag="win_rate"
-            ModalIcon={<EmojiEvents className="leaderboard-icon win-rate" />}
-          />
-          <TopModal
-            flag="xp"
-            ModalIcon={<Paid className="leaderboard-icon xp" />}
-          />
-          <TopModal
-            flag="kills"
-            ModalIcon={<CrisisAlert className="leaderboard-icon kills" />}
-          />
-        </Stack> */}
       <EnhancedTable
         selectedGame={selectedGame}
         selectedTable={selectedTable}
