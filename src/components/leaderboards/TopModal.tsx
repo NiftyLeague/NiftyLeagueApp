@@ -174,48 +174,12 @@ const TableModal = ({
     fetchDataItems();
   }, [myRank]);
 
-  const handleSetBackground = (rate: number) => {
-    if (rate === 1) {
-      return { fontSize: 15, background: '#ffcd1c', width: '100%' };
-    } else if (rate === 2) {
-      return { fontSize: 15, background: '#d8d8d8', width: '100%' };
-    } else if (rate === 3) {
-      return { fontSize: 15, background: '#e49c8e', width: '100%' };
-    }
-    return { fontSize: 14, background: '' };
-  };
-
-  const handleSetTopPeople = (rate: number) => {
-    if (rate === 1) {
-      return {
-        border: 'solid 1px #ffcd1c',
-        background: '#ffcd1c',
-        color: 'white',
-      };
-    } else if (rate === 2) {
-      return {
-        border: 'solid 1px rgb(216, 216, 216)',
-        background: 'rgb(216, 216, 216)',
-        color: 'white',
-      };
-    } else if (rate === 3) {
-      return {
-        border: 'solid 1px rgb(228, 156, 142)',
-        background: 'rgb(228, 156, 142)',
-        color: 'white',
-      };
-    }
-    return {};
+  const getTextStyleForRank = (rank: number) => {
+    return rank === myRank ? { color: '#E49C8E' } : {};
   };
 
   // shorten user id letters
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleShortenUserId = (userId: string) => {
-    const firstChar = userId.slice(-4);
-    const lastChar = userId.slice(0, 4);
-    const user = lastChar.concat('***', firstChar);
-    return user;
-  };
 
   const handleShareOnTwitter = () => {
     const obj = {
@@ -285,7 +249,7 @@ const TableModal = ({
                 <TableCell className={`cell index ${classes.rank}`}>
                   <span
                     className={classes.rankBody}
-                    style={handleSetTopPeople(i.rank)}
+                    style={getTextStyleForRank(i.rank)}
                   >
                     {i.rank}
                   </span>
@@ -293,7 +257,11 @@ const TableModal = ({
                   {i.rank === 10 && <Box className={classes.lineBottom} />}
                 </TableCell>
                 <TableCell
-                  style={handleSetBackground(i.rank)}
+                  style={{
+                    ...getTextStyleForRank(i.rank),
+                    fontSize: 14,
+                    background: '',
+                  }}
                   className="cell ellipsis"
                 >
                   {i.user_id}
@@ -318,7 +286,14 @@ const TableModal = ({
                     )}
                   </TableCell>
                 )}
-                <TableCell className="cell ellipsis end">
+                <TableCell
+                  style={{
+                    ...getTextStyleForRank(i.rank),
+                    fontSize: 14,
+                    background: '',
+                  }}
+                  className="cell ellipsis end"
+                >
                   {i.stats.matches}
                   {i.rank === 1 && flag === 'xp' && (
                     <Box className={classes.lineTop} />
