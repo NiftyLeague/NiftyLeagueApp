@@ -30,8 +30,8 @@ const Backdrop = styled('div')`
 `;
 
 const style = (theme) => ({
-  width: '772px',
-  height: '1024px',
+  width: '67.5vh',
+  height: '90vh',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   pt: 2,
@@ -42,22 +42,15 @@ const style = (theme) => ({
   backgroundColor: '#181425',
   backgroundPosition: 'center',
   [theme.breakpoints.down('sm')]: {
+    width: '90vw',
+    height: '120vw',
     backgroundSize: 'cover',
-    width: '90%',
-    height: '90%',
     '& .title-header': {
       fontSize: '24px',
       top: '-28px',
     },
-    '& .modal-table': {
-      margin: '286px auto auto',
-      width: '280px',
-    },
     '& .box-table': {
       marginTop: '18px',
-    },
-    '& .modal-table .body .row .cell': {
-      height: '33px !important',
     },
     '& p.MuiTypography-body2': {
       width: '100%',
