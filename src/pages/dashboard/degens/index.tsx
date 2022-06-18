@@ -24,7 +24,6 @@ import {
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -59,8 +58,6 @@ const DashboardDegensPage = (): JSX.Element => {
   const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
-    useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
@@ -140,11 +137,6 @@ const DashboardDegensPage = (): JSX.Element => {
     [populatedDegens.length, filters],
   );
 
-  const handleEnableDisable = useCallback((degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsEnableDisableDegenModalOpen(true);
-  }, []);
-
   const handleClickEditName = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
@@ -210,16 +202,8 @@ const DashboardDegensPage = (): JSX.Element => {
         xl={3}
       >
         <DegenCard
-          id={degen.id}
-          name={degen.name}
-          multiplier={degen.multiplier}
-          owner={degen.owner}
-          price={degen.price}
-          background={degen.background}
-          activeRentals={degen.rental_count}
-          isEnabled={degen.is_active}
+          degen={degen}
           isDashboardDegen
-          onEnableDisable={() => handleEnableDisable(degen)}
           onClickDetail={() => handleViewTraits(degen)}
           onClickEditName={() => handleClickEditName(degen)}
           onClickClaim={() => handleClaimDegen(degen)}
@@ -230,7 +214,6 @@ const DashboardDegensPage = (): JSX.Element => {
     [
       handleClaimDegen,
       handleClickEditName,
-      handleEnableDisable,
       handleRentDegen,
       handleViewTraits,
       isDrawerOpen,
@@ -328,15 +311,6 @@ const DashboardDegensPage = (): JSX.Element => {
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
         <RenameDegenDialogContent degen={selectedDegen} />
-      </Dialog>
-      <Dialog
-        open={isEnableDisableDegenModalOpen}
-        onClose={() => setIsEnableDisableDegenModalOpen(false)}
-      >
-        <EnableDisableDegenDialogContent
-          degen={selectedDegen}
-          isEnabled={selectedDegen?.is_active}
-        />
       </Dialog>
     </>
   );
