@@ -13,8 +13,10 @@ import {
   Table,
   TableCell,
   CircularProgress,
+  Typography,
 } from '@mui/material';
 
+import { ReactComponent as TwitterIcon } from 'assets/images/icons/twitter.svg';
 const useStyles = makeStyles({
   title: {
     position: 'absolute',
@@ -61,24 +63,25 @@ const useStyles = makeStyles({
     color: '#9ba5bf !important',
   },
   loadingBox: {
+    width: '100%',
+    height: '80%',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '525px',
     position: 'absolute',
     display: 'flex',
-    height: '255px',
   },
   root: {
-    width: '100%',
-    height: '100%',
+    width: '80%',
+    height: '57%',
+    margin: '56.6% auto 0',
     position: 'relative',
+    overflow: 'hidden',
     '& thead': {
       position: 'initial !important',
       display: 'contents !important',
     },
     '& table': {
-      width: 525,
-      margin: '397px auto auto',
+      width: '100%',
     },
     '& .cell': {
       height: '40px !important',
@@ -90,7 +93,6 @@ const useStyles = makeStyles({
       maxWidth: '60px !important',
     },
     '& tbody': {
-      maxWidth: 525,
       position: 'initial !important',
       '& tr': {
         '&:first-child': {
@@ -115,92 +117,85 @@ const useStyles = makeStyles({
       },
     },
   },
+  twitter: {
+    width: '100%',
+    background: 'white',
+    color: '#5E72EB',
+    fontWeight: 600,
+    display: 'flex',
+    fontSize: '14px',
+    lineHeight: '20px',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: '0px',
+    marginTop: '10px',
+    gap: '10px',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
 });
 
 interface TableModalProps {
   selectedGame: string;
   flag: string;
   selectedTimeFilter: string;
+  myRank?: number;
 }
 
 const TableModal = ({
   selectedGame,
   flag,
   selectedTimeFilter,
+  myRank,
 }: TableModalProps): JSX.Element | null => {
-  let d = new Date(),
-    t = d.toDateString().split(' ');
+  // let d = new Date(),
+  //   t = d.toDateString().split(' ');
   const classes = useStyles();
   const [data, setData] = useState<DataType[]>();
 
   // get the top ten items
   const fetchDataItems = async () => {
-    // TODO: We should update game and time_window param later accordingly
+    if (!myRank) {
+      return;
+    }
+
     const ret: ReturnDataType = await fetchScores(
       selectedGame,
       flag,
       selectedTimeFilter,
       10,
-      0,
+      myRank < 3 ? 0 : myRank - 3,
     );
-    setData(ret.data.filter((i: { rank: number }) => i.rank <= 10));
+    setData(ret.data);
   };
 
   useEffect(() => {
     fetchDataItems();
-  }, []);
+  }, [myRank]);
 
-  const handleSetBackground = (rate: number) => {
-    if (rate === 1) {
-      return { fontSize: 15, background: '#ffcd1c', width: '100%' };
-    } else if (rate === 2) {
-      return { fontSize: 15, background: '#d8d8d8', width: '100%' };
-    } else if (rate === 3) {
-      return { fontSize: 15, background: '#e49c8e', width: '100%' };
-    }
-    return { fontSize: 14, background: '' };
-  };
-
-  const handleSetTopPeople = (rate: number) => {
-    if (rate === 1) {
-      return {
-        border: 'solid 1px #ffcd1c',
-        background: '#ffcd1c',
-        color: 'white',
-      };
-    } else if (rate === 2) {
-      return {
-        border: 'solid 1px rgb(216, 216, 216)',
-        background: 'rgb(216, 216, 216)',
-        color: 'white',
-      };
-    } else if (rate === 3) {
-      return {
-        border: 'solid 1px rgb(228, 156, 142)',
-        background: 'rgb(228, 156, 142)',
-        color: 'white',
-      };
-    }
-    return {};
+  const getTextStyleForRank = (rank: number) => {
+    return rank === myRank ? { color: '#E49C8E' } : {};
   };
 
   // shorten user id letters
-  const handleShortenUserId = (userId: string) => {
-    const firstChar = userId.slice(-4);
-    const lastChar = userId.slice(0, 4);
-    const user = lastChar.concat('***', firstChar);
-    return user;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+  const handleShareOnTwitter = () => {
+    const obj = {
+      original_referer: 'https://app.niftyleague.com/',
+      ref_src: 'twsrc^tfw|twcamp^buttonembed|twterm^share|twgr^',
+      text: `I ranked #${myRank} on the WEN Game Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
+      hashtags: 'NiftyLeague,NFT,NFTGaming',
+    };
+    window.open(
+      `https://twitter.com/intent/tweet?${`${new URLSearchParams(obj)}`}`,
+      '_blank',
+    );
   };
 
   return (
     <Box className={classes.root}>
-      <code className={classes.title}>
-        {flag === 'win_rate'
-          ? 'WIN RATE'
-          : flag === 'xp'
-          ? 'TOP EARNERS'
-          : 'TOP KILLS'}
-      </code>
       <Table className="modal-table">
         <TableHead className="header">
           <TableRow className="row">
@@ -220,26 +215,33 @@ const TableModal = ({
                 <code>TOTALNFTLEARNED</code>
               </TableCell>
             )}
-            <TableCell
-              component="th"
-              className="cell ellipsis"
-              style={{ fontSize: 12 }}
-            >
-              <code>MATCHES PLAYED</code>
-            </TableCell>
+            {flag !== 'score' && (
+              <TableCell
+                component="th"
+                className="cell ellipsis"
+                style={{ fontSize: 12 }}
+              >
+                <code>MATCHES PLAYED</code>
+              </TableCell>
+            )}
             {flag === 'xp' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>AVG,NFTL/MATCH</code>
               </TableCell>
             )}
-            {flag !== 'win_rate' && (
+            {flag !== 'win_rate' && flag !== 'score' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>KILLS</code>
               </TableCell>
             )}
+            {flag === 'score' && (
+              <TableCell component="th" className="cell ellipsis">
+                <code>HIGH SCORE</code>
+              </TableCell>
+            )}
           </TableRow>
         </TableHead>
-        <Box sx={{ marginTop: '50px' }} />
+        <Box className="box-table" sx={{ marginTop: '20px' }} />
         <TableBody className="body">
           {data ? (
             data.map((i) => (
@@ -247,7 +249,7 @@ const TableModal = ({
                 <TableCell className={`cell index ${classes.rank}`}>
                   <span
                     className={classes.rankBody}
-                    style={handleSetTopPeople(i.rank)}
+                    style={getTextStyleForRank(i.rank)}
                   >
                     {i.rank}
                   </span>
@@ -255,10 +257,14 @@ const TableModal = ({
                   {i.rank === 10 && <Box className={classes.lineBottom} />}
                 </TableCell>
                 <TableCell
-                  style={handleSetBackground(i.rank)}
+                  style={{
+                    ...getTextStyleForRank(i.rank),
+                    fontSize: 14,
+                    background: '',
+                  }}
                   className="cell ellipsis"
                 >
-                  {handleShortenUserId(i.user_id)}
+                  {i.user_id}
                   {i.rank === 1 && <Box className={classes.lineTop} />}
                   {i.rank === 10 && <Box className={classes.lineBottom} />}
                 </TableCell>
@@ -280,7 +286,14 @@ const TableModal = ({
                     )}
                   </TableCell>
                 )}
-                <TableCell className="cell ellipsis end">
+                <TableCell
+                  style={{
+                    ...getTextStyleForRank(i.rank),
+                    fontSize: 14,
+                    background: '',
+                  }}
+                  className="cell ellipsis end"
+                >
                   {i.stats.matches}
                   {i.rank === 1 && flag === 'xp' && (
                     <Box className={classes.lineTop} />
@@ -308,10 +321,19 @@ const TableModal = ({
               <CircularProgress />
             </Box>
           )}
-          {data && (
+          {/* {data && (
             <code className={classes.time}>
               {t[2] + ' ' + t[1] + ' ' + t[3]}
             </code>
+          )} */}
+          {data && (
+            <Typography
+              variant="body2"
+              className={classes.twitter}
+              onClick={handleShareOnTwitter}
+            >
+              Share on twitter <TwitterIcon />
+            </Typography>
           )}
         </TableBody>
       </Table>
@@ -328,6 +350,7 @@ const TopModal = ({
   selectedGame,
   flag,
   selectedTimeFilter,
+  myRank,
 }: TopModalProps): JSX.Element | null => {
   return (
     <CustomModal
@@ -337,8 +360,10 @@ const TopModal = ({
           selectedGame={selectedGame}
           flag={flag}
           selectedTimeFilter={selectedTimeFilter}
+          myRank={myRank}
         />
       }
+      flag={flag}
     />
   );
 };

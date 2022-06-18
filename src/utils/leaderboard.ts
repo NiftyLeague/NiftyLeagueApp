@@ -62,7 +62,7 @@ export const fetchScores = async (
   for (let i = 0; i < addAvg.length; i++) {
     for (let j = 0; j < a.length; j++) {
       if (addAvg[i].user_id === a[j][0]) {
-        addAvg[i].user_id = a[j][1].name;
+        addAvg[i].user_id = a[j][1]?.name;
       }
     }
   }

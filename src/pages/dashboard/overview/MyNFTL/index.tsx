@@ -270,10 +270,11 @@ const MyNFTL = (): JSX.Element => {
           </Grid>
           <BuyArcadeTokensDialog
             open={openBuyAT}
-            onClose={() => {
+            onSuccess={() => {
               setOpenBuyAT(false);
               refetchArcadeBal();
             }}
+            onClose={() => setOpenBuyAT(false)}
           />
         </>
       )}
