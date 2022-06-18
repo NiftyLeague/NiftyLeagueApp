@@ -26,6 +26,7 @@ import {
   LEADERBOARD_CATEGORY,
   LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
 } from 'constants/analytics';
+import TopModal from '../TopModal';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -55,6 +56,7 @@ export default function EnhancedTable({
   const [count, setCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState<DataType[] | null>();
+  const [myRank, setMyRank] = useState<number>();
   const { web3Modal } = useContext(NetworkContext);
   const { palette } = useTheme();
   const { profile } = usePlayerProfile();
@@ -104,33 +106,30 @@ export default function EnhancedTable({
 
   const handleCheckYourRank = async () => {
     sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
-    // Call API here
-    if (profile?.id) {
-      try {
-        const result: any = await fetchRankByUserId(profile?.id);
-        if (!result.ok) {
-          const errMsg = await result.text();
-          toast.error(errMsg, {
-            theme: 'dark',
-          });
-          return;
-        }
-        const res = await result.json();
-        if (res < 1) {
-          toast.error(
-            'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.',
-            {
-              theme: 'dark',
-            },
-          );
-          return;
-        }
-        // TODO: will implement FE-362
-      } catch (error) {
-        toast.error(error, {
-          theme: 'dark',
-        });
+    const errorMes =
+      'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
+
+    if (!profile?.id) {
+      toast.error(errorMes, { theme: 'dark' });
+      return;
+    }
+    try {
+      const result: any = await fetchRankByUserId(profile?.id);
+      if (!result.ok) {
+        const errMsg = await result.text();
+        toast.error(errMsg, { theme: 'dark' });
+        return;
       }
+      const res = await result.json();
+      if (res < 1) {
+        toast.error(errorMes, { theme: 'dark' });
+        return;
+      }
+      setMyRank(res);
+      document?.querySelector('.wen-game-modal')?.parentElement?.click();
+    } catch (error) {
+      toast.error(error, { theme: 'dark' });
+      return;
     }
   };
 
@@ -213,19 +212,35 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {/* {!!web3Modal.cachedProvider && (
-                  <Typography
-                    variant="body2"
-                    color={palette.primary.main}
-                    sx={{
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                    }}
-                    onClick={handleCheckYourRank}
-                  >
-                    CHECK YOUR RANK
-                  </Typography>
-                )} */}
+                {!!web3Modal.cachedProvider && selectedGame === 'wen_game' && (
+                  <>
+                    <Typography
+                      variant="body2"
+                      color={palette.primary.main}
+                      sx={{
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleCheckYourRank}
+                    >
+                      CHECK YOUR RANK
+                    </Typography>
+                    <TopModal
+                      selectedGame="wen_game"
+                      selectedTimeFilter="all_time"
+                      flag="score"
+                      ModalIcon={
+                        <Box
+                          className="wen-game-modal"
+                          sx={{ display: 'none' }}
+                        >
+                          N/A
+                        </Box>
+                      }
+                      myRank={myRank}
+                    />
+                  </>
+                )}
                 {`${from}–${to}`}
               </Stack>
             )}

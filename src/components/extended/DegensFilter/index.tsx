@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -39,13 +40,16 @@ type FilterSource =
 interface DegensFilterProps {
   onFilter: (filter: DegenFilter) => void;
   defaultFilterValues: DegenFilter;
+  isDegenOwner?: boolean;
 }
 
 const DegensFilter = ({
   onFilter,
   defaultFilterValues,
+  isDegenOwner,
 }: DegensFilterProps): JSX.Element => {
   const theme = useTheme();
+  const mountedRef = useRef(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const params = useMemo(
@@ -72,7 +76,7 @@ const DegensFilter = ({
     defaultFilterValues.tribes,
   );
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
-    defaultFilterValues.backgrounds,
+    isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
   );
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
@@ -160,10 +164,12 @@ const DegensFilter = ({
     setMultipliersRangeValue(defaultFilterValues.multipliers);
     setRentalsRangeValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
-    setBackgroundsValue(defaultFilterValues.backgrounds);
+    setBackgroundsValue(
+      isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
+    );
     setCosmeticsValue(defaultFilterValues.cosmetics);
     setSearchTermValue(defaultFilterValues.searchTerm);
-  }, [defaultFilterValues]);
+  }, [defaultFilterValues, isDegenOwner]);
 
   const handleReset = () => {
     if (isParamsEmpty) return;
@@ -187,16 +193,34 @@ const DegensFilter = ({
 
   // Update local state on mount & on filter params update
   useEffect(() => {
-    const newFilters = updateFilterValue(defaultFilterValues, params, {
-      prices: setPricesRangeValue,
-      multipliers: setMultipliersRangeValue,
-      rentals: setRentalsRangeValue,
-      tribes: setTribesValue,
-      backgrounds: setBackgroundsValue,
-      cosmetics: setCosmeticsValue,
-      searchTerm: setSearchTermValue,
-    });
-
+    // Once mounted, show only DEGENs with Common backgrounds if non DEGEN owner
+    const newFilters = updateFilterValue(
+      !params.backgrounds && !mountedRef.current
+        ? {
+            ...defaultFilterValues,
+            backgrounds: isDegenOwner
+              ? defaultFilterValues.backgrounds
+              : ['Common'],
+          }
+        : defaultFilterValues,
+      params,
+      {
+        prices: setPricesRangeValue,
+        multipliers: setMultipliersRangeValue,
+        rentals: setRentalsRangeValue,
+        tribes: setTribesValue,
+        backgrounds: setBackgroundsValue,
+        cosmetics: setCosmeticsValue,
+        searchTerm: setSearchTermValue,
+      },
+    );
+    if (!params.backgrounds && !mountedRef.current && !isDegenOwner) {
+      setSearchParams({
+        ...params,
+        backgrounds: ['Common'],
+      });
+    }
+    mountedRef.current = true;
     onFilter({
       prices: newFilters.prices,
       multipliers: newFilters.multipliers,
@@ -206,7 +230,7 @@ const DegensFilter = ({
       cosmetics: newFilters.cosmetics,
       searchTerm: newFilters.searchTerm,
     });
-  }, [defaultFilterValues, onFilter, params]);
+  }, [defaultFilterValues, isDegenOwner, onFilter, params, setSearchParams]);
 
   return (
     <Stack

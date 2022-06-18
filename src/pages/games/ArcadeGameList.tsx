@@ -11,7 +11,7 @@ import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();
   const { loadWeb3Modal, web3Modal } = useContext(NetworkContext);
-  const { arcadeBalance } = useArcadeBalance();
+  const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const [openBuyAT, setOpenBuyAT] = useState(false);
 
   const goToPlayOnGame = useCallback(() => {
@@ -65,6 +65,10 @@ const ArcadeGameList: React.FC = () => {
       </Grid>
       <BuyArcadeTokensDialog
         open={openBuyAT}
+        onSuccess={() => {
+          setOpenBuyAT(false);
+          refetchArcadeBal();
+        }}
         onClose={() => setOpenBuyAT(false)}
       />
     </>

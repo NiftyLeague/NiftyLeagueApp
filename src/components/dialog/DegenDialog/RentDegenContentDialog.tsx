@@ -1,3 +1,4 @@
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,23 +12,28 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTheme } from '@mui/material/styles';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useQuery } from '@apollo/client';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useRentalRenameFee from 'hooks/useRentalRenameFee';
-import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen } from 'types/degens';
 import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
 import useRentalRename from 'hooks/useRentalRename';
 import { toast } from 'react-toastify';
-import LoadingButton from '@mui/lab/LoadingButton';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { NetworkContext } from 'NetworkProvider';
 import { sendEvent } from 'utils/google-analytics';
 import TermsOfServiceDialog from '../TermsOfServiceDialog';
+import { Owner } from 'types/graph';
+import { OWNER_QUERY } from 'queries/OWNER_QUERY';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -38,7 +44,7 @@ const RentDegenContentDialog = ({
   degen,
   onClose,
 }: RentDegenContentDialogProps) => {
-  const { web3Modal } = useContext(NetworkContext);
+  const { address, web3Modal } = useContext(NetworkContext);
   const [agreement, setAgreement] = useState<boolean>(
     localStorage.getItem('aggreement-accepted') === 'ACCEPTED',
   );
@@ -51,6 +57,34 @@ const RentDegenContentDialog = ({
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [openTOS, setOpenTOS] = useState<boolean>(false);
+  const [disabledRentFor, setDisabledRentFor] = useState<boolean>(false);
+  const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
+    useQuery(OWNER_QUERY, {
+      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
+      variables: { address: address?.toLowerCase() },
+      skip: !address,
+    });
+
+  const isDegenOwner = useMemo(
+    () => (userDegens?.owner?.characterCount ?? 0) > 0,
+    [userDegens?.owner?.characterCount],
+  );
+
+  useEffect(() => {
+    if (!degen) return;
+    if (degen.is_active === false) {
+      setRentFor('myself');
+      setDisabledRentFor(true);
+    }
+    if (degen.background === 'common') return;
+    if (!isDegenOwner) {
+      setRentFor('myself');
+      setDisabledRentFor(true);
+    } else {
+      // Once api is ready,
+      // need to check if user has reached out to max Sponsorship cap, then disable RentFor option
+    }
+  }, [degen, isDegenOwner]);
 
   const [, , rentalPassCount] = useRentalPassCount(degen?.id);
   const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
@@ -229,12 +263,30 @@ const RentDegenContentDialog = ({
           </Typography>
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          <Typography>What are you renting for?</Typography>
+          <Typography>Who are you renting for?</Typography>
           <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
             <FormControlLabel
               value="recruit"
               control={<Radio />}
-              label="Recruit"
+              label={
+                <Box display="flex" alignItems="center">
+                  <Typography>Recruit</Typography>
+                  {disabledRentFor && (
+                    <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
+                      <InfoOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          ml: 0.5,
+                          mt: -1.5,
+                          width: '16px',
+                          height: '16px',
+                        }}
+                      />
+                    </Tooltip>
+                  )}
+                </Box>
+              }
+              disabled={disabledRentFor}
             />
             <FormControlLabel
               value="myself"
