@@ -72,7 +72,7 @@ const DegenCard: React.FC<
 > = memo(
   ({
     degen,
-    isDashboardDegen,
+    isDashboardDegen = false,
     onClickClaim,
     onClickDetail,
     onClickEditName,
@@ -85,26 +85,24 @@ const DegenCard: React.FC<
     const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
       useState<boolean>(false);
     const [isEnabled, setIsEnabled] = useState(is_active);
-    const getIsEnabled = async () => {
-      if (authToken && degen) {
-        const res = await fetch(
-          `${DISABLE_RENT_API_URL}activate?degen_id=${degen.id}`,
-          {
-            method: 'GET',
-            headers: { authorizationToken: authToken },
-          },
-        );
-        const json = await res.json();
-        setIsEnabled(!json?.price);
-      }
-    };
+
     useEffect(() => {
-      getIsEnabled();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [degen]);
-    const onEnableDisable = () => {
-      setIsEnableDisableDegenModalOpen(true);
-    };
+      const getIsEnabled = async () => {
+        if (authToken && id) {
+          const res = await fetch(
+            `${DISABLE_RENT_API_URL}activate?degen_id=${id}`,
+            {
+              method: 'GET',
+              headers: { authorizationToken: authToken },
+            },
+          );
+          const json = await res.json();
+          setIsEnabled(!json?.price);
+        }
+      };
+      if (isDashboardDegen) getIsEnabled();
+    }, [authToken, id, isDashboardDegen]);
+
     const onClickDownload = async () => {
       if (authToken) {
         try {
@@ -243,7 +241,7 @@ const DegenCard: React.FC<
                 cursor: 'pointer',
                 textAlign: 'center',
               }}
-              onClick={onEnableDisable}
+              onClick={() => setIsEnableDisableDegenModalOpen(true)}
             >
               {isEnabled ? 'Disable' : 'Enable'} Rentals
             </Typography>
