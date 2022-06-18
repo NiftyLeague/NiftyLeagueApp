@@ -294,7 +294,7 @@ const TableModal = ({
                   }}
                   className="cell ellipsis end"
                 >
-                  {i.stats.matches}
+                  {i.score}
                   {i.rank === 1 && flag === 'xp' && (
                     <Box className={classes.lineTop} />
                   )}
