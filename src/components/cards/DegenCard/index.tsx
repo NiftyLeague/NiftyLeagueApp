@@ -1,4 +1,4 @@
-import { useContext, memo } from 'react';
+import { useContext, memo, useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   Theme,
   Typography,
   useTheme,
+  Dialog,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
@@ -22,6 +23,9 @@ import { NetworkContext } from 'NetworkProvider';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
 import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
+import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
+import { Degen } from 'types/degens';
+import { DISABLE_RENT_API_URL } from 'constants/url';
 
 const chipStyles = {
   color: 'white',
@@ -38,20 +42,12 @@ const chipStyles = {
 };
 
 export interface DegenCardProps {
-  activeRentals?: number;
-  background?: string;
-  id: string;
+  degen: Degen;
   isDashboardDegen?: boolean;
-  isEnabled?: boolean;
-  multiplier?: number;
-  name?: string;
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
-  onEnableDisable?: React.MouseEventHandler<HTMLDivElement>;
-  owner?: string;
-  price?: number;
   sx?: SxProps<Theme>;
 }
 
@@ -75,25 +71,38 @@ const DegenCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
 > = memo(
   ({
-    activeRentals,
-    background,
-    id,
+    degen,
     isDashboardDegen = false,
-    isEnabled,
-    multiplier,
-    name,
     onClickClaim,
     onClickDetail,
     onClickEditName,
     onClickRent,
-    onEnableDisable,
-    owner,
-    price,
     sx,
   }) => {
     const { palette } = useTheme();
-
+    const { id, name, multiplier, price, rental_count, is_active } = degen;
     const authToken = window.localStorage.getItem('authentication-token');
+    const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
+      useState<boolean>(false);
+    const [isEnabled, setIsEnabled] = useState(is_active);
+
+    useEffect(() => {
+      const getIsEnabled = async () => {
+        if (authToken && id) {
+          const res = await fetch(
+            `${DISABLE_RENT_API_URL}activate?degen_id=${id}`,
+            {
+              method: 'GET',
+              headers: { authorizationToken: authToken },
+            },
+          );
+          const json = await res.json();
+          setIsEnabled(!json?.price);
+        }
+      };
+      if (isDashboardDegen) getIsEnabled();
+    }, [authToken, id, isDashboardDegen]);
+
     const onClickDownload = async () => {
       if (authToken) {
         try {
@@ -129,7 +138,7 @@ const DegenCard: React.FC<
           />
           <Chip
             chipcolor="rgb(75, 7, 175)"
-            label={`${activeRentals} Rentals`}
+            label={`${rental_count} Rentals`}
             sx={chipStyles}
             variant="outlined"
             size="small"
@@ -232,7 +241,7 @@ const DegenCard: React.FC<
                 cursor: 'pointer',
                 textAlign: 'center',
               }}
-              onClick={onEnableDisable}
+              onClick={() => setIsEnableDisableDegenModalOpen(true)}
             >
               {isEnabled ? 'Disable' : 'Enable'} Rentals
             </Typography>
@@ -257,6 +266,19 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
+        <Dialog
+          open={isEnableDisableDegenModalOpen}
+          onClose={() => setIsEnableDisableDegenModalOpen(false)}
+        >
+          <EnableDisableDegenDialogContent
+            degen={degen}
+            isEnabled={isEnabled}
+            onClose={() => {
+              setIsEnabled(!isEnabled);
+              setIsEnableDisableDegenModalOpen(false);
+            }}
+          />
+        </Dialog>
       </Card>
     );
   },

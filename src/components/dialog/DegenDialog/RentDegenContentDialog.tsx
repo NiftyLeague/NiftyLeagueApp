@@ -69,14 +69,11 @@ const RentDegenContentDialog = ({
     () => (userDegens?.owner?.characterCount ?? 0) > 0,
     [userDegens?.owner?.characterCount],
   );
+  const rentDisabled =
+    degen?.owner !== address.toLowerCase() && !degen?.is_active;
 
   useEffect(() => {
-    if (!degen) return;
-    if (degen.is_active === false) {
-      setRentFor('myself');
-      setDisabledRentFor(true);
-    }
-    if (degen.background === 'common') return;
+    if (!degen || degen?.background === 'common') return;
     if (!isDegenOwner) {
       setRentFor('myself');
       setDisabledRentFor(true);
@@ -208,25 +205,6 @@ const RentDegenContentDialog = ({
     sendEvent('add_to_cart', 'ecommerce');
   }, []);
 
-  // TODO: @Brian double check requirements. Errors should not popup everytime someone opens the rental dialog.
-  // If this feedback below is required we should disable the radio buttons and show these messages on tooltip
-  //
-  // useEffect(() => {
-  //   if (!isShowRentalPassOption() && !rentalPassCountloading) {
-  //     if (rentalPassCount > 0)
-  //       toast.error(
-  //         "Rental passes can't be added to Degens with an active rental",
-  //         { theme: 'dark' },
-  //       );
-  //     else
-  //       toast.error(
-  //         "You can't use rental pass option because you have no remaining rental pass",
-  //         { theme: 'dark' },
-  //       );
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rentalPassCount, rentalPassCountloading]);
-
   const openTOSDialog = (event) => {
     event.preventDefault();
     setOpenTOS(true);
@@ -262,91 +240,109 @@ const RentDegenContentDialog = ({
             Owned by {degen?.owner?.substring(0, 5)}
           </Typography>
         </Stack>
-        <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          <Typography>Who are you renting for?</Typography>
-          <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
-            <FormControlLabel
-              value="recruit"
-              control={<Radio />}
-              label={
-                <Box display="flex" alignItems="center">
-                  <Typography>Recruit</Typography>
-                  {disabledRentFor && (
-                    <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
-                      <InfoOutlinedIcon
-                        fontSize="small"
-                        sx={{
-                          ml: 0.5,
-                          mt: -1.5,
-                          width: '16px',
-                          height: '16px',
-                        }}
-                      />
-                    </Tooltip>
-                  )}
-                </Box>
-              }
-              disabled={disabledRentFor}
-            />
-            <FormControlLabel
-              value="myself"
-              control={<Radio />}
-              label="Myself"
-            />
-          </RadioGroup>
-        </Stack>
-        {rentFor === 'recruit' && (
-          <Stack direction="column" alignItems="center" gap={2} sx={{ my: 2 }}>
-            <Typography textAlign="center">
-              What is your recruit&#39;s ETH wallet address?
-            </Typography>
-            <FormControl fullWidth>
-              <TextField
-                placeholder="0xunkown"
-                name="address"
-                variant="outlined"
-                fullWidth
-                value={ethAddress}
-                error={addressError !== ''}
-                helperText={addressError}
-                onChange={(event) => validateAddress(event.target.value)}
-              />
-            </FormControl>
+        {rentDisabled ? (
+          <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
+            <Typography>Owner has disabled this DEGEN from renting.</Typography>
           </Stack>
-        )}
-        <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          <Typography textAlign="center">
-            Do you want to rename the degen for your rental?
-          </Typography>
-          <RadioGroup
-            row
-            onChange={handleChangeRenameDegen}
-            value={renameEnabled ? 'yes' : 'no'}
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-          {renameEnabled && (
-            <FormControl fullWidth>
-              <TextField
-                placeholder="Enter a degen name"
-                name="degen_name"
-                variant="outlined"
-                fullWidth
-                value={newDegenName}
-                error={nameError !== ''}
-                helperText={nameError}
-                onChange={(event) => validateName(event.target.value)}
-              />
-            </FormControl>
-          )}
-        </Stack>
-        {renameEnabled && (
-          <Stack direction="column" alignItems="center" gap={1} sx={{ my: 2 }}>
-            <Typography color="gray">
-              There is a {renameFee} NFTL fee for renaming
-            </Typography>
-          </Stack>
+        ) : (
+          <>
+            <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
+              <Typography>Who are you renting for?</Typography>
+              <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
+                <FormControlLabel
+                  value="recruit"
+                  control={<Radio />}
+                  label={
+                    <Box display="flex" alignItems="center">
+                      <Typography>Recruit</Typography>
+                      {disabledRentFor && (
+                        <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
+                          <InfoOutlinedIcon
+                            fontSize="small"
+                            sx={{
+                              ml: 0.5,
+                              mt: -1.5,
+                              width: '16px',
+                              height: '16px',
+                            }}
+                          />
+                        </Tooltip>
+                      )}
+                    </Box>
+                  }
+                  disabled={disabledRentFor}
+                />
+                <FormControlLabel
+                  value="myself"
+                  control={<Radio />}
+                  label="Myself"
+                />
+              </RadioGroup>
+            </Stack>
+            {rentFor === 'recruit' && (
+              <Stack
+                direction="column"
+                alignItems="center"
+                gap={2}
+                sx={{ my: 2 }}
+              >
+                <Typography textAlign="center">
+                  What is your recruit&#39;s ETH wallet address?
+                </Typography>
+                <FormControl fullWidth>
+                  <TextField
+                    placeholder="0xunkown"
+                    name="address"
+                    variant="outlined"
+                    fullWidth
+                    value={ethAddress}
+                    error={addressError !== ''}
+                    helperText={addressError}
+                    onChange={(event) => validateAddress(event.target.value)}
+                  />
+                </FormControl>
+              </Stack>
+            )}
+            <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
+              <Typography textAlign="center">
+                Do you want to rename the degen for your rental?
+              </Typography>
+              <RadioGroup
+                row
+                onChange={handleChangeRenameDegen}
+                value={renameEnabled ? 'yes' : 'no'}
+              >
+                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="no" control={<Radio />} label="No" />
+              </RadioGroup>
+              {renameEnabled && (
+                <FormControl fullWidth>
+                  <TextField
+                    placeholder="Enter a degen name"
+                    name="degen_name"
+                    variant="outlined"
+                    fullWidth
+                    value={newDegenName}
+                    error={nameError !== ''}
+                    helperText={nameError}
+                    onChange={(event) => validateName(event.target.value)}
+                  />
+                </FormControl>
+              )}
+            </Stack>
+            {renameEnabled && (
+              <Stack
+                direction="column"
+                alignItems="center"
+                gap={1}
+                sx={{ my: 2 }}
+              >
+                <Typography color="gray">
+                  There is a {renameFee} NFTL fee for renaming
+                </Typography>
+              </Stack>
+            )}
+          </>
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
@@ -461,7 +457,7 @@ const RentDegenContentDialog = ({
                     >
                       terms &amp; conditions
                     </Link>
-                    regarding disabling rental
+                    regarding rentals
                   </Typography>
                 }
                 control={
@@ -486,7 +482,8 @@ const RentDegenContentDialog = ({
                 !agreement ||
                 Boolean(nameError) ||
                 Boolean(addressError) ||
-                (rentFor === 'recruit' && !ethAddress)
+                (rentFor === 'recruit' && !ethAddress) ||
+                rentDisabled
               }
               loading={loading}
             >
