@@ -286,22 +286,24 @@ const TableModal = ({
                     )}
                   </TableCell>
                 )}
-                <TableCell
-                  style={{
-                    ...getTextStyleForRank(i.rank),
-                    fontSize: 14,
-                    background: '',
-                  }}
-                  className="cell ellipsis end"
-                >
-                  {i.score}
-                  {i.rank === 1 && flag === 'xp' && (
-                    <Box className={classes.lineTop} />
-                  )}
-                  {i.rank === 10 && flag === 'xp' && (
-                    <Box className={classes.lineBottom} />
-                  )}
-                </TableCell>
+                {flag !== 'score' && (
+                  <TableCell
+                    style={{
+                      ...getTextStyleForRank(i.rank),
+                      fontSize: 14,
+                      background: '',
+                    }}
+                    className="cell ellipsis end"
+                  >
+                    {i.stats.matches}
+                    {i.rank === 1 && flag === 'xp' && (
+                      <Box className={classes.lineTop} />
+                    )}
+                    {i.rank === 10 && flag === 'xp' && (
+                      <Box className={classes.lineBottom} />
+                    )}
+                  </TableCell>
+                )}
                 {flag === 'xp' && (
                   <TableCell className="cell ellipsis end">
                     {i.stats['avg_NFTL/match']}
@@ -309,9 +311,20 @@ const TableModal = ({
                     {i.rank === 10 && <Box className={classes.lineBottom} />}
                   </TableCell>
                 )}
-                {flag !== 'win_rate' && (
+                {flag !== 'win_rate' && flag !== 'score' && (
                   <TableCell className="cell ellipsis end">
                     {i.stats.kills}
+                  </TableCell>
+                )}
+                {flag === 'score' && (
+                  <TableCell
+                    style={{
+                      ...getTextStyleForRank(i.rank),
+                      fontSize: 14,
+                    }}
+                    className="cell ellipsis end"
+                  >
+                    {i.score}
                   </TableCell>
                 )}
               </TableRow>
