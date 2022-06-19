@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     display: 'flex',
   },
   root: {
-    width: '80%',
+    width: '76%',
     height: '57%',
     margin: '56.6% auto 0',
     position: 'relative',
