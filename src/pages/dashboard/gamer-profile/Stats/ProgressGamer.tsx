@@ -1,10 +1,14 @@
 import { Box, LinearProgress, useTheme } from '@mui/material';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 
-import { ProfileTotal, ProfileNiftySmsher } from 'types/account';
+import {
+  ProfileTotal,
+  ProfileNiftySmsher,
+  ProfileWenGame,
+} from 'types/account';
 
 interface ProgressGamerProps {
-  data: ProfileTotal | ProfileNiftySmsher;
+  data: ProfileTotal | ProfileNiftySmsher | ProfileWenGame;
   size?: 'sm' | 'md';
 }
 
