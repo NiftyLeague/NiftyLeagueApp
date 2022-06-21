@@ -8,6 +8,7 @@ import {
   SxProps,
 } from '@mui/material';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import { ENGAGEMENT_CATEGORY, VIEW_ITEM_EVENT } from 'constants/analytics';
 import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
@@ -43,7 +44,7 @@ const ViewTraitsContentDialog = ({
   const { traitList } = character;
 
   useEffect(() => {
-    sendEvent('view_item', 'engagement');
+    sendEvent(VIEW_ITEM_EVENT, ENGAGEMENT_CATEGORY);
   }, []);
 
   return (
