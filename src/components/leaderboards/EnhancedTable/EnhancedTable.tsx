@@ -22,10 +22,7 @@ import EnhancedTableHead from './EnhancedTableHead';
 import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
 import { NetworkContext } from 'NetworkProvider';
 import usePlayerProfile from 'hooks/usePlayerProfile';
-import {
-  LEADERBOARD_CATEGORY,
-  LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
-} from 'constants/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import TopModal from '../TopModal';
 
 const useStyles = makeStyles({
@@ -105,7 +102,10 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+    );
     const errorMes =
       'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
 

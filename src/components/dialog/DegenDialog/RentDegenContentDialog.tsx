@@ -34,12 +34,7 @@ import TermsOfServiceDialog from '../TermsOfServiceDialog';
 import { Owner } from 'types/graph';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
-import {
-  ADD_TO_CART_EVENT,
-  BEGIN_CHECKOUT_EVENT,
-  ECOMMERCE_CATEGORY,
-  PURCHASE_EVENT,
-} from 'constants/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -149,7 +144,10 @@ const RentDegenContentDialog = ({
         return;
       }
 
-      sendEvent(BEGIN_CHECKOUT_EVENT, ECOMMERCE_CATEGORY);
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.BEGIN_CHECKOUT,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
 
       setLoading(true);
       try {
@@ -170,7 +168,10 @@ const RentDegenContentDialog = ({
         toast.success('Rent successfully!', { theme: 'dark' });
         onClose?.(event);
 
-        sendEvent(PURCHASE_EVENT, ECOMMERCE_CATEGORY);
+        sendEvent(
+          GOOGLE_ANALYTICS.EVENTS.PURCHASE,
+          GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+        );
       } catch (err: any) {
         setLoading(false);
         toast.error(err.message, { theme: 'dark' });
@@ -208,7 +209,10 @@ const RentDegenContentDialog = ({
     rentalPassCount > 0 && !degen?.rental_count;
 
   useEffect(() => {
-    sendEvent(ADD_TO_CART_EVENT, ECOMMERCE_CATEGORY);
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.ADD_TO_CART,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+    );
   }, []);
 
   const openTOSDialog = (event) => {
