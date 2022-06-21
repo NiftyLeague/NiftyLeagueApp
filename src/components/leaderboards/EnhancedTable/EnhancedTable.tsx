@@ -27,6 +27,7 @@ import {
   LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
 } from 'constants/analytics';
 import TopModal from '../TopModal';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -147,7 +148,7 @@ export default function EnhancedTable({
           <CircularProgress />
         </Box>
       ) : (
-        <Paper className={classes.paperStyle}>
+        <PerfectScrollbar className={classes.paperStyle}>
           <TableContainer sx={{ minWidth: '850px' }}>
             <Table
               sx={{ minWidth: 750 }}
@@ -245,7 +246,7 @@ export default function EnhancedTable({
               </Stack>
             )}
           />
-        </Paper>
+        </PerfectScrollbar>
       )}
     </Box>
   );
