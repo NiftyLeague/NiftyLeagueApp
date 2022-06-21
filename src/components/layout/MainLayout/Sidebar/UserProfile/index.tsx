@@ -7,7 +7,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import Blockies from 'react-blockies';
 import { NetworkContext } from 'NetworkProvider';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
