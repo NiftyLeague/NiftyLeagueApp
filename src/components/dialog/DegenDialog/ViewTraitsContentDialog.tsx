@@ -8,7 +8,10 @@ import {
   SxProps,
 } from '@mui/material';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { ENGAGEMENT_CATEGORY, VIEW_ITEM_EVENT } from 'constants/analytics';
+import {
+  ENGAGEMENT_CATEGORY,
+  VIEW_ITEM_EVENT,
+} from 'constants/google-analytics';
 import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,

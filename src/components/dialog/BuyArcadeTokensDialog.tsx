@@ -34,7 +34,7 @@ import {
   BUY_ARCADE_TOKEN_STARTED_EVENT,
   BUY_ARCADE_TOKEN_COMPLETE_EVENT,
   ECOMMERCE_CATEGORY,
-} from 'constants/analytics';
+} from 'constants/google-analytics';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 

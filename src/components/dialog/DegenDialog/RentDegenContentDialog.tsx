@@ -39,7 +39,7 @@ import {
   BEGIN_CHECKOUT_EVENT,
   ECOMMERCE_CATEGORY,
   PURCHASE_EVENT,
-} from 'constants/analytics';
+} from 'constants/google-analytics';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;

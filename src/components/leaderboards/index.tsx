@@ -21,7 +21,7 @@ import {
   LEADERBOARD_TYPE_FILTER_CHANGED_EVENT,
   NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT,
   WEN_GAME_LEADERBOARD_VIEWED_EVENT,
-} from 'constants/analytics';
+} from 'constants/google-analytics';
 import {
   Game,
   LEADERBOARD_GAME_LIST,
