@@ -7,7 +7,7 @@ import useArcadeBalance from 'hooks/useArcadeBalance';
 import { sendEvent } from 'utils/google-analytics';
 import WenThumbnail from 'assets/images/games/wen.gif';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
-import { ENGAGEMENT_CATEGORY, LOGIN_EVENT } from 'constants/analytics';
+import { ENGAGEMENT_CATEGORY, LOGIN_EVENT } from 'constants/google-analytics';
 
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();

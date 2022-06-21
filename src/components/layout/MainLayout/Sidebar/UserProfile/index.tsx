@@ -18,7 +18,7 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendEvent } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
-import { ENGAGEMENT_CATEGORY, LOGIN_EVENT } from 'constants/analytics';
+import { ENGAGEMENT_CATEGORY, LOGIN_EVENT } from 'constants/google-analytics';
 
 export interface UserProfileProps {}
 

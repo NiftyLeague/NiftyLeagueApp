@@ -15,7 +15,10 @@ import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import { sendEvent } from 'utils/google-analytics';
-import { ENGAGEMENT_CATEGORY, VIEW_ITEM_LIST_EVENT } from 'constants/analytics';
+import {
+  ENGAGEMENT_CATEGORY,
+  VIEW_ITEM_LIST_EVENT,
+} from 'constants/google-analytics';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);

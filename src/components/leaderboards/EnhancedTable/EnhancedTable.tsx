@@ -25,7 +25,7 @@ import usePlayerProfile from 'hooks/usePlayerProfile';
 import {
   LEADERBOARD_CATEGORY,
   LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
-} from 'constants/analytics';
+} from 'constants/google-analytics';
 import TopModal from '../TopModal';
 
 const useStyles = makeStyles({
