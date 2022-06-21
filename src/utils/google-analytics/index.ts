@@ -11,7 +11,7 @@ const initGA = () => {
 
 const sendEvent = (action = '', category = '', label = '') => {
   if (category && action) {
-    ReactGA.event({ category, label, action });
+    ReactGA.event(action, { category, label });
   }
 };
 
