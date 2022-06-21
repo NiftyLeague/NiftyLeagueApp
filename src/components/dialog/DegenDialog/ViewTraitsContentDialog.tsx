@@ -77,7 +77,12 @@ const ViewTraitsContentDialog = ({
         </Stack>
         <Stack direction="column" alignItems="center" gap={1}>
           <Typography color="gray">
-            Owned by {degen?.owner?.substring(0, 5)}
+            Owned by{' '}
+            {degen?.name ||
+              `${degen?.owner?.slice(0, 5)}...${degen?.owner?.slice(
+                degen?.owner?.length - 5,
+                degen?.owner?.length - 1,
+              )}`}
           </Typography>
         </Stack>
       </Grid>
