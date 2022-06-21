@@ -41,7 +41,7 @@ import WithdrawForm from './WithdrawForm';
 import TokenInfoCard from 'components/cards/TokenInfoCard';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import { sendEvent } from 'utils/google-analytics';
-import { PLAY_ARCADE_GAMES_BUTTON_TAPPED } from 'constants/analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
@@ -197,7 +197,10 @@ const MyNFTL = (): JSX.Element => {
   };
 
   const handlePlayArcade = useCallback(() => {
-    sendEvent(PLAY_ARCADE_GAMES_BUTTON_TAPPED, 'arcade');
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.PLAY_ARCADE_GAMES_BUTTON_TAPPED,
+      GOOGLE_ANALYTICS.CATEGORIES.GAMEPLAY,
+    );
     navigate('/games');
   }, [navigate]);
 

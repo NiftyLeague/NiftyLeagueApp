@@ -15,6 +15,7 @@ import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import { sendEvent } from 'utils/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 const NiftyLeagueAppPage = () => {
   const [degens, setDegens] = useState<Degen[]>([]);
@@ -61,7 +62,10 @@ const NiftyLeagueAppPage = () => {
   };
 
   const handleViewAllTraits = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    sendEvent('view_item_list', 'engagement');
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.VIEW_ITEM_LIST,
+      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
+    );
   };
 
   const settings = {
