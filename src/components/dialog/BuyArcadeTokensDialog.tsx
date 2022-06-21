@@ -30,11 +30,7 @@ import { formatNumberToDisplay } from 'utils/numbers';
 import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
-import {
-  BUY_ARCADE_TOKEN_STARTED_EVENT,
-  BUY_ARCADE_TOKEN_COMPLETE_EVENT,
-  ECOMMERCE_CATEGORY,
-} from 'constants/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -75,7 +71,10 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      sendEvent(BUY_ARCADE_TOKEN_STARTED_EVENT, ECOMMERCE_CATEGORY);
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.BUY_ARCADE_TOKEN_STARTED,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
     }
   }, [open]);
 
@@ -113,7 +112,10 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      sendEvent(BUY_ARCADE_TOKEN_COMPLETE_EVENT, ECOMMERCE_CATEGORY);
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.BUY_ARCADE_TOKEN_COMPLETE,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
       setRefreshAccKey(Math.random());
       onSuccess();
     } catch {

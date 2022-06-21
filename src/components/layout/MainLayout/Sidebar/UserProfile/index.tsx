@@ -18,7 +18,7 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendEvent } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
-import { ENGAGEMENT_CATEGORY, LOGIN_EVENT } from 'constants/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 export interface UserProfileProps {}
 
@@ -73,7 +73,11 @@ const UserProfile: React.FC<
   }, [tokenIndices, totalAccumulated, tx, writeContracts]);
 
   const handleConnectWallet = useCallback(() => {
-    sendEvent(LOGIN_EVENT, ENGAGEMENT_CATEGORY, 'method');
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.LOGIN,
+      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
+      'method',
+    );
     loadWeb3Modal();
   }, [loadWeb3Modal]);
 
