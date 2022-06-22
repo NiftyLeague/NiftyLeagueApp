@@ -151,6 +151,8 @@ export const transformRentals = (
         netEarning,
         netGameEarning,
         isEditable,
+        earningCap: earning_cap,
+        earningCapDaily: earning_cap_daily,
       };
     },
   );
