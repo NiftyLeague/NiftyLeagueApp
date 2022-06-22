@@ -14,6 +14,7 @@ import { ColumnType } from '.';
 import { v4 as uuidv4 } from 'uuid';
 import Countdown from 'react-countdown';
 import { formatNumberToDisplayWithCommas } from 'utils/numbers';
+import ProgressBar from 'components/ProgressBar';
 
 interface RentalsTableSimpleProps {
   rentals: RentalDataGrid[];
@@ -79,11 +80,25 @@ const RentalsTableSimple = ({
                         </TableCell>
                       );
                     }
+                    if (column.id === 'earningCap') {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <Typography>
+                            {formatNumberToDisplayWithCommas(
+                              rental.earningCapDaily,
+                            )}{' '}
+                            / {formatNumberToDisplayWithCommas(value)}
+                          </Typography>
+                        </TableCell>
+                      );
+                    }
 
                     if (column.id === 'rentalRenewsIn') {
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <Countdown date={new Date(value * 1000)} />
+                          <Typography color={palette.warning.main}>
+                            <Countdown date={new Date(value * 1000)} />
+                          </Typography>
                         </TableCell>
                       );
                     }
@@ -100,6 +115,35 @@ const RentalsTableSimple = ({
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {formatNumberToDisplayWithCommas(value)}
+                        </TableCell>
+                      );
+                    }
+
+                    if (column.id === 'earningCapProgress') {
+                      const val =
+                        (100 / rental.earningCap) * rental.earningCapDaily;
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <ProgressBar value={val}>
+                            {rental.earningCap !== rental.earningCapDaily ? (
+                              `${rental.earningCapDaily} / ${rental.earningCap}`
+                            ) : (
+                              <Typography fontSize={10}>
+                                LIMIT REACHED. RENEWS IN{' '}
+                                <Typography
+                                  color={palette.warning.main}
+                                  variant="caption"
+                                  fontSize={10}
+                                >
+                                  <Countdown
+                                    date={
+                                      new Date(rental.rentalRenewsIn * 1000)
+                                    }
+                                  />
+                                </Typography>
+                              </Typography>
+                            )}
+                          </ProgressBar>
                         </TableCell>
                       );
                     }
