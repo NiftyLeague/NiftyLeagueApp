@@ -236,6 +236,28 @@ const MyRentalsDataGrid = ({
       headerName: 'Tribe',
     },
     {
+      field: 'earningCap',
+      headerName: 'Earning Cap',
+      width: 150,
+      renderCell: (params) => (
+        <Typography>
+          {formatNumberToDisplayWithCommas(params.row.earningCapDaily)} /{' '}
+          {formatNumberToDisplayWithCommas(params.value)}
+        </Typography>
+      ),
+    },
+    {
+      field: 'rentalRenewsIn',
+      headerName: 'Rental Renews In',
+      ...commonColumnProp,
+      width: 150,
+      renderCell: (params) => (
+        <Typography color={palette.warning.main}>
+          <Countdown date={new Date(params.value * 1000)} />
+        </Typography>
+      ),
+    },
+    {
       field: 'multiplier',
       headerName: 'Multiplier',
       width: 150,
@@ -332,15 +354,6 @@ const MyRentalsDataGrid = ({
           </Typography>
         );
       },
-    },
-    {
-      field: 'rentalRenewsIn',
-      headerName: 'Rental Renews In',
-      ...commonColumnProp,
-      width: 150,
-      renderCell: (params) => (
-        <Countdown date={new Date(params.value * 1000)} />
-      ),
     },
   ];
 
