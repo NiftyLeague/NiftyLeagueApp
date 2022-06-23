@@ -213,7 +213,7 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {!!web3Modal.cachedProvider && selectedGame === 'wen_game' && (
+                {!!web3Modal.cachedProvider && (
                   <>
                     <Typography
                       variant="body2"
@@ -227,9 +227,9 @@ export default function EnhancedTable({
                       CHECK YOUR RANK
                     </Typography>
                     <TopModal
-                      selectedGame="wen_game"
-                      selectedTimeFilter="all_time"
-                      flag="score"
+                      selectedGame={selectedGame}
+                      selectedTimeFilter={selectedTimeFilter}
+                      flag={selectedTable.key}
                       ModalIcon={
                         <Box
                           className="wen-game-modal"
