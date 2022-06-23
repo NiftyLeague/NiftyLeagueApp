@@ -45,17 +45,9 @@ const Game = ({
       authorizationToken: authToken,
     };
   }
-  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+  const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
   });
-
-  const [rentals, setRentals] = useState<Rentals[] | any>([]);
-
-  useEffect(() => {
-    if (data) {
-      setRentals(data);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -149,7 +141,7 @@ const Game = ({
           }}
         />
         <Box ml={4} minWidth={360}>
-          <EarningCap rentals={rentals} hideTitle={true} />
+          <EarningCap rentals={rentals ?? []} hideTitle={true} />
         </Box>
       </Stack>
     </>
