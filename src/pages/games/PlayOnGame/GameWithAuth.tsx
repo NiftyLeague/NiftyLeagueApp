@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import Unity, { UnityContext } from 'react-unity-webgl';
-import { Button, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import withVerification from 'components/Authentication';
@@ -14,6 +14,10 @@ import { NETWORK_NAME } from 'constants/networks';
 import { DEBUG } from 'constants/index';
 import Preloader from './Preloader';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
+import { ALL_RENTAL_API_URL } from 'constants/url';
+import { Rentals } from 'types/rentals';
+import EarningCap from 'pages/dashboard/overview/EarningCap';
+import useFetch from 'hooks/useFetch';
 
 interface GameProps {
   auth: string;
@@ -33,6 +37,25 @@ const Game = ({
   const authCallback = useRef<null | ((authMsg: string) => void)>();
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const authToken = window.localStorage.getItem('authentication-token');
+  let headers;
+  if (authToken) {
+    headers = {
+      authorizationToken: authToken,
+    };
+  }
+  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+    headers,
+  });
+
+  const [rentals, setRentals] = useState<Rentals[] | any>([]);
+
+  useEffect(() => {
+    if (data) {
+      setRentals(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -102,10 +125,6 @@ const Game = ({
     };
   }, [unityContext, onMouse, startAuthentication, getConfiguration]);
 
-  const handleOnClickFullscreen = () => {
-    (window as any).unityInstance.setFullscreen(true);
-  };
-
   if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
     return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
   }
@@ -129,13 +148,9 @@ const Game = ({
             visibility: isLoaded ? 'visible' : 'hidden',
           }}
         />
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleOnClickFullscreen}
-        >
-          Fullscreen
-        </Button>
+        <Box ml={4} minWidth={360}>
+          <EarningCap rentals={rentals} hideTitle={true} />
+        </Box>
       </Stack>
     </>
   );
