@@ -9,8 +9,9 @@ import { ColumnType } from '../MyRentals';
 import RentalsTableSimple from '../MyRentals/RentalsTableSimple';
 interface EarningCapProps {
   rentals: Rentals[];
+  hideTitle?: boolean;
 }
-const EarningCap: FC<EarningCapProps> = ({ rentals }) => {
+const EarningCap: FC<EarningCapProps> = ({ rentals, hideTitle }) => {
   const { profile } = usePlayerProfile();
 
   const rows = transformRentals(rentals, profile?.id || '');
@@ -26,9 +27,11 @@ const EarningCap: FC<EarningCapProps> = ({ rentals }) => {
   ];
   return (
     <Grid container spacing={sectionSpacing} sx={{ height: '100%' }}>
-      <Grid item xs={12}>
-        <SectionTitle firstSection>Earnings Cap</SectionTitle>
-      </Grid>
+      {!hideTitle && (
+        <Grid item xs={12}>
+          <SectionTitle firstSection>Earnings Cap</SectionTitle>
+        </Grid>
+      )}
       <Grid item xs={12} sx={{ height: '100%' }}>
         <RentalsTableSimple rentals={rows} columns={columns} />
       </Grid>
