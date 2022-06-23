@@ -210,23 +210,31 @@ const TableModal = ({
                 <code>WIN RATE</code>
               </TableCell>
             )}
-            {flag === 'xp' && (
-              <TableCell component="th" className="cell ellipsis">
-                <code>TOTALNFTLEARNED</code>
+            {flag === 'earnings' && (
+              <TableCell
+                component="th"
+                className="cell ellipsis"
+                style={{ fontSize: 10, textAlign: 'center' }}
+              >
+                <code>TOTAL NFTL EARNED</code>
               </TableCell>
             )}
             {flag !== 'score' && (
               <TableCell
                 component="th"
                 className="cell ellipsis"
-                style={{ fontSize: 12 }}
+                style={{ fontSize: 10, textAlign: 'center' }}
               >
                 <code>MATCHES PLAYED</code>
               </TableCell>
             )}
-            {flag === 'xp' && (
-              <TableCell component="th" className="cell ellipsis">
-                <code>AVG,NFTL/MATCH</code>
+            {flag === 'earnings' && (
+              <TableCell
+                component="th"
+                className="cell ellipsis"
+                style={{ fontSize: 10, textAlign: 'center' }}
+              >
+                <code>AVG,NFTL / MATCH</code>
               </TableCell>
             )}
             {flag !== 'win_rate' && flag !== 'score' && (
@@ -275,13 +283,13 @@ const TableModal = ({
                     {i.rank === 10 && <Box className={classes.lineBottom} />}
                   </TableCell>
                 )}
-                {flag === 'xp' && (
+                {flag === 'earnings' && (
                   <TableCell className="cell ellipsis end">
                     {i.stats.earnings}
-                    {i.rank === 1 && flag === 'xp' && (
+                    {i.rank === 1 && flag === 'earnings' && (
                       <Box className={classes.lineTop} />
                     )}
-                    {i.rank === 10 && flag === 'xp' && (
+                    {i.rank === 10 && flag === 'earnings' && (
                       <Box className={classes.lineBottom} />
                     )}
                   </TableCell>
@@ -296,15 +304,15 @@ const TableModal = ({
                     className="cell ellipsis end"
                   >
                     {i.stats.matches}
-                    {i.rank === 1 && flag === 'xp' && (
+                    {i.rank === 1 && flag === 'earnings' && (
                       <Box className={classes.lineTop} />
                     )}
-                    {i.rank === 10 && flag === 'xp' && (
+                    {i.rank === 10 && flag === 'earnings' && (
                       <Box className={classes.lineBottom} />
                     )}
                   </TableCell>
                 )}
-                {flag === 'xp' && (
+                {flag === 'earnings' && (
                   <TableCell className="cell ellipsis end">
                     {i.stats['avg_NFTL/match']}
                     {i.rank === 1 && <Box className={classes.lineTop} />}
