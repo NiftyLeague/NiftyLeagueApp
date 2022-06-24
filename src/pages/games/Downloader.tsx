@@ -4,7 +4,7 @@ import { GetApp } from '@mui/icons-material';
 import useVersion from 'hooks/useVersion';
 
 const Downloader = (): JSX.Element => {
-  const { isWindows, isLinux, downloadURL, version } = useVersion();
+  const { isWindows, isLinux, isMacOs, downloadURL, version } = useVersion();
 
   return (
     <Container style={{ textAlign: 'left', padding: '40px' }}>
@@ -23,7 +23,7 @@ const Downloader = (): JSX.Element => {
         <li>Download the installer below</li>
         <Button
           color="primary"
-          disabled={!isWindows || !isLinux || !version}
+          disabled={isMacOs || !version}
           href={downloadURL}
           size="large"
           startIcon={<GetApp />}
