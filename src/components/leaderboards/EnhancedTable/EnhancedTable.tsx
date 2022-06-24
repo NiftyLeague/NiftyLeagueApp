@@ -149,7 +149,7 @@ export default function EnhancedTable({
     : 0;
 
   return (
-    <Box mb={16}>
+    <Box mb={{ xs: 10, sm: 0 }}>
       {!rows ? (
         <Box className={classes.loadingBox}>
           <CircularProgress />
