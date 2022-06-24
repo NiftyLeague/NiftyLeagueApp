@@ -7,7 +7,8 @@ const useVersion = () => {
   const { targetNetwork } = useContext(NetworkContext);
   const [version, setVersion] = useState('');
   const env = targetNetwork.chainId === 1 ? 'prod' : 'stage';
-  const os = isWindows ? 'win' : 'osx';
+  const isLinux = window?.navigator?.userAgent?.indexOf('Linux') >= 0;
+  const os = isWindows || isLinux ? 'win' : 'osx';
   const fileName = `NiftyLauncher-setup-${version.substring(
     0,
     version.indexOf('-'),
