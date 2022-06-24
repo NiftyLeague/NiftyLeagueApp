@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { NetworkContext } from 'NetworkProvider';
-import { isWindows } from 'react-device-detect';
+import { isWindows, isMacOs } from 'react-device-detect';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 
 const useVersion = () => {
@@ -41,6 +41,7 @@ const useVersion = () => {
     version,
     isWindows,
     isLinux,
+    isMacOs,
   };
 };
 
