@@ -40,6 +40,7 @@ const useVersion = () => {
     downloadURL,
     version,
     isWindows,
+    isLinux,
   };
 };
 

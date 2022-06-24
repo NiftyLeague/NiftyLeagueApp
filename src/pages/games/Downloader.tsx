@@ -4,7 +4,7 @@ import { GetApp } from '@mui/icons-material';
 import useVersion from 'hooks/useVersion';
 
 const Downloader = (): JSX.Element => {
-  const { isWindows, downloadURL, version } = useVersion();
+  const { isWindows, isLinux, downloadURL, version } = useVersion();
 
   return (
     <Container style={{ textAlign: 'left', padding: '40px' }}>
@@ -23,17 +23,21 @@ const Downloader = (): JSX.Element => {
         <li>Download the installer below</li>
         <Button
           color="primary"
-          disabled={!isWindows || !version}
+          disabled={!isWindows || !isLinux || !version}
           href={downloadURL}
           size="large"
           startIcon={<GetApp />}
           // style={{ color: currentTheme === 'dark' ? 'white' : 'black' }}
           variant="contained"
         >
-          {!version && isWindows
+          {!version && (isWindows || isLinux)
             ? 'Fetching installer version...'
             : `Download for ${
-                isWindows ? 'Windows' : 'Mac OS will be added soon!'
+                isWindows
+                  ? 'Windows'
+                  : isLinux
+                  ? 'Linux'
+                  : 'Mac OS will be added soon!'
               }`}
         </Button>
         <li>
