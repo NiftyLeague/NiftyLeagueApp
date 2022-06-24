@@ -9,8 +9,8 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Paper,
   CircularProgress,
+  Theme,
   Typography,
   Stack,
   useTheme,
@@ -27,7 +27,7 @@ import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import TopModal from '../TopModal';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   loadingBox: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -44,7 +44,12 @@ const useStyles = makeStyles({
       display: 'none',
     },
   },
-});
+  paginationSpacer: {
+    [theme.breakpoints.down('sm')]: {
+      flex: 'none',
+    },
+  },
+}));
 
 export default function EnhancedTable({
   selectedGame,
@@ -144,7 +149,7 @@ export default function EnhancedTable({
     : 0;
 
   return (
-    <Box>
+    <Box mb={16}>
       {!rows ? (
         <Box className={classes.loadingBox}>
           <CircularProgress />
@@ -205,7 +210,6 @@ export default function EnhancedTable({
             </TableContainer>
           </PerfectScrollbar>
           <TablePagination
-            sx={{}}
             rowsPerPageOptions={[5, 10, 25]}
             count={count}
             rowsPerPage={rowsPerPage}
