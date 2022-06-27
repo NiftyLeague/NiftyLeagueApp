@@ -50,7 +50,11 @@ const DashboardOverview = (): JSX.Element => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={7}>
-        <Grid container flexDirection="column" spacing={6}>
+        <Grid
+          container
+          flexDirection="column"
+          spacing={{ lg: 6, xs: 4, md: 4 }}
+        >
           <Grid item xs={12}>
             <MyDegens />
           </Grid>
