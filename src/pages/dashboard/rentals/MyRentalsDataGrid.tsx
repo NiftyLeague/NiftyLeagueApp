@@ -155,207 +155,219 @@ const MyRentalsDataGrid = ({
     minWidth: 100,
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: 'action',
-      headerName: 'Actions',
-      width: 130,
-      ...commonColumnProp,
-      renderCell: (params) => (
-        <Button
-          onClick={() => handleOpenTerminateRental(params)}
-          variant="outlined"
-          color="secondary"
-          disabled={params.value}
-        >
-          {params.value ? 'Terminated' : 'Terminate'}
-        </Button>
-      ),
+  const columns: GridColDef[] = useMemo(
+    () => {
+      const results = [
+        {
+          field: 'action',
+          headerName: 'Actions',
+          width: 130,
+          ...commonColumnProp,
+          renderCell: (params) => (
+            <Button
+              onClick={() => handleOpenTerminateRental(params)}
+              variant="outlined"
+              color="secondary"
+              disabled={params.value}
+            >
+              {params.value ? 'Terminated' : 'Terminate'}
+            </Button>
+          ),
+        },
+        {
+          field: 'renter',
+          headerName: 'Player',
+          width: 120,
+          renderCell: (params) => (
+            <Stack direction="row" columnGap={1} alignItems="center">
+              <Typography>{params.value}</Typography>
+            </Stack>
+          ),
+        },
+        {
+          field: 'playerNickname',
+          headerName: 'Player Nickname',
+          width: 150,
+          renderCell: (params) => {
+            return (
+              <Stack direction="row" columnGap={1} alignItems="center">
+                <Typography>{params.value}</Typography>
+                {params.row.isEditable && (
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => handleOpenNickname(params)}
+                    sx={{ display: 'none' }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Stack>
+            );
+          },
+        },
+        {
+          field: 'rentalCategory',
+          headerName: 'Category',
+          width: 150,
+        },
+        // {
+        //   field: 'player',
+        //   headerName: "Who's playing?",
+        //   width: 130,
+        // },
+        {
+          field: 'degenId',
+          headerName: 'Degen ID',
+          renderCell: (params) => (
+            <Link
+              component="button"
+              variant="body2"
+              sx={{ color: 'white', textDecorationColor: 'white' }}
+              onClick={() => handleClickDegenId(params)}
+            >
+              #{params.value}
+            </Link>
+          ),
+        },
+        {
+          field: 'background',
+          headerName: 'Background',
+        },
+        {
+          field: 'tribe',
+          headerName: 'Tribe',
+        },
+        {
+          field: 'earningCap',
+          headerName: 'Earning Cap',
+          width: 150,
+          renderCell: (params) => (
+            <Typography>
+              {formatNumberToDisplayWithCommas(params.row.earningCapDaily)} /{' '}
+              {formatNumberToDisplayWithCommas(params.value)}
+            </Typography>
+          ),
+        },
+        {
+          field: 'rentalRenewsIn',
+          headerName: 'Rental Renews In',
+          ...commonColumnProp,
+          width: 150,
+          renderCell: (params) => (
+            <Typography color={palette.warning.main}>
+              <Countdown date={new Date(params.value * 1000)} />
+            </Typography>
+          ),
+        },
+        {
+          field: 'multiplier',
+          headerName: 'Multiplier',
+          width: 150,
+          ...commonColumnProp,
+        },
+        // {
+        //   field: 'timePlayed',
+        //   headerName: 'Time Played',
+        //   ...commonColumnProp,
+        //   width: 120,
+        // },
+        {
+          field: 'matches',
+          headerName: 'Matches',
+        },
+        {
+          field: 'wins',
+          headerName: 'Wins',
+        },
+        {
+          field: 'winRate',
+          headerName: 'Win Rate',
+          ...commonColumnProp,
+          renderCell: (params) => (
+            <span>{formatNumberToDisplayWithCommas(params.value)}%</span>
+          ),
+        },
+        {
+          field: 'weeklyFee',
+          headerName: 'Weekly Fee',
+          ...commonColumnProp,
+        },
+        {
+          field: 'dailyFee',
+          headerName: 'Current Daily Fee',
+          width: 150,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'dailyFeesToDate',
+          headerName: 'Daily Fees To Date',
+          width: 150,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'costs',
+          headerName: 'Rental Fee Costs',
+          width: 150,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'rentalFeeEarning',
+          headerName: 'Rental Fees Earned',
+          width: 150,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'profits',
+          headerName: 'Gross Gameplay Earnings',
+          width: 180,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'netGameEarning',
+          headerName: 'Net Gameplay Earnings',
+          width: 200,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'netEarning',
+          headerName: 'Net Earnings',
+          width: 150,
+          renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
+          ...commonColumnProp,
+        },
+        {
+          field: 'roi',
+          headerName: 'ROI %',
+          ...commonColumnProp,
+          renderCell: (params) => {
+            let color;
+            if (params.value === 0) color = palette.text.primary;
+            if (params.value > 0) color = palette.success.main;
+            if (params.value < 0) color = palette.error.main;
+            return (
+              <Typography color={color}>
+                {formatNumberToDisplayWithCommas(params.value)}%
+              </Typography>
+            );
+          },
+        },
+      ];
+
+      if (category === 'direct-renter') {
+        return results.filter((result) => result.field !== 'action');
+      } else {
+        return results;
+      }
     },
-    {
-      field: 'renter',
-      headerName: 'Player',
-      width: 120,
-      renderCell: (params) => (
-        <Stack direction="row" columnGap={1} alignItems="center">
-          <Typography>{params.value}</Typography>
-        </Stack>
-      ),
-    },
-    {
-      field: 'playerNickname',
-      headerName: 'Player Nickname',
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <Stack direction="row" columnGap={1} alignItems="center">
-            <Typography>{params.value}</Typography>
-            {params.row.isEditable && (
-              <IconButton
-                aria-label="edit"
-                onClick={() => handleOpenNickname(params)}
-                sx={{ display: 'none' }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            )}
-          </Stack>
-        );
-      },
-    },
-    {
-      field: 'rentalCategory',
-      headerName: 'Category',
-      width: 150,
-    },
-    // {
-    //   field: 'player',
-    //   headerName: "Who's playing?",
-    //   width: 130,
-    // },
-    {
-      field: 'degenId',
-      headerName: 'Degen ID',
-      renderCell: (params) => (
-        <Link
-          component="button"
-          variant="body2"
-          sx={{ color: 'white', textDecorationColor: 'white' }}
-          onClick={() => handleClickDegenId(params)}
-        >
-          #{params.value}
-        </Link>
-      ),
-    },
-    {
-      field: 'background',
-      headerName: 'Background',
-    },
-    {
-      field: 'tribe',
-      headerName: 'Tribe',
-    },
-    {
-      field: 'earningCap',
-      headerName: 'Earning Cap',
-      width: 150,
-      renderCell: (params) => (
-        <Typography>
-          {formatNumberToDisplayWithCommas(params.row.earningCapDaily)} /{' '}
-          {formatNumberToDisplayWithCommas(params.value)}
-        </Typography>
-      ),
-    },
-    {
-      field: 'rentalRenewsIn',
-      headerName: 'Rental Renews In',
-      ...commonColumnProp,
-      width: 150,
-      renderCell: (params) => (
-        <Typography color={palette.warning.main}>
-          <Countdown date={new Date(params.value * 1000)} />
-        </Typography>
-      ),
-    },
-    {
-      field: 'multiplier',
-      headerName: 'Multiplier',
-      width: 150,
-      ...commonColumnProp,
-    },
-    // {
-    //   field: 'timePlayed',
-    //   headerName: 'Time Played',
-    //   ...commonColumnProp,
-    //   width: 120,
-    // },
-    {
-      field: 'matches',
-      headerName: 'Matches',
-    },
-    {
-      field: 'wins',
-      headerName: 'Wins',
-    },
-    {
-      field: 'winRate',
-      headerName: 'Win Rate',
-      ...commonColumnProp,
-      renderCell: (params) => (
-        <span>{formatNumberToDisplayWithCommas(params.value)}%</span>
-      ),
-    },
-    {
-      field: 'weeklyFee',
-      headerName: 'Weekly Fee',
-      ...commonColumnProp,
-    },
-    {
-      field: 'dailyFee',
-      headerName: 'Current Daily Fee',
-      width: 150,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'dailyFeesToDate',
-      headerName: 'Daily Fees To Date',
-      width: 150,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'costs',
-      headerName: 'Rental Fee Costs',
-      width: 150,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'rentalFeeEarning',
-      headerName: 'Rental Fees Earned',
-      width: 150,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'profits',
-      headerName: 'Gross Gameplay Earnings',
-      width: 180,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'netGameEarning',
-      headerName: 'Net Gameplay Earnings',
-      width: 200,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'netEarning',
-      headerName: 'Net Earnings',
-      width: 150,
-      renderCell: (params) => formatNumberToDisplayWithCommas(params.value),
-      ...commonColumnProp,
-    },
-    {
-      field: 'roi',
-      headerName: 'ROI %',
-      ...commonColumnProp,
-      renderCell: (params) => {
-        let color;
-        if (params.value === 0) color = palette.text.primary;
-        if (params.value > 0) color = palette.success.main;
-        if (params.value < 0) color = palette.error.main;
-        return (
-          <Typography color={color}>
-            {formatNumberToDisplayWithCommas(params.value)}%
-          </Typography>
-        );
-      },
-    },
-  ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [category],
+  );
 
   return (
     <>
