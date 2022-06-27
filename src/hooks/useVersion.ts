@@ -8,7 +8,18 @@ const useVersion = () => {
   const [version, setVersion] = useState('');
   const env = targetNetwork.chainId === 1 ? 'prod' : 'stage';
   const isLinux = window?.navigator?.userAgent?.indexOf('Linux') >= 0;
-  const os = isWindows || isLinux ? 'win' : 'osx';
+  let os = isWindows && 'win';
+  let message = isWindows && 'Download for Windows';
+
+  if (isLinux) {
+    message = 'Linux support is not available at this time';
+    os = 'linux';
+  }
+  if (isMacOs) {
+    message = 'Download for Mac OS will be added soon!';
+    os = 'osx';
+  }
+
   const fileName = `NiftyLauncher-setup-${version.substring(
     0,
     version.indexOf('-'),
@@ -42,6 +53,7 @@ const useVersion = () => {
     isWindows,
     isLinux,
     isMacOs,
+    message,
   };
 };
 
