@@ -210,7 +210,8 @@ export default function EnhancedTable({
             </TableContainer>
           </PerfectScrollbar>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10]}
+            component="div"
             count={count}
             rowsPerPage={rowsPerPage}
             page={page}
