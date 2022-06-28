@@ -24,7 +24,6 @@ import { NetworkContext } from 'NetworkProvider';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import TopModal from '../TopModal';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles({
   loadingBox: {
@@ -148,12 +147,15 @@ export default function EnhancedTable({
           <CircularProgress />
         </Box>
       ) : (
-        <PerfectScrollbar className={classes.paperStyle}>
-          <TableContainer sx={{ minWidth: '850px' }}>
+        <>
+          <TableContainer
+            sx={{ minWidth: '100%', maxHeight: 'calc(100vh - 355px)' }}
+          >
             <Table
               sx={{ minWidth: 750 }}
               aria-labelledby="tableTitle"
               size="medium"
+              stickyHeader
             >
               <EnhancedTableHead rows={selectedTable.rows} />
               <TableBody>
@@ -198,7 +200,7 @@ export default function EnhancedTable({
             </Table>
           </TableContainer>
           <TablePagination
-            sx={{ minWidth: '850px' }}
+            sx={{ width: '100%' }}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={count}
@@ -246,7 +248,7 @@ export default function EnhancedTable({
               </Stack>
             )}
           />
-        </PerfectScrollbar>
+        </>
       )}
     </Box>
   );
