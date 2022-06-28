@@ -1,4 +1,10 @@
-import { Slider, SliderProps, Stack, Typography } from '@mui/material';
+import {
+  Slider,
+  SliderProps,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { memo } from 'react';
 
 interface Props extends Omit<SliderProps, 'value'> {
@@ -12,27 +18,54 @@ const FilterRangeSlider = ({
   unit,
   label,
   ...props
-}: Props): JSX.Element => (
-  <Stack>
-    <Stack gap={1}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6">Min {label || ''}</Typography>
-        <Typography variant="h6">Max {label || ''}</Typography>
-      </Stack>
-      <Slider {...props} value={value} />
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="caption">
-          {value[0]}
-          {unit || ''}
+}: Props): JSX.Element => {
+  const theme = useTheme();
+  return (
+    <Stack>
+      <Stack>
+        <Typography sx={{ mb: 1 }} variant="paragraphXXSmall">
+          {label}
         </Typography>
-        <Typography variant="caption">
-          {value[1]}
-          {unit || ''}
-        </Typography>
+        <Stack
+          gap={4}
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
+        >
+          <Typography
+            sx={{ color: theme.palette.grey[600] }}
+            variant="paragraphXXXSmall"
+          >
+            Min
+          </Typography>
+          <Slider sx={{ p: 0 }} size="small" {...props} value={value} />
+          <Typography
+            sx={{ color: theme.palette.grey[600] }}
+            variant="paragraphXXXSmall"
+          >
+            Max
+          </Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography
+            sx={{ color: theme.palette.grey[600] }}
+            variant="paragraphXXXSmall"
+          >
+            {value[0]}
+            {/* {unit || ''} */}
+          </Typography>
+          <Typography
+            sx={{ color: theme.palette.grey[600] }}
+            variant="paragraphXXXSmall"
+          >
+            {value[1]}
+            {/* {unit || ''} */}
+          </Typography>
+        </Stack>
       </Stack>
     </Stack>
-  </Stack>
-);
+  );
+};
 
 export default memo(
   FilterRangeSlider,
