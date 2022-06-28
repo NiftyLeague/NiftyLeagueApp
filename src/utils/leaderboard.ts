@@ -112,12 +112,15 @@ export const stableSort = <T>(
   return stabilizedThis.map((el) => el[0]);
 };
 
-export const fetchRankByUserId = async (userId: string): Promise<any> => {
+export const fetchRankByUserId = async (
+  game: string,
+  userId: string,
+): Promise<any> => {
   try {
     const res = await fetch(
       `${GET_RANK_BY_USER_ID_API}?${new URLSearchParams({
         user_id: userId,
-        game: 'wen_game',
+        game,
         time_window: 'all_time',
       })}`,
     );
