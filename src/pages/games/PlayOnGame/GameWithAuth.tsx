@@ -18,6 +18,7 @@ import { ALL_RENTAL_API_URL } from 'constants/url';
 import { Rentals } from 'types/rentals';
 import EarningCap from 'pages/dashboard/overview/EarningCap';
 import useFetch from 'hooks/useFetch';
+import { Web3ModalProvider } from 'types/web3';
 
 interface GameProps {
   auth: string;
@@ -30,7 +31,7 @@ const Game = ({
   unityContext,
   arcadeTokenRequired = false,
 }: GameProps) => {
-  const { address, targetNetwork } = useContext(NetworkContext);
+  const { address, targetNetwork, web3Modal } = useContext(NetworkContext);
   const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
   const authMsg = `true,${address || '0x0'},Vitalik,${auth},${favs}`;
@@ -91,6 +92,25 @@ const Game = ({
     }
   }, []);
 
+  const accountChanged = useCallback(async () => {
+    const provider: Web3ModalProvider =
+      (await web3Modal.connect()) as Web3ModalProvider;
+
+    provider.on('accountsChanged', () => {
+      if ((window as any).unityInstance)
+        (window as any).unityInstance.removeAllEventListeners();
+      (window as any).removeEventListener(
+        'StartAuthentication',
+        startAuthentication,
+      );
+      (window as any).removeEventListener('GetConfiguration', getConfiguration);
+      document.removeEventListener('mousemove', onMouse, false);
+      authCallback.current = null;
+      window.location.reload();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (unityContext) {
       (window as any).unityInstance = unityContext;
@@ -116,6 +136,10 @@ const Game = ({
       document.removeEventListener('mousemove', onMouse, false);
     };
   }, [unityContext, onMouse, startAuthentication, getConfiguration]);
+
+  useEffect(() => {
+    accountChanged();
+  }, [accountChanged, address]);
 
   if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
     return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
