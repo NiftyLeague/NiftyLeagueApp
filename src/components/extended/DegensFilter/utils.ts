@@ -72,18 +72,9 @@ export const tranformDataByFilter = (
       return false;
     }
 
-    // if (
-    //   cosmetics.length > 0 &&
-    //   !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
-    // ) {
-    //   return false;
-    // }
-
     if (
       cosmetics.length > 0 &&
-      !cosmetics.every((cosmetic) =>
-        traits_string.split(',').includes(cosmetic),
-      )
+      !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
     ) {
       return false;
     }
@@ -113,6 +104,7 @@ export const tranformDataByFilter = (
   if (sort === 'price') {
     result.sort((a, b) => Number(b.price) - Number(a.price));
   }
+
   return result;
 };
 
