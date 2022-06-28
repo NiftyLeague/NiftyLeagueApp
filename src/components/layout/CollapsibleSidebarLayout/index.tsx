@@ -47,11 +47,13 @@ const CollapsibleSidebarLayout = ({
           }),
           '& .MuiDrawer-paper': {
             height: matchDownLG ? '100%' : 'auto',
-            backgroundColor: theme.palette.dark.main,
+            backgroundColor: theme.palette.background.paper,
             width: drawerWidth,
             boxSizing: 'border-box',
             position: 'relative',
             border: 'none',
+            borderRadius: '4px',
+            padding: '24px',
           },
         }}
         variant={matchDownLG ? 'temporary' : 'persistent'}
@@ -63,7 +65,7 @@ const CollapsibleSidebarLayout = ({
         <PerfectScrollbar
           style={{
             height: matchDownLG ? '100vh' : 'calc(100vh - 88px)',
-            padding: '16px',
+            // padding: '16px',
           }}
         >
           {renderDrawer()}
@@ -95,7 +97,7 @@ const CollapsibleSidebarLayout = ({
       >
         <PerfectScrollbar
           style={{
-            padding: '20px',
+            // padding: '20px',
             paddingRight: matchDownSm ? '30px' : '40px',
             height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
           }}
