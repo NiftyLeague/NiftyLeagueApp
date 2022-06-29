@@ -25,7 +25,6 @@ const NiftyLeagueAppPage = () => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [degenDialogView, setDegenDialogView] =
     useState<DegenViewType>('default');
-  const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const { enableWenGame } = useFlags();
 
   const { data } = useFetch<Degen[]>(

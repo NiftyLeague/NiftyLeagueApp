@@ -10,7 +10,6 @@ import React, {
 import { useSearchParams } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import {
-  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -240,6 +239,7 @@ const DegensFilter = ({
         [theme.breakpoints.down('sm')]: {
           paddingX: 2,
         },
+        fontWeight: 500,
       }}
     >
       <Stack
@@ -248,33 +248,50 @@ const DegensFilter = ({
         alignItems="center"
         sx={{ padding: matchDownLG ? theme.spacing(2) : '' }}
       >
-        <Typography variant="h4">Filter Rentals</Typography>
+        <Typography variant="paragraphP2XXSmall">Filter</Typography>
         <Stack direction="row" gap={2}>
-          <Button
-            variant="outlined"
+          {/* <Button
+            // variant="text"
             disabled={isParamsEmpty}
+            onClick={handleReset}
+            sx={{ textDecoration: 'underline' }}
+          >
+            Reset
+          </Button> */}
+          <Typography
+            variant="paragraphXXSmall"
+            sx={{ textDecoration: 'underline', cursor: 'pointer' }}
             onClick={handleReset}
           >
             Reset
-          </Button>
+          </Typography>
         </Stack>
       </Stack>
       <TextField
-        label="Search degens by token # or name"
+        label="Search by degen name or token id"
         name="search-degen-by-token-id-name"
         variant="outlined"
         size="small"
         fullWidth
         value={searchTermValue}
         onChange={handleChangeSearchTerm}
-        sx={{ margin: '6px 0px 10px 0px' }}
+        sx={{
+          '& input': {
+            border: `1px solid ${theme.palette.grey[800]}`,
+            borderRadius: '6px',
+            fontSize: '10px !important',
+            lineHeight: '20px',
+            fontFamily: `'IBM Plex Mono', monospace`,
+            p: '8px !important',
+          },
+        }}
       />
       <Stack>
         <FilterAccordion
-          summary={<Typography variant="h5">Overview</Typography>}
+          summary={<Typography variant="paragraphXSmall">Overview</Typography>}
           expanded
         >
-          <Stack gap={4}>
+          <Stack gap={6}>
             <FilterRangeSlider
               value={pricesRangeValue}
               min={defaultFilterValues.prices[0]}
@@ -306,7 +323,7 @@ const DegensFilter = ({
           </Stack>
         </FilterAccordion>
         <FilterAccordion
-          summary={<Typography variant="h5">Tribe</Typography>}
+          summary={<Typography variant="paragraphXSmall">Tribe</Typography>}
           expanded
         >
           <FormGroup sx={{ flexDirection: 'row' }}>
@@ -334,20 +351,28 @@ const DegensFilter = ({
                 label={tribe.name}
                 sx={{
                   svg: {
-                    height: '22px',
-                    width: '22px',
+                    height: '8px',
+                    width: '8px',
                   },
                   background: tribesValue.includes(tribe.name)
                     ? theme.palette.primary.main
-                    : theme.palette.dark[800],
-                  borderRadius: '16px',
-                  pl: 1,
-                  pr: 2,
+                    : theme.palette.grey[800],
+                  borderRadius: '4px',
+                  height: '16px',
+                  width: '68px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   ml: 0,
                   mb: '12px',
                   '& .MuiCheckbox-root:': {
                     padding: 0,
                     mr: '8px',
+                  },
+                  '& .MuiTypography-body1': {
+                    fontSize: '8px',
+                    lineHeight: '20px',
+                    fontFamily: `'IBM Plex Mono', monospace`,
+                    fontWeight: 500,
                   },
                 }}
               />
@@ -355,7 +380,9 @@ const DegensFilter = ({
           </FormGroup>
         </FilterAccordion>
         <FilterAccordion
-          summary={<Typography variant="h5">Background</Typography>}
+          summary={
+            <Typography variant="paragraphXSmall">Background</Typography>
+          }
           expanded
         >
           <FormGroup sx={{ flexDirection: 'row' }}>
@@ -383,7 +410,7 @@ const DegensFilter = ({
           </FormGroup>
         </FilterAccordion>
         <FilterAccordion
-          summary={<Typography variant="h5">Cosmetics</Typography>}
+          summary={<Typography variant="paragraphXSmall">Cosmetics</Typography>}
           expanded={false}
         >
           {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
@@ -400,7 +427,7 @@ const DegensFilter = ({
                 <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
                   <FilterAccordion
                     summary={
-                      <Typography variant="h5">
+                      <Typography variant="paragraphXXSmall">
                         {categoryKey} ({traitGroup.length})
                       </Typography>
                     }
