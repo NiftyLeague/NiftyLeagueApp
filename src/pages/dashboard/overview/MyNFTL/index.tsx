@@ -222,7 +222,7 @@ const MyNFTL = (): JSX.Element => {
                 // <Button variant="outlined" onClick={handleClaimNFTL}>
                 //   Claim All {formatNumberToDisplay(mockAccrued)} NFTL
                 // </Button>
-                <Typography variant="h5">
+                <Typography>
                   NFTL in Wallet: {formatNumberToDisplay(userNFTLBalance)}
                 </Typography>
               )}
@@ -233,44 +233,34 @@ const MyNFTL = (): JSX.Element => {
         </SectionTitle>
       </Grid>
       {enableWenGame && (
-        <>
-          <Grid item xs={12}>
-            <TokenInfoCard
-              title="Arcade Token Balance"
-              secondary={`${arcadeBalance} Tokens`}
-              isLoading={arcadeBalanceLoading}
-              customStyle={{
-                backgroundColor: theme.palette.background.default,
-                border: '1px solid',
-                borderColor: theme.palette.grey[800],
-                borderRadius: '8px',
-              }}
-              actions={
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  paddingX={{ xl: 1, xs: 3 }}
-                  paddingY={{ xl: 0.5, xs: 1.5 }}
-                >
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleBuyArcadeTokens}
-                  >
-                    Buy Tokens
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={handlePlayArcade}
-                  >
-                    Play Arcade
-                  </Button>
-                </Stack>
-              }
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TokenInfoCard
+            title="Arcade Token Balance"
+            secondary={`${arcadeBalance} Tokens`}
+            isLoading={arcadeBalanceLoading}
+            customStyle={{
+              backgroundColor: theme.palette.background.default,
+              border: '1px solid',
+              borderColor: theme.palette.grey[800],
+              borderRadius: '8px',
+            }}
+            actions={
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                paddingX={{ xl: 1, xs: 3 }}
+                paddingY={{ xl: 0.5, xs: 1.5 }}
+              >
+                <Button variant="contained" onClick={handleBuyArcadeTokens}>
+                  Buy Tokens
+                </Button>
+                <Button variant="outlined" onClick={handlePlayArcade}>
+                  Play Arcade
+                </Button>
+              </Stack>
+            }
+          />
           <BuyArcadeTokensDialog
             open={openBuyAT}
             onSuccess={() => {
@@ -279,7 +269,7 @@ const MyNFTL = (): JSX.Element => {
             }}
             onClose={() => setOpenBuyAT(false)}
           />
-        </>
+        </Grid>
       )}
       {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>

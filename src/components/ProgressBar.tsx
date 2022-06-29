@@ -44,7 +44,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ value, children }) => {
       >
         <Typography
           ref={centerTextRef}
-          fontSize={10}
+          fontSize={8}
           sx={{
             position: 'absolute',
             left: `50%`,
@@ -71,7 +71,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ value, children }) => {
         height={16}
       >
         <Typography
-          fontSize={10}
+          fontSize={8}
           sx={{
             position: 'absolute',
             left: `${rect.left}px`,

@@ -363,13 +363,19 @@ export default function componentStyleOverrides(
     MuiTableCell: {
       styleOverrides: {
         root: {
+          fontSize: '14px',
+          lineHeight: '20px',
+          fontFamily: `'IBM Plex Mono', monospace`,
+          fontWeight: 500,
           borderColor:
             mode === 'dark'
               ? theme.palette.text.primary + 15
               : theme.palette.grey[200],
           '&.MuiTableCell-head': {
-            fontSize: '0.875rem',
-            color: theme.palette.grey[600],
+            fontSize: '14px',
+            lineHeight: '20px',
+            fontFamily: `'IBM Plex Mono', monospace`,
+            color: theme.palette.grey[100],
             fontWeight: 500,
           },
         },

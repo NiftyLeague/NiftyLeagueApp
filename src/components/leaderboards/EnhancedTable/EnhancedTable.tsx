@@ -227,7 +227,7 @@ export default function EnhancedTable({
                 {!!web3Modal.cachedProvider && selectedGame === 'wen_game' && (
                   <>
                     <Typography
-                      variant="body2"
+                      variant="paragraphP2XSmall"
                       color={palette.primary.main}
                       sx={{
                         textDecoration: 'underline',
@@ -253,7 +253,9 @@ export default function EnhancedTable({
                     />
                   </>
                 )}
-                {`${from}–${to}`}
+                <Typography>
+                  {from} - {to}
+                </Typography>
               </Stack>
             )}
           />
