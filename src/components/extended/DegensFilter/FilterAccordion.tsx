@@ -23,15 +23,18 @@ const FilterAccordion = ({
     <Accordion
       defaultExpanded={expanded}
       sx={{
-        backgroundColor: `${theme.palette.grey[800]}3d`,
-        '&:not(:last-child)': {
-          borderBottom: 0,
-        },
-        '&:before': {
-          backgroundColor: theme.palette.grey[800],
-        },
-        marginTop: 1,
+        // backgroundColor: `${theme.palette.grey[800]}3d`,
+        // marginTop: 1,
         width: '100%',
+        '& .MuiAccordionSummary-gutters': {
+          p: 0,
+          borderBottom: `1px solid ${theme.palette.grey[800]}`,
+          minHeight: '50px',
+          mb: 3,
+          '& .MuiAccordionSummary-contentGutters': {
+            my: 4,
+          },
+        },
       }}
     >
       <AccordionSummary expandIcon={<IconChevronDown />}>
