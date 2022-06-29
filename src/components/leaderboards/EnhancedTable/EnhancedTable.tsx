@@ -122,7 +122,11 @@ export default function EnhancedTable({
       return;
     }
     try {
-      const result: any = await fetchRankByUserId(selectedGame, profile?.id);
+      const result: any = await fetchRankByUserId(
+        profile?.id,
+        selectedGame,
+        selectedTable.key,
+      );
       if (!result.ok) {
         const errMsg = await result.text();
         toast.error(errMsg, { theme: 'dark' });

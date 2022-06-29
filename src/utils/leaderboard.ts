@@ -113,8 +113,9 @@ export const stableSort = <T>(
 };
 
 export const fetchRankByUserId = async (
-  game: string,
   userId: string,
+  game: string,
+  scoreType: string,
 ): Promise<any> => {
   try {
     const res = await fetch(
@@ -122,6 +123,7 @@ export const fetchRankByUserId = async (
         user_id: userId,
         game,
         time_window: 'all_time',
+        score_type: scoreType,
       })}`,
     );
     return res;
