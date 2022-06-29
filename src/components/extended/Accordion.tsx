@@ -1,7 +1,6 @@
 import { useEffect, useState, ReactElement } from 'react';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
@@ -36,8 +35,6 @@ const Accordion = ({
   square,
   toggle,
 }: accordionProps) => {
-  const theme = useTheme();
-
   const [expanded, setExpanded] = useState<string | boolean | null>(null);
   const handleChange =
     (panel: string) =>
@@ -72,10 +69,6 @@ const Accordion = ({
                   <ExpandMoreIcon />
                 )
               }
-              sx={{
-                color: theme.palette.mode === 'dark' ? 'grey.500' : 'grey.800',
-                fontWeight: 500,
-              }}
             >
               {item.title}
             </MuiAccordionSummary>
