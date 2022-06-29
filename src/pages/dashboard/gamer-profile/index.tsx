@@ -110,7 +110,7 @@ const GamerProfile = (): JSX.Element => {
           <hr />
           <Stack spacing={1}>
             <Stack>
-              <Typography variant="h3" component="div">
+              <Typography variant="paragraphP2Small" component="div">
                 Nifty League Player Stats
               </Typography>
             </Stack>

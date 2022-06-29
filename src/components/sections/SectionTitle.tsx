@@ -18,7 +18,7 @@ const SectionTitle: React.FC<
     flexWrap="wrap"
   >
     {typeof children === 'string' ? (
-      <Typography variant="h2">{children}</Typography>
+      <Typography variant="paragraphP2Small">{children}</Typography>
     ) : (
       children
     )}

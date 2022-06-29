@@ -62,7 +62,7 @@ const SortButton = ({
       justifyContent="center"
       sx={{ display: { xs: 'none', sm: 'flex' } }}
     >
-      <Typography variant="h5">{label}</Typography>
+      <Typography>{label}</Typography>
       {Button}
       <Menu
         id="demo-positioned-menu"

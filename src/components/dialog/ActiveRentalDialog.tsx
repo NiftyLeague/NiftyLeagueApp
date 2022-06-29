@@ -5,6 +5,7 @@ import {
   DialogContent,
   Grid,
   Link,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -47,28 +48,20 @@ const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
       <DialogContent sx={{ width: '563px', marginY: '50px', marginX: '28px' }}>
         <Grid container spacing={2}>
           <Grid item md={6}>
-            <Typography
-              sx={{ fontSize: '32px', lineHeight: '38px' }}
-              fontWeight={600}
-            >
+            <Typography variant="paragraphP2Small">
               Welcome back DeGen!
             </Typography>
-            <Typography
-              sx={{
-                fontSize: '16px',
-                lineHeight: '20px',
-                marginTop: '24px',
-                marginBottom: '30px',
-              }}
-              fontWeight={700}
-            >
-              Your active{' '}
-              <Link sx={{ cursor: 'pointer' }} onClick={handleClickRental}>
-                rental
-              </Link>{' '}
-              is at {progressValue.toFixed(2)}% of it’s earning cap. Earn more
-              NFTL when you play NOW.
-            </Typography>
+            <br />
+            <Stack sx={{ marginTop: '24px', marginBottom: '30px' }}>
+              <Typography variant="paragraphXSmall">
+                Your active{' '}
+                <Link sx={{ cursor: 'pointer' }} onClick={handleClickRental}>
+                  rental
+                </Link>{' '}
+                is at {progressValue.toFixed(2)}% of it’s earning cap. Earn more
+                NFTL when you play NOW.
+              </Typography>
+            </Stack>
             <Button variant="contained" onClick={handleClickPlay}>
               Play Nifty Smasher Now
             </Button>

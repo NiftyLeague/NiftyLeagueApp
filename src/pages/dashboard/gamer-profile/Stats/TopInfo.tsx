@@ -37,7 +37,7 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
       <Stack>
         <Stack direction="row" alignItems="center" spacing={5}>
           <Box width="50%">
-            <Typography variant="h2" component="div">
+            <Typography variant="paragraphP2Small" component="div">
               {profileName}{' '}
               <ChangeProfileNameDialog
                 handleUpdateNewName={handleUpdateNewName}
@@ -49,7 +49,7 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
         <Stack direction="row" alignItems="center" spacing={5}>
           <Typography
             width="50%"
-            variant="h4"
+            variant="paragraphXSmall"
             component="div"
             color={theme.palette.grey[400]}
           >
@@ -72,10 +72,10 @@ const TopInfo = ({ profile, walletAddress }: TopInfoProps): JSX.Element => {
               />
             </IconButton>
           </Typography>
-          <Typography width="50%" variant="h4" component="div">
+          <Typography width="50%" variant="paragraphSmall" component="div">
             {Math.round(total?.xp || 0)}/{total?.rank_xp_next}
             <Typography
-              variant="h4"
+              variant="paragraphSmall"
               component="div"
               color={theme.palette.grey[400]}
               display="inline"

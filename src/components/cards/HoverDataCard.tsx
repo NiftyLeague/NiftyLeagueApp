@@ -32,7 +32,7 @@ const HoverDataCard = ({
         {isLoading ? (
           <Skeleton variant="text" animation="wave" width={80} />
         ) : (
-          <Typography variant="h5" color="inherit" textAlign="center">
+          <Typography color="inherit" textAlign="center">
             {title}
           </Typography>
         )}
@@ -47,7 +47,7 @@ const HoverDataCard = ({
           {isLoading ? (
             <Skeleton variant="text" animation="wave" width={80} />
           ) : (
-            <Typography variant="h3">{primary}</Typography>
+            <Typography variant="paragraphP2XSmall">{primary}</Typography>
           )}
         </Stack>
       </Grid>
@@ -56,7 +56,7 @@ const HoverDataCard = ({
           {isLoading ? (
             <Skeleton variant="text" animation="wave" width={120} />
           ) : (
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="paragraphXXSmall" color="textSecondary">
               {secondary}
             </Typography>
           )}
