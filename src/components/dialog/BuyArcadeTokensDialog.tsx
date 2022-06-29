@@ -260,7 +260,14 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                       color={palette.warning.main}
                       my={1}
                     >
-                      Balance is too low, <Link>buy NFTL</Link>
+                      Balance is too low.{' '}
+                      <Link
+                        href="https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Buy NFTL
+                      </Link>
                     </Typography>
                   )}
                 {!accountBalance && (
@@ -269,7 +276,14 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                     color={palette.error.main}
                     my={1}
                   >
-                    You have zero balance; <Link>buy NFTL</Link>
+                    You have zero balance.{' '}
+                    <Link
+                      href="https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Buy NFTL
+                    </Link>
                   </Typography>
                 )}
               </Box>
@@ -301,7 +315,11 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 loading={isPending}
                 sx={{ mb: 2 }}
               >
-                {!agreement ? 'Accept Terms to Continue' : 'Buy'}
+                {!agreement
+                  ? 'Accept Terms to Continue'
+                  : accountBalance < tokenCount * details.price
+                  ? 'Insufficient Balance'
+                  : 'Buy'}
               </LoadingButton>
             </>
           )}
