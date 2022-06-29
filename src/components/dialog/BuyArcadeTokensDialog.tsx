@@ -31,8 +31,10 @@ import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
+const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
 
 interface BuyArcadeTokensDialogProps extends DialogProps {
   open: boolean;
@@ -262,7 +264,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                     >
                       Balance is too low.{' '}
                       <Link
-                        href="https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638"
+                        href={NFTL_PURCHASE_URL}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -278,7 +280,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   >
                     You have zero balance.{' '}
                     <Link
-                      href="https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638"
+                      href={NFTL_PURCHASE_URL}
                       target="_blank"
                       rel="noreferrer"
                     >
