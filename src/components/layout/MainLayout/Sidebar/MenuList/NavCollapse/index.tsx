@@ -39,9 +39,9 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const childrens = menu.children ? menu.children : [];
+    const children = menu?.children || [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    childrens.forEach((item: any) => {
+    children.forEach((item: any) => {
       if (pathname && pathname.includes('product-details')) {
         if (item.url && item.url.includes('product-details')) {
           setOpen(true);
@@ -51,10 +51,10 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
         setOpen(true);
       }
     });
-  }, [pathname, menu.children]);
+  }, [pathname, menu?.children]);
 
   // menu collapse & item
-  const menus = menu.children?.map((item) => {
+  const menus = (menu?.children || []).map((item) => {
     switch (item.type) {
       case 'collapse':
         return <NavCollapse key={item.id} menu={item} level={level + 1} />;

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Button,
@@ -20,6 +22,7 @@ import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import { NetworkContext } from 'NetworkProvider';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { Owner } from 'types/graph';
+import useArcadeBalance from 'hooks/useArcadeBalance';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import useNFTLBalance from 'hooks/useNFTLBalance';
 import useAccount from 'hooks/useAccount';
@@ -35,14 +38,26 @@ import { WITHDRAW_NFTL_SIGN, WITHDRAW_NFTL_REFRESH } from 'constants/url';
 import DepositForm from './DepositForm';
 import RefreshBalanceForm from './RefreshBalanceForm';
 import WithdrawForm from './WithdrawForm';
+import TokenInfoCard from 'components/cards/TokenInfoCard';
+import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
+import { sendEvent } from 'utils/google-analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
   const auth = window.localStorage.getItem('authentication-token');
+  const navigate = useNavigate();
   const { address, writeContracts, tx } = useContext(NetworkContext);
+  const {
+    arcadeBalance,
+    loading: arcadeBalanceLoading,
+    refetch: refetchArcadeBal,
+  } = useArcadeBalance();
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
+  const { enableWenGame } = useFlags();
+  const [openBuyAT, setOpenBuyAT] = useState(false);
   // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
   const userNFTLBalance = useNFTLBalance(
@@ -177,6 +192,18 @@ const MyNFTL = (): JSX.Element => {
     }
   }, [auth]);
 
+  const handleBuyArcadeTokens = () => {
+    setOpenBuyAT(true);
+  };
+
+  const handlePlayArcade = useCallback(() => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.PLAY_ARCADE_GAMES_BUTTON_TAPPED,
+      GOOGLE_ANALYTICS.CATEGORIES.GAMEPLAY,
+    );
+    navigate('/games');
+  }, [navigate]);
+
   return (
     <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
@@ -202,9 +229,58 @@ const MyNFTL = (): JSX.Element => {
             </Stack>
           }
         >
-          My NFTL
+          My Tokens
         </SectionTitle>
       </Grid>
+      {enableWenGame && (
+        <>
+          <Grid item xs={12}>
+            <TokenInfoCard
+              title="Arcade Token Balance"
+              secondary={`${arcadeBalance} Tokens`}
+              isLoading={arcadeBalanceLoading}
+              customStyle={{
+                backgroundColor: theme.palette.background.default,
+                border: '1px solid',
+                borderColor: theme.palette.grey[800],
+                borderRadius: '8px',
+              }}
+              actions={
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  paddingX={{ xl: 1, xs: 3 }}
+                  paddingY={{ xl: 0.5, xs: 1.5 }}
+                >
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleBuyArcadeTokens}
+                  >
+                    Buy Tokens
+                  </Button>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={handlePlayArcade}
+                  >
+                    Play Arcade
+                  </Button>
+                </Stack>
+              }
+            />
+          </Grid>
+          <BuyArcadeTokensDialog
+            open={openBuyAT}
+            onSuccess={() => {
+              setOpenBuyAT(false);
+              refetchArcadeBal();
+            }}
+            onClose={() => setOpenBuyAT(false)}
+          />
+        </>
+      )}
       {/* <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
           <Grid item sm={6} xs={12}>
@@ -311,7 +387,7 @@ const MyNFTL = (): JSX.Element => {
                   ? 'Error fetching balance'
                   : `${
                       account
-                        ? formatNumberToDisplay(account?.balance!)
+                        ? formatNumberToDisplay(account?.balance! ?? 0)
                         : '0.00'
                     } NFTL`
               }`}

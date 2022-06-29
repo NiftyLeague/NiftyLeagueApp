@@ -17,7 +17,6 @@ import { v4 as uuidv4 } from 'uuid';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialogV3';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 
 const BoxDegenStyles = {
   px: 1,
@@ -36,8 +35,6 @@ const MyDegens = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
-    useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
     useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [degenDialogView, setDegenDialogView] =
@@ -109,11 +106,6 @@ const MyDegens = (): JSX.Element => {
     window.open('https://opensea.io/collection/niftydegen', '_blank');
   };
 
-  const handleEnableDisable = (degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsEnableDisableDegenModalOpen(true);
-  };
-
   const handleClickEditName = (degen: Degen): void => {
     setSelectedDegen(degen);
     setIsRenameDegenModalOpen(true);
@@ -169,7 +161,6 @@ const MyDegens = (): JSX.Element => {
                 isEnabled={degen.is_active}
                 onEditName={() => handleClickEditName(degen)}
                 onClaim={() => handleClaimDegen(degen)}
-                onEnableDisable={() => handleEnableDisable(degen)}
                 onOpenRentDialog={() => handleRentDegen(degen)}
                 onOpenTraitsDialog={() => handleViewTraits(degen)}
               />
@@ -196,15 +187,6 @@ const MyDegens = (): JSX.Element => {
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
         <RenameDegenDialogContent degen={selectedDegen} />
-      </Dialog>
-      <Dialog
-        open={isEnableDisableDegenModalOpen}
-        onClose={() => setIsEnableDisableDegenModalOpen(false)}
-      >
-        <EnableDisableDegenDialogContent
-          degen={selectedDegen}
-          isEnabled={selectedDegen?.is_active}
-        />
       </Dialog>
     </>
   );

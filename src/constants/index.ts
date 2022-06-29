@@ -1,8 +1,5 @@
 import { ChainId } from '@sushiswap/sdk';
 
-export const DEPLOYER_ADDRESS = process.env
-  .REACT_APP_DEPLOYER_ADDRESS as string;
-
 // MY ALCHEMY_ID, SWAP IN YOURS FROM https://dashboard.alchemyapi.io/
 export const ALCHEMY_ID: { [key in ChainId]?: string } = {
   [ChainId.MAINNET]: process.env.REACT_APP_ALCHEMY_MAINNET_API as string,
@@ -11,10 +8,6 @@ export const ALCHEMY_ID: { [key in ChainId]?: string } = {
 
 export const SUBGRAPH_URI = `${process.env.REACT_APP_SUBGRAPH_URI as string}${
   process.env.REACT_APP_SUBGRAPH_VERSION as string
-}`;
-
-export const IPNS_URL = `${process.env.REACT_APP_IPFS_GATEWAY as string}/ipns/${
-  process.env.REACT_APP_IPNS_ID as string
 }`;
 
 export const DEBUG =

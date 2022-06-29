@@ -2,10 +2,8 @@ import { Button, Grid, Stack } from '@mui/material';
 import SectionTitle from 'components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
 import { sectionSpacing } from 'store/constant';
-import { ALL_RENTAL_API_URL } from 'constants/url';
-import useFetch from 'hooks/useFetch';
 import usePlayerProfile from 'hooks/usePlayerProfile';
-import { useState, useEffect } from 'react';
+import { FC } from 'react';
 import { Rentals } from 'types/rentals';
 import { transformRentals } from 'pages/dashboard/utils';
 import { Link } from 'react-router-dom';
@@ -19,6 +17,8 @@ export interface ColumnType {
     | 'profits'
     | 'netEarning'
     | 'roi'
+    | 'earningCap'
+    | 'earningCapProgress'
     | 'rentalRenewsIn';
   label: string;
   minWidth?: number;
@@ -31,6 +31,17 @@ const columns: ColumnType[] = [
     id: 'playerNickname',
     label: 'Player Nickname',
     minWidth: 150,
+  },
+  {
+    id: 'earningCap',
+    label: 'Earning Cap',
+    minWidth: 150,
+  },
+  {
+    id: 'rentalRenewsIn',
+    label: 'Rental Renews In',
+    minWidth: 150,
+    align: 'center',
   },
   { id: 'degenId', label: 'Degen ID', minWidth: 100, align: 'center' },
   { id: 'winRate', label: 'Win Rate', minWidth: 120, align: 'center' },
@@ -47,36 +58,12 @@ const columns: ColumnType[] = [
     align: 'center',
   },
   { id: 'roi', label: 'ROI %', minWidth: 80, align: 'center' },
-  {
-    id: 'rentalRenewsIn',
-    label: 'Rental Renews In',
-    minWidth: 150,
-    align: 'center',
-  },
 ];
-
-const MyRentals = (): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
-
-  let headers;
-  if (authToken) {
-    headers = {
-      authorizationToken: authToken,
-    };
-  }
-  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
-    headers,
-  });
-
+interface MyRentalsProps {
+  rentals: Rentals[];
+}
+const MyRentals: FC<MyRentalsProps> = ({ rentals }): JSX.Element => {
   const { profile } = usePlayerProfile();
-
-  const [rentals, setRentals] = useState<Rentals[] | any>([]);
-
-  useEffect(() => {
-    if (data) {
-      setRentals(data);
-    }
-  }, [data]);
 
   const rows = transformRentals(rentals, profile?.id || '');
 

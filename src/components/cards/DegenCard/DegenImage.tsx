@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CardMedia } from '@mui/material';
+import { CardMedia, SxProps } from '@mui/material';
 import useBackgroundType from 'hooks/useBackgroundType';
 import ImagePlaceholder from 'components/cards/Skeleton/ImagePlaceholder';
 import UnavailableImg from 'assets/images/unavailable-image.png';
@@ -11,9 +11,11 @@ const DegenImage = memo(
   ({
     tokenId,
     imageHeight = IMAGE_HEIGHT,
+    sx,
   }: {
     tokenId: string | number;
     imageHeight?: number;
+    sx?: SxProps<{}>;
   }) => {
     const { loading, error, background } = useBackgroundType(tokenId);
     const imageURL = `${DEGEN_BASE_IMAGE_URL}/mainnet/images/${tokenId}`;
@@ -50,7 +52,12 @@ const DegenImage = memo(
       };
     }
 
-    return <CardMedia {...setting} sx={{ borderRadius: '4px' }} />;
+    return (
+      <CardMedia
+        {...setting}
+        sx={{ borderRadius: '4px', objectFit: 'cover', ...sx }}
+      />
+    );
   },
 );
 

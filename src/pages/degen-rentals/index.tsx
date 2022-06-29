@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
-
+import { useQuery } from '@apollo/client';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Button,
@@ -23,7 +23,6 @@ import {
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
@@ -32,6 +31,10 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
+import { OWNER_QUERY } from 'queries/OWNER_QUERY';
+import { NetworkContext } from 'NetworkProvider';
+import { Owner } from 'types/graph';
 import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialogV3';
 import { DegenViewType } from '../../types/degens';
@@ -40,6 +43,7 @@ import { DegenViewType } from '../../types/degens';
 const DEGENS_PER_PAGE = 12;
 
 const DegenRentalsPage = (): JSX.Element => {
+  const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
@@ -50,13 +54,23 @@ const DegenRentalsPage = (): JSX.Element => {
     useState<DegenViewType>('default');
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
-  const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
-    useState<boolean>(false);
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
   const { data } = useFetch<{ [id: number]: Degen }>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
+  );
+
+  const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
+    useQuery(OWNER_QUERY, {
+      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
+      variables: { address: address?.toLowerCase() },
+      skip: !address,
+    });
+
+  const isDegenOwner = useMemo(
+    () => (userDegens?.owner?.characterCount ?? 0) > 0,
+    [userDegens?.owner?.characterCount],
   );
 
   const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
@@ -149,9 +163,10 @@ const DegenRentalsPage = (): JSX.Element => {
         <DegensFilter
           onFilter={handleFilter}
           defaultFilterValues={defaultValues as DegenFilter}
+          isDegenOwner={isDegenOwner}
         />
       ),
-    [defaultValues, handleFilter],
+    [defaultValues, isDegenOwner, handleFilter],
   );
 
   const renderDegen = useCallback(
@@ -254,15 +269,6 @@ const DegenRentalsPage = (): JSX.Element => {
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
         <RenameDegenDialogContent degen={selectedDegen} />
-      </Dialog>
-      <Dialog
-        open={isEnableDisableDegenModalOpen}
-        onClose={() => setIsEnableDisableDegenModalOpen(false)}
-      >
-        <EnableDisableDegenDialogContent
-          degen={selectedDegen}
-          isEnabled={selectedDegen?.is_active}
-        />
       </Dialog>
     </>
   );
