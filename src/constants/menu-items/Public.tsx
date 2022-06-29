@@ -1,3 +1,19 @@
+// assets
+import {
+  IconDeviceGamepad,
+  IconTag,
+  IconLayoutGrid,
+  IconListNumbers,
+} from '@tabler/icons';
+
+// constant
+const icons = {
+  IconDeviceGamepad,
+  IconTag,
+  IconLayoutGrid,
+  IconListNumbers,
+};
+
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const PublicItems = {
@@ -28,6 +44,14 @@ const PublicItems = {
       type: 'item',
       url: '/degen-rentals',
       // icon: icons.IconTag,
+      breadcrumbs: false,
+    },
+    {
+      id: 'leaderboards',
+      title: 'Leaderboards',
+      type: 'item',
+      url: '/leaderboards',
+      icon: icons.IconListNumbers,
       breadcrumbs: false,
     },
   ],

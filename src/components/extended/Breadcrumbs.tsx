@@ -86,7 +86,7 @@ const Breadcrumbs = ({
   // set active item state
 
   const getCollapse = (menu: NavItemTypeObject) => {
-    if (menu.children) {
+    if (menu?.children) {
       menu.children.filter((collapse: NavItemType) => {
         if (collapse.type && collapse.type === 'collapse') {
           getCollapse(collapse as { children: NavItemType[]; type?: string });

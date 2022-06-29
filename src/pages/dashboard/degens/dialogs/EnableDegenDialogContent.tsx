@@ -18,17 +18,18 @@ import DegenImage from 'components/cards/DegenCard/DegenImage';
 interface Props {
   degen?: Degen;
   isEnabled?: boolean;
+  onClose: () => void;
   onSuccess?: () => void;
 }
 
 const EnableDisableDegenDialogContent = ({
   degen,
   isEnabled,
+  onClose,
   onSuccess,
 }: Props): JSX.Element => {
   const auth = window.localStorage.getItem('authentication-token');
   const [agreement, setAgreement] = useState(false);
-
   const handleButtonClick = async () => {
     if (auth && degen) {
       const res = await fetch(
@@ -53,6 +54,7 @@ const EnableDisableDegenDialogContent = ({
           theme: 'dark',
         });
         onSuccess?.();
+        onClose();
       }
     }
   };

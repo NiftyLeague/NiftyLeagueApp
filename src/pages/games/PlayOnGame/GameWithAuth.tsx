@@ -5,42 +5,49 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button, Stack } from '@mui/material';
 import Unity, { UnityContext } from 'react-unity-webgl';
+import { Box, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
+import useArcadeBalance from 'hooks/useArcadeBalance';
 import withVerification from 'components/Authentication';
 import { NETWORK_NAME } from 'constants/networks';
-import Preloader from './Preloader';
 import { DEBUG } from 'constants/index';
+import Preloader from './Preloader';
+import ArcadeTokensRequired from './ArcadeTokensRequired';
+import { ALL_RENTAL_API_URL } from 'constants/url';
+import { Rentals } from 'types/rentals';
+import EarningCap from 'pages/dashboard/overview/EarningCap';
+import useFetch from 'hooks/useFetch';
 
-const baseUrl = process.env.REACT_APP_UNITY_SMASHERS_BASE_URL as string;
-const buildVersion = process.env
-  .REACT_APP_UNITY_SMASHERS_BASE_VERSION as string;
-
-export const smashersContext = new UnityContext({
-  loaderUrl: `${baseUrl}/Build/${buildVersion}.loader.js`,
-  dataUrl: `${baseUrl}/Build/${buildVersion}.data.br`,
-  frameworkUrl: `${baseUrl}/Build/${buildVersion}.framework.js.br`,
-  codeUrl: `${baseUrl}/Build/${buildVersion}.wasm.br`,
-  streamingAssetsUrl: `${baseUrl}/StreamingAssets`,
-  companyName: 'NiftyLeague',
-  productName: 'NiftySmashers',
-  productVersion: buildVersion,
-});
+interface GameProps {
+  auth: string;
+  unityContext: UnityContext;
+  arcadeTokenRequired?: boolean;
+}
 
 const Game = ({
   auth,
   unityContext,
-}: {
-  auth: string;
-  unityContext: UnityContext;
-}) => {
+  arcadeTokenRequired = false,
+}: GameProps) => {
   const { address, targetNetwork } = useContext(NetworkContext);
+  const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
   const authMsg = `true,${address || '0x0'},Vitalik,${auth},${favs}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const authToken = window.localStorage.getItem('authentication-token');
+  let headers;
+  if (authToken) {
+    headers = {
+      authorizationToken: authToken,
+    };
+  }
+  const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+    headers,
+  });
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -110,9 +117,9 @@ const Game = ({
     };
   }, [unityContext, onMouse, startAuthentication, getConfiguration]);
 
-  const handleOnClickFullscreen = () => {
-    (window as any).unityInstance.setFullscreen(true);
-  };
+  if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
+    return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
+  }
 
   return (
     <>
@@ -133,20 +140,14 @@ const Game = ({
             visibility: isLoaded ? 'visible' : 'hidden',
           }}
         />
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleOnClickFullscreen}
-        >
-          Fullscreen
-        </Button>
+        <Box ml={4} minWidth={360}>
+          <EarningCap rentals={rentals ?? []} hideTitle={true} />
+        </Box>
       </Stack>
     </>
   );
 };
 
-const GameWithAuth = withVerification(
-  (props: { auth: string; unityContext: UnityContext }) => Game(props),
-);
+const GameWithAuth = withVerification((props: GameProps) => Game(props));
 
 export default GameWithAuth;

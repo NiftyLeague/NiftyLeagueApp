@@ -75,6 +75,8 @@ const GamerProfile = (): JSX.Element => {
     [comicsBalance],
   );
 
+  const degenCount = userDegens?.owner?.characterCount || 0;
+
   const renderEmptyProfile = () => {
     return (
       <Grid
@@ -115,7 +117,8 @@ const GamerProfile = (): JSX.Element => {
             <Stack direction="row" spacing={5}>
               <LeftInfo data={profile?.stats?.total} />
               <RightInfo
-                degenCount={filteredDegens?.length}
+                degenCount={degenCount}
+                rentalCount={filteredDegens.length - degenCount}
                 comicCount={filteredComics?.reduce(
                   (prev, cur) => prev + Number(cur?.balance),
                   0,
@@ -131,7 +134,10 @@ const GamerProfile = (): JSX.Element => {
   const renderBottomProfile = () => {
     return (
       <SectionSlider firstSection title="Player Stats by Game" isSlider={false}>
-        <BottomInfo nifty_smashers={profile?.stats?.nifty_smashers} />
+        <BottomInfo
+          nifty_smashers={profile?.stats?.nifty_smashers}
+          wen_game={profile?.stats?.wen_game}
+        />
       </SectionSlider>
     );
   };

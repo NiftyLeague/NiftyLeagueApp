@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Stack, Button } from '@mui/material';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import ComicCard from 'components/cards/ComicCard';
 import EmptyState from 'components/EmptyState';
@@ -20,6 +21,8 @@ const DashboardComicsPage = (): JSX.Element => {
     () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
     [comicsBalance],
   );
+  const { displayMyItems } = useFlags();
+
   const handleViewComic = useCallback(
     (comic: Comic) => setSelectedComic(comic),
     [],
@@ -105,11 +108,18 @@ const DashboardComicsPage = (): JSX.Element => {
             {renderComics}
           </Grid>
         </SectionSlider>
-        <SectionSlider firstSection title="My Items" isSlider={false}>
-          <Grid container direction="row" flexWrap="wrap" spacing={cardSpacing}>
-            {renderItems}
-          </Grid>
-        </SectionSlider>
+        {displayMyItems && (
+          <SectionSlider firstSection title="My Items" isSlider={false}>
+            <Grid
+              container
+              direction="row"
+              flexWrap="wrap"
+              spacing={cardSpacing}
+            >
+              {renderItems}
+            </Grid>
+          </SectionSlider>
+        )}
       </Stack>
       <ViewComicDialog
         comic={selectedComic}
