@@ -40,7 +40,7 @@ const PublicItems = {
     {
       id: 'degen-rentals',
       // title: 'DEGEN Rentals',
-      title: 'Leaderboards',
+      title: 'Degen Rentals',
       type: 'item',
       url: '/degen-rentals',
       // icon: icons.IconTag,

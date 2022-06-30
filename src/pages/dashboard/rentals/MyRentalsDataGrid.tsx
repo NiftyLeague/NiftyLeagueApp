@@ -390,6 +390,12 @@ const MyRentalsDataGrid = ({
               display: 'block',
             },
           },
+          '& .MuiDataGrid-cell': {
+            fontSize: '14px',
+            lineHeight: '20px',
+            fontFamily: `'IBM Plex Mono', monospace`,
+            fontWeight: 500,
+          },
         }}
       />
       {/* Nickname Degen Dialog */}

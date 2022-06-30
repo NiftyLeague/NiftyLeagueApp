@@ -22,19 +22,27 @@ const CardGameContent = ({
 }) => {
   const theme = useTheme();
   return (
-    <Stack justifyContent="space-between" flexGrow={1}>
+    <Stack
+      justifyContent="space-between"
+      flexGrow={1}
+      sx={{
+        background: theme.palette.background.paper,
+        boxShadow: theme.customShadows.xSmall,
+        borderRadius: '4px',
+      }}
+    >
       <CardContent
         sx={{
           padding: '24px 24px 0',
         }}
       >
         <Stack direction="row" justifyContent="space-between">
-          <Typography gutterBottom variant="h3" component="div">
+          <Typography gutterBottom variant="paragraphP2XSmall" component="div">
             {title}
           </Typography>
           <Typography
             gutterBottom
-            variant="body2"
+            variant="paragraphXSmall"
             component="div"
             sx={{
               color: isComingSoon
@@ -47,16 +55,16 @@ const CardGameContent = ({
         </Stack>
         {required && (
           <Typography
-            variant="body2"
+            variant="paragraphXSmall"
             gutterBottom
             sx={{
               color: theme.palette.warning.main,
             }}
           >
-            {required}
+            {required} <br />
           </Typography>
         )}
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="formTextMedium" color="text.secondary">
           {description}
         </Typography>
       </CardContent>
