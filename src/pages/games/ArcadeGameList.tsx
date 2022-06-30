@@ -7,6 +7,7 @@ import useArcadeBalance from 'hooks/useArcadeBalance';
 import { sendEvent } from 'utils/google-analytics';
 import WenThumbnail from 'assets/images/games/wen.gif';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 const ArcadeGameList: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,11 @@ const ArcadeGameList: React.FC = () => {
   }, [arcadeBalance, navigate]);
 
   const handleConnectWallet = useCallback(() => {
-    sendEvent('login', 'engagement', 'method');
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.LOGIN,
+      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
+      'method',
+    );
     loadWeb3Modal();
   }, [loadWeb3Modal]);
 

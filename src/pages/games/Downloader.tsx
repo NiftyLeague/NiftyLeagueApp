@@ -4,7 +4,7 @@ import { GetApp } from '@mui/icons-material';
 import useVersion from 'hooks/useVersion';
 
 const Downloader = (): JSX.Element => {
-  const { isWindows, downloadURL, version } = useVersion();
+  const { isWindows, isMacOs, downloadURL, version, message } = useVersion();
 
   return (
     <Container style={{ textAlign: 'left', padding: '40px' }}>
@@ -23,18 +23,14 @@ const Downloader = (): JSX.Element => {
         <li>Download the installer below</li>
         <Button
           color="primary"
-          disabled={!isWindows || !version}
+          disabled={isMacOs || !version}
           href={downloadURL}
           size="large"
           startIcon={<GetApp />}
           // style={{ color: currentTheme === 'dark' ? 'white' : 'black' }}
           variant="contained"
         >
-          {!version && isWindows
-            ? 'Fetching installer version...'
-            : `Download for ${
-                isWindows ? 'Windows' : 'Mac OS will be added soon!'
-              }`}
+          {!version && isWindows ? 'Fetching installer version...' : message}
         </Button>
         <li>
           Run the installer to install <strong>Nifty Launcher</strong> and an

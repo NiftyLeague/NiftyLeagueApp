@@ -15,13 +15,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 // import { makeStyles } from '@mui/styles';
 import { sendEvent } from 'utils/google-analytics';
 import { TableType } from 'types/leaderboard';
-import {
-  LEADERBOARD_CATEGORY,
-  LEADERBOARD_GAME_FILTER_CHANGED_EVENT,
-  LEADERBOARD_TYPE_FILTER_CHANGED_EVENT,
-  NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT,
-  WEN_GAME_LEADERBOARD_VIEWED_EVENT,
-} from 'constants/analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import {
   Game,
   LEADERBOARD_GAME_LIST,
@@ -57,9 +51,9 @@ export default function LeaderBoards(): JSX.Element {
   useEffect(() => {
     sendEvent(
       selectedGame === 'nifty_smashers'
-        ? NIFTY_SMASHERS_LEADERBOARD_VIEWED_EVENT
-        : WEN_GAME_LEADERBOARD_VIEWED_EVENT,
-      LEADERBOARD_CATEGORY,
+        ? GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_LEADERBOARD_VIEWED
+        : GOOGLE_ANALYTICS.EVENTS.WEN_GAME_LEADERBOARD_VIEWED,
+      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
     );
   }, [selectedGame]);
 
@@ -67,8 +61,8 @@ export default function LeaderBoards(): JSX.Element {
     const game = event.target.value;
     setGame(game);
     sendEvent(
-      LEADERBOARD_GAME_FILTER_CHANGED_EVENT,
-      LEADERBOARD_CATEGORY,
+      GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_GAME_FILTER_CHANGED,
+      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
       game === 'nifty_smashers' ? Game.NiftySmashers : Game.WenGame,
     );
     if (game === 'nifty_smashers') {
@@ -88,8 +82,8 @@ export default function LeaderBoards(): JSX.Element {
       setTable(table);
       setType(table.key);
       sendEvent(
-        LEADERBOARD_TYPE_FILTER_CHANGED_EVENT,
-        LEADERBOARD_CATEGORY,
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_TYPE_FILTER_CHANGED,
+        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
         table.display,
       );
     }

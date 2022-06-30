@@ -7,7 +7,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import Blockies from 'react-blockies';
 import { NetworkContext } from 'NetworkProvider';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
@@ -18,6 +17,11 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendEvent } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+
+import { useGamerProfile } from 'hooks/useGamerProfile';
+import { ProfileAvatar } from 'types/account';
+import useAuth from 'hooks/useAuth';
 
 export interface UserProfileProps {}
 
@@ -56,6 +60,26 @@ const UserProfile: React.FC<
     tokenIndices,
     refreshKey,
   );
+  const [username, setUserName] = useState<string | undefined>('');
+  const [avatar, setAvatar] = useState<ProfileAvatar | undefined>(undefined);
+  const { fetchUserProfile } = useGamerProfile();
+
+  const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res: any = await fetchUserProfile();
+      if (res) {
+        setUserName(res?.name);
+        setAvatar(res?.avatar);
+        return;
+      }
+    };
+    if (isLoggedIn) {
+      void fetchUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (totalAccumulated) setMockAccumulated(totalAccumulated);
@@ -72,7 +96,11 @@ const UserProfile: React.FC<
   }, [tokenIndices, totalAccumulated, tx, writeContracts]);
 
   const handleConnectWallet = useCallback(() => {
-    sendEvent('login', 'engagement', 'method');
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.LOGIN,
+      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
+      'method',
+    );
     loadWeb3Modal();
   }, [loadWeb3Modal]);
 
@@ -86,13 +114,15 @@ const UserProfile: React.FC<
       p={4}
       sx={{ border: `1px solid ${palette.grey[800]}` }}
     >
-      <Avatar alt="avatar" sx={{ height: 80, width: 80 }}>
-        <Blockies seed={address.toLowerCase()} size={80} className="blockies" />
-      </Avatar>
+      <Avatar alt="avatar" src={avatar?.url} sx={{ height: 80, width: 80 }} />
       <Stack direction="column" alignItems="center" marginY={2}>
-        {/* Hidden the name */}
-        {/* <Typography variant="h4">Unkown</Typography> */}
-        <Typography>{address.substring(0, 6)}</Typography>
+        <Typography>
+          {username ||
+            `${address.slice(0, 5)}...${address.slice(
+              address.length - 5,
+              address.length - 1,
+            )}`}
+        </Typography>
       </Stack>
       <Stack direction="column" alignItems="center" marginY={2}>
         {loading ? (

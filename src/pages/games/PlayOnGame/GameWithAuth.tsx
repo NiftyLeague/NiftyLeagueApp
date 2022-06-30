@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import Unity, { UnityContext } from 'react-unity-webgl';
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import withVerification from 'components/Authentication';
@@ -14,6 +14,10 @@ import { NETWORK_NAME } from 'constants/networks';
 import { DEBUG } from 'constants/index';
 import Preloader from './Preloader';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
+import { ALL_RENTAL_API_URL } from 'constants/url';
+import { Rentals } from 'types/rentals';
+import EarningCap from 'pages/dashboard/overview/EarningCap';
+import useFetch from 'hooks/useFetch';
 
 interface GameProps {
   auth: string;
@@ -33,6 +37,17 @@ const Game = ({
   const authCallback = useRef<null | ((authMsg: string) => void)>();
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const authToken = window.localStorage.getItem('authentication-token');
+  let headers;
+  if (authToken) {
+    headers = {
+      authorizationToken: authToken,
+    };
+  }
+  const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+    headers,
+  });
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -113,29 +128,29 @@ const Game = ({
   return (
     <>
       <Preloader ready={isLoaded} progress={progress} />
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
-        width="100%"
-        gap={1}
-      >
-        <Unity
-          className="game-canvas"
-          unityContext={unityContext}
-          style={{
-            width: 'calc(89vh * 1.33)',
-            height: '89vh',
-            visibility: isLoaded ? 'visible' : 'hidden',
-          }}
-        />
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleOnClickFullscreen}
-        >
-          Fullscreen
-        </Button>
+      <Stack direction="row" alignItems="flex-start">
+        <Stack alignItems="flex-start">
+          <Unity
+            className="game-canvas"
+            unityContext={unityContext}
+            style={{
+              width: 'calc(77vh * 1.33)',
+              height: '77vh',
+              visibility: isLoaded ? 'visible' : 'hidden',
+            }}
+          />
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleOnClickFullscreen}
+            sx={{ marginTop: '6px' }}
+          >
+            Fullscreen
+          </Button>
+        </Stack>
+        <Box ml={2} minWidth={350}>
+          <EarningCap rentals={rentals ?? []} hideTitle={true} />
+        </Box>
       </Stack>
     </>
   );

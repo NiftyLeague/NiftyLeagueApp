@@ -9,11 +9,12 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Paper,
   CircularProgress,
+  Theme,
   Typography,
   Stack,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { sendEvent } from 'utils/google-analytics';
@@ -22,13 +23,11 @@ import EnhancedTableHead from './EnhancedTableHead';
 import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
 import { NetworkContext } from 'NetworkProvider';
 import usePlayerProfile from 'hooks/usePlayerProfile';
-import {
-  LEADERBOARD_CATEGORY,
-  LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT,
-} from 'constants/analytics';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import TopModal from '../TopModal';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   loadingBox: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -45,7 +44,12 @@ const useStyles = makeStyles({
       display: 'none',
     },
   },
-});
+  paginationSpacer: {
+    [theme.breakpoints.down('sm')]: {
+      flex: 'none',
+    },
+  },
+}));
 
 export default function EnhancedTable({
   selectedGame,
@@ -58,8 +62,9 @@ export default function EnhancedTable({
   const [rows, setData] = useState<DataType[] | null>();
   const [myRank, setMyRank] = useState<number>();
   const { web3Modal } = useContext(NetworkContext);
-  const { palette } = useTheme();
+  const { breakpoints, palette } = useTheme();
   const { profile } = usePlayerProfile();
+  const isMobile = useMediaQuery(breakpoints.down('sm'));
 
   const classes = useStyles();
 
@@ -105,7 +110,10 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    sendEvent(LEADERBOARD_CHECK_YOUR_RANK_CLICKED_EVENT, LEADERBOARD_CATEGORY);
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+    );
     const errorMes =
       'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
 
@@ -114,7 +122,11 @@ export default function EnhancedTable({
       return;
     }
     try {
-      const result: any = await fetchRankByUserId(profile?.id);
+      const result: any = await fetchRankByUserId(
+        profile?.id,
+        selectedGame,
+        selectedTable.key,
+      );
       if (!result.ok) {
         const errMsg = await result.text();
         toast.error(errMsg, { theme: 'dark' });
@@ -141,64 +153,68 @@ export default function EnhancedTable({
     : 0;
 
   return (
-    <Box>
+    <Box mb={{ xs: 10, sm: 0 }}>
       {!rows ? (
         <Box className={classes.loadingBox}>
           <CircularProgress />
         </Box>
       ) : (
-        <Paper className={classes.paperStyle}>
-          <TableContainer sx={{ minWidth: '850px' }}>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size="medium"
+        <>
+          <PerfectScrollbar className={classes.paperStyle}>
+            <TableContainer
+              sx={{ minWidth: '850px', height: isMobile ? '50vh' : 'auto' }}
             >
-              <EnhancedTableHead rows={selectedTable.rows} />
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: DataType, index: number) => {
-                    const labelId = `enhanced-table-checkbox-${index}`;
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.rank}
-                      >
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="normal"
+              <Table
+                stickyHeader
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size="medium"
+              >
+                <EnhancedTableHead rows={selectedTable.rows} />
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row: DataType, index: number) => {
+                      const labelId = `enhanced-table-checkbox-${index}`;
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.rank}
                         >
-                          {row.rank}
-                        </TableCell>
-                        <TableCell align="left">{row.user_id}</TableCell>
-                        {selectedTable.rows.map((cell) => (
-                          <TableCell key={cell.key} align="left">
-                            {row.stats[cell.key]}
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="normal"
+                          >
+                            {row.rank}
                           </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                          <TableCell align="left">{row.user_id}</TableCell>
+                          {selectedTable.rows.map((cell) => (
+                            <TableCell key={cell.key} align="left">
+                              {row.stats[cell.key]}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: 53 * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </PerfectScrollbar>
           <TablePagination
-            sx={{ minWidth: '850px' }}
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10]}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
@@ -212,7 +228,7 @@ export default function EnhancedTable({
                 alignItems="center"
                 gap={2}
               >
-                {!!web3Modal.cachedProvider && selectedGame === 'wen_game' && (
+                {!!web3Modal.cachedProvider && (
                   <>
                     <Typography
                       variant="body2"
@@ -226,9 +242,9 @@ export default function EnhancedTable({
                       CHECK YOUR RANK
                     </Typography>
                     <TopModal
-                      selectedGame="wen_game"
-                      selectedTimeFilter="all_time"
-                      flag="score"
+                      selectedGame={selectedGame}
+                      selectedTimeFilter={selectedTimeFilter}
+                      flag={selectedTable.key}
                       ModalIcon={
                         <Box
                           className="wen-game-modal"
@@ -245,7 +261,7 @@ export default function EnhancedTable({
               </Stack>
             )}
           />
-        </Paper>
+        </>
       )}
     </Box>
   );
