@@ -51,7 +51,7 @@ const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
               sx={{ fontSize: '32px', lineHeight: '38px' }}
               fontWeight={600}
             >
-              Welcome back DeGen!
+              Welcome back DEGEN!
             </Typography>
             <Typography
               sx={{
