@@ -31,8 +31,10 @@ import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
+const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
 
 interface BuyArcadeTokensDialogProps extends DialogProps {
   open: boolean;
@@ -260,7 +262,14 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                       color={palette.warning.main}
                       my={1}
                     >
-                      Balance is too low, <Link>buy NFTL</Link>
+                      Balance is too low.{' '}
+                      <Link
+                        href={NFTL_PURCHASE_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Buy NFTL
+                      </Link>
                     </Typography>
                   )}
                 {!accountBalance && (
@@ -269,7 +278,14 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                     color={palette.error.main}
                     my={1}
                   >
-                    You have zero balance; <Link>buy NFTL</Link>
+                    You have zero balance.{' '}
+                    <Link
+                      href={NFTL_PURCHASE_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Buy NFTL
+                    </Link>
                   </Typography>
                 )}
               </Box>
@@ -301,7 +317,11 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 loading={isPending}
                 sx={{ mb: 2 }}
               >
-                {!agreement ? 'Accept Terms to Continue' : 'Buy'}
+                {!agreement
+                  ? 'Accept Terms to Continue'
+                  : accountBalance < tokenCount * details.price
+                  ? 'Insufficient Balance'
+                  : 'Buy'}
               </LoadingButton>
             </>
           )}
