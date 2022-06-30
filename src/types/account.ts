@@ -19,6 +19,7 @@ export interface Profile {
   stats: {
     nifty_smashers: ProfileNiftySmsher;
     total: ProfileTotal;
+    wen_game: ProfileWenGame;
   };
   name: string;
   name_cased: string;
@@ -52,6 +53,19 @@ export interface ProfileNiftySmsher extends ProfileTotal {
   round_wins: number;
   deaths: number;
   rounds: number;
+}
+export interface ProfileWenGame {
+  dodges: number;
+  hits: number;
+  machine_hits: number;
+  matches: number;
+  misses: number;
+  rank: number;
+  rank_xp_next: number;
+  rank_xp_previous: number;
+  score: number;
+  time_played: number;
+  xp: number;
 }
 
 export interface WithdrawalHistory {

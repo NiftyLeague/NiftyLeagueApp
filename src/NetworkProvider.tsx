@@ -82,6 +82,9 @@ const web3Modal = new Web3Modal({
 
 const logoutOfWeb3Modal = () => {
   web3Modal.clearCachedProvider();
+  window.localStorage.removeItem('authentication-token');
+  window.localStorage.removeItem('uuid-token');
+  window.localStorage.removeItem('nonce');
   setTimeout(() => {
     window.location.reload();
   }, 1);
