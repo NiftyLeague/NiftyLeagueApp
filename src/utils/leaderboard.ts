@@ -1,7 +1,9 @@
 import { DataType, ReturnDataType, Order } from 'types/leaderboard';
-import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
-import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
-import { GET_RANK_BY_USER_ID_API } from 'constants/url';
+import {
+  GET_RANK_BY_USER_ID_API,
+  LEADERBOARD_SCORE_API_URL,
+  LEADERBOARD_USERNAMES_API_URL,
+} from 'constants/url';
 
 export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
