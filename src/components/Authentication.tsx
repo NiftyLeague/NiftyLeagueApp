@@ -5,6 +5,7 @@ import { Button, Typography, Container } from '@mui/material';
 
 import { NetworkContext } from 'NetworkProvider';
 import { getProviderAndSigner } from 'helpers';
+import { ADDRESS_VERIFICATION, WALLET_VERIFICATION } from 'constants/url';
 
 const ProfileVerification = ({
   setAuth,
@@ -36,18 +37,15 @@ const ProfileVerification = ({
             }`,
           );
           setMsgSent(true);
-          const result = await fetch(
-            'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/verification',
-            {
-              method: 'POST',
-              body: JSON.stringify({
-                token,
-                nonce,
-                verification,
-                address: addressToLower,
-              }),
-            },
-          )
+          const result = await fetch(WALLET_VERIFICATION, {
+            method: 'POST',
+            body: JSON.stringify({
+              token,
+              nonce,
+              verification,
+              address: addressToLower,
+            }),
+          })
             .then((res) => {
               if (res.status === 404) setError(true);
               return res.text();
@@ -106,12 +104,9 @@ export default function withVerification(
     useEffect(() => {
       const checkAddress = async () => {
         if (auth) {
-          const result = await fetch(
-            'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/verification/address',
-            {
-              headers: { authorizationToken: auth },
-            },
-          )
+          const result = await fetch(ADDRESS_VERIFICATION, {
+            headers: { authorizationToken: auth },
+          })
             .then((res) => {
               if (res.status === 404) setSuccess(false);
               return res.text();

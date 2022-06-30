@@ -1,5 +1,3 @@
-export const LEADERBOARD_SCORE_API_URL =
-  'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/scores';
 export const NiftySmashersTables = [
   {
     key: 'win_rate',
