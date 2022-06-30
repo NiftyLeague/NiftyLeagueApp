@@ -39,7 +39,7 @@ const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
   };
 
   const handleClickPlay = () => {
-    navigate('/games/smasher');
+    navigate('/games/smashers');
   };
 
   return (
