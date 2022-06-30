@@ -174,7 +174,7 @@ const DashboardRentalPage = (): JSX.Element => {
         columnGap={3}
         rowGap={1}
       >
-        <Typography variant="h2">My Rentals</Typography>
+        <Typography variant="paragraphP2Small">My Rentals</Typography>
 
         {/* Header form */}
         <Stack

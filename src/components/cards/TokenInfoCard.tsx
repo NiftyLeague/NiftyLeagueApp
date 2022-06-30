@@ -34,7 +34,11 @@ const TokenInfoCard = ({
                   sx={{ mx: 'auto' }}
                 />
               ) : (
-                <Typography variant="h5" color="inherit" textAlign="center">
+                <Typography
+                  color="inherit"
+                  textAlign="center"
+                  variant="paragraphXXSmall"
+                >
                   {title}
                 </Typography>
               )}
@@ -49,9 +53,9 @@ const TokenInfoCard = ({
                 />
               ) : (
                 <Typography
-                  variant="body2"
                   color="textSecondary"
                   textAlign="center"
+                  variant="paragraphXXSmall"
                 >
                   {secondary}
                 </Typography>

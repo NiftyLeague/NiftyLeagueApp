@@ -11,14 +11,19 @@ export default function EnhancedTableHead(
   return (
     <TableHead>
       <TableRow>
-        <TableCell align="left" padding="normal">
+        <TableCell align="left" padding="normal" variant="head">
           RANK
         </TableCell>
-        <TableCell align="left" padding="normal">
+        <TableCell align="left" padding="normal" variant="head">
           USERNAME
         </TableCell>
         {rows.map((headCell) => (
-          <TableCell key={headCell.key} align="left" padding="normal">
+          <TableCell
+            key={headCell.key}
+            align="left"
+            padding="normal"
+            variant="head"
+          >
             {headCell.display}
           </TableCell>
         ))}
