@@ -122,7 +122,7 @@ const DegenDialog = ({
 
   return (
     <Dialog
-      maxWidth={isRent ? 'xs' : 'sm'}
+      maxWidth="sm"
       fullWidth={isClaim ? false : true}
       scroll="body"
       fullScreen={fullScreen}
