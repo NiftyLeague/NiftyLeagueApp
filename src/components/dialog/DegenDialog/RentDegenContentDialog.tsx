@@ -156,6 +156,7 @@ const RentDegenContentDialog = ({
       setRentFor('myself');
       setDisabledRentFor(true);
     } else {
+      setDisabledRentFor(false);
       // Once api is ready,
       // need to check if user has reached out to max Sponsorship cap, then disable RentFor option
     }
