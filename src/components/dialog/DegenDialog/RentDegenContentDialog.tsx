@@ -39,6 +39,7 @@ import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
 import { NFTL_PURCHASE_URL } from 'constants/url';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       textTransform: 'uppercase',
     },
     '& p,span': {
-      fontSize: '12px',
+      fontSize: '14px',
       lineHeight: 1.2,
     },
   },
@@ -297,8 +298,8 @@ const RentDegenContentDialog = ({
   return (
     <>
       <Stack
-        rowGap={{ xs: 6, lg: 3 }}
-        mx={{ xs: 2, sm: 6 }}
+        rowGap={{ xs: 6, lg: 4 }}
+        mx={{ xs: 2, sm: 8 }}
         className={classes.root}
       >
         <IconButton
@@ -447,7 +448,9 @@ const RentDegenContentDialog = ({
                           ? 'line-through'
                           : 'none',
                       }}
-                    >{`${degen?.price || 0} NFTL`}</Typography>
+                    >{`${formatNumberToDisplay(
+                      degen?.price || 0,
+                    )} NFTL`}</Typography>
                   </Stack>
                   {checkBalance && (
                     <Stack direction="column">
@@ -455,7 +458,11 @@ const RentDegenContentDialog = ({
                         <Typography>Balance:</Typography>
                         <Typography
                           color={sufficientBalance ? '#007B60' : '#B51424'}
-                        >{`${accountBalance} NFTL`}</Typography>
+                        >{`${
+                          accountBalance
+                            ? formatNumberToDisplay(accountBalance)
+                            : '0.00'
+                        } NFTL`}</Typography>
                       </Stack>
                       {!sufficientBalance && (
                         <Typography variant="caption" mt={0.5} ml="auto">
@@ -593,7 +600,7 @@ const RentDegenContentDialog = ({
           <Typography variant="h5" mt={4} mb={1.5}>
             Stats
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={6}>
             <Grid item xs={12} sm={12} md={6}>
               <Stack gap={1}>
                 <Stack direction="row" justifyContent="space-between">
