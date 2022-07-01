@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import { Theme } from '@mui/material/styles';
@@ -72,7 +71,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 'calc(100% + 80px)',
-      marginLeft: '-40px',
+      marginLeft: '-32px',
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+        marginLeft: 0,
+        marginTop: theme.spacing(10),
+      },
     },
     stepper: {
       backgroundColor: 'transparent',
@@ -85,27 +89,22 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function getSteps() {
-  return ['Start', 'Connect Wallet', 'Check Balance', 'Success'];
-}
+const steps = ['Connect Wallet', 'Check Balance', 'Success'];
 
 export default function RentStepper({
-  //   insufficientAllowance,
   rentSuccess,
-  insufficientBalance,
+  checkBalance,
 }: {
-  //   insufficientAllowance: boolean;
   rentSuccess: boolean;
-  insufficientBalance: boolean;
+  checkBalance: boolean;
 }): JSX.Element {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const steps = getSteps();
 
   useEffect(() => {
-    if (rentSuccess) setActiveStep(3);
-    else if (insufficientBalance) setActiveStep(2);
-  }, [insufficientBalance, rentSuccess]);
+    if (rentSuccess) setActiveStep(2);
+    else if (checkBalance) setActiveStep(1);
+  }, [checkBalance, rentSuccess]);
 
   return (
     <div className={classes.root}>
