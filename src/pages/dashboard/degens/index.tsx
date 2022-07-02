@@ -85,7 +85,30 @@ const DashboardDegensPage = (): JSX.Element => {
     if (!characters.length || !data) {
       return [];
     }
-    return characters.map((character) => data[character.id]);
+    // TODO: remove temp fix for 7th tribes
+    return characters.map(
+      (character) =>
+        data[character.id] || {
+          id: character.id,
+          name: character.name,
+          traits_string: Object.values(character.traits).toString(),
+          background: 'meta',
+          earning_cap: 0,
+          earning_cap_daily: 0,
+          is_active: false,
+          last_rented_at: 0,
+          multiplier: 2,
+          multipliers: { background: 2 },
+          owner: '',
+          owner_share: 0.1,
+          price: 0,
+          price_daily: 0,
+          rental_count: 0,
+          total_rented: 0,
+          tribe: 'egg',
+        },
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characters.length, !!data]);
 
