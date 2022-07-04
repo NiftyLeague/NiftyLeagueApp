@@ -164,14 +164,19 @@ const MyRentalsDataGrid = ({
           width: 130,
           ...commonColumnProp,
           renderCell: (params) => (
-            <Button
-              onClick={() => handleOpenTerminateRental(params)}
-              variant="outlined"
-              color="secondary"
-              disabled={params.value}
-            >
-              {params.value ? 'Terminated' : 'Terminate'}
-            </Button>
+            <>
+              {(params.row.category === 'direct-rental' ||
+                params.row.category === 'non-owned-sponsorship') && (
+                <Button
+                  onClick={() => handleOpenTerminateRental(params)}
+                  variant="outlined"
+                  color="secondary"
+                  disabled={params.value}
+                >
+                  {params.value ? 'Terminated' : 'Terminate'}
+                </Button>
+              )}
+            </>
           ),
         },
         {
