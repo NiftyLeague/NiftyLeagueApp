@@ -1,5 +1,6 @@
-import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
+import { Dialog, DialogProps, Theme, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { NFT_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
@@ -21,6 +22,16 @@ export interface DegenDialogProps extends DialogProps {
   onRent?: (degen: Degen) => void;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: ({ isRent }: { isRent: boolean | undefined }) => ({
+    overflowX: 'hidden',
+    minWidth: isRent ? 473 : 'inherit',
+    [theme.breakpoints.down('md')]: {
+      minWidth: 'inherit',
+    },
+  }),
+}));
+
 const DegenDialog = ({
   open,
   degen,
@@ -35,7 +46,7 @@ const DegenDialog = ({
   const theme = useTheme();
   const tokenId = degen?.id || 0;
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+  const classes = useStyles({ isRent });
   const { readContracts } = useContext(NetworkContext);
   const [degenDetail, setDegenDetail] = useState<GetDegenResponse>();
   const [character, setCharacter] = useState<CharacterType>({
@@ -122,12 +133,13 @@ const DegenDialog = ({
 
   return (
     <Dialog
-      maxWidth="sm"
+      maxWidth={isRent ? 'xs' : 'sm'}
       fullWidth={isClaim ? false : true}
       scroll="body"
       fullScreen={fullScreen}
       onClose={handleClose}
       open={open}
+      classes={{ paper: classes.paper }}
       {...rest}
     >
       {isClaim && (

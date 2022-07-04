@@ -70,8 +70,8 @@ function ColorlibStepIcon({ active, completed }: StepIconProps) {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: 'calc(100% + 120px)',
-      marginLeft: '-52px',
+      width: 'calc(100% + 156px)',
+      marginLeft: '-80px',
       [theme.breakpoints.down('md')]: {
         width: '100%',
         marginLeft: 0,
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme: Theme) =>
     label: {
       color: 'white !important',
       marginTop: '6px !important',
-      fontSize: '8px',
+      fontSize: '10px !important',
     },
   }),
 );
