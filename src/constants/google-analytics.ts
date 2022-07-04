@@ -4,6 +4,11 @@ export const GOOGLE_ANALYTICS = {
     BEGIN_CHECKOUT: 'begin_checkout',
     PURCHASE: 'purchase',
     ADD_TO_CART: 'add_to_cart',
+    RENTAL_RECRUIT_CLICKED: 'rental_recruit_clicked',
+    RENTAL_CONNECT_WALLET_CLICKED: 'rental_connect_wallet_clicked',
+    RENTAL_PASS_CLICKED: 'rental_pass_clicked',
+    RENTAL_BUY_NFTL_CLICKED: 'rental_buy_nftl_clicked',
+    RENTAL_REFRESH_BALANCE_CLICKED: 'rental_refresh_balance_clicked',
     BUY_ARCADE_TOKEN_STARTED: 'buy_arcade_token_started',
     BUY_ARCADE_TOKEN_COMPLETE: 'buy_arcade_token_complete',
     // Engagement
