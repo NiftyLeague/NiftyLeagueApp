@@ -175,15 +175,27 @@ const RentDegenContentDialog = ({
   const theme = useTheme();
 
   const handleChangeRentingFor = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    _: React.ChangeEvent<HTMLInputElement>,
     value: string,
   ) => {
+    if (value === 'recruit') {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.RENTAL_RECRUIT_CLICKED,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
+    }
     setRentFor(value);
   };
 
   const handleChangeUseRentalPass = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    if (event.target.checked) {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.RENTAL_PASS_CLICKED,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
+    }
     setIsUseRentalPass(event.target.checked);
   };
 
@@ -262,7 +274,7 @@ const RentDegenContentDialog = ({
 
   const handleConnectWallet = useCallback(() => {
     sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.LOGIN,
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_CONNECT_WALLET_CLICKED,
       GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
       'method',
     );
@@ -270,6 +282,11 @@ const RentDegenContentDialog = ({
   }, [loadWeb3Modal]);
 
   const handleRefreshBalance = () => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_REFRESH_BALANCE_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      'method',
+    );
     setRefreshAccKey(Math.random());
   };
 
@@ -294,6 +311,13 @@ const RentDegenContentDialog = ({
   const handleClickPlay = useCallback(() => {
     navigate('/games/smashers');
   }, [navigate]);
+
+  const handleBuyNFTL = () => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_BUY_NFTL_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+    );
+  };
 
   return (
     <>
@@ -471,6 +495,7 @@ const RentDegenContentDialog = ({
                             href={NFTL_PURCHASE_URL}
                             target="_blank"
                             rel="noreferrer"
+                            onClick={handleBuyNFTL}
                           >
                             Buy NFTL now
                           </Link>
