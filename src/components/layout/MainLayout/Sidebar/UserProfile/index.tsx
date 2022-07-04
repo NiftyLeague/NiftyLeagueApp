@@ -70,7 +70,7 @@ const UserProfile: React.FC<
     const fetchUser = async () => {
       const res: any = await fetchUserProfile();
       if (res) {
-        setUserName(res?.name);
+        setUserName(res?.name_cased);
         setAvatar(res?.avatar);
         return;
       }
