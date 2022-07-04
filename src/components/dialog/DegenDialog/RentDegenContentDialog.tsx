@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       borderRadius: '2px',
     },
     '& h5': {
-      fontSize: '16px',
+      fontSize: '13px',
       fontWeight: 700,
       textTransform: 'uppercase',
     },
     '& p,span': {
-      fontSize: '14px',
+      fontSize: '13px',
       lineHeight: 1.2,
     },
   },
@@ -298,8 +298,8 @@ const RentDegenContentDialog = ({
   return (
     <>
       <Stack
-        rowGap={{ xs: 6, lg: 4 }}
-        mx={{ xs: 2, sm: 8 }}
+        rowGap={{ xs: 6, lg: 2 }}
+        mx={{ xs: 2, sm: 7.5 }}
         className={classes.root}
       >
         <IconButton
@@ -321,7 +321,7 @@ const RentDegenContentDialog = ({
         >
           <Typography variant="h5">Rental Overview</Typography>
         </Box>
-        <Stack direction="row" spacing={2} mt={0.5}>
+        <Stack direction="row" spacing={1.6} mt={0.5}>
           <Stack direction="column">
             <Stack direction="row" justifyContent="center">
               {degen?.id && (
