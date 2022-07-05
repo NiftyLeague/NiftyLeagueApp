@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { Contract, Signer } from 'ethers';
 import { Contracts, NetworkName, Provider } from 'types/web3';
 import { getProviderAndSigner } from 'helpers';
-import { NETWORK_NAME, SUPPORTED_CHAIN_IDS } from '../constants/networks';
-import EXTERNAL_CONTRACTS from '../constants/externalContracts';
+import { NETWORK_NAME, SUPPORTED_CHAIN_IDS } from 'constants/networks';
+import EXTERNAL_CONTRACTS from 'constants/externalContracts';
 
 /*
   ~ What it does? ~

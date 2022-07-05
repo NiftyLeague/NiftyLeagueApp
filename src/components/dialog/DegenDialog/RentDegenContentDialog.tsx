@@ -33,7 +33,7 @@ import { sendEvent } from 'utils/google-analytics';
 import TermsOfServiceDialog from '../TermsOfServiceDialog';
 import { Owner } from 'types/graph';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 export interface RentDegenContentDialogProps {

@@ -19,6 +19,7 @@ const WenGamePage = Loadable(
 );
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
+const Mint = Loadable(lazy(() => import('pages/mint')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -65,6 +66,10 @@ const PublicRoutes = {
     {
       path: '/verification',
       element: <GameVerification />,
+    },
+    {
+      path: '/mint-o-matic',
+      element: <Mint />,
     },
   ],
 };

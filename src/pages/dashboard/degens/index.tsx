@@ -37,7 +37,7 @@ import { NetworkContext } from 'NetworkProvider';
 import { Owner } from 'types/graph';
 import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 
