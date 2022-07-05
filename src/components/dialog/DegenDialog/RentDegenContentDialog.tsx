@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       borderRadius: '2px',
     },
     '& h5': {
-      fontSize: '13px',
+      fontSize: '16px',
       fontWeight: 700,
       textTransform: 'uppercase',
     },
     '& p,span': {
-      fontSize: '13px',
+      fontSize: '14px',
       lineHeight: 1.2,
     },
   },
@@ -67,9 +67,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   input: {
     padding: '8px 8px 4px 8px',
-    fontSize: '11px',
+    fontSize: '12px',
     '&::placeholder': {
-      fontSize: '11px',
+      fontSize: '12px',
     },
   },
   formHelper: {
@@ -322,7 +322,7 @@ const RentDegenContentDialog = ({
   return (
     <>
       <Stack
-        rowGap={{ xs: 6, lg: 2 }}
+        rowGap={{ xs: 6, lg: 2.5 }}
         mx={{ xs: 2, sm: 7.5 }}
         className={classes.root}
       >
@@ -439,7 +439,7 @@ const RentDegenContentDialog = ({
                     />
                   </RadioGroup>
                   {rentFor === 'recruit' && (
-                    <Stack direction="column" alignItems="center">
+                    <Stack direction="column" alignItems="center" my={1}>
                       <FormControl fullWidth>
                         <TextField
                           placeholder="Paste your recruit’s eth address"
