@@ -7,7 +7,7 @@ import { NetworkContext } from 'NetworkProvider';
 import { useNavigate } from 'react-router-dom';
 import { Owner } from 'types/graph';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import useFetch from 'hooks/useFetch';
 import { Degen } from 'types/degens';
 import { DEGEN_BASE_API_URL } from 'constants/url';

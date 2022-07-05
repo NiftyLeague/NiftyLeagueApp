@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import { Contracts } from 'types/web3';
-// import { DEBUG } from '../constants';
+// import { DEBUG } from 'constants/index';
 
 export default function useSingleCallResult(
   contracts: Contracts,
