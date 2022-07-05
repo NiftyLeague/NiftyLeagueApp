@@ -31,7 +31,7 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { NetworkContext } from 'NetworkProvider';
 import { Owner } from 'types/graph';

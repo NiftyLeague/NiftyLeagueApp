@@ -16,7 +16,7 @@ import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendEvent } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
-import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from '../../../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';

@@ -3,7 +3,7 @@ import { useCallback, useState, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Contracts } from 'types/web3';
 import useAsyncInterval from './useAsyncInterval';
-import { READ_CONTRACT_DEFAULT_INTERVAL } from '../constants';
+import { READ_CONTRACT_DEFAULT_INTERVAL } from 'constants/index';
 
 /*
   Enables you to read values from contracts and keep track of them in the local React states
