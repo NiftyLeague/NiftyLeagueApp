@@ -28,15 +28,12 @@ const MenuList = () => {
   if (displayGamerProfile && lastItems.length > 1) {
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
-      lastItems[1].children[0].children = [
-        ...item,
-        {
-          id: 'gamer-profile',
-          title: 'Gamer Profile',
-          type: 'item',
-          url: '/dashboard/gamer-profile',
-        },
-      ];
+      lastItems[1].children[0].children.splice(1, 0, {
+        id: 'gamer-profile',
+        title: 'Gamer Profile',
+        type: 'item',
+        url: '/dashboard/gamer-profile',
+      });
     }
   }
 
