@@ -322,7 +322,7 @@ const RentDegenContentDialog = ({
   return (
     <>
       <Stack
-        rowGap={{ xs: 6, lg: 2.5 }}
+        rowGap={{ xs: 6, lg: 4 }}
         mx={{ xs: 2, sm: 7.5 }}
         className={classes.root}
       >
@@ -352,8 +352,8 @@ const RentDegenContentDialog = ({
                 <DegenImage
                   sx={{
                     objectFit: 'contain',
-                    width: 108,
-                    height: 120,
+                    width: 132,
+                    height: 146,
                     borderRadius: '10px',
                     border: '1px solid #000000',
                   }}
@@ -375,7 +375,7 @@ const RentDegenContentDialog = ({
                 direction="column"
                 width="100%"
                 spacing={1}
-                height="120px"
+                height="146px"
                 justifyContent="space-between"
                 alignItems="center"
               >
@@ -393,8 +393,8 @@ const RentDegenContentDialog = ({
               <Stack
                 direction="column"
                 width="100%"
-                spacing={1}
-                height="120px"
+                spacing={1.25}
+                height="146px"
                 justifyContent="space-between"
               >
                 <Stack
@@ -411,12 +411,12 @@ const RentDegenContentDialog = ({
                   >
                     <FormControlLabel
                       value="myself"
-                      control={<Radio size="small" sx={{ py: 0.5 }} />}
+                      control={<Radio size="small" />}
                       label="Myself"
                     />
                     <FormControlLabel
                       value="recruit"
-                      control={<Radio size="small" sx={{ py: 0.5 }} />}
+                      control={<Radio size="small" />}
                       label={
                         <Box display="flex" alignItems="center">
                           <Typography>Recruit</Typography>
@@ -463,7 +463,7 @@ const RentDegenContentDialog = ({
                     </Stack>
                   )}
                 </Stack>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={1.25}>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>Rental Cost:</Typography>
                     <Typography
@@ -489,7 +489,7 @@ const RentDegenContentDialog = ({
                         } NFTL`}</Typography>
                       </Stack>
                       {!sufficientBalance && (
-                        <Typography variant="caption" mt={0.5} ml="auto">
+                        <Typography variant="caption" mt={1} ml="auto">
                           Balance low.{' '}
                           <Link
                             href={NFTL_PURCHASE_URL}
@@ -504,7 +504,7 @@ const RentDegenContentDialog = ({
                     </Stack>
                   )}
                 </Stack>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={1.25}>
                   {checkBalance && isShowRentalPassOption() && (
                     <Stack
                       direction="row"
