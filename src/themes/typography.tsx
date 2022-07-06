@@ -95,7 +95,6 @@ const Typography = (
     width: '100%',
     minHeight: 'calc(100vh - 88px)',
     flexGrow: 1,
-    marginTop: '88px',
     borderRadius: `${borderRadius}px`,
   },
   menuCaption: {

@@ -95,8 +95,7 @@ const CollapsibleSidebarLayout = ({
       >
         <PerfectScrollbar
           style={{
-            padding: '20px',
-            paddingRight: matchDownSm ? '30px' : '40px',
+            padding: matchDownSm ? '10px 20px' : '20px 40px',
             height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
           }}
         >
