@@ -44,7 +44,7 @@ const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
 
   return (
     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-      <DialogContent sx={{ width: '563px', marginY: '50px', marginX: '28px' }}>
+      <DialogContent sx={{ marginY: '50px', marginX: '16px' }}>
         <Grid container spacing={2}>
           <Grid item md={6}>
             <Typography
