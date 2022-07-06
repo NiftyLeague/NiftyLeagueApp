@@ -46,6 +46,7 @@ const Main = styled<any>('main', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.shorter,
     }),
+    marginTop: '80px',
     [theme.breakpoints.up('md')]: {
       marginLeft: -(drawerWidth - 20),
       width: `calc(100% - ${drawerWidth}px)`,
@@ -55,6 +56,7 @@ const Main = styled<any>('main', {
       width: `calc(100% - ${drawerWidth}px)`,
     },
     [theme.breakpoints.down('sm')]: {
+      marginTop: '60px',
       marginLeft: '10px',
       width: `calc(100% - ${drawerWidth}px)`,
     },
@@ -68,10 +70,12 @@ const Main = styled<any>('main', {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     width: `calc(100% - ${drawerWidth}px)`,
+    marginTop: '80px',
     [theme.breakpoints.down('md')]: {
       marginLeft: '20px',
     },
     [theme.breakpoints.down('sm')]: {
+      marginTop: '60px',
       marginLeft: '10px',
     },
   }),
@@ -186,8 +190,7 @@ const MainLayout = () => {
         {!isNoFilterPage ? (
           <PerfectScrollbar
             style={{
-              padding: '20px',
-              paddingRight: matchDownSm ? '30px' : '40px',
+              padding: matchDownSm ? '10px 20px' : '20px 40px',
               height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
             }}
           >
