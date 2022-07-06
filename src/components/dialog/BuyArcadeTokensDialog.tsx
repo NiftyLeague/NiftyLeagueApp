@@ -27,14 +27,16 @@ import AddIcon from '@mui/icons-material/Add';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useQuery } from 'react-query';
 import { formatNumberToDisplay } from 'utils/numbers';
-import { GET_PRODUCT, PURCHASE_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
+import {
+  GET_PRODUCT,
+  NFTL_PURCHASE_URL,
+  PURCHASE_ARCADE_TOKEN_BALANCE_API,
+} from 'constants/url';
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
-import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
-const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
 
 interface BuyArcadeTokensDialogProps extends DialogProps {
   open: boolean;

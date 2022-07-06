@@ -1,3 +1,5 @@
+import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
+
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
 
@@ -58,3 +60,6 @@ export const GET_PRODUCT = (productId: string, currency: string) =>
 export const GET_RANK_BY_USER_ID_API = `${BASE_API_URL}/GetRank`;
 export const LEADERBOARD_USERNAMES_API_URL = `${BASE_API_URL}/profiles/public/profiles`;
 export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
+
+// SUSHISWAP URL FOR NFTL PURCHASE
+export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
