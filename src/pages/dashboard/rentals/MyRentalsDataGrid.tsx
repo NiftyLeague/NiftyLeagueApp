@@ -165,8 +165,11 @@ const MyRentalsDataGrid = ({
           ...commonColumnProp,
           renderCell: (params) => (
             <>
-              {(params.row.category === 'direct-rental' ||
-                params.row.category === 'non-owned-sponsorship') && (
+              {[
+                'direct-rental',
+                'non-owned-sponsorship',
+                'owned-sponsorship',
+              ].includes(params.row.category) && (
                 <Button
                   onClick={() => handleOpenTerminateRental(params)}
                   variant="outlined"
