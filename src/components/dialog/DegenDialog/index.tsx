@@ -25,7 +25,7 @@ export interface DegenDialogProps extends DialogProps {
 const useStyles = makeStyles((theme: Theme) => ({
   paper: ({ isRent }: { isRent: boolean | undefined }) => ({
     overflowX: 'hidden',
-    minWidth: isRent ? 500 : 'inherit',
+    minWidth: isRent ? 550 : 'inherit',
     [theme.breakpoints.down('md')]: {
       minWidth: 'inherit',
     },
