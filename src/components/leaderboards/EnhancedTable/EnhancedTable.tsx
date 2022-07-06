@@ -162,7 +162,10 @@ export default function EnhancedTable({
         <>
           <PerfectScrollbar className={classes.paperStyle}>
             <TableContainer
-              sx={{ minWidth: '850px', height: isMobile ? '50vh' : 'auto' }}
+              sx={{
+                minWidth: '850px',
+                height: isMobile ? 'calc(100vh - 320px)' : 'auto',
+              }}
             >
               <Table
                 stickyHeader
@@ -177,12 +180,7 @@ export default function EnhancedTable({
                     .map((row: DataType, index: number) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.rank}
-                        >
+                        <TableRow role="checkbox" tabIndex={-1} key={row.rank}>
                           <TableCell
                             component="th"
                             id={labelId}
