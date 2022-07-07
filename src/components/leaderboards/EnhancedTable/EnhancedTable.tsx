@@ -170,7 +170,10 @@ export default function EnhancedTable({
                 aria-labelledby="tableTitle"
                 size="medium"
               >
-                <EnhancedTableHead rows={selectedTable.rows} />
+                <EnhancedTableHead
+                  handleCheckYourRank={handleCheckYourRank}
+                  rows={selectedTable.rows}
+                />
                 <TableBody>
                   {rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -197,6 +200,11 @@ export default function EnhancedTable({
                               {row.stats[cell.key]}
                             </TableCell>
                           ))}
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            padding="normal"
+                          ></TableCell>
                         </TableRow>
                       );
                     })}
@@ -230,17 +238,6 @@ export default function EnhancedTable({
               >
                 {!!web3Modal.cachedProvider && (
                   <>
-                    <Typography
-                      variant="body2"
-                      color={palette.primary.main}
-                      sx={{
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={handleCheckYourRank}
-                    >
-                      CHECK YOUR RANK
-                    </Typography>
                     <TopModal
                       selectedGame={selectedGame}
                       selectedTimeFilter={selectedTimeFilter}
