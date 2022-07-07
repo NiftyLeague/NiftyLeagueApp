@@ -47,6 +47,7 @@ const Game = ({
   }
   const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
+    enabled: unityContext.unityConfig.productName === 'NiftySmashers',
   });
 
   useEffect(() => {
@@ -148,9 +149,11 @@ const Game = ({
             Fullscreen
           </Button>
         </Stack>
-        <Box ml={2} minWidth={350}>
-          <EarningCap rentals={rentals ?? []} hideTitle={true} />
-        </Box>
+        {unityContext.unityConfig.productName === 'NiftySmashers' && (
+          <Box ml={2} minWidth={350}>
+            <EarningCap rentals={rentals ?? []} hideTitle={true} />
+          </Box>
+        )}
       </Stack>
     </>
   );

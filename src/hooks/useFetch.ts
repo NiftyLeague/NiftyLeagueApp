@@ -14,9 +14,13 @@ type Action<T> =
   | { type: 'fetched'; payload: T }
   | { type: 'error'; payload: Error };
 
+type Options = RequestInit & {
+  enabled?: boolean;
+};
+
 function useFetch<T = unknown>(
   url?: string,
-  options?: RequestInit,
+  options?: Options,
   textOnly = false,
 ): State<T> {
   const cache = useRef<Cache<T>>({});
@@ -49,6 +53,7 @@ function useFetch<T = unknown>(
   useEffect(() => {
     // Do nothing if the url is not given
     if (!url) return;
+    if (options?.enabled === false) return;
 
     const fetchData = async () => {
       dispatch({ type: 'loading' });
@@ -87,7 +92,7 @@ function useFetch<T = unknown>(
       cancelRequest.current = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, options?.enabled]);
 
   return state;
 }
