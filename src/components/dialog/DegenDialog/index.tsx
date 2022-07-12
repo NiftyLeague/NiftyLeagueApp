@@ -1,6 +1,6 @@
-import { Dialog, DialogProps, Theme, useMediaQuery } from '@mui/material';
+import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/material/styles';
 import { NFT_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import { NetworkContext } from 'NetworkProvider';
@@ -12,6 +12,7 @@ import ViewTraitsContentDialog from './ViewTraitsContentDialog';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { toast } from 'react-toastify';
+import EquipDegenContentDialog from './EquipDegenContentDialog';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -19,17 +20,26 @@ export interface DegenDialogProps extends DialogProps {
   setIsRent?: React.Dispatch<React.SetStateAction<boolean>>;
   isClaim?: boolean;
   setIsClaim?: React.Dispatch<React.SetStateAction<boolean>>;
+  isEquip?: boolean;
+  setIsEquip?: React.Dispatch<React.SetStateAction<boolean>>;
   onRent?: (degen: Degen) => void;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: ({ isRent }: { isRent: boolean | undefined }) => ({
+const CustomDialog = styled(Dialog, {
+  shouldForwardProp: (prop) => prop !== 'isRent' && prop !== 'isEquip',
+})<{ isRent?: boolean; isEquip?: boolean }>(({ theme, isRent, isEquip }) => ({
+  '& .MuiPaper-root': {
     overflowX: 'hidden',
     minWidth: isRent ? 550 : 'inherit',
     [theme.breakpoints.down('md')]: {
       minWidth: 'inherit',
+      margin: isRent || isEquip ? 16 : 'inherit',
+      maxWidth: isRent || isEquip ? 'calc(100% - 32px) !important' : 'inherit',
+      width: isRent || isEquip ? 'calc(100% - 32px) !important' : 'inherit',
+      height: isRent || isEquip ? 'auto' : 'inherit',
+      borderRadius: isRent || isEquip ? '10px' : 'inherit',
     },
-  }),
+  },
 }));
 
 const DegenDialog = ({
@@ -40,13 +50,14 @@ const DegenDialog = ({
   isClaim,
   setIsClaim,
   onRent,
+  isEquip,
+  setIsEquip,
   onClose,
   ...rest
 }: DegenDialogProps) => {
   const theme = useTheme();
   const tokenId = degen?.id || 0;
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const classes = useStyles({ isRent });
   const { readContracts } = useContext(NetworkContext);
   const [degenDetail, setDegenDetail] = useState<GetDegenResponse>();
   const [character, setCharacter] = useState<CharacterType>({
@@ -132,21 +143,23 @@ const DegenDialog = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       maxWidth={isRent ? 'xs' : 'sm'}
       fullWidth={isClaim ? false : true}
       scroll="body"
-      fullScreen={fullScreen}
+      fullScreen={isEquip ? false : fullScreen}
       onClose={handleClose}
       open={open}
-      classes={{ paper: classes.paper }}
+      isRent={isRent}
+      isEquip={isEquip}
       {...rest}
     >
       {isClaim && (
         <ClaimDegenContentDialog degen={degen} onClose={handleClose} />
       )}
+      {isEquip && <EquipDegenContentDialog degen={degen} name={name} />}
       {isRent && <RentDegenContentDialog degen={degen} onClose={handleClose} />}
-      {!isRent && !isClaim && setIsRent && (
+      {!isRent && !isClaim && !isEquip && setIsRent && (
         <ViewTraitsContentDialog
           degen={degen}
           degenDetail={degenDetail}
@@ -157,7 +170,7 @@ const DegenDialog = ({
           onClose={handleClose}
         />
       )}
-      {!isRent && !isClaim && setIsClaim && (
+      {!isRent && !isClaim && !isEquip && setIsClaim && (
         <ViewTraitsContentDialog
           degen={degen}
           degenDetail={degenDetail}
@@ -168,7 +181,7 @@ const DegenDialog = ({
           onClose={handleClose}
         />
       )}
-    </Dialog>
+    </CustomDialog>
   );
 };
 
