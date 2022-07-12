@@ -48,6 +48,7 @@ export interface DegenCardProps {
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
   sx?: SxProps<Theme>;
 }
 
@@ -77,6 +78,7 @@ const DegenCard: React.FC<
     onClickDetail,
     onClickEditName,
     onClickRent,
+    onClickEquip,
     sx,
   }) => {
     const { palette } = useTheme();
@@ -206,15 +208,27 @@ const DegenCard: React.FC<
           >
             Rent
           </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            sx={{ minWidth: '32%' }}
-            onClick={onClickDetail}
-          >
-            Traits
-          </Button>
+          {isDashboardDegen && onClickEquip ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+              onClick={onClickEquip}
+            >
+              Equip
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+              onClick={onClickDetail}
+            >
+              Traits
+            </Button>
+          )}
           {isDashboardDegen && (
             <Button
               onClick={onClickClaim}

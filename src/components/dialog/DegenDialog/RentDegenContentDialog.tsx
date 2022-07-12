@@ -322,8 +322,9 @@ const RentDegenContentDialog = ({
   return (
     <>
       <Stack
+        maxWidth={430}
         rowGap={{ xs: 6, lg: 4 }}
-        mx={{ xs: 2, sm: 7.5 }}
+        mx={{ xs: 1, sm: 'auto' }}
         className={classes.root}
       >
         <IconButton
