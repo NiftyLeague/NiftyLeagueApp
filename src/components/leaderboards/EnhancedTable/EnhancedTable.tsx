@@ -11,7 +11,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import usePlayerProfile from 'hooks/usePlayerProfile';
-import ResponsiveTable from 'material-ui-responsive-table';
+import ResponsiveTable from 'mui-responsive-table';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
