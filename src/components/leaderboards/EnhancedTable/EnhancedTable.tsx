@@ -110,12 +110,21 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED,
-      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
-    );
-    const errorMes =
-      'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
+    if (selectedGame === 'nifty_smashers') {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS,
+        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+        selectedTable.display,
+      );
+    } else {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN,
+        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+      );
+    }
+    const errorMes = `You have not played the ${
+      selectedGame === 'nifty_smashers' ? 'Nifty Smashers' : 'WEN Game'
+    } yet! Play the game to see your rank on the leaderboard.`;
 
     if (!profile?.id) {
       toast.error(errorMes, { theme: 'dark' });
