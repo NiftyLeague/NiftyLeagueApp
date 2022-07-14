@@ -11,6 +11,23 @@ export const GOOGLE_ANALYTICS = {
     RENTAL_REFRESH_BALANCE_CLICKED: 'rental_refresh_balance_clicked',
     BUY_ARCADE_TOKEN_STARTED: 'buy_arcade_token_started',
     BUY_ARCADE_TOKEN_COMPLETE: 'buy_arcade_token_complete',
+    DEGEN_EQUIP_CLICKED: 'degen_equip_clicked',
+    DEGEN_INVENTORY_CAPE_EQUIPPED: 'degen_inventory_cape_equipped',
+    DEGEN_INVENTORY_HALO_EQUIPPED: 'degen_inventory_halo_equipped',
+    DEGEN_INVENTORY_COMPANION_EQUIPPED: 'degen_inventory_companion_equipped',
+    DEGEN_INVENTORY_BREAD_BAT_EQUIPPED: 'degen_inventory_bread_bat_equipped',
+    DEGEN_INVENTORY_DIAMOND_BAT_EQUIPPED:
+      'degen_inventory_diamond_bat_equipped',
+    DEGEN_INVENTORY_PURPLE_BAT_EQUIPPED: 'degen_inventory_purple_bat_equipped',
+    DEGEN_SLOT_BACK_UNEQUIPPED: 'degen_slot_back_unequipped',
+    DEGEN_SLOT_HEAD_UNEQUIPPED: 'degen_slot_head_unequipped',
+    DEGEN_SLOT_PET_UNEQUIPPED: 'degen_slot_pet_unequipped',
+    DEGEN_SLOT_WEAPON_UNEQUIPPED: 'degen_slot_weapon_unequipped',
+    DEGEN_EQUIP_ANIMATION_ROTATE_CLICKED:
+      'degen_equip_animation_rotate_clicked',
+    DEGEN_EQUIP_ANIMATION_POSE_CLICKED: 'degen_equip_animation_pose_clicked',
+    DEGEN_EQUIP_STARTED: 'degen_equip_started',
+    DEGEN_EQUIP_SUCCESS: 'degen_equip_success',
     // Engagement
     VIEW_ITEM: 'view_item',
     VIEW_ITEM_LIST: 'view_item_list',
