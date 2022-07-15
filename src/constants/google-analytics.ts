@@ -39,7 +39,9 @@ export const GOOGLE_ANALYTICS = {
     NIFTY_SMASHERS_LEADERBOARD_VIEWED: 'nifty_smashers_leaderboard_viewed',
     LEADERBOARD_GAME_FILTER_CHANGED: 'leaderboard_game_filter_changed',
     LEADERBOARD_TYPE_FILTER_CHANGED: 'leaderboard_type_filter_changed',
-    LEADERBOARD_CHECK_YOUR_RANK_CLICKED: 'check_your_rank_clicked',
+    LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN: 'check_your_rank_clicked_wen',
+    LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS:
+      'check_your_rank_clicked_smashers',
   },
   CATEGORIES: {
     ECOMMERCE: 'ecommerce',
