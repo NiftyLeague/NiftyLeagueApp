@@ -10,8 +10,10 @@ const DegenImage = memo(
   ({ tokenId, sx }: { tokenId: string | number; sx?: SxProps<{}> }) => {
     const { loading, error, background } = useBackgroundType(tokenId);
     const imageURL = `${DEGEN_BASE_IMAGE_URL}/mainnet/images/${tokenId}`;
+    // @ts-ignore
+    const imageHeight = sx?.height ?? IMAGE_HEIGHT;
     let setting: any = {
-      height: IMAGE_HEIGHT,
+      height: imageHeight,
       component: 'img',
       image: `${imageURL}.png`,
     };
@@ -23,7 +25,9 @@ const DegenImage = memo(
         <ImagePlaceholder
           sx={{
             overflow: 'hidden',
-            height: IMAGE_HEIGHT,
+            height: imageHeight,
+            // @ts-ignore
+            width: sx?.width,
           }}
         />
       );

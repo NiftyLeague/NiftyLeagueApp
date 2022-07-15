@@ -39,6 +39,7 @@ export type Order = 'asc' | 'desc';
 
 export interface EnhancedTableProps {
   rows: TableRowType[];
+  handleCheckYourRank: React.MouseEventHandler<HTMLSpanElement>;
 }
 
 export interface TableProps {

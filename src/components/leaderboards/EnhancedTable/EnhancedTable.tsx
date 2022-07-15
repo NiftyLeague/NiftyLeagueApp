@@ -110,12 +110,21 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED,
-      GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
-    );
-    const errorMes =
-      'You have not played the WEN Game yet! Play the game to see your rank on the leaderboard.';
+    if (selectedGame === 'nifty_smashers') {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS,
+        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+        selectedTable.display,
+      );
+    } else {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN,
+        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
+      );
+    }
+    const errorMes = `You have not played the ${
+      selectedGame === 'nifty_smashers' ? 'Nifty Smashers' : 'WEN Game'
+    } yet! Play the game to see your rank on the leaderboard.`;
 
     if (!profile?.id) {
       toast.error(errorMes, { theme: 'dark' });
@@ -170,7 +179,10 @@ export default function EnhancedTable({
                 aria-labelledby="tableTitle"
                 size="medium"
               >
-                <EnhancedTableHead rows={selectedTable.rows} />
+                <EnhancedTableHead
+                  handleCheckYourRank={handleCheckYourRank}
+                  rows={selectedTable.rows}
+                />
                 <TableBody>
                   {rows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -197,6 +209,11 @@ export default function EnhancedTable({
                               {row.stats[cell.key]}
                             </TableCell>
                           ))}
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            padding="normal"
+                          ></TableCell>
                         </TableRow>
                       );
                     })}
@@ -230,17 +247,6 @@ export default function EnhancedTable({
               >
                 {!!web3Modal.cachedProvider && (
                   <>
-                    <Typography
-                      variant="body2"
-                      color={palette.primary.main}
-                      sx={{
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={handleCheckYourRank}
-                    >
-                      CHECK YOUR RANK
-                    </Typography>
                     <TopModal
                       selectedGame={selectedGame}
                       selectedTimeFilter={selectedTimeFilter}
