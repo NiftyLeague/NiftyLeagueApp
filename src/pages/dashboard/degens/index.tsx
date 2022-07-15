@@ -2,7 +2,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
-
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Button,
@@ -64,6 +64,7 @@ const DashboardDegensPage = (): JSX.Element => {
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const [isEquipDialog, setIsEquipDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
+  const { enableEquip } = useFlags();
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -239,6 +240,7 @@ const DashboardDegensPage = (): JSX.Element => {
         <DegenCard
           degen={degen}
           isDashboardDegen
+          degenEquipEnabled={enableEquip}
           onClickDetail={() => handleViewTraits(degen)}
           onClickEditName={() => handleClickEditName(degen)}
           onClickClaim={() => handleClaimDegen(degen)}
@@ -248,6 +250,7 @@ const DashboardDegensPage = (): JSX.Element => {
       </Grid>
     ),
     [
+      enableEquip,
       handleClaimDegen,
       handleClickEditName,
       handleRentDegen,
