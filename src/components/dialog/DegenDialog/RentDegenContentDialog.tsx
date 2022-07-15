@@ -1,31 +1,33 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControl,
   FormControlLabel,
   Grid,
+  IconButton,
   Link,
   Radio,
   RadioGroup,
   Stack,
   TextField,
+  Theme,
   Tooltip,
   Typography,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import LoadingButton from '@mui/lab/LoadingButton';
+import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useQuery } from '@apollo/client';
 import useRentalPassCount from 'hooks/useRentalPassCount';
-import useRentalRenameFee from 'hooks/useRentalRenameFee';
+import useAccount from 'hooks/useAccount';
 import { Degen } from 'types/degens';
-import { getErrorForName } from 'utils/name';
 import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
-import useRentalRename from 'hooks/useRentalRename';
 import { toast } from 'react-toastify';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { NetworkContext } from 'NetworkProvider';
@@ -35,28 +37,100 @@ import { Owner } from 'types/graph';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import RentStepper from './RentStepper';
+import { NFTL_PURCHASE_URL } from 'constants/url';
+import { formatNumberToDisplay } from 'utils/numbers';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
   onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    '& button': {
+      height: 28,
+      borderRadius: '2px',
+    },
+    '& h5': {
+      fontSize: '16px',
+      fontWeight: 700,
+      textTransform: 'uppercase',
+    },
+    '& p,span': {
+      fontSize: '14px',
+      lineHeight: 1.2,
+    },
+  },
+  greyText: {
+    color: '#4C4F52',
+  },
+  input: {
+    padding: '8px 8px 4px 8px',
+    fontSize: '12px',
+    '&::placeholder': {
+      fontSize: '12px',
+    },
+  },
+  formHelper: {
+    marginLeft: 0,
+  },
+  inputCheck: {
+    padding: 4,
+    '& .MuiSvgIcon-root': {
+      width: '0.75em',
+      height: '0.75em',
+    },
+  },
+  inputCheckFormControl: {
+    marginLeft: -4,
+    marginRight: 0,
+  },
+  successInfo: {
+    fontSize: '16px',
+    fontWeight: 700,
+    lineHeight: 1.25,
+  },
+  closeBtn: {
+    position: 'absolute',
+    right: 12,
+    top: 6,
+    color: '#5820D6',
+    border: '1px solid #5820D6',
+    borderRadius: '50% !important',
+    width: '20px',
+    height: '20px !important',
+    zIndex: 1,
+    '& .MuiSvgIcon-root': {
+      width: 16,
+      height: 16,
+    },
+    [theme.breakpoints.down('md')]: {
+      right: 20,
+      top: 20,
+    },
+  },
+}));
+
 const RentDegenContentDialog = ({
   degen,
   onClose,
 }: RentDegenContentDialogProps) => {
-  const { address, web3Modal } = useContext(NetworkContext);
+  const classes = useStyles();
+  const navigate = useNavigate();
+  const { loadWeb3Modal, address, web3Modal } = useContext(NetworkContext);
+  const [refreshAccKey, setRefreshAccKey] = useState(0);
+  const { account } = useAccount(refreshAccKey);
   const [agreement, setAgreement] = useState<boolean>(
     localStorage.getItem('aggreement-accepted') === 'ACCEPTED',
   );
-  const [rentFor, setRentFor] = useState<string>('recruit');
-  const [renameEnabled, setRenameEnabled] = useState<boolean>(false);
+  const [rentFor, setRentFor] = useState<string>('myself');
   const [ethAddress, setEthAddress] = useState<string>('');
-  const [newDegenName, setNewDegenName] = useState<string>('');
   const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
-  const [nameError, setNameError] = useState<string>('');
   const [addressError, setAddressError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [checkBalance, setCheckBalance] = useState<boolean>(false);
+  const [rentSuccess, setRentSuccess] = useState<boolean>(false);
   const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [disabledRentFor, setDisabledRentFor] = useState<boolean>(false);
   const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
@@ -70,8 +144,12 @@ const RentDegenContentDialog = ({
     () => (userDegens?.owner?.characterCount ?? 0) > 0,
     [userDegens?.owner?.characterCount],
   );
-  const rentDisabled =
-    degen?.owner !== address.toLowerCase() && !degen?.is_active;
+
+  const accountBalance = account?.balance ?? 0;
+  const sufficientBalance = useMemo(
+    () => accountBalance >= (degen?.price || 0),
+    [accountBalance, degen?.price],
+  );
 
   useEffect(() => {
     if (!degen || degen?.background === 'common') return;
@@ -79,17 +157,17 @@ const RentDegenContentDialog = ({
       setRentFor('myself');
       setDisabledRentFor(true);
     } else {
+      setDisabledRentFor(false);
       // Once api is ready,
       // need to check if user has reached out to max Sponsorship cap, then disable RentFor option
     }
   }, [degen, isDegenOwner]);
 
   const [, , rentalPassCount] = useRentalPassCount(degen?.id);
-  const [, , renameFee = 1000] = useRentalRenameFee(degen?.id);
   const rent = useRent(
     degen?.id,
     degen?.rental_count || 0,
-    degen?.price,
+    degen?.price || 0,
     ethAddress,
     isUseRentalPass,
   );
@@ -97,30 +175,28 @@ const RentDegenContentDialog = ({
   const theme = useTheme();
 
   const handleChangeRentingFor = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    _: React.ChangeEvent<HTMLInputElement>,
     value: string,
   ) => {
+    if (value === 'recruit') {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.RENTAL_RECRUIT_CLICKED,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
+    }
     setRentFor(value);
-  };
-
-  const handleChangeRenameDegen = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
-  ) => {
-    setRenameEnabled(value === 'yes');
   };
 
   const handleChangeUseRentalPass = (
     event: React.ChangeEvent<HTMLInputElement>,
-    value: string,
   ) => {
-    setIsUseRentalPass(value === 'yes');
-  };
-
-  const validateName = (value: string) => {
-    setNewDegenName(value);
-    const errorMsg = getErrorForName(value);
-    setNameError(errorMsg);
+    if (event.target.checked) {
+      sendEvent(
+        GOOGLE_ANALYTICS.EVENTS.RENTAL_PASS_CLICKED,
+        GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      );
+    }
+    setIsUseRentalPass(event.target.checked);
   };
 
   const validateAddress = (value: string) => {
@@ -134,77 +210,36 @@ const RentDegenContentDialog = ({
     }
   };
 
-  const handleRent = useCallback(
-    async (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (!web3Modal.cachedProvider) {
-        toast.error(
-          'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
-          { theme: 'dark' },
-        );
-        return;
-      }
+  const handleRent = useCallback(async () => {
+    if (!web3Modal.cachedProvider) {
+      toast.error(
+        'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
+        { theme: 'dark' },
+      );
+      return;
+    }
+
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.BEGIN_CHECKOUT,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+    );
+
+    setLoading(true);
+    try {
+      await rent();
+      setLoading(false);
+      setRentSuccess(true);
 
       sendEvent(
-        GOOGLE_ANALYTICS.EVENTS.BEGIN_CHECKOUT,
+        GOOGLE_ANALYTICS.EVENTS.PURCHASE,
         GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
       );
+    } catch (err: any) {
+      setLoading(false);
+      toast.error(err.message, { theme: 'dark' });
+    }
+  }, [web3Modal.cachedProvider, rent]);
 
-      setLoading(true);
-      try {
-        const myRental = await rent();
-
-        // useRentalRename is actually not a hook, so we can safely use it here
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const renameRental = useRentalRename(
-          degen?.id,
-          myRental?.id,
-          newDegenName,
-        );
-
-        if (renameEnabled) {
-          await renameRental();
-        }
-        setLoading(false);
-        toast.success('Rent successfully!', { theme: 'dark' });
-        onClose?.(event);
-
-        sendEvent(
-          GOOGLE_ANALYTICS.EVENTS.PURCHASE,
-          GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
-        );
-      } catch (err: any) {
-        setLoading(false);
-        toast.error(err.message, { theme: 'dark' });
-      }
-    },
-    [
-      web3Modal.cachedProvider,
-      rent,
-      degen?.id,
-      newDegenName,
-      renameEnabled,
-      onClose,
-    ],
-  );
-
-  const precheckRent = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (rentFor === 'recruit' && !ethAddress) {
-        setAddressError('Please input an address.');
-        return;
-      }
-
-      if (renameEnabled && !newDegenName) {
-        setNameError('Please input a name.');
-        return;
-      }
-
-      handleRent(event);
-    },
-    [ethAddress, handleRent, newDegenName, renameEnabled, rentFor],
-  );
-
-  const degenPrice = isUseRentalPass ? 0 : degen?.price || 0;
   const isShowRentalPassOption = () =>
     rentalPassCount > 0 && !degen?.rental_count;
 
@@ -237,275 +272,395 @@ const RentDegenContentDialog = ({
     }
   };
 
+  const handleConnectWallet = useCallback(() => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_CONNECT_WALLET_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
+      'method',
+    );
+    loadWeb3Modal();
+  }, [loadWeb3Modal]);
+
+  const handleRefreshBalance = () => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_REFRESH_BALANCE_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+      'method',
+    );
+    setRefreshAccKey(Math.random());
+  };
+
+  const handleGoCheckBalance = () => {
+    if (rentFor === 'recruit' && !ethAddress) {
+      setAddressError('Please input an address.');
+      return;
+    }
+
+    if (rentFor === 'recruit' && Boolean(addressError)) {
+      return;
+    }
+
+    if (rentFor === 'myself') {
+      setEthAddress('');
+    }
+
+    setCheckBalance(true);
+    setRefreshAccKey(Math.random());
+  };
+
+  const handleClickPlay = useCallback(() => {
+    navigate('/games/smashers');
+  }, [navigate]);
+
+  const handleBuyNFTL = () => {
+    sendEvent(
+      GOOGLE_ANALYTICS.EVENTS.RENTAL_BUY_NFTL_CLICKED,
+      GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
+    );
+  };
+
   return (
-    <Grid container sx={{ p: 2 }} spacing={3}>
-      <Grid item xs={12} sm={12} md={6}>
-        <Stack direction="row" justifyContent="center">
-          {degen?.id && (
-            <DegenImage sx={{ objectFit: 'contain' }} tokenId={degen.id} />
-          )}
-        </Stack>
-        <Stack direction="column" alignItems="center" gap={1} sx={{ my: 2 }}>
-          <Typography color="gray">
-            Owned by {degen?.owner?.substring(0, 5)}
-          </Typography>
-        </Stack>
-        {rentDisabled ? (
-          <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-            <Typography>Owner has disabled this DEGEN from renting.</Typography>
-          </Stack>
-        ) : (
-          <>
-            <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-              <Typography>Who are you renting for?</Typography>
-              <RadioGroup row onChange={handleChangeRentingFor} value={rentFor}>
-                <FormControlLabel
-                  value="recruit"
-                  control={<Radio />}
-                  label={
-                    <Box display="flex" alignItems="center">
-                      <Typography>Recruit</Typography>
-                      {disabledRentFor && (
-                        <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
-                          <InfoOutlinedIcon
-                            fontSize="small"
-                            sx={{
-                              ml: 0.5,
-                              mt: -1.5,
-                              width: '16px',
-                              height: '16px',
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                    </Box>
-                  }
-                  disabled={disabledRentFor}
+    <>
+      <Stack
+        maxWidth={430}
+        rowGap={{ xs: 6, lg: 4 }}
+        mx={{ xs: 1, sm: 'auto' }}
+        className={classes.root}
+      >
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          className={classes.closeBtn}
+        >
+          <CloseIcon />
+        </IconButton>
+        <RentStepper rentSuccess={rentSuccess} checkBalance={checkBalance} />
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+          p={1}
+          sx={{ backgroundColor: '#262930' }}
+        >
+          <Typography variant="h5">Rental Overview</Typography>
+        </Box>
+        <Stack direction="row" spacing={1.6} mt={0.5}>
+          <Stack direction="column">
+            <Stack direction="row" justifyContent="center">
+              {degen?.id && (
+                <DegenImage
+                  sx={{
+                    objectFit: 'contain',
+                    width: 132,
+                    height: 146,
+                    borderRadius: '10px',
+                    border: '1px solid #000000',
+                  }}
+                  tokenId={degen.id}
                 />
-                <FormControlLabel
-                  value="myself"
-                  control={<Radio />}
-                  label="Myself"
-                />
-              </RadioGroup>
-            </Stack>
-            {rentFor === 'recruit' && (
-              <Stack
-                direction="column"
-                alignItems="center"
-                gap={2}
-                sx={{ my: 2 }}
-              >
-                <Typography textAlign="center">
-                  What is your recruit&#39;s ETH wallet address?
-                </Typography>
-                <FormControl fullWidth>
-                  <TextField
-                    placeholder="0xunkown"
-                    name="address"
-                    variant="outlined"
-                    fullWidth
-                    value={ethAddress}
-                    error={addressError !== ''}
-                    helperText={addressError}
-                    onChange={(event) => validateAddress(event.target.value)}
-                  />
-                </FormControl>
-              </Stack>
-            )}
-            <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-              <Typography textAlign="center">
-                Do you want to rename the degen for your rental?
-              </Typography>
-              <RadioGroup
-                row
-                onChange={handleChangeRenameDegen}
-                value={renameEnabled ? 'yes' : 'no'}
-              >
-                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-                <FormControlLabel value="no" control={<Radio />} label="No" />
-              </RadioGroup>
-              {renameEnabled && (
-                <FormControl fullWidth>
-                  <TextField
-                    placeholder="Enter a degen name"
-                    name="degen_name"
-                    variant="outlined"
-                    fullWidth
-                    value={newDegenName}
-                    error={nameError !== ''}
-                    helperText={nameError}
-                    onChange={(event) => validateName(event.target.value)}
-                  />
-                </FormControl>
               )}
             </Stack>
-            {renameEnabled && (
+            <Stack direction="column" alignItems="center" mt={0.5}>
+              <Typography
+                sx={{ fontSize: '10px', lineHeight: 2, color: '#535659' }}
+              >
+                Owned by {degen?.owner?.substring(0, 5)}
+              </Typography>
+            </Stack>
+          </Stack>
+          <Stack direction="column" width="100%">
+            {rentSuccess ? (
               <Stack
                 direction="column"
+                width="100%"
+                spacing={1}
+                height="146px"
+                justifyContent="space-between"
                 alignItems="center"
-                gap={1}
-                sx={{ my: 2 }}
               >
-                <Typography color="gray">
-                  There is a {renameFee} NFTL fee for renaming
+                <Typography variant="h6" className={classes.successInfo} mt={2}>
+                  Congratulations!
                 </Typography>
-              </Stack>
-            )}
-          </>
-        )}
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <Stack sx={{ justifyContent: 'space-between', height: '100%' }} gap={2}>
-          <Stack sx={{ flex: 1 }}>
-            <Box
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Typography variant="h2">Rental Overview</Typography>
-            </Box>
-            <Stack gap={1} sx={{ flex: 1, my: 2 }}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Degen Being Rented</Typography>
-                <Typography color="gray">
-                  {degen?.name || 'No Name DEGEN'}
+                <Typography variant="h6" className={classes.successInfo}>
+                  Your rental is active.
                 </Typography>
+                <Button variant="contained" fullWidth onClick={handleClickPlay}>
+                  Play Nifty Smasher Now
+                </Button>
               </Stack>
-              <Stack direction="row" justifyContent="flex-end">
-                <Typography color="gray">Degen #{degen?.id}</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Rental Term</Typography>
-                <Typography color="gray">1 week</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Sponsorship?</Typography>
-                <Typography color="gray">
-                  {rentFor === 'recruit' ? 'Yes' : 'No'}
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Total Multipliers</Typography>
-                <Typography color="gray">{degen?.multiplier}x</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Rental Queue</Typography>
-                <Typography color="gray">{degen?.rental_count}</Typography>
-              </Stack>
-            </Stack>
-            <Divider />
-            <Stack gap={1} sx={{ flex: 1, my: 2 }}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>First Week Rental Cost:</Typography>
-                <Typography color="gray">{degenPrice} NFTL</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Renews Daily After Week 1 at:</Typography>
-                <Typography color="gray">{degen?.price_daily} NFTL</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Rental Passes Remaining</Typography>
-                <Typography color="gray">{rentalPassCount}</Typography>
-              </Stack>
-              {isShowRentalPassOption() && (
+            ) : (
+              <Stack
+                direction="column"
+                width="100%"
+                spacing={1.25}
+                height="146px"
+                justifyContent="space-between"
+              >
                 <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
+                  direction="column"
+                  display={checkBalance ? 'none' : 'flex'}
                 >
-                  <Typography variant="caption" color="gray">
-                    Use a rental pass?
+                  <Typography sx={{ fontSize: '10px', lineHeight: 2 }}>
+                    Who are you renting for?
                   </Typography>
                   <RadioGroup
                     row
-                    onChange={handleChangeUseRentalPass}
-                    value={isUseRentalPass ? 'yes' : 'no'}
+                    onChange={handleChangeRentingFor}
+                    value={rentFor}
                   >
                     <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
+                      value="myself"
+                      control={<Radio size="small" />}
+                      label="Myself"
                     />
                     <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
+                      value="recruit"
+                      control={<Radio size="small" />}
+                      label={
+                        <Box display="flex" alignItems="center">
+                          <Typography>Recruit</Typography>
+                          {disabledRentFor && (
+                            <Tooltip title="DEGEN ownership is required to sponsor Recruits on this DEGEN.">
+                              <InfoOutlinedIcon
+                                fontSize="small"
+                                sx={{
+                                  ml: 0.5,
+                                  mt: -1.5,
+                                  width: '16px',
+                                  height: '16px',
+                                }}
+                              />
+                            </Tooltip>
+                          )}
+                        </Box>
+                      }
+                      disabled={disabledRentFor}
                     />
                   </RadioGroup>
+                  {rentFor === 'recruit' && (
+                    <Stack direction="column" alignItems="center" my={1}>
+                      <FormControl fullWidth>
+                        <TextField
+                          placeholder="Paste your recruit’s eth address"
+                          name="address"
+                          variant="outlined"
+                          fullWidth
+                          value={ethAddress}
+                          error={addressError !== ''}
+                          helperText={addressError}
+                          onChange={(event) =>
+                            validateAddress(event.target.value)
+                          }
+                          inputProps={{
+                            className: classes.input,
+                          }}
+                          FormHelperTextProps={{
+                            className: classes.formHelper,
+                          }}
+                        />
+                      </FormControl>
+                    </Stack>
+                  )}
                 </Stack>
-              )}
-
-              {renameEnabled && (
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography>Renaming Fee</Typography>
-                  <Typography color="gray">{renameFee} NFTL</Typography>
-                </Stack>
-              )}
-              <Stack direction="row" justifyContent="space-between">
-                <Typography>Total Due Now</Typography>
-                <Typography color="gray">{`${
-                  renameEnabled ? degenPrice + renameFee : degenPrice
-                } NFTL`}</Typography>
-              </Stack>
-            </Stack>
-            <Divider />
-            <FormControl sx={{ mt: 1 }}>
-              <FormControlLabel
-                label={
-                  <Typography variant="caption">
-                    I have read the
-                    <Link
+                <Stack direction="column" spacing={1.25}>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography>Rental Cost:</Typography>
+                    <Typography
                       sx={{
-                        mx: '4px',
-                        textDecoration: 'none',
-                        fontWeight: theme.typography.fontWeightBold,
+                        textDecoration: isUseRentalPass
+                          ? 'line-through'
+                          : 'none',
                       }}
-                      variant="body2"
-                      onClick={openTOSDialog}
+                    >{`${formatNumberToDisplay(
+                      degen?.price || 0,
+                    )} NFTL`}</Typography>
+                  </Stack>
+                  {checkBalance && (
+                    <Stack direction="column">
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography>Balance:</Typography>
+                        <Typography
+                          color={sufficientBalance ? '#007B60' : '#B51424'}
+                        >{`${
+                          accountBalance
+                            ? formatNumberToDisplay(accountBalance)
+                            : '0.00'
+                        } NFTL`}</Typography>
+                      </Stack>
+                      {!sufficientBalance && (
+                        <Typography variant="caption" mt={1} ml="auto">
+                          Balance low.{' '}
+                          <Link
+                            href={NFTL_PURCHASE_URL}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={handleBuyNFTL}
+                          >
+                            Buy NFTL now
+                          </Link>
+                        </Typography>
+                      )}
+                    </Stack>
+                  )}
+                </Stack>
+                <Stack direction="column" spacing={1.25}>
+                  {checkBalance && isShowRentalPassOption() && (
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
                     >
-                      terms &amp; conditions
-                    </Link>
-                    regarding rentals
-                  </Typography>
-                }
-                control={
-                  <Checkbox
-                    checked={agreement}
-                    onChange={handleAgreementChange}
-                  />
-                }
-              />
-            </FormControl>
-            <TermsOfServiceDialog
-              open={openTOS}
-              onClose={handleTOSDialogClose}
-            />
-          </Stack>
-          <Stack direction="column" gap={1} width="100%">
-            <LoadingButton
-              variant="contained"
-              fullWidth
-              onClick={precheckRent}
-              disabled={
-                !agreement ||
-                Boolean(nameError) ||
-                Boolean(addressError) ||
-                (rentFor === 'recruit' && !ethAddress) ||
-                rentDisabled
-              }
-              loading={loading}
-            >
-              Rent Degen
-            </LoadingButton>
-            <Button fullWidth onClick={onClose} disabled={loading}>
-              Close
-            </Button>
+                      <FormControl>
+                        <FormControlLabel
+                          label={
+                            <Typography variant="caption">
+                              Rental Pass
+                            </Typography>
+                          }
+                          control={
+                            <Checkbox
+                              size="small"
+                              checked={isUseRentalPass}
+                              onChange={handleChangeUseRentalPass}
+                              className={classes.inputCheck}
+                            />
+                          }
+                          className={classes.inputCheckFormControl}
+                        />
+                      </FormControl>
+                      {isUseRentalPass && (
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          width="100px"
+                        >
+                          <Typography>Balance:</Typography>
+                          <Typography color="#5820D6">
+                            {rentalPassCount}
+                          </Typography>
+                        </Stack>
+                      )}
+                    </Stack>
+                  )}
+                  {web3Modal.cachedProvider ? (
+                    !checkBalance ? (
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={handleGoCheckBalance}
+                      >
+                        Next
+                      </Button>
+                    ) : sufficientBalance || isUseRentalPass ? (
+                      <Stack direction="column" spacing={1}>
+                        <LoadingButton
+                          variant="contained"
+                          fullWidth
+                          onClick={handleRent}
+                          loading={loading}
+                          disabled={!agreement}
+                        >
+                          Rent
+                        </LoadingButton>
+                        <FormControl fullWidth>
+                          <FormControlLabel
+                            label={
+                              <Typography variant="caption">
+                                I have read the
+                                <Link
+                                  sx={{
+                                    mx: '4px',
+                                    textDecoration: 'none',
+                                    fontWeight: theme.typography.fontWeightBold,
+                                  }}
+                                  onClick={openTOSDialog}
+                                >
+                                  terms &amp; conditions
+                                </Link>
+                                regarding rentals
+                              </Typography>
+                            }
+                            control={
+                              <Checkbox
+                                size="small"
+                                checked={agreement}
+                                onChange={handleAgreementChange}
+                                className={classes.inputCheck}
+                              />
+                            }
+                            className={classes.inputCheckFormControl}
+                          />
+                        </FormControl>
+                        <TermsOfServiceDialog
+                          open={openTOS}
+                          onClose={handleTOSDialogClose}
+                        />
+                      </Stack>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={handleRefreshBalance}
+                      >
+                        Refresh Balance
+                      </Button>
+                    )
+                  ) : (
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={handleConnectWallet}
+                    >
+                      Connect Wallet
+                    </Button>
+                  )}
+                </Stack>
+              </Stack>
+            )}
           </Stack>
         </Stack>
-      </Grid>
-    </Grid>
+        <Stack direction="column" mb={6}>
+          <Typography variant="h5" mt={4} mb={1.5}>
+            Stats
+          </Typography>
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={12} md={6}>
+              <Stack gap={1}>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography>Multipliers</Typography>
+                  <Typography className={classes.greyText}>
+                    {degen?.multiplier}x
+                  </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography>Queue</Typography>
+                  <Typography className={classes.greyText}>
+                    {degen?.rental_count}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <Stack gap={1}>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography>Rental period</Typography>
+                  <Typography className={classes.greyText}>1 week</Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                  <Typography>Renewal Cost</Typography>
+                  <Typography className={classes.greyText}>
+                    {degen?.price_daily}/Day
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Stack>
+      </Stack>
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import useFetch from 'hooks/useFetch';
 import { Degen } from 'types/degens';
-import { DEGEN_BASE_API_URL } from 'constants/url';
+import { DEGEN_BASE_API_URL, DEGEN_PURCHASE_URL } from 'constants/url';
 import { useQuery } from '@apollo/client';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
@@ -103,7 +103,7 @@ const MyDegens = (): JSX.Element => {
   };
 
   const handleBuyDegen = () => {
-    window.open('https://opensea.io/collection/niftydegen', '_blank');
+    window.open(DEGEN_PURCHASE_URL, '_blank');
   };
 
   const handleClickEditName = (degen: Degen): void => {

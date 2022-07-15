@@ -262,3 +262,16 @@ body {
 .leaderboard-icon.kills {
   fill:greenyellow;
 }
+.web3modal-modal-lightbox { 
+  z-index: 10000 !important; 
+}
+.inventory {
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  &:active {
+    outline: 3px solid #5820D6;
+    outline-offset: -3px;
+  }
+}
