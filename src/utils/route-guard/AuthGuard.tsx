@@ -39,6 +39,7 @@ const AuthGuard = ({ children }: GuardProps) => {
           window.localStorage.removeItem('authentication-token');
           window.localStorage.removeItem('uuid-token');
           window.localStorage.removeItem('nonce');
+          window.localStorage.removeItem('user-id');
           setAuth(null);
         }
       }
