@@ -135,6 +135,7 @@ export default function EnhancedTable({
         profile?.id,
         selectedGame,
         selectedTable.key,
+        selectedTimeFilter,
       );
       if (!result.ok) {
         const errMsg = await result.text();
