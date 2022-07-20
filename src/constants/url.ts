@@ -63,3 +63,10 @@ export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
 
 // SUSHISWAP URL FOR NFTL PURCHASE
 export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
+
+// DEGEN Purchase URL
+export const DEGEN_PURCHASE_URL = 'https://opensea.io/collection/niftydegen';
+
+// Comic Purchase URL
+export const COMIC_PURCHASE_URL =
+  'https://opensea.io/collection/nifty-league-launch-comics';

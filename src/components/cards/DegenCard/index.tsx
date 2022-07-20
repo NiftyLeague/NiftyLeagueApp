@@ -44,10 +44,12 @@ const chipStyles = {
 export interface DegenCardProps {
   degen: Degen;
   isDashboardDegen?: boolean;
+  degenEquipEnabled?: boolean;
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
   sx?: SxProps<Theme>;
 }
 
@@ -73,10 +75,12 @@ const DegenCard: React.FC<
   ({
     degen,
     isDashboardDegen = false,
+    degenEquipEnabled = false,
     onClickClaim,
     onClickDetail,
     onClickEditName,
     onClickRent,
+    onClickEquip,
     sx,
   }) => {
     const { palette } = useTheme();
@@ -85,7 +89,6 @@ const DegenCard: React.FC<
     const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
       useState<boolean>(false);
     const [isEnabled, setIsEnabled] = useState(is_active);
-
     useEffect(() => {
       const getIsEnabled = async () => {
         if (authToken && id) {
@@ -206,15 +209,27 @@ const DegenCard: React.FC<
           >
             Rent
           </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            sx={{ minWidth: '32%' }}
-            onClick={onClickDetail}
-          >
-            Traits
-          </Button>
+          {degenEquipEnabled && isDashboardDegen && onClickEquip ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+              onClick={onClickEquip}
+            >
+              Equip
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ minWidth: '32%' }}
+              onClick={onClickDetail}
+            >
+              Traits
+            </Button>
+          )}
           {isDashboardDegen && (
             <Button
               onClick={onClickClaim}
@@ -266,19 +281,21 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
-        <Dialog
-          open={isEnableDisableDegenModalOpen}
-          onClose={() => setIsEnableDisableDegenModalOpen(false)}
-        >
-          <EnableDisableDegenDialogContent
-            degen={degen}
-            isEnabled={isEnabled}
-            onClose={() => {
-              setIsEnabled(!isEnabled);
-              setIsEnableDisableDegenModalOpen(false);
-            }}
-          />
-        </Dialog>
+        {isDashboardDegen && degenEquipEnabled && (
+          <Dialog
+            open={isEnableDisableDegenModalOpen}
+            onClose={() => setIsEnableDisableDegenModalOpen(false)}
+          >
+            <EnableDisableDegenDialogContent
+              degen={degen}
+              isEnabled={isEnabled}
+              onClose={() => {
+                setIsEnabled(!isEnabled);
+                setIsEnableDisableDegenModalOpen(false);
+              }}
+            />
+          </Dialog>
+        )}
       </Card>
     );
   },
