@@ -95,7 +95,12 @@ export default function LeaderBoards(): JSX.Element {
 
   return (
     <Box sx={{ margin: 'auto' }}>
-      <Stack direction={{ sm: 'row' }} alignItems={{ sm: 'center' }} mb={2}>
+      <Stack
+        direction={{ sm: 'row', xs: 'column' }}
+        alignItems={{ sm: 'center', xs: 'inherit' }}
+        mb={2}
+        spacing={1.5}
+      >
         <FormControl sx={{ minWidth: '164px' }}>
           <Select
             value={selectedGame}
@@ -110,7 +115,7 @@ export default function LeaderBoards(): JSX.Element {
           </Select>
         </FormControl>
         {selectedGame === 'nifty_smashers' && (
-          <FormControl sx={{ minWidth: '120px', marginLeft: '12px' }}>
+          <FormControl sx={{ minWidth: '120px' }}>
             <Select
               value={selectedType}
               onChange={handleChangeType}
