@@ -14,7 +14,7 @@ import { Owner } from 'types/graph';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { sendEvent } from 'utils/google-analytics';
+import { sendEvent, sendUserId } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
@@ -72,6 +72,7 @@ const UserProfile: React.FC<
       if (res) {
         setUserName(res?.name_cased);
         setAvatar(res?.avatar);
+        sendUserId(res?.id);
         return;
       }
     };

@@ -85,6 +85,7 @@ const logoutOfWeb3Modal = () => {
   window.localStorage.removeItem('authentication-token');
   window.localStorage.removeItem('uuid-token');
   window.localStorage.removeItem('nonce');
+  window.localStorage.removeItem('user-id');
   setTimeout(() => {
     window.location.reload();
   }, 1);

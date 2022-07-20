@@ -13,6 +13,7 @@ import { ITEMS } from 'constants/comics';
 import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
+import { COMIC_PURCHASE_URL } from 'constants/url';
 
 const DashboardComicsPage = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
@@ -32,8 +33,8 @@ const DashboardComicsPage = (): JSX.Element => {
     setSelectedComic(null);
   }, []);
 
-  const handleBuyDegen = () => {
-    window.open('https://opensea.io/collection/niftydegen', '_blank');
+  const handleBuyComic = () => {
+    window.open(COMIC_PURCHASE_URL, '_blank');
   };
 
   const renderComics = useMemo(() => {
@@ -56,7 +57,7 @@ const DashboardComicsPage = (): JSX.Element => {
           <EmptyState
             message="You don't own any Comics yet."
             buttonText="Buy a Comic"
-            onClick={handleBuyDegen}
+            onClick={handleBuyComic}
           />
         </Grid>
       );
