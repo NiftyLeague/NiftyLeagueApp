@@ -29,20 +29,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     height: '70%',
   },
-  paperStyle: {
-    width: '100%',
-    overflowX: 'auto',
-    mb: 2,
-    '& .MuiTablePagination-selectLabel, & .MuiInputBase-root': {
-      display: 'none',
-    },
-  },
-  paginationSpacer: {
-    [theme.breakpoints.down('sm')]: {
-      flex: 'none',
+  table: {
+    '& MuiAccordion-root.Mui-expanded': {
+      margin: '0 !important',
     },
   },
 }));
+
+const flatObject = (obj) => {
+  const keys = Object.keys(obj);
+  return keys.reduce((acc, k) => {
+    const value = obj[k];
+    return typeof value === 'object'
+      ? { ...acc, ...flatObject(value) }
+      : { ...acc, [k]: value };
+  }, {});
+};
 
 export default function EnhancedTable({
   selectedGame,
@@ -61,16 +63,6 @@ export default function EnhancedTable({
 
   const classes = useStyles();
 
-  const flatObject = (obj) => {
-    const keys = Object.keys(obj);
-    return keys.reduce((acc, k) => {
-      const value = obj[k];
-      return typeof value === 'object'
-        ? { ...acc, ...flatObject(value) }
-        : { ...acc, [k]: value };
-    }, {});
-  };
-
   const fetchTopData = async () => {
     setPage(0);
     const returnValue: ReturnDataType = await fetchScores(
@@ -84,6 +76,7 @@ export default function EnhancedTable({
     returnValue.data.forEach((value: any) => {
       leaderBoardValue.push(flatObject(value));
     });
+
     setData(leaderBoardValue);
     setCount(returnValue.count);
   };
@@ -239,6 +232,7 @@ export default function EnhancedTable({
             RANK
           </Typography>
           <ResponsiveTable
+            className={classes.table}
             page={page}
             rowsPerPage={10}
             columns={getColumns()}
