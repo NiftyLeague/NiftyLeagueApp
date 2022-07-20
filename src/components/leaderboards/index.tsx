@@ -3,16 +3,16 @@ import { useState, useEffect } from 'react';
 import {
   Box,
   FormControl,
-  // List,
-  // ListItemButton,
-  // ListItemText,
+  List,
+  ListItemButton,
+  ListItemText,
   MenuItem,
   Stack,
-  // Theme,
-  // Typography,
+  Theme,
+  Typography,
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-// import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import { sendEvent } from 'utils/google-analytics';
 import { TableType } from 'types/leaderboard';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
@@ -28,25 +28,25 @@ import EnhancedTable from 'components/leaderboards/EnhancedTable/EnhancedTable';
 // import TopModal from './TopModal';
 import './navigation.css';
 
-// const useStyles = makeStyles((theme: Theme) => ({
-//   listItemButtonStyle: {
-//     padding: `${theme.spacing(0.25)} ${theme.spacing(1.5)}`,
-//     '&.Mui-selected': {
-//       backgroundColor: 'transparent !important',
-//     },
-//   },
-// }));
+const useStyles = makeStyles((theme: Theme) => ({
+  listItemButtonStyle: {
+    padding: `${theme.spacing(0.25)} ${theme.spacing(1.5)}`,
+    '&.Mui-selected': {
+      backgroundColor: 'transparent !important',
+    },
+  },
+}));
 
 export default function LeaderBoards(): JSX.Element {
-  // const { listItemButtonStyle } = useStyles();
+  const { listItemButtonStyle } = useStyles();
   const [selectedGame, setGame] = useState<string>(
     LEADERBOARD_GAME_LIST[0].key,
   );
   const [selectedTable, setTable] = useState<TableType>(NiftySmashersTables[0]);
   const [selectedType, setType] = useState<string>(NiftySmashersTables[0].key);
-  // const [selectedTimeFilter, setTimeFilter] = useState<string>(
-  //   LEADERBOARD_TIME_FILTERS[2].key,
-  // );
+  const [selectedTimeFilter, setTimeFilter] = useState<string>(
+    LEADERBOARD_TIME_FILTERS[2].key,
+  );
 
   useEffect(() => {
     sendEvent(
@@ -89,9 +89,9 @@ export default function LeaderBoards(): JSX.Element {
     }
   };
 
-  // const handleChangeTimeFilter = (selected: string) => {
-  //   setTimeFilter(selected);
-  // };
+  const handleChangeTimeFilter = (selected: string) => {
+    setTimeFilter(selected);
+  };
 
   return (
     <Box sx={{ margin: 'auto' }}>
@@ -126,8 +126,7 @@ export default function LeaderBoards(): JSX.Element {
             </Select>
           </FormControl>
         )}
-        {/* Hide for now since api is not implemented well */}
-        {/* <List sx={{ display: 'flex' }}>
+        <List sx={{ display: 'flex' }}>
           {LEADERBOARD_TIME_FILTERS.map((item) => (
             <ListItemButton
               key={item.key}
@@ -146,12 +145,12 @@ export default function LeaderBoards(): JSX.Element {
               </ListItemText>
             </ListItemButton>
           ))}
-        </List> */}
+        </List>
       </Stack>
       <EnhancedTable
         selectedGame={selectedGame}
         selectedTable={selectedTable}
-        selectedTimeFilter={LEADERBOARD_TIME_FILTERS[2].key}
+        selectedTimeFilter={selectedTimeFilter}
       />
     </Box>
   );
