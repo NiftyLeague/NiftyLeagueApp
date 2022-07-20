@@ -1,31 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect, useContext } from 'react';
-import { toast } from 'react-toastify';
 import {
   Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
   CircularProgress,
   Theme,
   Typography,
-  Stack,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { sendEvent } from 'utils/google-analytics';
-import { ReturnDataType, DataType, TableProps } from 'types/leaderboard';
-import EnhancedTableHead from './EnhancedTableHead';
-import { fetchScores, fetchRankByUserId } from 'utils/leaderboard';
-import { NetworkContext } from 'NetworkProvider';
-import usePlayerProfile from 'hooks/usePlayerProfile';
+import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import usePlayerProfile from 'hooks/usePlayerProfile';
+import ResponsiveTable from 'mui-responsive-table';
+import { NetworkContext } from 'NetworkProvider';
+import { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { DataType, ReturnDataType, TableProps } from 'types/leaderboard';
+import { sendEvent } from 'utils/google-analytics';
+import { fetchRankByUserId, fetchScores } from 'utils/leaderboard';
 import TopModal from '../TopModal';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   loadingBox: {
@@ -36,20 +29,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     height: '70%',
   },
-  paperStyle: {
-    width: '100%',
-    overflowX: 'auto',
-    mb: 2,
-    '& .MuiTablePagination-selectLabel, & .MuiInputBase-root': {
-      display: 'none',
-    },
-  },
-  paginationSpacer: {
-    [theme.breakpoints.down('sm')]: {
-      flex: 'none',
+  table: {
+    '& MuiAccordion-root.Mui-expanded': {
+      margin: '0 !important',
     },
   },
 }));
+
+const flatObject = (obj) => {
+  const keys = Object.keys(obj);
+  return keys.reduce((acc, k) => {
+    const value = obj[k];
+    return typeof value === 'object'
+      ? { ...acc, ...flatObject(value) }
+      : { ...acc, [k]: value };
+  }, {});
+};
 
 export default function EnhancedTable({
   selectedGame,
@@ -77,7 +72,12 @@ export default function EnhancedTable({
       rowsPerPage * 3,
       0,
     );
-    setData(returnValue.data);
+    const leaderBoardValue: any = [];
+    returnValue.data.forEach((value: any) => {
+      leaderBoardValue.push(flatObject(value));
+    });
+
+    setData(leaderBoardValue);
     setCount(returnValue.count);
   };
 
@@ -86,8 +86,7 @@ export default function EnhancedTable({
     fetchTopData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, selectedTable.key, selectedTimeFilter]);
-
-  const handleChangePage = async (event: unknown, newPage: number) => {
+  const handleChangePage = async (newPage: number) => {
     if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
       const returnValue: ReturnDataType = await fetchScores(
         selectedGame,
@@ -96,7 +95,11 @@ export default function EnhancedTable({
         rowsPerPage,
         (newPage + 2) * rowsPerPage,
       );
-      setData([...rows, ...returnValue.data]);
+      const leaderBoardValue: any = [];
+      returnValue.data.forEach((value: any) => {
+        leaderBoardValue.push(flatObject(value));
+      });
+      setData([...rows, ...leaderBoardValue]);
       setCount(returnValue.count);
     }
     setPage(newPage);
@@ -108,7 +111,6 @@ export default function EnhancedTable({
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
   const handleCheckYourRank = async () => {
     if (selectedGame === 'nifty_smashers') {
       sendEvent(
@@ -155,13 +157,25 @@ export default function EnhancedTable({
     }
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = rows
-    ? page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - rows.length)
-      : 0
-    : 0;
-
+  const getColumns = () => {
+    let columns: any = [
+      { field: 'rank', headerName: 'RANK', width: 100, primary: true },
+      {
+        field: 'user_id',
+        headerName: 'USERNAME',
+        width: 250,
+        primary: true,
+      },
+    ];
+    selectedTable.rows.forEach((headerCell: any) => {
+      columns.push({
+        field: headerCell.key,
+        headerName: headerCell.display,
+        width: 250,
+      });
+    });
+    return columns;
+  };
   return (
     <Box mb={{ xs: 10, sm: 0 }}>
       {!rows ? (
@@ -169,104 +183,66 @@ export default function EnhancedTable({
           <CircularProgress />
         </Box>
       ) : (
-        <>
-          <PerfectScrollbar className={classes.paperStyle}>
-            <TableContainer
-              sx={{
-                minWidth: '850px',
-                height: isMobile ? 'calc(100vh - 320px)' : 'auto',
-              }}
-            >
-              <Table
-                stickyHeader
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size="medium"
-              >
-                <EnhancedTableHead
-                  handleCheckYourRank={handleCheckYourRank}
-                  rows={selectedTable.rows}
-                />
-                <TableBody>
-                  {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: DataType, index: number) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
-                      return (
-                        <TableRow role="checkbox" tabIndex={-1} key={row.rank}>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="normal"
-                          >
-                            {row.rank}
-                          </TableCell>
-                          <TableCell align="left">{row.user_id}</TableCell>
-                          {selectedTable.rows.map((cell) => (
-                            <TableCell key={cell.key} align="left">
-                              {row.stats[cell.key]}
-                            </TableCell>
-                          ))}
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            padding="normal"
-                          ></TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: 53 * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </PerfectScrollbar>
-          <TablePagination
-            rowsPerPageOptions={[10]}
-            component="div"
-            count={count}
-            rowsPerPage={rowsPerPage}
+        <Box sx={{ position: 'relative' }}>
+          {!!web3Modal.cachedProvider && (
+            <>
+              <TopModal
+                selectedGame={selectedGame}
+                selectedTimeFilter={selectedTimeFilter}
+                flag={selectedTable.key}
+                ModalIcon={
+                  <Box className="wen-game-modal" sx={{ display: 'none' }}>
+                    N/A
+                  </Box>
+                }
+                myRank={myRank}
+              />
+            </>
+          )}
+          <Typography
+            variant="h4"
+            color={palette.primary.main}
+            sx={{
+              position: {
+                lg: 'absolute',
+              },
+              textDecoration: 'underline',
+              right: {
+                lg: '0px',
+              },
+              cursor: 'pointer',
+              display: 'flex',
+              lineHeight: '24px',
+              justifyContent: 'flex-end',
+              fontWeight: 700,
+              svg: {
+                mr: '3px',
+              },
+              transform: {
+                lg: 'translate(0px, 50%)',
+              },
+              mb: {
+                xs: '1rem',
+                lg: '0px',
+              },
+              zIndex: 1000,
+            }}
+            onClick={handleCheckYourRank}
+          >
+            <RankIcon />
+            RANK
+          </Typography>
+          <ResponsiveTable
+            className={classes.table}
             page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelDisplayedRows={({ from, to }) => (
-              <Stack
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                gap={2}
-              >
-                {!!web3Modal.cachedProvider && (
-                  <>
-                    <TopModal
-                      selectedGame={selectedGame}
-                      selectedTimeFilter={selectedTimeFilter}
-                      flag={selectedTable.key}
-                      ModalIcon={
-                        <Box
-                          className="wen-game-modal"
-                          sx={{ display: 'none' }}
-                        >
-                          N/A
-                        </Box>
-                      }
-                      myRank={myRank}
-                    />
-                  </>
-                )}
-                {`${from}–${to}`}
-              </Stack>
-            )}
+            rowsPerPage={10}
+            columns={getColumns()}
+            showPagination={true}
+            onChangePage={handleChangePage}
+            data={rows}
+            count={count}
           />
-        </>
+        </Box>
       )}
     </Box>
   );
