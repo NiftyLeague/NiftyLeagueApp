@@ -191,7 +191,7 @@ const MainLayout = () => {
           <PerfectScrollbar
             style={{
               padding: matchDownSm ? '10px 20px' : '20px 40px',
-              height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+              height: !matchUpMd ? 'calc(100vh - 120px)' : 'calc(100vh - 88px)',
             }}
           >
             {getContent()}
