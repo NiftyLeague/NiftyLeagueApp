@@ -58,7 +58,6 @@
     "eth-hooks": "2.3.0-beta07",
     "eth-rpc-errors": "4.0.3",
     "ethers": "5.6.5",
-    "firebase": "^9.6.6",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.13",
     "graphql": "16.4.0",
