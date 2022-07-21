@@ -14,14 +14,14 @@ import { Owner } from 'types/graph';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { sendEvent, sendUserId } from 'utils/google-analytics';
+import { sendUserId } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from 'constants/index';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';
 import { ProfileAvatar } from 'types/account';
 import useAuth from 'hooks/useAuth';
+import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 
 export interface UserProfileProps {}
 
@@ -29,8 +29,7 @@ const UserProfile: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<UserProfileProps>>
 > = () => {
   const { palette } = useTheme();
-  const { address, loadWeb3Modal, web3Modal, writeContracts, tx } =
-    useContext(NetworkContext);
+  const { address, writeContracts, tx } = useContext(NetworkContext);
 
   const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
     useQuery(OWNER_QUERY, {
@@ -96,15 +95,6 @@ const UserProfile: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccumulated, tx, writeContracts]);
 
-  const handleConnectWallet = useCallback(() => {
-    sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.LOGIN,
-      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
-      'method',
-    );
-    loadWeb3Modal();
-  }, [loadWeb3Modal]);
-
   return (
     <Box
       display="flex"
@@ -136,7 +126,7 @@ const UserProfile: React.FC<
         )}
         <Typography>Available to Claim</Typography>
       </Stack>
-      {web3Modal.cachedProvider ? (
+      <ConnectWrapper fullWidth>
         <Button
           variant="contained"
           fullWidth
@@ -145,11 +135,7 @@ const UserProfile: React.FC<
         >
           Claim NFTL
         </Button>
-      ) : (
-        <Button variant="contained" fullWidth onClick={handleConnectWallet}>
-          Connect Wallet
-        </Button>
-      )}
+      </ConnectWrapper>
     </Box>
   );
 };

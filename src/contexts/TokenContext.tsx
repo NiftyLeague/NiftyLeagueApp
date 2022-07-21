@@ -2,22 +2,15 @@ import React, { createContext, useEffect, useReducer, useContext } from 'react';
 
 // reducer - state management
 import { LOGIN, LOGOUT } from 'store/actions';
-import accountReducer from 'store/accountReducer';
+import accountReducer, { initialAccountState } from 'store/accountReducer';
 
 // types
-import { InitialLoginContextProps, TokenContextType } from 'types/auth';
+import { TokenContextType } from 'types/auth';
 import { NetworkContext } from 'NetworkProvider';
 import { getProviderAndSigner } from 'helpers';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
-import { BASE_API_URL } from 'constants/url';
-
-// constant
-const initialState: InitialLoginContextProps = {
-  isLoggedIn: false,
-  isInitialized: false,
-  user: null,
-};
+import { ADDRESS_VERIFICATION, WALLET_VERIFICATION } from 'constants/url';
 
 // ==============================|| JWT CONTEXT & PROVIDER ||============================== //
 const TokenContext = createContext<TokenContextType | null>(null);
@@ -28,7 +21,7 @@ export const TokenProvider = ({
   children: React.ReactElement;
 }) => {
   const { address, userProvider } = useContext(NetworkContext);
-  const [state, dispatch] = useReducer(accountReducer, initialState);
+  const [state, dispatch] = useReducer(accountReducer, initialAccountState);
 
   const nonce = `0x${crypto.randomBytes(4).toString('hex')}`;
   const token = `${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}`;
@@ -37,7 +30,7 @@ export const TokenProvider = ({
   useEffect(() => {
     const checkAddress = async () => {
       if (prevAuth) {
-        const result = await fetch(`${BASE_API_URL}/verification/address`, {
+        const result = await fetch(ADDRESS_VERIFICATION, {
           headers: { authorizationToken: prevAuth },
         })
           .then((res) => {
@@ -81,7 +74,7 @@ export const TokenProvider = ({
               }`,
             );
 
-            const result = await fetch(`${BASE_API_URL}/verification`, {
+            const result = await fetch(WALLET_VERIFICATION, {
               method: 'POST',
               body: JSON.stringify({
                 token,

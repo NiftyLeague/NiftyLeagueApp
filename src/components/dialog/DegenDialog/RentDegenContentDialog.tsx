@@ -40,6 +40,7 @@ import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
 import { NFTL_PURCHASE_URL } from 'constants/url';
 import { formatNumberToDisplay } from 'utils/numbers';
+import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -271,15 +272,6 @@ const RentDegenContentDialog = ({
       localStorage.removeItem('aggreement-accepted');
     }
   };
-
-  const handleConnectWallet = useCallback(() => {
-    sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.RENTAL_CONNECT_WALLET_CLICKED,
-      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
-      'method',
-    );
-    loadWeb3Modal();
-  }, [loadWeb3Modal]);
 
   const handleRefreshBalance = () => {
     sendEvent(
@@ -545,8 +537,8 @@ const RentDegenContentDialog = ({
                       )}
                     </Stack>
                   )}
-                  {web3Modal.cachedProvider ? (
-                    !checkBalance ? (
+                  <ConnectWrapper fullWidth>
+                    {!checkBalance ? (
                       <Button
                         variant="contained"
                         fullWidth
@@ -607,16 +599,8 @@ const RentDegenContentDialog = ({
                       >
                         Refresh Balance
                       </Button>
-                    )
-                  ) : (
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      onClick={handleConnectWallet}
-                    >
-                      Connect Wallet
-                    </Button>
-                  )}
+                    )}
+                  </ConnectWrapper>
                 </Stack>
               </Stack>
             )}

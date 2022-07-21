@@ -9,14 +9,14 @@ interface AccountReducerActionProps {
   payload?: InitialLoginContextProps;
 }
 
-const initialState: InitialLoginContextProps = {
+export const initialAccountState: InitialLoginContextProps = {
   isLoggedIn: false,
   isInitialized: false,
   user: null,
 };
 
 const accountReducer = (
-  state = initialState,
+  state = initialAccountState,
   action: AccountReducerActionProps,
 ) => {
   switch (action.type) {
