@@ -1,5 +1,5 @@
 // action - state management
-import { LOGIN, LOGOUT, REGISTER } from './actions';
+import { LOGIN, LOGOUT } from './actions';
 import { InitialLoginContextProps } from 'types/auth';
 
 // ==============================|| ACCOUNT REDUCER ||============================== //
@@ -11,8 +11,6 @@ interface AccountReducerActionProps {
 
 export const initialAccountState: InitialLoginContextProps = {
   isLoggedIn: false,
-  isInitialized: false,
-  user: null,
 };
 
 const accountReducer = (
@@ -20,26 +18,15 @@ const accountReducer = (
   action: AccountReducerActionProps,
 ) => {
   switch (action.type) {
-    case REGISTER: {
-      const { user } = action.payload!;
-      return {
-        ...state,
-        user,
-      };
-    }
     case LOGIN: {
-      const { user } = action.payload!;
       return {
         ...state,
         isLoggedIn: true,
-        isInitialized: true,
-        user,
       };
     }
     case LOGOUT: {
       return {
         ...state,
-        isInitialized: true,
         isLoggedIn: false,
         user: null,
       };
