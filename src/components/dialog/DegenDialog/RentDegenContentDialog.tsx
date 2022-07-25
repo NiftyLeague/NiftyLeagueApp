@@ -212,14 +212,6 @@ const RentDegenContentDialog = ({
   };
 
   const handleRent = useCallback(async () => {
-    if (!web3Modal.cachedProvider) {
-      toast.error(
-        'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
-        { theme: 'dark' },
-      );
-      return;
-    }
-
     sendEvent(
       GOOGLE_ANALYTICS.EVENTS.BEGIN_CHECKOUT,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
@@ -239,7 +231,7 @@ const RentDegenContentDialog = ({
       setLoading(false);
       toast.error(err.message, { theme: 'dark' });
     }
-  }, [web3Modal.cachedProvider, rent]);
+  }, [rent]);
 
   const isShowRentalPassOption = () =>
     rentalPassCount > 0 && !degen?.rental_count;
