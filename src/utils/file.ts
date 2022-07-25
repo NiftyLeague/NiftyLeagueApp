@@ -1,5 +1,5 @@
 import { saveAs } from 'save-as';
-import { DEGEN_ASSETS_DOWNLOAD_URL } from '../constants/url';
+import { DEGEN_ASSETS_DOWNLOAD_URL } from 'constants/url';
 
 export const base64ToBlob = (base64: string): Blob => {
   const binaryStr = window.atob(base64);

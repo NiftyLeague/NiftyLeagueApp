@@ -2,7 +2,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
-
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Button,
@@ -27,7 +27,7 @@ import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenD
 import SortButton from 'components/extended/SortButton';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import { DEGEN_BASE_API_URL } from 'constants/url';
+import { DEGEN_BASE_API_URL, DEGEN_PURCHASE_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
@@ -37,7 +37,7 @@ import { NetworkContext } from 'NetworkProvider';
 import { Owner } from 'types/graph';
 import { useQuery } from '@apollo/client';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 
@@ -45,7 +45,7 @@ import DegenDialog from 'components/dialog/DegenDialog';
 const DEGENS_PER_PAGE = 12;
 
 const handleBuyDegen = () => {
-  window.open('https://opensea.io/collection/niftydegen', '_blank');
+  window.open(DEGEN_PURCHASE_URL, '_blank');
 };
 
 const DashboardDegensPage = (): JSX.Element => {
@@ -62,7 +62,9 @@ const DashboardDegensPage = (): JSX.Element => {
   const [isDegenModalOpen, setIsDegenModalOpen] = useState<boolean>(false);
   const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
+  const [isEquipDialog, setIsEquipDialog] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
+  const { enableEquip } = useFlags();
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -85,7 +87,30 @@ const DashboardDegensPage = (): JSX.Element => {
     if (!characters.length || !data) {
       return [];
     }
-    return characters.map((character) => data[character.id]);
+    // TODO: remove temp fix for 7th tribes
+    return characters.map(
+      (character) =>
+        data[character.id] || {
+          id: character.id,
+          name: character.name,
+          traits_string: Object.values(character.traits).toString(),
+          background: 'meta',
+          earning_cap: 0,
+          earning_cap_daily: 0,
+          is_active: false,
+          last_rented_at: 0,
+          multiplier: 2,
+          multipliers: { background: 2 },
+          owner: '',
+          owner_share: 0.1,
+          price: 0,
+          price_daily: 0,
+          rental_count: 0,
+          total_rented: 0,
+          tribe: 'egg',
+        },
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characters.length, !!data]);
 
@@ -145,6 +170,7 @@ const DashboardDegensPage = (): JSX.Element => {
   const handleViewTraits = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(false);
+    setIsEquipDialog(false);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
   }, []);
@@ -152,6 +178,7 @@ const DashboardDegensPage = (): JSX.Element => {
   const handleClaimDegen = useCallback((degen: Degen): void => {
     setSelectedDegen(degen);
     setIsClaimDialog(true);
+    setIsEquipDialog(false);
     setIsRentDialog(false);
     setIsDegenModalOpen(true);
   }, []);
@@ -160,6 +187,15 @@ const DashboardDegensPage = (): JSX.Element => {
     setSelectedDegen(degen);
     setIsRentDialog(true);
     setIsClaimDialog(false);
+    setIsEquipDialog(false);
+    setIsDegenModalOpen(true);
+  }, []);
+
+  const handleEquipDegen = useCallback((degen: Degen): void => {
+    setSelectedDegen(degen);
+    setIsRentDialog(false);
+    setIsClaimDialog(false);
+    setIsEquipDialog(true);
     setIsDegenModalOpen(true);
   }, []);
 
@@ -204,18 +240,22 @@ const DashboardDegensPage = (): JSX.Element => {
         <DegenCard
           degen={degen}
           isDashboardDegen
+          degenEquipEnabled={enableEquip}
           onClickDetail={() => handleViewTraits(degen)}
           onClickEditName={() => handleClickEditName(degen)}
           onClickClaim={() => handleClaimDegen(degen)}
           onClickRent={() => handleRentDegen(degen)}
+          onClickEquip={() => handleEquipDegen(degen)}
         />
       </Grid>
     ),
     [
+      enableEquip,
       handleClaimDegen,
       handleClickEditName,
       handleRentDegen,
       handleViewTraits,
+      handleEquipDegen,
       isDrawerOpen,
     ],
   );
@@ -303,6 +343,7 @@ const DashboardDegensPage = (): JSX.Element => {
         degen={selectedDegen}
         isClaim={isClaimDialog}
         isRent={isRentDialog}
+        isEquip={isEquipDialog}
         setIsRent={setIsRentDialog}
         onClose={() => setIsDegenModalOpen(false)}
       />

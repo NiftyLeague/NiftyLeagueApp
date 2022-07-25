@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { providers } from 'ethers';
 import BurnerProvider from 'burner-provider';
 import { Network, UserProvider } from 'types/web3';
-import { DEBUG } from '../constants';
-import { LOCAL_CHAIN_ID } from '../constants/networks';
+import { DEBUG } from 'constants/index';
+import { LOCAL_CHAIN_ID } from 'constants/networks';
 
 /*
   ~ What it does? ~

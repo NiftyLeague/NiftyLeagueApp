@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import ActiveRentalDialog from 'components/dialog/ActiveRentalDialog';
 import { ALL_RENTAL_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import { useEffect, useState } from 'react';
@@ -21,11 +22,16 @@ const DashboardOverview = (): JSX.Element => {
     headers,
   });
 
+  const [rental, setRental] = useState<Rentals>();
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
 
   useEffect(() => {
     if (data) {
       setRentals(data);
+
+      if (data.length > 0) {
+        setRental(data[0]);
+      }
     }
   }, [data]);
 
@@ -50,7 +56,11 @@ const DashboardOverview = (): JSX.Element => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={7}>
-        <Grid container flexDirection="column" spacing={6}>
+        <Grid
+          container
+          flexDirection="column"
+          spacing={{ lg: 6, xs: 4, md: 4 }}
+        >
           <Grid item xs={12}>
             <MyDegens />
           </Grid>
@@ -59,6 +69,9 @@ const DashboardOverview = (): JSX.Element => {
           </Grid>
         </Grid>
       </Grid>
+      {rental && (
+        <ActiveRentalDialog degenId={rentals[0].degen_id} rental={rental} />
+      )}
     </Grid>
   );
 };

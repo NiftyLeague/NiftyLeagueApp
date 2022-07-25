@@ -6,7 +6,17 @@ const initGA = () => {
     return;
   }
 
-  ReactGA.initialize(process.env.REACT_APP_GA_CONTAINER_ID || '');
+  const userId = window.localStorage.getItem('user-id');
+  ReactGA.initialize(
+    process.env.REACT_APP_GA_CONTAINER_ID || '',
+    userId
+      ? {
+          gaOptions: {
+            userId: userId,
+          },
+        }
+      : undefined,
+  );
 };
 
 const sendEvent = (action = '', category = '', label = '') => {
@@ -19,4 +29,9 @@ const sendPageview = (path: string) => {
   ReactGA.send({ hitType: 'pageview', page: path });
 };
 
-export { initGA, sendEvent, sendPageview };
+const sendUserId = (userId: string) => {
+  window.localStorage.setItem('user-id', userId);
+  ReactGA.set({ userId });
+};
+
+export { initGA, sendEvent, sendPageview, sendUserId };

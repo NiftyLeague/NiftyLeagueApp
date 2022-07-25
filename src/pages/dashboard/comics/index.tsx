@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Stack, Button } from '@mui/material';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import ComicCard from 'components/cards/ComicCard';
 import EmptyState from 'components/EmptyState';
@@ -12,6 +13,7 @@ import { ITEMS } from 'constants/comics';
 import { cardSpacing } from 'store/constant';
 import { Comic } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
+import { COMIC_PURCHASE_URL } from 'constants/url';
 
 const DashboardComicsPage = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
@@ -20,6 +22,8 @@ const DashboardComicsPage = (): JSX.Element => {
     () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
     [comicsBalance],
   );
+  const { displayMyItems } = useFlags();
+
   const handleViewComic = useCallback(
     (comic: Comic) => setSelectedComic(comic),
     [],
@@ -29,8 +33,8 @@ const DashboardComicsPage = (): JSX.Element => {
     setSelectedComic(null);
   }, []);
 
-  const handleBuyDegen = () => {
-    window.open('https://opensea.io/collection/niftydegen', '_blank');
+  const handleBuyComic = () => {
+    window.open(COMIC_PURCHASE_URL, '_blank');
   };
 
   const renderComics = useMemo(() => {
@@ -53,7 +57,7 @@ const DashboardComicsPage = (): JSX.Element => {
           <EmptyState
             message="You don't own any Comics yet."
             buttonText="Buy a Comic"
-            onClick={handleBuyDegen}
+            onClick={handleBuyComic}
           />
         </Grid>
       );
@@ -105,11 +109,18 @@ const DashboardComicsPage = (): JSX.Element => {
             {renderComics}
           </Grid>
         </SectionSlider>
-        <SectionSlider firstSection title="My Items" isSlider={false}>
-          <Grid container direction="row" flexWrap="wrap" spacing={cardSpacing}>
-            {renderItems}
-          </Grid>
-        </SectionSlider>
+        {displayMyItems && (
+          <SectionSlider firstSection title="My Items" isSlider={false}>
+            <Grid
+              container
+              direction="row"
+              flexWrap="wrap"
+              spacing={cardSpacing}
+            >
+              {renderItems}
+            </Grid>
+          </SectionSlider>
+        )}
       </Stack>
       <ViewComicDialog
         comic={selectedComic}

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import useContractReader from './useContractReader';
-import { BALANCE_INTERVAL } from '../constants';
+import { BALANCE_INTERVAL } from 'constants/index';
 import { NFTL_CONTRACT } from 'constants/contracts';
 
 /*

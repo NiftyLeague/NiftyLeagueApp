@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GuardProps } from 'types';
 import { useContext, useEffect, useState } from 'react';
 import { NetworkContext } from 'NetworkProvider';
+import { ADDRESS_VERIFICATION } from 'constants/url';
 
 // ==============================|| AUTH GUARD ||============================== //
 
@@ -22,12 +23,9 @@ const AuthGuard = ({ children }: GuardProps) => {
   useEffect(() => {
     const checkAddress = async () => {
       if (auth) {
-        const result = await fetch(
-          'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod/verification/address',
-          {
-            headers: { authorizationToken: auth },
-          },
-        )
+        const result = await fetch(ADDRESS_VERIFICATION, {
+          headers: { authorizationToken: auth },
+        })
           .then((res) => {
             if (res.status === 404) setSuccess(false);
             return res.text();
@@ -41,6 +39,7 @@ const AuthGuard = ({ children }: GuardProps) => {
           window.localStorage.removeItem('authentication-token');
           window.localStorage.removeItem('uuid-token');
           window.localStorage.removeItem('nonce');
+          window.localStorage.removeItem('user-id');
           setAuth(null);
         }
       }

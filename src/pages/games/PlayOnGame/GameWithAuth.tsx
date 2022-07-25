@@ -6,13 +6,13 @@ import React, {
   useState,
 } from 'react';
 import Unity, { UnityContext } from 'react-unity-webgl';
-import { Box, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import withVerification from 'components/Authentication';
 import { NETWORK_NAME } from 'constants/networks';
+import Preloader from 'components/Preloader';
 import { DEBUG } from 'constants/index';
-import Preloader from './Preloader';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
 import { ALL_RENTAL_API_URL } from 'constants/url';
 import { Rentals } from 'types/rentals';
@@ -47,6 +47,7 @@ const Game = ({
   }
   const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
+    enabled: unityContext.unityConfig.productName === 'NiftySmashers',
   });
 
   useEffect(() => {
@@ -117,6 +118,10 @@ const Game = ({
     };
   }, [unityContext, onMouse, startAuthentication, getConfiguration]);
 
+  const handleOnClickFullscreen = () => {
+    (window as any).unityInstance.setFullscreen(true);
+  };
+
   if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
     return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
   }
@@ -124,25 +129,31 @@ const Game = ({
   return (
     <>
       <Preloader ready={isLoaded} progress={progress} />
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
-        width="100%"
-        gap={1}
-      >
-        <Unity
-          className="game-canvas"
-          unityContext={unityContext}
-          style={{
-            width: 'calc(89vh * 1.33)',
-            height: '89vh',
-            visibility: isLoaded ? 'visible' : 'hidden',
-          }}
-        />
-        <Box ml={4} minWidth={360}>
-          <EarningCap rentals={rentals ?? []} hideTitle={true} />
-        </Box>
+      <Stack direction="row" alignItems="flex-start">
+        <Stack alignItems="flex-start">
+          <Unity
+            className="game-canvas"
+            unityContext={unityContext}
+            style={{
+              width: 'calc(77vh * 1.33)',
+              height: '77vh',
+              visibility: isLoaded ? 'visible' : 'hidden',
+            }}
+          />
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleOnClickFullscreen}
+            sx={{ marginTop: '6px' }}
+          >
+            Fullscreen
+          </Button>
+        </Stack>
+        {unityContext.unityConfig.productName === 'NiftySmashers' && (
+          <Box ml={2} minWidth={350}>
+            <EarningCap rentals={rentals ?? []} hideTitle={true} />
+          </Box>
+        )}
       </Stack>
     </>
   );

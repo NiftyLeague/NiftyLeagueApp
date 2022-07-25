@@ -7,7 +7,7 @@ import ArcadeGameList from './ArcadeGameList';
 import GameList from './GameList';
 
 const GamesPage = () => {
-  const { isWindows, downloadURL, version } = useVersion();
+  const { isWindows, isMacOs, downloadURL, version, message } = useVersion();
   const { enableWenGame } = useFlags();
   return (
     <>
@@ -18,14 +18,10 @@ const GamesPage = () => {
         actions={
           <Button
             href={downloadURL}
-            disabled={!isWindows || !version}
+            disabled={isMacOs || !version}
             variant="outlined"
           >
-            {!version && isWindows
-              ? 'Fetching installer version...'
-              : `Download for ${
-                  isWindows ? 'Windows' : 'Mac OS will be added soon!'
-                }`}
+            {!version && isWindows ? 'Fetching installer version...' : message}
           </Button>
         }
       >
