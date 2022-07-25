@@ -2,7 +2,6 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Signer, providers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { useUserAddress } from 'eth-hooks';
 import { ChainId } from '@sushiswap/sdk';
 import Web3Modal from 'web3modal';
 import isEmpty from 'lodash/isEmpty';
@@ -137,6 +136,7 @@ const NetworkProvider = ({
   const [injectedProvider, setInjectedProvider] = useState<
     UserProvider | undefined
   >(undefined);
+  const [address, setAddress] = useState('');
 
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   const userProvider = useUserProvider(
@@ -144,7 +144,6 @@ const NetworkProvider = ({
     localProvider as providers.JsonRpcProvider,
     targetNetwork,
   );
-  const address = useUserAddress(userProvider);
   const signer = userProvider?.getSigner();
 
   // You can warn the user if you would like them to be on a specific network
@@ -228,6 +227,17 @@ const NetworkProvider = ({
     userProvider,
     writeContracts,
   ]);
+
+  useEffect(() => {
+    (async () => {
+      if (!signer) {
+        return;
+      }
+
+      const addr = await signer.getAddress();
+      setAddress(addr);
+    })();
+  }, [signer]);
 
   const context = {
     address,
