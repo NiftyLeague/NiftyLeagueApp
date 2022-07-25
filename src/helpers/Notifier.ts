@@ -20,7 +20,7 @@ import { serializeError } from 'eth-rpc-errors';
 import { GasStationResponse, Network, Provider } from 'types/web3';
 import { NotifyCallback, NotifyError, Tx } from 'types/notify';
 import { calculateGasMargin, getProviderAndSigner } from 'helpers';
-import { DEBUG } from '../constants';
+import { DEBUG } from 'constants/index';
 import { VALID_NOTIFY_NETWORKS } from 'constants/networks';
 
 // Wrapper around BlockNative's wonderful Notify.js

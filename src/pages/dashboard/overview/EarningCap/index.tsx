@@ -18,7 +18,7 @@ const EarningCap: FC<EarningCapProps> = ({ rentals, hideTitle }) => {
   const columns: ColumnType[] = [
     {
       id: 'degenId',
-      label: 'DeGen ID',
+      label: 'DEGEN ID',
     },
     {
       id: 'earningCapProgress',

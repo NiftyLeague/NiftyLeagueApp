@@ -1,13 +1,25 @@
 import { useState, useEffect, useContext } from 'react';
 import { NetworkContext } from 'NetworkProvider';
-import { isWindows } from 'react-device-detect';
+import { isWindows, isMacOs } from 'react-device-detect';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 
 const useVersion = () => {
   const { targetNetwork } = useContext(NetworkContext);
   const [version, setVersion] = useState('');
   const env = targetNetwork.chainId === 1 ? 'prod' : 'stage';
-  const os = isWindows ? 'win' : 'osx';
+  const isLinux = window?.navigator?.userAgent?.indexOf('Linux') >= 0;
+  let os = isWindows && 'win';
+  let message = isWindows && 'Download for Windows';
+
+  if (isLinux) {
+    message = 'Linux support is not available at this time';
+    os = 'linux';
+  }
+  if (isMacOs) {
+    message = 'Download for Mac OS will be added soon!';
+    os = 'osx';
+  }
+
   const fileName = `NiftyLauncher-setup-${version.substring(
     0,
     version.indexOf('-'),
@@ -39,6 +51,9 @@ const useVersion = () => {
     downloadURL,
     version,
     isWindows,
+    isLinux,
+    isMacOs,
+    message,
   };
 };
 

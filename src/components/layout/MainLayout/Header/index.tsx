@@ -41,7 +41,12 @@ const Header = () => {
     <Stack
       direction="row"
       justifyContent="space-between"
-      sx={{ height: 60, width: '100%' }}
+      sx={{
+        [theme.breakpoints.up('sm')]: {
+          height: 60,
+        },
+        width: '100%',
+      }}
     >
       {/* logo & toggler button */}
       <Box

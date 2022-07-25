@@ -1,7 +1,17 @@
+import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
+
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
 
 export const MY_PROFILE_API_URL = `${BASE_API_URL}/stats/profile`;
+
+export const SUBGRAPH_CACHE_URL = `${BASE_API_URL}/info?network=${
+  process.env.REACT_APP_NETWORK as string
+}&version=${process.env.REACT_APP_SUBGRAPH_VERSION as string}&characters=false`;
+
+// Authentication
+export const WALLET_VERIFICATION = `${BASE_API_URL}/verification`;
+export const ADDRESS_VERIFICATION = `${BASE_API_URL}/verification/address`;
 
 // Degen API url
 export const DEGEN_BASE_API_URL = 'https://nifty-league.s3.amazonaws.com';
@@ -41,10 +51,22 @@ export const UPDATE_PROFILE_AVATAR_API = `${BASE_API_URL}/${GAMER_PROFILE_BASE}/
 // Arcade API
 export const GET_ARCADE_TOKEN_BALANCE_API = `${BASE_API_URL}/accounts/account/inventory?id=arcade-token`;
 
-// Get Rank API
-export const GET_RANK_BY_USER_ID_API = `${BASE_API_URL}/GetRank`;
-
 // Marketplace API
 export const PURCHASE_ARCADE_TOKEN_BALANCE_API = `${BASE_API_URL}/marketplace/product/purchase`;
 export const GET_PRODUCT = (productId: string, currency: string) =>
   `${BASE_API_URL}/marketplace/product?id=${productId}&currency=${currency}`;
+
+// Leaderboards
+export const GET_RANK_BY_USER_ID_API = `${BASE_API_URL}/GetRank`;
+export const LEADERBOARD_USERNAMES_API_URL = `${BASE_API_URL}/profiles/public/profiles`;
+export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
+
+// SUSHISWAP URL FOR NFTL PURCHASE
+export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
+
+// DEGEN Purchase URL
+export const DEGEN_PURCHASE_URL = 'https://opensea.io/collection/niftydegen';
+
+// Comic Purchase URL
+export const COMIC_PURCHASE_URL =
+  'https://opensea.io/collection/nifty-league-launch-comics';

@@ -8,6 +8,7 @@ import { Typography } from '@mui/material';
 import NavGroup from './NavGroup';
 import { PublicItems, PrivateItems } from 'constants/menu-items';
 import { NetworkContext } from 'NetworkProvider';
+import useAuth from 'hooks/useAuth';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
@@ -20,23 +21,18 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 };
 
 const MenuList = () => {
-  const { web3Modal } = useContext(NetworkContext);
   const { displayGamerProfile } = useFlags();
-  let lastItems: any = getMenuItemsByLoginStatus(
-    Boolean(web3Modal.cachedProvider),
-  ).items;
+  const { isLoggedIn } = useAuth();
+  let lastItems: any = getMenuItemsByLoginStatus(isLoggedIn).items;
   if (displayGamerProfile && lastItems.length > 1) {
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
-      lastItems[1].children[0].children = [
-        ...item,
-        {
-          id: 'gamer-profile',
-          title: 'Gamer Profile',
-          type: 'item',
-          url: '/dashboard/gamer-profile',
-        },
-      ];
+      lastItems[1].children[0].children.splice(1, 0, {
+        id: 'gamer-profile',
+        title: 'Gamer Profile',
+        type: 'item',
+        url: '/dashboard/gamer-profile',
+      });
     }
   }
 

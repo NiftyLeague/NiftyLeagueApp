@@ -1,7 +1,9 @@
 import { DataType, ReturnDataType, Order } from 'types/leaderboard';
-import { LEADERBOARD_SCORE_API_URL } from 'constants/leaderboard';
-import { LEADERBOARD_USERNAMES_API_URL } from 'constants/leaderboardUsernames';
-import { GET_RANK_BY_USER_ID_API } from 'constants/url';
+import {
+  GET_RANK_BY_USER_ID_API,
+  LEADERBOARD_SCORE_API_URL,
+  LEADERBOARD_USERNAMES_API_URL,
+} from 'constants/url';
 
 export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
@@ -29,18 +31,27 @@ export const fetchScores = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
   const addAvg = json.data.map((data: DataType) => {
-    const { earnings, matches, wins } = data?.stats || {};
-    let earningsParsed = earnings
-      ? Math.round(parseFloat(earnings) * 10) / 10
-      : 0;
+    const { earnings, matches } = data?.stats || {};
     let avg =
       earnings && matches
         ? Math.round((parseFloat(earnings) * 100) / parseFloat(matches)) / 100
         : 0;
-    let rate =
-      wins && matches
-        ? Math.round((parseFloat(wins) * 10000) / parseFloat(matches)) / 100
-        : 0;
+    let rate = 0;
+    let earningsParsed = Math.round(parseFloat(earnings ?? '0') * 10) / 10;
+    let kills = Number(data.stats?.kills ?? '0');
+    switch (scoreType) {
+      case 'win_rate':
+        rate = parseFloat(data.score) * 100;
+        break;
+      case 'earnings':
+        earningsParsed = Number(data.score);
+        break;
+      case 'kills':
+        kills = Number(data.score);
+        break;
+      default:
+        break;
+    }
     return {
       ...data,
       stats: {
@@ -49,6 +60,7 @@ export const fetchScores = async (
         'avg_NFTL/match': avg,
         win_rate: `${rate}%`,
         earnings: earningsParsed,
+        kills,
       },
     };
   });
@@ -112,13 +124,19 @@ export const stableSort = <T>(
   return stabilizedThis.map((el) => el[0]);
 };
 
-export const fetchRankByUserId = async (userId: string): Promise<any> => {
+export const fetchRankByUserId = async (
+  userId: string,
+  game: string,
+  scoreType: string,
+  timeFilter: string,
+): Promise<any> => {
   try {
     const res = await fetch(
       `${GET_RANK_BY_USER_ID_API}?${new URLSearchParams({
         user_id: userId,
-        game: 'wen_game',
-        time_window: 'all_time',
+        game,
+        time_window: timeFilter,
+        score_type: scoreType,
       })}`,
     );
     return res;

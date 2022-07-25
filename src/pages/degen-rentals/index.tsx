@@ -31,7 +31,7 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from '../../constants';
+import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { NetworkContext } from 'NetworkProvider';
 import { Owner } from 'types/graph';
@@ -83,7 +83,12 @@ const DegenRentalsPage = (): JSX.Element => {
 
     const originalDegens: Degen[] = Object.values(data);
     setDefaultValues(getDefaultFilterValueFromData(originalDegens));
-    setDegens(originalDegens);
+    // Filter out rent disabled degens in Feed
+    setDegens(
+      originalDegens.filter(
+        (degen) => degen?.is_active || degen?.owner === address.toLowerCase(),
+      ),
+    );
     const params = Object.fromEntries(searchParams.entries());
     let newDegens = originalDegens;
     if (!isEmpty(params)) {
@@ -98,7 +103,7 @@ const DegenRentalsPage = (): JSX.Element => {
       setDegens([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmpty(data)]);
+  }, [isEmpty(data), address]);
 
   const handleFilter = useCallback(
     (filter: DegenFilter) => {

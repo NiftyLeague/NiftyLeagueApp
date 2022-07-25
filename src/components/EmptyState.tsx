@@ -6,10 +6,11 @@ interface EmptyStateProps {
   message?: string;
   buttonText?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  noBorder?: boolean;
 }
 const EmptyState: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<EmptyStateProps>>
-> = ({ message, buttonText, onClick }) => {
+> = ({ message, buttonText, onClick, noBorder = false }) => {
   const theme = useTheme();
 
   return (
@@ -19,7 +20,7 @@ const EmptyState: React.FC<
           mx: 'auto',
           width: 400,
           bgcolor: 'transparent',
-          border: `1px solid${theme.palette.primary.main}`,
+          border: noBorder ? 'none' : `1px solid${theme.palette.primary.main}`,
           boxShadow: 'none',
           p: 4,
           textAlign: 'center',

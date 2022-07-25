@@ -77,7 +77,9 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
         aria-describedby="unstyled-modal-description"
         open={open}
         onClose={handleClose}
-        // BackdropComponent={Backdrop}
+        components={{
+          Backdrop,
+        }}
       >
         <Box
           sx={{

@@ -10,23 +10,36 @@ import ThemeCustomization from 'themes';
 
 // auth provider
 import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
+import { useEffect } from 'react';
 
 // ==============================|| APP ||============================== //
 
-const App = () => (
-  <ThemeCustomization>
-    <Locales>
-      <NavigationScroll>
-        <AuthProvider>
-          <>
-            <Routes />
-            <Snackbar />
-          </>
-        </AuthProvider>
-      </NavigationScroll>
-    </Locales>
-  </ThemeCustomization>
-);
+const App = () => {
+  useEffect(() => {
+    window.addEventListener(
+      'beforeunload',
+      () => {
+        localStorage.removeItem('active_rental');
+      },
+      false,
+    );
+  });
+
+  return (
+    <ThemeCustomization>
+      <Locales>
+        <NavigationScroll>
+          <AuthProvider>
+            <>
+              <Routes />
+              <Snackbar />
+            </>
+          </AuthProvider>
+        </NavigationScroll>
+      </Locales>
+    </ThemeCustomization>
+  );
+};
 
 export default withLDProvider({
   clientSideID: process.env.REACT_APP_LAUNCHDARKLY_SDK_CLIENT!,
