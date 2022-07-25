@@ -1,15 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Box,
-  CircularProgress,
-  Theme,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import useAuth from 'hooks/useAuth';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 //@ts-ignore
 import ResponsiveTable from 'mui-responsive-table';
@@ -21,7 +15,7 @@ import { sendEvent } from 'utils/google-analytics';
 import { fetchRankByUserId, fetchScores } from 'utils/leaderboard';
 import TopModal from '../TopModal';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   loadingBox: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -54,13 +48,12 @@ export default function EnhancedTable({
 }: TableProps): JSX.Element | null {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage] = useState(10);
   const [rows, setData] = useState<DataType[] | null>();
   const [myRank, setMyRank] = useState<number>();
-  const { web3Modal } = useContext(NetworkContext);
-  const { breakpoints, palette } = useTheme();
+  const { isLoggedIn } = useAuth();
+  const { palette } = useTheme();
   const { profile } = usePlayerProfile();
-  const isMobile = useMediaQuery(breakpoints.down('sm'));
 
   const classes = useStyles();
 
@@ -106,12 +99,6 @@ export default function EnhancedTable({
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
   const handleCheckYourRank = async () => {
     if (selectedGame === 'nifty_smashers') {
       sendEvent(
@@ -185,7 +172,7 @@ export default function EnhancedTable({
         </Box>
       ) : (
         <Box sx={{ position: 'relative' }}>
-          {!!web3Modal.cachedProvider && (
+          {isLoggedIn && (
             <>
               <TopModal
                 selectedGame={selectedGame}

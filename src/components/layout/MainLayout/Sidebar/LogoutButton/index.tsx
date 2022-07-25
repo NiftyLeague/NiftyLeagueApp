@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import useAuth from 'hooks/useAuth';
 import { NetworkContext } from 'NetworkProvider';
 import { useContext } from 'react';
 
@@ -9,8 +10,9 @@ export interface LogoutButtonProps {
 const LogoutButton: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<LogoutButtonProps>>
 > = ({ sx }) => {
-  const { logoutOfWeb3Modal, web3Modal } = useContext(NetworkContext);
-  if (web3Modal && web3Modal.cachedProvider) {
+  const { logoutOfWeb3Modal } = useContext(NetworkContext);
+  const { isLoggedIn } = useAuth();
+  if (isLoggedIn) {
     return (
       <Button sx={sx} variant="outlined" onClick={logoutOfWeb3Modal}>
         Log Out
