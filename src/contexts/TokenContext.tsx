@@ -61,7 +61,7 @@ export const TokenProvider = ({
   const signMsg = async () => {
     try {
       const initialized = await checkAddress();
-      if (!initialized && userProvider && nonce && token) {
+      if (!initialized && address && userProvider && nonce && token) {
         const { signer } = getProviderAndSigner(userProvider);
         if (signer) {
           const addressToLower = address.toLowerCase();
