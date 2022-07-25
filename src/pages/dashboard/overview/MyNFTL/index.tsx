@@ -281,66 +281,6 @@ const MyNFTL = (): JSX.Element => {
           />
         </>
       )}
-      {/* <Grid item xs={12}>
-        <Grid container spacing={sectionSpacing}>
-          <Grid item sm={6} xs={12}>
-            <HoverDataCard
-              title="NFTL in Wallet"
-              primary={formatNumberToDisplay(userNFTLBalance)}
-              isLoading={loading}
-              customStyle={{
-                backgroundColor: theme.palette.background.default,
-                border: '1px solid',
-                borderColor: theme.palette.grey[800],
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
-          </Grid>
-          <Grid item sm={6} xs={12}>
-            <Grid container spacing={sectionSpacing}>
-              <Grid item xs={12}>
-                <HoverDataCard
-                  title="All-Time Rental Earnings"
-                  primary={
-                    !profileError
-                      ? formatNumberToDisplay(
-                          profile?.stats?.total?.rental_earnings || 0,
-                        )
-                      : 0
-                  }
-                  isLoading={loading}
-                  customStyle={{
-                    backgroundColor: theme.palette.background.default,
-                    border: '1px solid',
-                    borderColor: theme.palette.grey[800],
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <HoverDataCard
-                  title="All-Time Game Earnings"
-                  primary={
-                    !profileError
-                      ? formatNumberToDisplay(
-                          profile?.stats?.total?.earnings || 0,
-                        )
-                      : 0
-                  }
-                  isLoading={loading}
-                  customStyle={{
-                    backgroundColor: theme.palette.background.default,
-                    border: '1px solid',
-                    borderColor: theme.palette.grey[800],
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid> */}
       <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
           <Grid item xl={6} lg={12} md={12} sm={12} xs={12}>
