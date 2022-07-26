@@ -1,19 +1,25 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { Box, Button, Stack, Theme, Typography } from '@mui/material';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Box, Button, Link, Stack, Theme, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import SouthIcon from '@mui/icons-material/South';
 import makeStyles from '@mui/styles/makeStyles';
 import CircleIcon from '@mui/icons-material/Circle';
 import { CowSdk, OrderKind } from '@cowprotocol/cow-sdk';
 import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
+import wethAbi from 'constants/abis/weth.json';
 import useAccount from 'hooks/useAccount';
 import { Contract, ethers } from 'ethers';
 import { NetworkContext } from 'NetworkProvider';
 import { CONVERT_TOKEN_TO_USD_URL } from 'constants/url';
 import { formatNumberToDisplay2 } from 'utils/numbers';
+import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
+import {
+  COWSWAP_VAULT_RELAYER_ADDRESS,
+  WETH_ADDRESS,
+} from 'constants/contracts';
 import TokenInfoBox from './TokenInfoBox';
 import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
 import NFTL from 'assets/images/logo.png';
-import { parseBalance } from 'helpers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   purchaseNFTLBtn: {
@@ -49,6 +55,8 @@ const CowSwapWidget = () => {
   const [nftlAmount, setNftlAmount] = useState<string>('');
   const [ethBalance, setEthBalance] = useState<number>(0);
   const [rateEthToNftl, setRateEthToNftl] = useState<number>(0);
+  const [purchasing, setPurchasing] = useState<boolean>(false);
+  const [orderId, setOrderId] = useState<string>('');
 
   const accountBalance = account?.balance ?? 0;
 
@@ -63,11 +71,25 @@ const CowSwapWidget = () => {
       .catch((err) => {});
   };
 
+  const fetchEthBalance = useCallback(() => {
+    if (address && userProvider) {
+      userProvider
+        .getBalance(address)
+        .then((rawBalance) => {
+          setEthBalance(Number(ethers.utils.formatEther(rawBalance)));
+        })
+        .catch((err) => {});
+    }
+  }, [address, userProvider]);
+
   useEffect(() => {
-    // Get NFTL to ETH Conversion Rate
+    // Get NFTL to ETH Conversion Rate and ETH Balance
     fetchNFTLTokenInfo();
+    fetchEthBalance();
     const timer = setInterval(() => {
       fetchNFTLTokenInfo();
+      fetchEthBalance();
+      setRefreshAccKey(Math.random());
     }, 10000);
     return () => clearInterval(timer);
   }, []);
@@ -96,39 +118,64 @@ const CowSwapWidget = () => {
     );
   }, [inputNftlAmount]);
 
-  useEffect(() => {
-    if (userProvider) {
-      userProvider
-        // .getBalance(address)
-        .getBalance('0x5cf56639814C002cb86c25507c3e450F49baf0A9')
-        .then((rawBalance) => {
-          setEthBalance(Number(ethers.utils.formatEther(rawBalance)));
-        })
-        .catch((err) => {});
-    }
-  }, [address, userProvider]);
+  const sufficientBalance = useMemo(
+    () => Number(ethAmount) <= ethBalance,
+    [ethAmount, ethBalance],
+  );
 
   const handleBuyNFTL = useCallback(async () => {
     try {
-      const cowSdk = new CowSdk(targetNetwork.chainId);
+      if (!userProvider) return;
+      setPurchasing(true);
+      const signer = userProvider.getSigner(address);
+
+      // Wrap ETH
+      const wEth = new Contract(WETH_ADDRESS[targetNetwork.chainId], wethAbi);
+      await wEth.connect(signer).deposit({
+        value: ethers.utils.parseEther(ethAmount),
+      });
+
+      // Approve WETH to Vault Relayer
+      const erc20 = new Contract(
+        WETH_ADDRESS[targetNetwork.chainId],
+        ERC20.abi,
+      );
+      const tx = await erc20
+        .connect(signer)
+        .approve(
+          COWSWAP_VAULT_RELAYER_ADDRESS,
+          ethers.utils.parseEther(ethAmount),
+        );
+      await tx.wait();
+
+      const cowSdk = new CowSdk(targetNetwork.chainId, {
+        signer,
+      });
       const quoteResponse = await cowSdk.cowApi.getQuote({
         kind: OrderKind.SELL,
-        sellToken: 'ETH', // WETH
-        buyToken: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b', // USDC
-        amount: parseBalance(ethAmount).toString(),
-        userAddress: '0x5cf56639814C002cb86c25507c3e450F49baf0A9',
-        validTo: Math.floor(new Date().getTime() / 1000) + 3600,
+        sellToken: WETH_ADDRESS[targetNetwork.chainId],
+        buyToken: NFTLTokenAddress,
+        amount: ethers.utils.parseEther(ethAmount).toString(),
+        userAddress: address,
+        validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr
       });
-      if (!quoteResponse) {
-        return;
-      }
-      const { sellToken, buyToken, validTo, buyAmount, sellAmount, feeAmount } =
-        quoteResponse.quote;
+      if (!quoteResponse) return;
+      const {
+        sellToken,
+        buyToken,
+        validTo,
+        buyAmount,
+        sellAmount,
+        receiver,
+        feeAmount,
+      } = quoteResponse.quote;
+
+      if (!receiver) return;
 
       // Prepare the RAW order
       const order = {
         kind: OrderKind.SELL,
-        receiver: '0x5cf56639814C002cb86c25507c3e450F49baf0A9',
+        receiver,
         sellToken,
         buyToken,
         partiallyFillable: false,
@@ -140,32 +187,58 @@ const CowSwapWidget = () => {
           '0x0000000000000000000000000000000000000000000000000000000000000000',
       };
 
-      const erc20 = new Contract(address, ERC20.abi, userProvider);
-      const tx = await erc20
-        .connect('0xc778417e063141139fce010982780140aa0cd5ab')
-        .approve(
-          '0x5cf56639814C002cb86c25507c3e450F49baf0A9',
-          ethers.constants.MaxUint256,
-        );
-      await tx.wait();
       // Sign the order
       const signedOrder = await cowSdk.signOrder(order);
-      console.log(signedOrder);
       const signature = signedOrder?.signature;
       if (!signature) return;
-      const orderId = await cowSdk.cowApi.sendOrder({
+
+      // Post the order
+      const orderID = await cowSdk.cowApi.sendOrder({
         order: {
           ...order,
           ...signedOrder,
           signature,
         },
-        owner: '0x5cf56639814C002cb86c25507c3e450F49baf0A9',
+        owner: address,
       });
-      console.log(orderId);
+      setOrderId(orderID);
     } catch (err) {
       console.log(err);
+    } finally {
+      setPurchasing(false);
     }
-  }, [targetNetwork.chainId, ethAmount, userProvider]);
+  }, [address, targetNetwork.chainId, ethAmount, userProvider]);
+
+  const handleBuyMoreNFTL = () => {
+    setOrderId('');
+    setInputEthAmount('');
+    setInputNftlAmount('');
+    setEthAmount('');
+    setNftlAmount('');
+  };
+
+  const handleAddToken = () => {
+    const params = {
+      type: 'ERC20',
+      options: {
+        address: NFTLTokenAddress,
+        symbol: 'NFTL',
+        decimals: 18,
+        image:
+          'https://raw.githubusercontent.com/NiftyLeague/Nifty-League-Images/main/NFTL.png',
+      },
+    };
+    if (userProvider?.provider?.request)
+      userProvider.provider
+        // @ts-expect-error ts-migrate(2740) FIXME: Type '{ type: string; options: { address: string; ... Remove this comment to see the full error message
+        .request({ method: 'wallet_watchAsset', params })
+        .then((success) => {
+          // eslint-disable-next-line no-console
+          if (success) console.log('Successfully added NFTL to MetaMask');
+          else throw new Error('Something went wrong.');
+        })
+        .catch(console.error);
+  };
 
   return (
     <Stack direction="column">
@@ -197,41 +270,81 @@ const CowSwapWidget = () => {
         py={1.25}
         sx={{ background: '#202230' }}
       >
-        <Stack direction="column" spacing={0.75} position="relative">
-          <TokenInfoBox
-            balance={ethBalance}
-            icon={<EthIcon width={12} height={12} />}
-            name="ETH"
-            slug="ethereum"
-            value={ethAmount}
-            setValue={setInputEthAmount}
-          />
-          <Box
-            display="flex"
+        {!orderId ? (
+          <Stack direction="column" spacing={0.75} position="relative">
+            <TokenInfoBox
+              balance={ethBalance}
+              icon={<EthIcon width={12} height={12} />}
+              name="ETH"
+              slug="ethereum"
+              value={ethAmount}
+              setValue={setInputEthAmount}
+            />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              className={classes.arrowDown}
+            >
+              <SouthIcon fontSize="small" sx={{ color: '#FFFFFF' }} />
+            </Box>
+            <TokenInfoBox
+              balance={accountBalance}
+              icon={<img src={NFTL} alt="NFTL Token" width={12} height={12} />}
+              name="NFTL"
+              slug="nifty-league"
+              value={nftlAmount}
+              setValue={setInputNftlAmount}
+            />
+            <LoadingButton
+              variant="contained"
+              fullWidth
+              loading={purchasing}
+              className={classes.purchaseNFTLBtn}
+              onClick={handleBuyNFTL}
+              disabled={!ethAmount || !Number(ethAmount) || !sufficientBalance}
+            >
+              {!sufficientBalance ? 'Insufficient Balance' : 'Buy NFTL'}
+            </LoadingButton>
+          </Stack>
+        ) : (
+          <Stack
+            direction="column"
             alignItems="center"
             justifyContent="center"
-            className={classes.arrowDown}
+            position="relative"
+            height={228}
+            gap={1}
           >
-            <SouthIcon fontSize="small" sx={{ color: '#FFFFFF' }} />
-          </Box>
-          <TokenInfoBox
-            balance={accountBalance}
-            icon={<img src={NFTL} alt="NFTL Token" width={12} height={12} />}
-            name="NFTL"
-            slug="nifty-league"
-            value={nftlAmount}
-            setValue={setInputNftlAmount}
-          />
-          <Button
-            variant="contained"
-            fullWidth
-            className={classes.purchaseNFTLBtn}
-            onClick={handleBuyNFTL}
-            disabled={!ethAmount || !Number(ethAmount)}
-          >
-            Buy NFTL
-          </Button>
-        </Stack>
+            <Typography variant="h4">Transaction Submitted</Typography>{' '}
+            <Link
+              href={`https://explorer.cow.fi/mainnet/orders/${orderId}`}
+              target="_blank"
+              rel="noreferrer"
+              color={'#FFFFFF'}
+            >
+              View on explorer
+            </Link>
+            <Stack direction="row" alignItems="center" gap={1} mt={2}>
+              <Button
+                variant="outlined"
+                onClick={handleAddToken}
+                fullWidth
+                sx={{ height: '44px !important', lineHeight: '18px' }}
+              >
+                Add NFTL to Metamask
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleBuyMoreNFTL}
+                fullWidth
+                sx={{ height: '44px !important', lineHeight: '18px' }}
+              >
+                Buy More NFTL
+              </Button>
+            </Stack>
+          </Stack>
+        )}
       </Box>
     </Stack>
   );

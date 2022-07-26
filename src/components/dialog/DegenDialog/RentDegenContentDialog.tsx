@@ -119,8 +119,7 @@ const RentDegenContentDialog = ({
 }: RentDegenContentDialogProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { loadWeb3Modal, address, userProvider, web3Modal } =
-    useContext(NetworkContext);
+  const { address } = useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
   const [agreement, setAgreement] = useState<boolean>(

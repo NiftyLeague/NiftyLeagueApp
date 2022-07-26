@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // material-ui
@@ -7,7 +7,6 @@ import { Typography } from '@mui/material';
 // project imports
 import NavGroup from './NavGroup';
 import { PublicItems, PrivateItems } from 'constants/menu-items';
-import { NetworkContext } from 'NetworkProvider';
 import useAuth from 'hooks/useAuth';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
