@@ -42,6 +42,7 @@ const TokenAmountInput = styled(InputBase)(({ theme }) => ({
     padding: 0,
     height: 36,
     fontSize: 36,
+    fontWeight: 700,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     '::placeholder': {
@@ -104,10 +105,6 @@ const TokenInfoBox = ({
       }
     }
   };
-
-  const fillAmountAsBalance = useCallback(() => {
-    setValue(balance.toString());
-  }, [balance]);
 
   const price = useMemo(() => {
     if (!tokenPrice) return '';
@@ -179,12 +176,7 @@ const TokenInfoBox = ({
             </Typography>
           )}
         </Stack>
-        <Typography
-          variant="body1"
-          fontWeight="bold"
-          sx={{ color: '#4D4D4F', cursor: 'pointer' }}
-          onClick={fillAmountAsBalance}
-        >
+        <Typography variant="body1" fontWeight="bold" sx={{ color: '#4D4D4F' }}>
           {`Balance: ${balance ? formatNumberToDisplay(balance) : '0.00'}`}
         </Typography>
       </Stack>
