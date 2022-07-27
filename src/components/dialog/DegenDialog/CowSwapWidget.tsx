@@ -1,22 +1,17 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Box, Button, Link, Stack, Theme, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SouthIcon from '@mui/icons-material/South';
 import makeStyles from '@mui/styles/makeStyles';
 import CircleIcon from '@mui/icons-material/Circle';
-import { CowSdk, OrderKind } from '@cowprotocol/cow-sdk';
-import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
-import wethAbi from 'constants/abis/weth.json';
 import useAccount from 'hooks/useAccount';
-import { Contract, ethers } from 'ethers';
+import useEtherBalance from 'hooks/useEtherBalance';
+import useRateEtherToNFTL from 'hooks/useRateEtherToNFTL';
 import { NetworkContext } from 'NetworkProvider';
-import { CONVERT_TOKEN_TO_USD_URL } from 'constants/url';
 import { formatNumberToDisplay2 } from 'utils/numbers';
-import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
-import {
-  COWSWAP_VAULT_RELAYER_ADDRESS,
-  WETH_ADDRESS,
-} from 'constants/contracts';
+import useImportNFTLToWallet from 'hooks/useImportNFTLToWallet';
+import { COW_PROTOCOL_URL } from 'constants/url';
+import { createOrderSwapEtherToNFTL } from 'utils/cowswap';
 import TokenInfoBox from './TokenInfoBox';
 import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
 import NFTL from 'assets/images/logo.png';
@@ -48,47 +43,25 @@ const CowSwapWidget = () => {
   const { address, targetNetwork, userProvider } = useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
+  const { balance: etherBalance, refetch: refetchEthBalance } =
+    useEtherBalance();
+  const { rate: rateEtherToNftl, refetch: refetchRateEtherToNftl } =
+    useRateEtherToNFTL();
+  const { handleImportNFTLToWallet } = useImportNFTLToWallet();
 
   const [inputEthAmount, setInputEthAmount] = useState<string>('');
   const [inputNftlAmount, setInputNftlAmount] = useState<string>('');
   const [ethAmount, setEthAmount] = useState<string>('');
   const [nftlAmount, setNftlAmount] = useState<string>('');
-  const [ethBalance, setEthBalance] = useState<number>(0);
-  const [rateEthToNftl, setRateEthToNftl] = useState<number>(0);
   const [purchasing, setPurchasing] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<string>('');
 
   const accountBalance = account?.balance ?? 0;
 
-  const fetchNFTLTokenInfo = () => {
-    fetch(CONVERT_TOKEN_TO_USD_URL + 'nifty-league', {
-      method: 'GET',
-    })
-      .then(async (response) => {
-        const json = await response.json();
-        setRateEthToNftl(json.crypto.eth);
-      })
-      .catch((err) => {});
-  };
-
-  const fetchEthBalance = useCallback(() => {
-    if (address && userProvider) {
-      userProvider
-        .getBalance(address)
-        .then((rawBalance) => {
-          setEthBalance(Number(ethers.utils.formatEther(rawBalance)));
-        })
-        .catch((err) => {});
-    }
-  }, [address, userProvider]);
-
   useEffect(() => {
-    // Get NFTL to ETH Conversion Rate and ETH Balance
-    fetchNFTLTokenInfo();
-    fetchEthBalance();
     const timer = setInterval(() => {
-      fetchNFTLTokenInfo();
-      fetchEthBalance();
+      refetchRateEtherToNftl();
+      refetchEthBalance();
       setRefreshAccKey(Math.random());
     }, 10000);
     return () => clearInterval(timer);
@@ -96,110 +69,40 @@ const CowSwapWidget = () => {
 
   useEffect(() => {
     setEthAmount(inputEthAmount);
-    if (!rateEthToNftl) return;
+    if (!rateEtherToNftl) return;
     if (!inputEthAmount || Number(inputEthAmount) === 0) {
       setNftlAmount('');
       return;
     }
     setNftlAmount(
-      Math.floor(Number(inputEthAmount) / rateEthToNftl).toString(),
+      Math.floor(Number(inputEthAmount) / rateEtherToNftl).toString(),
     );
   }, [inputEthAmount]);
 
   useEffect(() => {
     setNftlAmount(inputNftlAmount);
-    if (!rateEthToNftl) return;
+    if (!rateEtherToNftl) return;
     if (!inputNftlAmount || Number(inputNftlAmount) === 0) {
       setEthAmount('');
       return;
     }
     setEthAmount(
-      formatNumberToDisplay2(Number(inputNftlAmount) * rateEthToNftl, 8),
+      formatNumberToDisplay2(Number(inputNftlAmount) * rateEtherToNftl, 8),
     );
   }, [inputNftlAmount]);
 
-  const sufficientBalance = useMemo(
-    () => Number(ethAmount) <= ethBalance,
-    [ethAmount, ethBalance],
-  );
+  const sufficientBalance: boolean = Number(ethAmount) <= etherBalance;
 
   const handleBuyNFTL = useCallback(async () => {
     try {
       if (!userProvider) return;
       setPurchasing(true);
       const signer = userProvider.getSigner(address);
-
-      // Wrap ETH
-      const wEth = new Contract(WETH_ADDRESS[targetNetwork.chainId], wethAbi);
-      await wEth.connect(signer).deposit({
-        value: ethers.utils.parseEther(ethAmount),
-      });
-
-      // Approve WETH to Vault Relayer
-      const erc20 = new Contract(
-        WETH_ADDRESS[targetNetwork.chainId],
-        ERC20.abi,
-      );
-      const tx = await erc20
-        .connect(signer)
-        .approve(
-          COWSWAP_VAULT_RELAYER_ADDRESS,
-          ethers.utils.parseEther(ethAmount),
-        );
-      await tx.wait();
-
-      const cowSdk = new CowSdk(targetNetwork.chainId, {
+      const orderID = await createOrderSwapEtherToNFTL({
         signer,
-      });
-      const quoteResponse = await cowSdk.cowApi.getQuote({
-        kind: OrderKind.SELL,
-        sellToken: WETH_ADDRESS[targetNetwork.chainId],
-        buyToken: NFTLTokenAddress,
-        amount: ethers.utils.parseEther(ethAmount).toString(),
+        chainId: targetNetwork.chainId,
+        etherVal: ethAmount,
         userAddress: address,
-        validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr
-      });
-      if (!quoteResponse) return;
-      const {
-        sellToken,
-        buyToken,
-        validTo,
-        buyAmount,
-        sellAmount,
-        receiver,
-        feeAmount,
-      } = quoteResponse.quote;
-
-      if (!receiver) return;
-
-      // Prepare the RAW order
-      const order = {
-        kind: OrderKind.SELL,
-        receiver,
-        sellToken,
-        buyToken,
-        partiallyFillable: false,
-        validTo: Number(validTo),
-        sellAmount,
-        buyAmount,
-        feeAmount,
-        appData:
-          '0x0000000000000000000000000000000000000000000000000000000000000000',
-      };
-
-      // Sign the order
-      const signedOrder = await cowSdk.signOrder(order);
-      const signature = signedOrder?.signature;
-      if (!signature) return;
-
-      // Post the order
-      const orderID = await cowSdk.cowApi.sendOrder({
-        order: {
-          ...order,
-          ...signedOrder,
-          signature,
-        },
-        owner: address,
       });
       setOrderId(orderID);
     } catch (err) {
@@ -209,7 +112,7 @@ const CowSwapWidget = () => {
     }
   }, [address, targetNetwork.chainId, ethAmount, userProvider]);
 
-  const handleBuyMoreNFTL = () => {
+  const initialize = () => {
     setOrderId('');
     setInputEthAmount('');
     setInputNftlAmount('');
@@ -217,41 +120,13 @@ const CowSwapWidget = () => {
     setNftlAmount('');
   };
 
-  const handleAddToken = () => {
-    const params = {
-      type: 'ERC20',
-      options: {
-        address: NFTLTokenAddress,
-        symbol: 'NFTL',
-        decimals: 18,
-        image:
-          'https://raw.githubusercontent.com/NiftyLeague/Nifty-League-Images/main/NFTL.png',
-      },
-    };
-    if (userProvider?.provider?.request)
-      userProvider.provider
-        // @ts-expect-error ts-migrate(2740) FIXME: Type '{ type: string; options: { address: string; ... Remove this comment to see the full error message
-        .request({ method: 'wallet_watchAsset', params })
-        .then((success) => {
-          // eslint-disable-next-line no-console
-          if (success) console.log('Successfully added NFTL to MetaMask');
-          else throw new Error('Something went wrong.');
-        })
-        .catch(console.error);
-  };
-
   return (
     <Stack direction="column">
       <Typography variant="caption" ml="auto" mb={1}>
         This transaction is taking place live on{' '}
-        <Typography
-          variant="caption"
-          ml="auto"
-          sx={{ color: '#5820D6' }}
-          alignItems="center"
-        >
-          cowswap.com
-        </Typography>
+        <Link href={COW_PROTOCOL_URL} target="_blank" rel="noreferrer">
+          cow.fi
+        </Link>
         <CircleIcon
           sx={{
             width: 3,
@@ -273,7 +148,7 @@ const CowSwapWidget = () => {
         {!orderId ? (
           <Stack direction="column" spacing={0.75} position="relative">
             <TokenInfoBox
-              balance={ethBalance}
+              balance={etherBalance}
               icon={<EthIcon width={12} height={12} />}
               name="ETH"
               slug="ethereum"
@@ -328,7 +203,7 @@ const CowSwapWidget = () => {
             <Stack direction="row" alignItems="center" gap={1} mt={2}>
               <Button
                 variant="outlined"
-                onClick={handleAddToken}
+                onClick={handleImportNFTLToWallet}
                 fullWidth
                 sx={{ height: '44px !important', lineHeight: '18px' }}
               >
@@ -336,7 +211,7 @@ const CowSwapWidget = () => {
               </Button>
               <Button
                 variant="contained"
-                onClick={handleBuyMoreNFTL}
+                onClick={initialize}
                 fullWidth
                 sx={{ height: '44px !important', lineHeight: '18px' }}
               >
