@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled, Box, useTheme } from '@mui/system';
 import ModalUnstyled from '@mui/base/ModalUnstyled';
 
