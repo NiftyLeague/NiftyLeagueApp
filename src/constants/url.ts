@@ -70,3 +70,8 @@ export const DEGEN_PURCHASE_URL = 'https://opensea.io/collection/niftydegen';
 // Comic Purchase URL
 export const COMIC_PURCHASE_URL =
   'https://opensea.io/collection/nifty-league-launch-comics';
+
+export const CONVERT_TOKEN_TO_USD_URL =
+  'https://price-api.crypto.com/price/v1/exchange/';
+
+export const COW_PROTOCOL_URL = 'https://cow.fi/';
