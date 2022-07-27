@@ -27,3 +27,11 @@ export const COMICS_MERKLE_DISTRIBUTOR_ADDRESS = {
 
 export const COMICS_MERKLE_ROOT =
   'https://raw.githubusercontent.com/NiftyLeague/merkle-distributor-comics56/main/data/result.json';
+
+export const COWSWAP_VAULT_RELAYER_ADDRESS =
+  '0xC92E8bdf79f0507f65a392b0ab4667716BFE0110';
+
+export const WETH_ADDRESS = {
+  [ChainId.MAINNET]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  [ChainId.RINKEBY]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+};

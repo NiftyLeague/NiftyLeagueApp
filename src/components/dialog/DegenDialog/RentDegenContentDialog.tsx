@@ -38,9 +38,9 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
-import { NFTL_PURCHASE_URL } from 'constants/url';
 import { formatNumberToDisplay } from 'utils/numbers';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
+import CowSwapWidget from './CowSwapWidget';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -119,7 +119,7 @@ const RentDegenContentDialog = ({
 }: RentDegenContentDialogProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { loadWeb3Modal, address, web3Modal } = useContext(NetworkContext);
+  const { address } = useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
   const [agreement, setAgreement] = useState<boolean>(
@@ -134,6 +134,7 @@ const RentDegenContentDialog = ({
   const [rentSuccess, setRentSuccess] = useState<boolean>(false);
   const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [disabledRentFor, setDisabledRentFor] = useState<boolean>(false);
+  const [purchasingNFTL, setPurchasingNFTL] = useState<boolean>(false);
   const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
     useQuery(OWNER_QUERY, {
       pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
@@ -301,6 +302,7 @@ const RentDegenContentDialog = ({
       GOOGLE_ANALYTICS.EVENTS.RENTAL_BUY_NFTL_CLICKED,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
     );
+    setPurchasingNFTL(true);
   };
 
   return (
@@ -330,7 +332,7 @@ const RentDegenContentDialog = ({
         >
           <Typography variant="h5">Rental Overview</Typography>
         </Box>
-        <Stack direction="row" spacing={1.6} mt={0.5}>
+        <Stack direction="row" spacing={3.5} mt={0.5}>
           <Stack direction="column">
             <Stack direction="row" justifyContent="center">
               {degen?.id && (
@@ -476,14 +478,17 @@ const RentDegenContentDialog = ({
                       {!sufficientBalance && (
                         <Typography variant="caption" mt={1} ml="auto">
                           Balance low.{' '}
-                          <Link
-                            href={NFTL_PURCHASE_URL}
-                            target="_blank"
-                            rel="noreferrer"
+                          <Typography
+                            variant="caption"
                             onClick={handleBuyNFTL}
+                            sx={{
+                              color: '#5820D6',
+                              textDecoration: 'underline',
+                              cursor: 'pointer',
+                            }}
                           >
                             Buy NFTL now
-                          </Link>
+                          </Typography>
                         </Typography>
                       )}
                     </Stack>
@@ -599,6 +604,7 @@ const RentDegenContentDialog = ({
           </Stack>
         </Stack>
         <Stack direction="column" mb={6}>
+          {purchasingNFTL && <CowSwapWidget />}
           <Typography variant="h5" mt={4} mb={1.5}>
             Stats
           </Typography>
