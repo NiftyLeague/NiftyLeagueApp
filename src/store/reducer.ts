@@ -9,7 +9,6 @@ import customerReducer from './slices/customer';
 import contactReducer from './slices/contact';
 import productReducer from './slices/product';
 import chatReducer from './slices/chat';
-import calendarReducer from './slices/calendar';
 import mailReducer from './slices/mail';
 import userReducer from './slices/user';
 import cartReducer from './slices/cart';
@@ -33,7 +32,6 @@ const reducer = combineReducers({
   contact: contactReducer,
   product: productReducer,
   chat: chatReducer,
-  calendar: calendarReducer,
   mail: mailReducer,
   user: userReducer,
   menu: menuReducer,
