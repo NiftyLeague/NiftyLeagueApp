@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Box, InputBase, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import { formatNumberToDisplay } from 'utils/numbers';
-import { CONVERT_TOKEN_TO_USD_URL } from 'constants/url';
+import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
 
 export interface TokenInfoBoxProps {
   balance: number;
@@ -61,27 +61,14 @@ const TokenInfoBox = ({
   setValue,
 }: TokenInfoBoxProps) => {
   const classes = useStyles();
-  const [tokenPrice, setTokenPrice] = useState<number>(0);
-
-  const fetchTokenUSDPrice = useCallback(() => {
-    fetch(CONVERT_TOKEN_TO_USD_URL + slug, {
-      method: 'GET',
-    })
-      .then(async (response) => {
-        const json = await response.json();
-        setTokenPrice(json.fiat.usd);
-      })
-      .catch((err) => {});
-  }, [slug]);
+  const { price, refetch } = useTokenUSDPrice({ slug });
 
   useEffect(() => {
-    // Get Token USD Price
-    fetchTokenUSDPrice();
     const timer = setInterval(() => {
-      fetchTokenUSDPrice();
+      refetch();
     }, 10000);
     return () => clearInterval(timer);
-  }, [fetchTokenUSDPrice]);
+  }, [refetch]);
 
   const handleChangeValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
@@ -106,14 +93,14 @@ const TokenInfoBox = ({
     }
   };
 
-  const price = useMemo(() => {
-    if (!tokenPrice) return '';
+  const priceInfo = useMemo(() => {
+    if (!price) return '';
     if (Number(value) === 0) {
-      return formatNumberToDisplay(tokenPrice, tokenPrice < 1 ? 4 : 2);
+      return formatNumberToDisplay(price, price < 1 ? 4 : 2);
     }
-    const total = Number(value) * tokenPrice;
+    const total = Number(value) * price;
     return formatNumberToDisplay(total, total < 1 ? 4 : 2);
-  }, [tokenPrice, value]);
+  }, [price, value]);
 
   return (
     <Box
@@ -165,14 +152,14 @@ const TokenInfoBox = ({
             onChange={handleChangeValue}
             onKeyDown={handleKeyDown}
           />
-          {value !== '0' && price && (
+          {value !== '0' && priceInfo && (
             <Typography
               variant="body1"
               fontWeight="bold"
               className={classes.infoUSD}
               sx={{ left: value.length > 0 ? value.length * 19 + 10 : 86 }}
             >
-              {`~$${price}`}
+              {`~$${priceInfo}`}
             </Typography>
           )}
         </Stack>

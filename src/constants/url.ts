@@ -73,3 +73,5 @@ export const COMIC_PURCHASE_URL =
 
 export const CONVERT_TOKEN_TO_USD_URL =
   'https://price-api.crypto.com/price/v1/exchange/';
+
+export const COW_PROTOCOL_URL = 'https://cow.fi/';
