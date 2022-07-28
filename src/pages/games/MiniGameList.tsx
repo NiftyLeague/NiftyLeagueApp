@@ -61,15 +61,21 @@ const MiniGameList: React.FC = () => {
           description="Burn NFTL tokens in the fires of Mount Rugman"
           image={MtRugmanThumbnail}
           actions={
-            <Button
-              variant="outlined"
+            <ConnectWrapper
               color="primary"
               fullWidth
-              sx={{ minWidth: 80, flex: 1 }}
-              onClick={goToPlayMtRugman}
+              buttonText="Connect Wallet to play"
             >
-              Burn Now
-            </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                sx={{ minWidth: 80, flex: 1 }}
+                onClick={goToPlayMtRugman}
+              >
+                Burn Now
+              </Button>
+            </ConnectWrapper>
           }
         />
       </Grid>
