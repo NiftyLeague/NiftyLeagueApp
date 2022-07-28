@@ -34,14 +34,20 @@ export const GOOGLE_ANALYTICS = {
     LOGIN: 'login',
     // GamePlay
     PLAY_ARCADE_GAMES_BUTTON_TAPPED: 'play_arcade_games_button_tapped',
+    WEN_GAME_VIEWED: 'wen_game_viewed',
+    NIFTY_SMASHERS_GAME_VIEWED: 'nifty_smashers_game_viewed',
+    MT_RUGMAN_GAME_VIEWED: 'mt_rugman_game_viewed',
     // Leaderboard
     WEN_GAME_LEADERBOARD_VIEWED: 'wen_game_leaderboard_viewed',
     NIFTY_SMASHERS_LEADERBOARD_VIEWED: 'nifty_smashers_leaderboard_viewed',
+    MT_RUGMAN_LEADERBOARD_VIEWED: 'mt_rugman_leaderboard_viewed',
     LEADERBOARD_GAME_FILTER_CHANGED: 'leaderboard_game_filter_changed',
     LEADERBOARD_TYPE_FILTER_CHANGED: 'leaderboard_type_filter_changed',
     LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN: 'check_your_rank_clicked_wen',
     LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS:
       'check_your_rank_clicked_smashers',
+    LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_RUGMAN:
+      'check_your_rank_clicked_rugman',
   },
   CATEGORIES: {
     ECOMMERCE: 'ecommerce',

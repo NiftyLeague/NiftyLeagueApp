@@ -1,24 +1,29 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
-import GameCard from 'components/cards/GameCard';
 import useArcadeBalance from 'hooks/useArcadeBalance';
-import WenThumbnail from 'assets/images/games/wen.gif';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
+import GameCard from 'components/cards/GameCard';
+import WenThumbnail from 'assets/images/games/wen.gif';
+import MtRugmanThumbnail from 'assets/images/games/mt-rugman.gif';
 
-const ArcadeGameList: React.FC = () => {
+const MiniGameList: React.FC = () => {
   const navigate = useNavigate();
   const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const [openBuyAT, setOpenBuyAT] = useState(false);
 
-  const goToPlayOnGame = useCallback(() => {
+  const goToPlayWENGame = useCallback(() => {
     if (Number(arcadeBalance) > 0) {
       navigate('/games/wen-game');
     } else {
       setOpenBuyAT(true);
     }
   }, [arcadeBalance, navigate]);
+
+  const goToPlayMtRugman = useCallback(() => {
+    navigate('/games/mt-rugman');
+  }, [navigate]);
 
   return (
     <>
@@ -39,13 +44,32 @@ const ArcadeGameList: React.FC = () => {
                 color="primary"
                 fullWidth
                 sx={{ minWidth: 80, flex: 1 }}
-                onClick={goToPlayOnGame}
+                onClick={goToPlayWENGame}
               >
                 {Number(arcadeBalance) > 0
                   ? 'Play in Browser'
                   : 'Buy Arcade Tokens'}
               </Button>
             </ConnectWrapper>
+          }
+        />
+      </Grid>
+      <Grid item sm={12} md={6} lg={4} xl={3}>
+        <GameCard
+          title="Mt. Rugman"
+          required=" "
+          description="Burn NFTL tokens in the fires of Mount Rugman"
+          image={MtRugmanThumbnail}
+          actions={
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ minWidth: 80, flex: 1 }}
+              onClick={goToPlayMtRugman}
+            >
+              Burn Now
+            </Button>
           }
         />
       </Grid>
@@ -61,5 +85,5 @@ const ArcadeGameList: React.FC = () => {
   );
 };
 
-ArcadeGameList.displayName = 'ArcadeGameList';
-export default ArcadeGameList;
+MiniGameList.displayName = 'MiniGameList';
+export default MiniGameList;
