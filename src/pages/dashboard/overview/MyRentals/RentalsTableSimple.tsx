@@ -85,7 +85,7 @@ const RentalsTableSimple = ({
                         <TableCell key={column.id} align={column.align}>
                           <Typography>
                             {formatNumberToDisplayWithCommas(
-                              rental.earningCapDaily,
+                              rental.totalEarnings,
                             )}{' '}
                             / {formatNumberToDisplayWithCommas(value)}
                           </Typography>
@@ -121,12 +121,12 @@ const RentalsTableSimple = ({
 
                     if (column.id === 'earningCapProgress') {
                       const val =
-                        (100 / rental.earningCap) * rental.earningCapDaily;
+                        (100 / rental.earningCap) * rental.totalEarnings;
                       return (
                         <TableCell key={column.id} align={column.align}>
                           <ProgressBar value={val}>
-                            {rental.earningCap !== rental.earningCapDaily ? (
-                              `${rental.earningCapDaily} / ${rental.earningCap}`
+                            {rental.earningCap !== rental.totalEarnings ? (
+                              `${rental.totalEarnings} / ${rental.earningCap}`
                             ) : (
                               <Typography fontSize={10}>
                                 LIMIT REACHED. RENEWS IN{' '}
