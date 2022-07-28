@@ -38,8 +38,9 @@ import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
-import { NFTL_PURCHASE_URL } from 'constants/url';
 import { formatNumberToDisplay } from 'utils/numbers';
+import ConnectWrapper from 'components/wrapper/ConnectWrapper';
+import CowSwapWidget from './CowSwapWidget';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -118,7 +119,7 @@ const RentDegenContentDialog = ({
 }: RentDegenContentDialogProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { loadWeb3Modal, address, web3Modal } = useContext(NetworkContext);
+  const { address } = useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
   const [agreement, setAgreement] = useState<boolean>(
@@ -133,6 +134,7 @@ const RentDegenContentDialog = ({
   const [rentSuccess, setRentSuccess] = useState<boolean>(false);
   const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [disabledRentFor, setDisabledRentFor] = useState<boolean>(false);
+  const [purchasingNFTL, setPurchasingNFTL] = useState<boolean>(false);
   const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
     useQuery(OWNER_QUERY, {
       pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
@@ -211,14 +213,6 @@ const RentDegenContentDialog = ({
   };
 
   const handleRent = useCallback(async () => {
-    if (!web3Modal.cachedProvider) {
-      toast.error(
-        'Your wallet is not connected, please connect your wallet to attempt to rent a DEGEN',
-        { theme: 'dark' },
-      );
-      return;
-    }
-
     sendEvent(
       GOOGLE_ANALYTICS.EVENTS.BEGIN_CHECKOUT,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
@@ -238,7 +232,7 @@ const RentDegenContentDialog = ({
       setLoading(false);
       toast.error(err.message, { theme: 'dark' });
     }
-  }, [web3Modal.cachedProvider, rent]);
+  }, [rent]);
 
   const isShowRentalPassOption = () =>
     rentalPassCount > 0 && !degen?.rental_count;
@@ -271,15 +265,6 @@ const RentDegenContentDialog = ({
       localStorage.removeItem('aggreement-accepted');
     }
   };
-
-  const handleConnectWallet = useCallback(() => {
-    sendEvent(
-      GOOGLE_ANALYTICS.EVENTS.RENTAL_CONNECT_WALLET_CLICKED,
-      GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
-      'method',
-    );
-    loadWeb3Modal();
-  }, [loadWeb3Modal]);
 
   const handleRefreshBalance = () => {
     sendEvent(
@@ -317,6 +302,7 @@ const RentDegenContentDialog = ({
       GOOGLE_ANALYTICS.EVENTS.RENTAL_BUY_NFTL_CLICKED,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
     );
+    setPurchasingNFTL(true);
   };
 
   return (
@@ -346,7 +332,7 @@ const RentDegenContentDialog = ({
         >
           <Typography variant="h5">Rental Overview</Typography>
         </Box>
-        <Stack direction="row" spacing={1.6} mt={0.5}>
+        <Stack direction="row" spacing={3.5} mt={0.5}>
           <Stack direction="column">
             <Stack direction="row" justifyContent="center">
               {degen?.id && (
@@ -492,14 +478,17 @@ const RentDegenContentDialog = ({
                       {!sufficientBalance && (
                         <Typography variant="caption" mt={1} ml="auto">
                           Balance low.{' '}
-                          <Link
-                            href={NFTL_PURCHASE_URL}
-                            target="_blank"
-                            rel="noreferrer"
+                          <Typography
+                            variant="caption"
                             onClick={handleBuyNFTL}
+                            sx={{
+                              color: '#5820D6',
+                              textDecoration: 'underline',
+                              cursor: 'pointer',
+                            }}
                           >
                             Buy NFTL now
-                          </Link>
+                          </Typography>
                         </Typography>
                       )}
                     </Stack>
@@ -545,8 +534,8 @@ const RentDegenContentDialog = ({
                       )}
                     </Stack>
                   )}
-                  {web3Modal.cachedProvider ? (
-                    !checkBalance ? (
+                  <ConnectWrapper fullWidth>
+                    {!checkBalance ? (
                       <Button
                         variant="contained"
                         fullWidth
@@ -607,22 +596,15 @@ const RentDegenContentDialog = ({
                       >
                         Refresh Balance
                       </Button>
-                    )
-                  ) : (
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      onClick={handleConnectWallet}
-                    >
-                      Connect Wallet
-                    </Button>
-                  )}
+                    )}
+                  </ConnectWrapper>
                 </Stack>
               </Stack>
             )}
           </Stack>
         </Stack>
         <Stack direction="column" mb={6}>
+          {purchasingNFTL && <CowSwapWidget />}
           <Typography variant="h5" mt={4} mb={1.5}>
             Stats
           </Typography>

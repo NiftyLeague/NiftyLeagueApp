@@ -13,7 +13,6 @@ import { CustomerStateProps } from './customer';
 import { ContactStateProps } from './contact';
 import { ProductStateProps } from './e-commerce';
 import { ChatStateProps } from './chat';
-import { CalendarStateProps } from './calendar';
 import { MailStateProps } from './mail';
 import { UserStateProps } from './user';
 
@@ -121,7 +120,6 @@ export interface DefaultRootStateProps {
   contact: ContactStateProps;
   product: ProductStateProps;
   chat: ChatStateProps;
-  calendar: CalendarStateProps;
   mail: MailStateProps;
   user: UserStateProps;
 }

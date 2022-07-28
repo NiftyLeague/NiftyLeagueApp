@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled, Box, useTheme } from '@mui/system';
 import ModalUnstyled from '@mui/base/ModalUnstyled';
 
@@ -77,7 +77,9 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
         aria-describedby="unstyled-modal-description"
         open={open}
         onClose={handleClose}
-        BackdropComponent={Backdrop}
+        components={{
+          Backdrop,
+        }}
       >
         <Box
           sx={{
