@@ -251,7 +251,7 @@ const MyRentalsDataGrid = ({
           width: 150,
           renderCell: (params) => (
             <Typography>
-              {formatNumberToDisplayWithCommas(params.row.earningCapDaily)} /{' '}
+              {formatNumberToDisplayWithCommas(params.row.totalEarnings)} /{' '}
               {formatNumberToDisplayWithCommas(params.value)}
             </Typography>
           ),

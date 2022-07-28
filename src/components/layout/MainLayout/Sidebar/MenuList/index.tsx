@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // material-ui
@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 // project imports
 import NavGroup from './NavGroup';
 import { PublicItems, PrivateItems } from 'constants/menu-items';
-import { NetworkContext } from 'NetworkProvider';
+import useAuth from 'hooks/useAuth';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
@@ -20,11 +20,9 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 };
 
 const MenuList = () => {
-  const { web3Modal } = useContext(NetworkContext);
   const { displayGamerProfile } = useFlags();
-  let lastItems: any = getMenuItemsByLoginStatus(
-    Boolean(web3Modal.cachedProvider),
-  ).items;
+  const { isLoggedIn } = useAuth();
+  let lastItems: any = getMenuItemsByLoginStatus(isLoggedIn).items;
   if (displayGamerProfile && lastItems.length > 1) {
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
