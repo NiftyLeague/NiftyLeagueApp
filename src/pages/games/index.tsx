@@ -3,7 +3,7 @@ import SectionSlider from 'components/sections/SectionSlider';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { cardSpacing } from 'store/constant';
 import useVersion from 'hooks/useVersion';
-import ArcadeGameList from './ArcadeGameList';
+import MiniGameList from './MiniGameList';
 import GameList from './GameList';
 
 const GamesPage = () => {
@@ -35,14 +35,14 @@ const GamesPage = () => {
         </Grid>
       </SectionSlider>
       {enableWenGame && (
-        <SectionSlider isSlider={false} title="Arcade Games">
+        <SectionSlider isSlider={false} title="Mini Games">
           <Grid
             container
             flexDirection="row"
             flexWrap="wrap"
             spacing={cardSpacing}
           >
-            <ArcadeGameList />
+            <MiniGameList />
           </Grid>
         </SectionSlider>
       )}
