@@ -1,23 +1,20 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { Box, Button, Stack } from '@mui/material';
 import { NetworkContext } from 'NetworkProvider';
 import useArcadeBalance from 'hooks/useArcadeBalance';
-import withVerification from 'components/Authentication';
+import useFetch from 'hooks/useFetch';
 import { NETWORK_NAME } from 'constants/networks';
-import Preloader from 'components/Preloader';
-import { DEBUG } from 'constants/index';
-import ArcadeTokensRequired from './ArcadeTokensRequired';
+import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import { ALL_RENTAL_API_URL } from 'constants/url';
+import { DEBUG } from 'constants/index';
+import { sendEvent } from 'utils/google-analytics';
+import withVerification from 'components/Authentication';
+import Preloader from 'components/Preloader';
 import { Rentals } from 'types/rentals';
 import EarningCap from 'pages/dashboard/overview/EarningCap';
-import useFetch from 'hooks/useFetch';
+import ArcadeTokensRequired from './ArcadeTokensRequired';
 
 interface GameProps {
   auth: string;
@@ -30,6 +27,7 @@ const Game = ({
   unityContext,
   arcadeTokenRequired = false,
 }: GameProps) => {
+  const location = useLocation();
   const { address, targetNetwork } = useContext(NetworkContext);
   const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
@@ -55,6 +53,20 @@ const Game = ({
       authCallback.current(authMsg);
     }
   }, [address, authMsg]);
+
+  useEffect(() => {
+    let eventName = '';
+    if (location?.pathname?.includes('smashers')) {
+      eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_GAME_VIEWED;
+    } else if (location?.pathname?.includes('wen-game')) {
+      eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_VIEWED;
+    } else if (location?.pathname?.includes('mt-rugman')) {
+      eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_GAME_VIEWED;
+    } else {
+      return;
+    }
+    sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.GAMEPLAY);
+  }, [location?.pathname]);
 
   const startAuthentication = useCallback(
     (e: CustomEvent<{ callback: (auth: string) => void }>) => {
