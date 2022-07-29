@@ -35,9 +35,18 @@ export const WenGameTables = [
   },
 ];
 
+export const MtRugmanTables = [
+  {
+    key: 'burnings',
+    display: 'NFTL BURNED',
+    rows: [{ key: 'score', display: 'NFTL BURNED' }],
+  },
+];
+
 export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
+  MtRugman = 'MT. RUGMAN',
 }
 
 export enum TimeFilter {
@@ -50,8 +59,10 @@ export const LEADERBOARD_GAME_LIST = [
   {
     key: 'nifty_smashers',
     display: Game.NiftySmashers,
+    tables: NiftySmashersTables,
   },
-  { key: 'wen_game', display: Game.WenGame },
+  { key: 'wen_game', display: Game.WenGame, tables: WenGameTables },
+  { key: 'nftl_burner', display: Game.MtRugman, tables: MtRugmanTables },
 ];
 
 export const LEADERBOARD_TIME_FILTERS = [
