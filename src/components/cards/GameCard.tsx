@@ -49,6 +49,7 @@ const CardGameContent = ({
           <Typography
             variant="body2"
             gutterBottom
+            minHeight="1.5em"
             sx={{
               color: theme.palette.warning.main,
             }}
