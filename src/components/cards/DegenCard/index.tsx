@@ -281,7 +281,7 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} />
           </Stack>
         )}
-        {isDashboardDegen && degenEquipEnabled && (
+        {isDashboardDegen && (
           <Dialog
             open={isEnableDisableDegenModalOpen}
             onClose={() => setIsEnableDisableDegenModalOpen(false)}
