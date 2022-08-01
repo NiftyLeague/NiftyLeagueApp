@@ -7,6 +7,7 @@ import useArcadeBalance from 'hooks/useArcadeBalance';
 import useFetch from 'hooks/useFetch';
 import { NETWORK_NAME } from 'constants/networks';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import { getGameViewedAnalyticsEventName } from 'constants/games';
 import { ALL_RENTAL_API_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { sendEvent } from 'utils/google-analytics';
@@ -55,17 +56,10 @@ const Game = ({
   }, [address, authMsg]);
 
   useEffect(() => {
-    let eventName = '';
-    if (location?.pathname?.includes('smashers')) {
-      eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_GAME_VIEWED;
-    } else if (location?.pathname?.includes('wen-game')) {
-      eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_VIEWED;
-    } else if (location?.pathname?.includes('mt-rugman')) {
-      eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_GAME_VIEWED;
-    } else {
-      return;
+    let eventName = getGameViewedAnalyticsEventName(location?.pathname);
+    if (eventName) {
+      sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.GAMEPLAY);
     }
-    sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.GAMEPLAY);
   }, [location?.pathname]);
 
   const startAuthentication = useCallback(
