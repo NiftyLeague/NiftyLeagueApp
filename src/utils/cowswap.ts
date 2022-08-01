@@ -8,6 +8,20 @@ import {
 } from 'constants/contracts';
 import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 
+export const getCowMarketPrice = async ({ chainId, amount, userAddress }) => {
+  const cowSdk = new CowSdk(chainId);
+  const quoteResponse = await cowSdk.cowApi.getQuote({
+    kind: OrderKind.SELL,
+    sellToken: WETH_ADDRESS[chainId],
+    buyToken: NFTLTokenAddress,
+    amount: ethers.utils.parseEther(amount).toString(),
+    userAddress,
+    validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr
+  });
+  if (!quoteResponse) throw Error('Cannot get marketplace');
+  return quoteResponse;
+};
+
 export const createOrderSwapEtherToNFTL = async ({
   signer,
   chainId,

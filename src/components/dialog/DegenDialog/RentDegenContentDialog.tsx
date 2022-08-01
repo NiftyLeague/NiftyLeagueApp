@@ -558,7 +558,7 @@ const RentDegenContentDialog = ({
                           <FormControlLabel
                             label={
                               <Typography variant="caption">
-                                I have read the
+                                I have read the{' '}
                                 <Link
                                   sx={{
                                     mx: '4px',
@@ -568,7 +568,7 @@ const RentDegenContentDialog = ({
                                   onClick={openTOSDialog}
                                 >
                                   terms &amp; conditions
-                                </Link>
+                                </Link>{' '}
                                 regarding rentals
                               </Typography>
                             }
