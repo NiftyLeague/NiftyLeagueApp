@@ -3,6 +3,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import { getLeaderboardRankAnalyticsEventName } from 'constants/leaderboard';
 import useAuth from 'hooks/useAuth';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 //@ts-ignore
@@ -100,21 +101,16 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    if (selectedGame === 'nifty_smashers') {
+    let eventName = getLeaderboardRankAnalyticsEventName(selectedGame);
+    if (eventName) {
       sendEvent(
-        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS,
+        eventName,
         GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
         selectedTable.display,
       );
-    } else {
-      sendEvent(
-        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN,
-        GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD,
-      );
     }
-    const errorMes = `You have not played the ${
-      selectedGame === 'nifty_smashers' ? 'Nifty Smashers' : 'WEN Game'
-    } yet! Play the game to see your rank on the leaderboard.`;
+    const errorMes =
+      'You have not played the game yet! Play the game to see your rank on the leaderboard.';
 
     if (!profile?.id) {
       toast.error(errorMes, { theme: 'dark' });
@@ -187,39 +183,42 @@ export default function EnhancedTable({
               />
             </>
           )}
-          <Typography
-            variant="h4"
-            color={palette.primary.main}
-            sx={{
-              position: {
-                lg: 'absolute',
-              },
-              textDecoration: 'underline',
-              right: {
-                lg: '0px',
-              },
-              cursor: 'pointer',
-              display: 'flex',
-              lineHeight: '24px',
-              justifyContent: 'flex-end',
-              fontWeight: 700,
-              svg: {
-                mr: '3px',
-              },
-              transform: {
-                lg: 'translate(0px, 50%)',
-              },
-              mb: {
-                xs: '1rem',
-                lg: '0px',
-              },
-              zIndex: 1000,
-            }}
-            onClick={handleCheckYourRank}
-          >
-            <RankIcon />
-            RANK
-          </Typography>
+          {/* Template is not ready for NFTL Burner yet */}
+          {isLoggedIn && selectedGame !== 'nftl_burner' && (
+            <Typography
+              variant="h4"
+              color={palette.primary.main}
+              sx={{
+                position: {
+                  lg: 'absolute',
+                },
+                textDecoration: 'underline',
+                right: {
+                  lg: '0px',
+                },
+                cursor: 'pointer',
+                display: 'flex',
+                lineHeight: '24px',
+                justifyContent: 'flex-end',
+                fontWeight: 700,
+                svg: {
+                  mr: '3px',
+                },
+                transform: {
+                  lg: 'translate(0px, 50%)',
+                },
+                mb: {
+                  xs: '1rem',
+                  lg: '0px',
+                },
+                zIndex: 1000,
+              }}
+              onClick={handleCheckYourRank}
+            >
+              <RankIcon />
+              RANK
+            </Typography>
+          )}
           <ResponsiveTable
             className={classes.table}
             page={page}
