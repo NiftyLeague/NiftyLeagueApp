@@ -1,3 +1,5 @@
+import { GOOGLE_ANALYTICS } from './google-analytics';
+
 export const NiftySmashersTables = [
   {
     key: 'win_rate',
@@ -79,3 +81,44 @@ export const LEADERBOARD_TIME_FILTERS = [
     display: TimeFilter.AllTime,
   },
 ];
+
+export const getGameLeaderboardViewedAnalyticsEventName = (
+  selectedGame: string,
+) => {
+  let eventName = '';
+  switch (selectedGame) {
+    case 'nifty_smashers':
+      eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_LEADERBOARD_VIEWED;
+      break;
+    case 'wen_game':
+      eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_LEADERBOARD_VIEWED;
+      break;
+    case 'nftl_burner':
+      eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_LEADERBOARD_VIEWED;
+      break;
+    default:
+      break;
+  }
+  return eventName;
+};
+
+export const getLeaderboardRankAnalyticsEventName = (selectedGame: string) => {
+  let eventName = '';
+  switch (selectedGame) {
+    case 'nifty_smashers':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS;
+      break;
+    case 'wen_game':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN;
+      break;
+    case 'nftl_burner':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_RUGMAN;
+      break;
+    default:
+      break;
+  }
+  return eventName;
+};

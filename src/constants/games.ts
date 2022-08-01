@@ -1,4 +1,5 @@
 import { Game } from 'types/games';
+import { GOOGLE_ANALYTICS } from './google-analytics';
 
 const games: Game[] = [
   {
@@ -79,5 +80,17 @@ const games: Game[] = [
     isComingSoon: true,
   },
 ];
+
+export const getGameViewedAnalyticsEventName = (pathname: string) => {
+  let eventName = '';
+  if (location?.pathname?.includes('smashers')) {
+    eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_GAME_VIEWED;
+  } else if (location?.pathname?.includes('wen-game')) {
+    eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_VIEWED;
+  } else if (location?.pathname?.includes('mt-rugman')) {
+    eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_GAME_VIEWED;
+  }
+  return eventName;
+};
 
 export default games;

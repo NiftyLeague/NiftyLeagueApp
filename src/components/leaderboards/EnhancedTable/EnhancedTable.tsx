@@ -3,6 +3,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import { getLeaderboardRankAnalyticsEventName } from 'constants/leaderboard';
 import useAuth from 'hooks/useAuth';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 //@ts-ignore
@@ -100,23 +101,7 @@ export default function EnhancedTable({
   };
 
   const handleCheckYourRank = async () => {
-    let eventName = '';
-    switch (selectedGame) {
-      case 'nifty_smashers':
-        eventName =
-          GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS;
-        break;
-      case 'wen_game':
-        eventName =
-          GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN;
-        break;
-      case 'nftl_burner':
-        eventName =
-          GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_RUGMAN;
-        break;
-      default:
-        break;
-    }
+    let eventName = getLeaderboardRankAnalyticsEventName(selectedGame);
     if (eventName) {
       sendEvent(
         eventName,

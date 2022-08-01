@@ -17,6 +17,7 @@ import { sendEvent } from 'utils/google-analytics';
 import { TableType } from 'types/leaderboard';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import {
+  getGameLeaderboardViewedAnalyticsEventName,
   LEADERBOARD_GAME_LIST,
   LEADERBOARD_TIME_FILTERS,
   NiftySmashersTables,
@@ -45,20 +46,7 @@ export default function LeaderBoards(): JSX.Element {
   const [selectedTimeFilter, setTimeFilter] = useState<string>('all_time');
 
   useEffect(() => {
-    let eventName = '';
-    switch (selectedGame) {
-      case 'nifty_smashers':
-        eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_LEADERBOARD_VIEWED;
-        break;
-      case 'wen_game':
-        eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_LEADERBOARD_VIEWED;
-        break;
-      case 'nftl_burner':
-        eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_LEADERBOARD_VIEWED;
-        break;
-      default:
-        break;
-    }
+    let eventName = getGameLeaderboardViewedAnalyticsEventName(selectedGame);
     if (eventName) {
       sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD);
     }
