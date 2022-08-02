@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   Button,
@@ -19,8 +20,14 @@ const CardGameContent = ({
   actions,
   onPlayOnDesktopClick,
   onPlayOnWebClick,
+  showMore,
 }) => {
   const theme = useTheme();
+  const [moreStatus, setMoreStatus] = useState(false);
+  const handleMoreStatus = () => {
+    setMoreStatus(!moreStatus);
+  };
+
   return (
     <Stack justifyContent="space-between" flexGrow={1}>
       <CardContent
@@ -49,7 +56,6 @@ const CardGameContent = ({
           <Typography
             variant="body2"
             gutterBottom
-            minHeight="1.5em"
             sx={{
               color: theme.palette.warning.main,
             }}
@@ -57,9 +63,26 @@ const CardGameContent = ({
             {required}
           </Typography>
         )}
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          whiteSpace="pre-wrap"
+          maxHeight={moreStatus ? 'inherit' : 42}
+          sx={{ overflowY: 'hidden' }}
+        >
           {description}
         </Typography>
+        {showMore && !moreStatus && (
+          <Typography
+            variant="body2"
+            color="#620edf"
+            whiteSpace="pre-wrap"
+            onClick={handleMoreStatus}
+            sx={{ cursor: 'pointer' }}
+          >
+            more..
+          </Typography>
+        )}
       </CardContent>
       <CardActions>
         {isComingSoon ? (
@@ -120,6 +143,8 @@ export interface GameCardProps {
   onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
   actions?: React.ReactNode;
   contents?: React.ReactNode;
+  showMore?: boolean;
+  autoHeight?: boolean;
 }
 
 const GameCard: React.FC<
@@ -136,6 +161,8 @@ const GameCard: React.FC<
   onPlayOnWebClick,
   actions,
   contents,
+  showMore = false,
+  autoHeight = false,
 }) => {
   const theme = useTheme();
 
@@ -145,7 +172,7 @@ const GameCard: React.FC<
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        height: '100%',
+        height: autoHeight ? 'auto' : '100%',
         backgroundColor: theme.palette.background.default,
         border: `1px solid ${theme.palette.grey[800]}`,
         ...sx,
@@ -161,6 +188,7 @@ const GameCard: React.FC<
           actions={actions}
           onPlayOnDesktopClick={onPlayOnDesktopClick}
           onPlayOnWebClick={onPlayOnWebClick}
+          showMore={showMore}
         />
       )}
     </Card>
