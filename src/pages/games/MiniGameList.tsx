@@ -33,6 +33,7 @@ const MiniGameList: React.FC = () => {
           required="Arcade Tokens Required"
           description="Play this single-player baseball inspired arcade game and rank as high as you can!"
           image={WenThumbnail}
+          autoHeight={true}
           actions={
             <ConnectWrapper
               color="primary"
@@ -58,8 +59,10 @@ const MiniGameList: React.FC = () => {
         <GameCard
           title="Mt. Rugman"
           required=" "
-          description="Burn NFTL tokens in the fires of Mount Rugman"
+          description={`Hearing the DEGENs’ desperate pleas to spend their hard-earned NFTL and with bigger sinks still under development, Satoshi suggests the DEGENs climb to the top of Mt. Rugman to offer their NFTL sacrifices to the fiery depths of the active volcano to see who can burn the most, and to discover whether the stories of Rugman offering interesting rewards are true.\n\nStrange thing is, every time they lob in NFTL, it's almost as if the volcano's... responding.\n\nCould the fabled 7th tribe be waking up from their centuries-long slumber?\n\nIs Rugman up to something?`}
+          showMore={true}
           image={MtRugmanThumbnail}
+          autoHeight={true}
           actions={
             <ConnectWrapper
               color="primary"
