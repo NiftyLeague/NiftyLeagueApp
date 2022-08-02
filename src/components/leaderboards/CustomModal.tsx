@@ -85,7 +85,9 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
           sx={{
             ...style(theme),
             backgroundImage: `url(${
-              flag === 'score' ? WenLeaderBoardBG : BgImage
+              flag === 'score' || flag === 'burnings'
+                ? WenLeaderBoardBG
+                : BgImage
             })`,
           }}
         >
