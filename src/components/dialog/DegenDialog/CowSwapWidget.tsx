@@ -4,12 +4,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SouthIcon from '@mui/icons-material/South';
 import makeStyles from '@mui/styles/makeStyles';
 import CircleIcon from '@mui/icons-material/Circle';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
+import { OrderKind } from '@cowprotocol/cow-sdk';
 import useAccount from 'hooks/useAccount';
 import useEtherBalance from 'hooks/useEtherBalance';
 import useRateEtherToNFTL from 'hooks/useRateEtherToNFTL';
 import { NetworkContext } from 'NetworkProvider';
-import { formatNumberToDisplay2 } from 'utils/numbers';
+import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
 import useImportNFTLToWallet from 'hooks/useImportNFTLToWallet';
 import { COW_PROTOCOL_URL } from 'constants/url';
 import { createOrderSwapEtherToNFTL, getCowMarketPrice } from 'utils/cowswap';
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '50%',
     background: '#202230',
     border: '1px solid #282B3F',
-    top: 76,
     left: 'calc(50% - 16px)',
   },
 }));
@@ -54,9 +54,12 @@ const CowSwapWidget = () => {
   const [inputNftlAmount, setInputNftlAmount] = useState<string>('');
   const [ethAmount, setEthAmount] = useState<string>('');
   const [nftlAmount, setNftlAmount] = useState<string>('');
+  const [fromEthAmount, setFromEthAmount] = useState<string>('');
+  const [receiveNftlAmount, setReceiveNftlAmount] = useState<string>('');
   const [feeAmount, setFeeAmount] = useState<string>('');
   const [purchasing, setPurchasing] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<string>('');
+  const [feeExceedAmount, setFeeExceedAmount] = useState<boolean>(false);
 
   const accountBalance = account?.balance ?? 0;
 
@@ -69,17 +72,33 @@ const CowSwapWidget = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const getMarketPrice = async (amount: string) => {
+  const getMarketPrice = async (kind: OrderKind, amount: string) => {
     try {
+      setFeeExceedAmount(false);
       const quoteResponse = await getCowMarketPrice({
+        kind,
         chainId: targetNetwork.chainId,
         amount,
         userAddress: address,
       });
-      console.log(quoteResponse);
-      setFeeAmount(ethers.utils.formatEther(quoteResponse?.quote?.feeAmount));
+      const { feeAmount: fee, buyAmount, sellAmount } = quoteResponse?.quote;
+      setFeeAmount(ethers.utils.formatEther(fee));
+      if (kind === OrderKind.SELL) {
+        setFromEthAmount('');
+        setReceiveNftlAmount(ethers.utils.formatEther(buyAmount));
+      } else {
+        setReceiveNftlAmount('');
+        setFromEthAmount(
+          ethers.utils.formatEther(
+            BigNumber.from(sellAmount).add(BigNumber.from(fee)),
+          ),
+        );
+      }
     } catch (err) {
-      console.log(err);
+      if (err.error_code === 'FeeExceedsFrom') {
+        setFeeExceedAmount(true);
+        setFeeAmount(ethers.utils.formatEther(err.data.fee_amount));
+      }
     }
   };
 
@@ -93,7 +112,7 @@ const CowSwapWidget = () => {
     setNftlAmount(
       Math.floor(Number(inputEthAmount) / rateEtherToNftl).toString(),
     );
-    getMarketPrice(inputEthAmount);
+    getMarketPrice(OrderKind.SELL, inputEthAmount);
   }, [inputEthAmount]);
 
   useEffect(() => {
@@ -106,10 +125,15 @@ const CowSwapWidget = () => {
     setEthAmount(
       formatNumberToDisplay2(Number(inputNftlAmount) * rateEtherToNftl, 8),
     );
-    getMarketPrice(inputNftlAmount);
+    getMarketPrice(OrderKind.BUY, inputNftlAmount);
   }, [inputNftlAmount]);
 
   const sufficientBalance: boolean = Number(ethAmount) <= etherBalance;
+  // We should alert if Fees exceed 30% of the swap amount
+  // const validFee = useMemo(() => {
+  //   if (!ethAmount || Number(ethAmount) === 0 || !feeAmount) return true;
+  //   return Number(ethAmount) > Number(feeAmount);
+  // }, [ethAmount, feeAmount]);
 
   const handleBuyNFTL = useCallback(async () => {
     try {
@@ -136,6 +160,8 @@ const CowSwapWidget = () => {
     setInputNftlAmount('');
     setEthAmount('');
     setNftlAmount('');
+    setFromEthAmount('');
+    setReceiveNftlAmount('');
     setFeeAmount('');
   };
 
@@ -172,6 +198,8 @@ const CowSwapWidget = () => {
               name="ETH"
               slug="ethereum"
               value={ethAmount}
+              transactionValue={fromEthAmount}
+              kind="From"
               setValue={setInputEthAmount}
             />
             <Box
@@ -179,6 +207,7 @@ const CowSwapWidget = () => {
               alignItems="center"
               justifyContent="center"
               className={classes.arrowDown}
+              sx={{ top: fromEthAmount ? 126 : 76 }}
             >
               <SouthIcon fontSize="small" sx={{ color: '#FFFFFF' }} />
             </Box>
@@ -188,18 +217,40 @@ const CowSwapWidget = () => {
               name="NFTL"
               slug="nifty-league"
               value={nftlAmount}
+              transactionValue={receiveNftlAmount}
+              kind="Receive"
               setValue={setInputNftlAmount}
             />
-            {feeAmount && <Typography>{`Fees: ${feeAmount}`}</Typography>}
+            <Stack direction="column">
+              {feeAmount && (
+                <Stack direction="row" justifyContent="space-between" my={1}>
+                  <Typography ml={1}>Fees</Typography>
+                  <Typography mr={1}>
+                    {`${formatNumberToDisplay(Number(feeAmount), 4)} ETH`}
+                  </Typography>
+                </Stack>
+              )}
+            </Stack>
             <LoadingButton
               variant="contained"
               fullWidth
               loading={purchasing}
               className={classes.purchaseNFTLBtn}
               onClick={handleBuyNFTL}
-              disabled={!ethAmount || !Number(ethAmount) || !sufficientBalance}
+              disabled={
+                !ethAmount ||
+                !Number(ethAmount) ||
+                !sufficientBalance ||
+                feeExceedAmount
+              }
             >
-              {!sufficientBalance ? 'Insufficient Balance' : 'Buy NFTL'}
+              {!ethAmount || !Number(ethAmount)
+                ? 'Enter an amount'
+                : !sufficientBalance
+                ? 'Insufficient ETH Balance'
+                : !feeExceedAmount
+                ? 'Buy NFTL'
+                : 'Fees exceed from amount'}
             </LoadingButton>
           </Stack>
         ) : (

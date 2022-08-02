@@ -8,10 +8,15 @@ import {
 } from 'constants/contracts';
 import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 
-export const getCowMarketPrice = async ({ chainId, amount, userAddress }) => {
+export const getCowMarketPrice = async ({
+  kind,
+  chainId,
+  amount,
+  userAddress,
+}) => {
   const cowSdk = new CowSdk(chainId);
   const quoteResponse = await cowSdk.cowApi.getQuote({
-    kind: OrderKind.SELL,
+    kind,
     sellToken: WETH_ADDRESS[chainId],
     buyToken: NFTLTokenAddress,
     amount: ethers.utils.parseEther(amount).toString(),
