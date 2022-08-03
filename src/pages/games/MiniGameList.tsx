@@ -59,7 +59,7 @@ const MiniGameList: React.FC = () => {
         <GameCard
           title="Mt. Gawx"
           required=" "
-          description={`Hearing the DEGENs’ desperate pleas to spend their hard-earned NFTL and with bigger sinks still under development, Satoshi suggests the DEGENs climb to the top of Mt. Gawx to offer their NFTL sacrifices to the fiery depths of the active volcano to see who can burn the most, and to discover whether the stories of Gawx offering interesting rewards are true.\n\nStrange thing is, every time they lob in NFTL, it's almost as if the volcano's... responding.\n\nCould the fabled 7th tribe be waking up from their centuries-long slumber?\n\nIs Gawx up to something?`}
+          description={`Hearing the DEGENs’ desperate pleas to spend their hard-earned NFTL and with bigger sinks still under development, Satoshi suggests the DEGENs climb to the top of Mt. Gawx to offer their NFTL sacrifices to the fiery depths of the active volcano to see who can burn the most, and to discover whether the stories of Rugman offering interesting rewards are true.\n\nStrange thing is, every time they lob in NFTL, it's almost as if the volcano's... responding.\n\nCould the fabled 7th tribe be waking up from their centuries-long slumber?\n\nIs Rugman up to something?`}
           showMore={true}
           image={MtGawxThumbnail}
           autoHeight={true}
