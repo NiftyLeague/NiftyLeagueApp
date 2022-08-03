@@ -12,10 +12,10 @@ export const burnerContext = new UnityContext({
   codeUrl: `${burnerBaseUrl}/Build/${burnerBuildVersion}.wasm.br`,
   streamingAssetsUrl: `${burnerBaseUrl}/StreamingAssets`,
   companyName: 'NiftyLeague',
-  productName: 'Mt.Rugman',
+  productName: 'Mt.Gawx',
   productVersion: burnerBuildVersion,
 });
 
-const MtRugmanGame = () => <GameWithAuth unityContext={burnerContext} />;
+const MtGawxGame = () => <GameWithAuth unityContext={burnerContext} />;
 
-export default MtRugmanGame;
+export default MtGawxGame;
