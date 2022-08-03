@@ -6,7 +6,7 @@ import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 import GameCard from 'components/cards/GameCard';
 import WenThumbnail from 'assets/images/games/wen.gif';
-import MtRugmanThumbnail from 'assets/images/games/mt-rugman.gif';
+import MtGawxThumbnail from 'assets/images/games/mt-gawx.gif';
 
 const MiniGameList: React.FC = () => {
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ const MiniGameList: React.FC = () => {
     }
   }, [arcadeBalance, navigate]);
 
-  const goToPlayMtRugman = useCallback(() => {
-    navigate('/games/mt-rugman');
+  const goToPlayMtGawx = useCallback(() => {
+    navigate('/games/mt-gawx');
   }, [navigate]);
 
   return (
@@ -57,11 +57,11 @@ const MiniGameList: React.FC = () => {
       </Grid>
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
-          title="Mt. Rugman"
+          title="Mt. Gawx"
           required=" "
-          description={`Hearing the DEGENs’ desperate pleas to spend their hard-earned NFTL and with bigger sinks still under development, Satoshi suggests the DEGENs climb to the top of Mt. Rugman to offer their NFTL sacrifices to the fiery depths of the active volcano to see who can burn the most, and to discover whether the stories of Rugman offering interesting rewards are true.\n\nStrange thing is, every time they lob in NFTL, it's almost as if the volcano's... responding.\n\nCould the fabled 7th tribe be waking up from their centuries-long slumber?\n\nIs Rugman up to something?`}
+          description={`Hearing the DEGENs’ desperate pleas to spend their hard-earned NFTL and with bigger sinks still under development, Satoshi suggests the DEGENs climb to the top of Mt. Gawx to offer their NFTL sacrifices to the fiery depths of the active volcano to see who can burn the most, and to discover whether the stories of Gawx offering interesting rewards are true.\n\nStrange thing is, every time they lob in NFTL, it's almost as if the volcano's... responding.\n\nCould the fabled 7th tribe be waking up from their centuries-long slumber?\n\nIs Gawx up to something?`}
           showMore={true}
-          image={MtRugmanThumbnail}
+          image={MtGawxThumbnail}
           autoHeight={true}
           actions={
             <ConnectWrapper
@@ -74,7 +74,7 @@ const MiniGameList: React.FC = () => {
                 color="primary"
                 fullWidth
                 sx={{ minWidth: 80, flex: 1 }}
-                onClick={goToPlayMtRugman}
+                onClick={goToPlayMtGawx}
               >
                 Burn Now
               </Button>

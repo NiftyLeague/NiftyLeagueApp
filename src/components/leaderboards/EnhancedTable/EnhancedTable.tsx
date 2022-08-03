@@ -183,8 +183,7 @@ export default function EnhancedTable({
               />
             </>
           )}
-          {/* Template is not ready for NFTL Burner yet */}
-          {isLoggedIn && selectedGame !== 'nftl_burner' && (
+          {isLoggedIn && (
             <Typography
               variant="h4"
               color={palette.primary.main}
