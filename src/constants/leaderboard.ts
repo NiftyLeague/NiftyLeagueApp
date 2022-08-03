@@ -37,7 +37,7 @@ export const WenGameTables = [
   },
 ];
 
-export const MtRugmanTables = [
+export const MtGawxTables = [
   {
     key: 'burnings',
     display: 'NFTL BURNED',
@@ -48,7 +48,7 @@ export const MtRugmanTables = [
 export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
-  MtRugman = 'MT. RUGMAN',
+  MtGawx = 'Mt. Gawx',
 }
 
 export enum TimeFilter {
@@ -64,7 +64,7 @@ export const LEADERBOARD_GAME_LIST = [
     tables: NiftySmashersTables,
   },
   { key: 'wen_game', display: Game.WenGame, tables: WenGameTables },
-  { key: 'nftl_burner', display: Game.MtRugman, tables: MtRugmanTables },
+  { key: 'nftl_burner', display: Game.MtGawx, tables: MtGawxTables },
 ];
 
 export const LEADERBOARD_TIME_FILTERS = [
@@ -94,7 +94,7 @@ export const getGameLeaderboardViewedAnalyticsEventName = (
       eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_LEADERBOARD_VIEWED;
       break;
     case 'nftl_burner':
-      eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_LEADERBOARD_VIEWED;
+      eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_LEADERBOARD_VIEWED;
       break;
     default:
       break;
@@ -115,7 +115,7 @@ export const getLeaderboardRankAnalyticsEventName = (selectedGame: string) => {
       break;
     case 'nftl_burner':
       eventName =
-        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_RUGMAN;
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_GAWX;
       break;
     default:
       break;
