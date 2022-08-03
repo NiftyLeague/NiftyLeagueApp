@@ -48,7 +48,7 @@ export const MtGawxTables = [
 export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
-  MtGawx = 'Mt. Gawx',
+  MtGawx = 'MT. GAWX',
 }
 
 export enum TimeFilter {
