@@ -5,7 +5,7 @@ import ModalUnstyled from '@mui/base/ModalUnstyled';
 
 import NiftySmashersLeaderBoardBg from 'assets/images/leaderboards/nifty_smashers.jpg';
 import WenLeaderBoardBG from 'assets/images/leaderboards/wen_game.png';
-import MtRugmanLeaderBoardBG from 'assets/images/leaderboards/mt_rugman.png';
+import MtGawxLeaderBoardBG from 'assets/images/leaderboards/mt_gawx.png';
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -89,7 +89,7 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
               flag === 'score'
                 ? WenLeaderBoardBG
                 : flag === 'burnings'
-                ? MtRugmanLeaderBoardBG
+                ? MtGawxLeaderBoardBG
                 : NiftySmashersLeaderBoardBg
             })`,
           }}

@@ -87,8 +87,8 @@ export const getGameViewedAnalyticsEventName = (pathname: string) => {
     eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_GAME_VIEWED;
   } else if (pathname.includes('wen-game')) {
     eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_VIEWED;
-  } else if (pathname.includes('mt-rugman')) {
-    eventName = GOOGLE_ANALYTICS.EVENTS.MT_RUGMAN_GAME_VIEWED;
+  } else if (pathname.includes('mt-gawx')) {
+    eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_GAME_VIEWED;
   }
   return eventName;
 };
