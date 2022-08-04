@@ -7,6 +7,7 @@ import {
   WETH_ADDRESS,
 } from 'constants/contracts';
 import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
+import { formatNumberToDisplay2 } from './numbers';
 
 export const getCowMarketPrice = async ({
   kind,
@@ -32,15 +33,18 @@ export const createOrderSwapEtherToNFTL = async ({
   chainId,
   etherVal,
   userAddress,
+  handleTxnState,
 }) => {
   try {
     // Wrap ETH
+    handleTxnState('Sign the wrapping with your wallet');
     const wEth = new Contract(WETH_ADDRESS[chainId], wethAbi);
     await wEth.connect(signer).deposit({
       value: ethers.utils.parseEther(etherVal),
     });
 
     // Approve WETH to Vault Relayer
+    handleTxnState('Allow CowSwap to use your WETH');
     const erc20 = new Contract(WETH_ADDRESS[chainId], ERC20.abi);
     const tx = await erc20
       .connect(signer)
@@ -91,6 +95,15 @@ export const createOrderSwapEtherToNFTL = async ({
     };
 
     // Sign the order
+    handleTxnState(
+      `Swapping ${formatNumberToDisplay2(
+        Number(etherVal),
+        4,
+      )} WETH for ${formatNumberToDisplay2(
+        Number(ethers.utils.formatEther(buyAmount)),
+        2,
+      )} NFTL`,
+    );
     const signedOrder = await cowSdk.signOrder(order);
     const signature = signedOrder?.signature;
     if (!signature) throw Error('No Signature');
@@ -108,4 +121,10 @@ export const createOrderSwapEtherToNFTL = async ({
   } catch (err) {
     throw err;
   }
+};
+
+export const getOrderDetail = async (chainId, orderID) => {
+  const cowSdk = new CowSdk(chainId);
+  const order = await cowSdk.cowApi.getOrder(orderID);
+  return order;
 };

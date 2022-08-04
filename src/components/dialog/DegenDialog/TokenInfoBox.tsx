@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Box, InputBase, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
+import { debounce } from 'lodash';
 import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
 import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
+import { OrderKind } from '@cowprotocol/cow-sdk';
 
 export interface TokenInfoBoxProps {
   balance: number;
@@ -14,6 +16,7 @@ export interface TokenInfoBoxProps {
   transactionValue: string;
   kind: string;
   setValue: (value: string) => void;
+  getMarketPrice: (kind: OrderKind, amount: string) => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -70,6 +73,7 @@ const TokenInfoBox = ({
   transactionValue,
   kind,
   setValue,
+  getMarketPrice,
 }: TokenInfoBoxProps) => {
   const classes = useStyles();
   const { price, refetch } = useTokenUSDPrice({ slug });
@@ -81,12 +85,26 @@ const TokenInfoBox = ({
     return () => clearInterval(timer);
   }, [refetch]);
 
+  const debouncedGetMarketplace = useRef(
+    debounce(async (amount) => {
+      if (!amount || Number(amount) === 0) return;
+      getMarketPrice(kind === 'From' ? OrderKind.SELL : OrderKind.BUY, amount);
+    }, 300),
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      debouncedGetMarketplace.cancel();
+    };
+  }, [debouncedGetMarketplace]);
+
   const handleChangeValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => {
     const newValue = e.target.value;
     if (!isNaN(Number(newValue))) {
       setValue(newValue);
+      debouncedGetMarketplace(newValue);
     } else {
       e.preventDefault();
     }
@@ -181,7 +199,9 @@ const TokenInfoBox = ({
             fontWeight="bold"
             sx={{ color: '#4D4D4F' }}
           >
-            {`Balance: ${balance ? formatNumberToDisplay(balance) : '0.00'}`}
+            {`Balance: ${
+              balance ? formatNumberToDisplay2(balance, 4) : '0.00'
+            }`}
           </Typography>
         </Stack>
       </Box>
