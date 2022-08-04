@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { ReactComponent as TwitterIcon } from 'assets/images/icons/twitter.svg';
+import { LEADERBOARD_GAME_LIST } from 'constants/leaderboard';
 const useStyles = makeStyles({
   title: {
     position: 'absolute',
@@ -182,10 +183,15 @@ const TableModal = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const handleShareOnTwitter = () => {
+    const currentGame = LEADERBOARD_GAME_LIST.filter(
+      (game) => game.key === selectedGame,
+    )?.[0];
+    if (!currentGame) return;
+    const { display } = currentGame;
     const obj = {
       original_referer: 'https://app.niftyleague.com/',
       ref_src: 'twsrc^tfw|twcamp^buttonembed|twterm^share|twgr^',
-      text: `I ranked #${myRank} on the WEN Game Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
+      text: `I ranked #${myRank} on the ${display} Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
       hashtags: 'NiftyLeague,NFT,NFTGaming',
     };
     window.open(
@@ -219,7 +225,7 @@ const TableModal = ({
                 <code>TOTAL NFTL EARNED</code>
               </TableCell>
             )}
-            {flag !== 'score' && (
+            {selectedGame === 'nifty_smashers' && (
               <TableCell
                 component="th"
                 className="cell ellipsis"
@@ -237,7 +243,7 @@ const TableModal = ({
                 <code>AVG,NFTL / MATCH</code>
               </TableCell>
             )}
-            {flag !== 'win_rate' && flag !== 'score' && (
+            {flag !== 'win_rate' && selectedGame === 'nifty_smashers' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>KILLS</code>
               </TableCell>
@@ -245,6 +251,11 @@ const TableModal = ({
             {flag === 'score' && (
               <TableCell component="th" className="cell ellipsis">
                 <code>HIGH SCORE</code>
+              </TableCell>
+            )}
+            {flag === 'burnings' && (
+              <TableCell component="th" className="cell ellipsis">
+                <code>NFTL BURNED</code>
               </TableCell>
             )}
           </TableRow>
@@ -294,7 +305,7 @@ const TableModal = ({
                     )}
                   </TableCell>
                 )}
-                {flag !== 'score' && (
+                {selectedGame === 'nifty_smashers' && (
                   <TableCell
                     style={{
                       ...getTextStyleForRank(i.rank),
@@ -319,12 +330,12 @@ const TableModal = ({
                     {i.rank === 10 && <Box className={classes.lineBottom} />}
                   </TableCell>
                 )}
-                {flag !== 'win_rate' && flag !== 'score' && (
+                {flag !== 'win_rate' && selectedGame === 'nifty_smashers' && (
                   <TableCell className="cell ellipsis end">
                     {i.stats.kills}
                   </TableCell>
                 )}
-                {flag === 'score' && (
+                {selectedGame !== 'nifty_smashers' && (
                   <TableCell
                     style={{
                       ...getTextStyleForRank(i.rank),

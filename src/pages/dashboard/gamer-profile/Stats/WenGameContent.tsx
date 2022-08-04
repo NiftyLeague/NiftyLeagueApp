@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Stack } from '@mui/material';
-import { getHours } from 'date-fns';
+import { secondsToHours } from 'date-fns';
 
 import { ProfileWenGame } from 'types/account';
 
@@ -35,9 +35,7 @@ const WenGameContent = ({ data }: WenGameContentProps): JSX.Element => {
       },
       {
         label: 'Time Played',
-        value: `${
-          (data?.time_played && getHours(new Date(data?.time_played))) || 0
-        } Hours`,
+        value: `${secondsToHours(data?.time_played ?? 0)} Hours`,
       },
     ];
   }, [data]);

@@ -10,7 +10,7 @@ import { DEGEN_BASE_API_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import { v4 as uuidv4 } from 'uuid';
-import ArcadeGameList from 'pages/games/ArcadeGameList';
+import MiniGameList from 'pages/games/MiniGameList';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
@@ -127,14 +127,14 @@ const NiftyLeagueAppPage = () => {
         </Grid>
       </SectionSlider>
       {enableWenGame && (
-        <SectionSlider isSlider={false} title="Arcade Games">
+        <SectionSlider isSlider={false} title="Mini Games">
           <Grid
             container
             flexDirection="row"
             flexWrap="wrap"
             spacing={cardSpacing}
           >
-            <ArcadeGameList />
+            <MiniGameList />
           </Grid>
         </SectionSlider>
       )}

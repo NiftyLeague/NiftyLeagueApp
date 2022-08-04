@@ -17,6 +17,9 @@ const SmashersGamePage = Loadable(
 const WenGamePage = Loadable(
   lazy(() => import('pages/games/PlayOnGame/WenGame')),
 );
+const MtGawxGamePage = Loadable(
+  lazy(() => import('pages/games/PlayOnGame/MtGawxGame')),
+);
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
@@ -62,6 +65,10 @@ const PublicRoutes = {
     {
       path: '/games/wen-game',
       element: <WenGamePage />,
+    },
+    {
+      path: '/games/mt-gawx',
+      element: <MtGawxGamePage />,
     },
     {
       path: '/verification',
