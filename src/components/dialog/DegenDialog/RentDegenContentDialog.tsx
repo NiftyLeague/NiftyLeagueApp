@@ -373,7 +373,7 @@ const RentDegenContentDialog = ({
                   Your rental is active.
                 </Typography>
                 <Button variant="contained" fullWidth onClick={handleClickPlay}>
-                  Play Nifty Smasher Now
+                  Play Nifty Smashers Now
                 </Button>
               </Stack>
             ) : (

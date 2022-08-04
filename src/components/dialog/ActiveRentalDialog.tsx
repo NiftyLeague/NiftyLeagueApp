@@ -70,7 +70,7 @@ const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
               NFTL when you play NOW.
             </Typography>
             <Button variant="contained" onClick={handleClickPlay}>
-              Play Nifty Smasher Now
+              Play Nifty Smashers Now
             </Button>
           </Grid>
           <Grid item md={6}>

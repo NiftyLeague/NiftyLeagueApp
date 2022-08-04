@@ -1,3 +1,5 @@
+import { GOOGLE_ANALYTICS } from './google-analytics';
+
 export const NiftySmashersTables = [
   {
     key: 'win_rate',
@@ -35,9 +37,18 @@ export const WenGameTables = [
   },
 ];
 
+export const MtGawxTables = [
+  {
+    key: 'burnings',
+    display: 'NFTL BURNED',
+    rows: [{ key: 'score', display: 'NFTL BURNED' }],
+  },
+];
+
 export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
+  MtGawx = 'MT. GAWX',
 }
 
 export enum TimeFilter {
@@ -50,8 +61,10 @@ export const LEADERBOARD_GAME_LIST = [
   {
     key: 'nifty_smashers',
     display: Game.NiftySmashers,
+    tables: NiftySmashersTables,
   },
-  { key: 'wen_game', display: Game.WenGame },
+  { key: 'wen_game', display: Game.WenGame, tables: WenGameTables },
+  { key: 'nftl_burner', display: Game.MtGawx, tables: MtGawxTables },
 ];
 
 export const LEADERBOARD_TIME_FILTERS = [
@@ -68,3 +81,44 @@ export const LEADERBOARD_TIME_FILTERS = [
     display: TimeFilter.AllTime,
   },
 ];
+
+export const getGameLeaderboardViewedAnalyticsEventName = (
+  selectedGame: string,
+) => {
+  let eventName = '';
+  switch (selectedGame) {
+    case 'nifty_smashers':
+      eventName = GOOGLE_ANALYTICS.EVENTS.NIFTY_SMASHERS_LEADERBOARD_VIEWED;
+      break;
+    case 'wen_game':
+      eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_LEADERBOARD_VIEWED;
+      break;
+    case 'nftl_burner':
+      eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_LEADERBOARD_VIEWED;
+      break;
+    default:
+      break;
+  }
+  return eventName;
+};
+
+export const getLeaderboardRankAnalyticsEventName = (selectedGame: string) => {
+  let eventName = '';
+  switch (selectedGame) {
+    case 'nifty_smashers':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS;
+      break;
+    case 'wen_game':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN;
+      break;
+    case 'nftl_burner':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_GAWX;
+      break;
+    default:
+      break;
+  }
+  return eventName;
+};

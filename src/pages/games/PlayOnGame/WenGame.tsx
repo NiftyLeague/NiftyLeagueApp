@@ -11,7 +11,7 @@ export const wenContext = new UnityContext({
   codeUrl: `${wenBaseUrl}/Build/${wenBuildVersion}.wasm.br`,
   streamingAssetsUrl: `${wenBaseUrl}/StreamingAssets`,
   companyName: 'NiftyLeague',
-  productName: 'WenGame',
+  productName: 'WENGame',
   productVersion: wenBuildVersion,
 });
 
