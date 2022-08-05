@@ -64,7 +64,7 @@ export default function EnhancedTable({
       selectedGame,
       selectedTable.key,
       selectedTimeFilter,
-      rowsPerPage * 3,
+      rowsPerPage,
       0,
     );
     const leaderBoardValue: any = [];
@@ -82,13 +82,17 @@ export default function EnhancedTable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, selectedTable.key, selectedTimeFilter]);
   const handleChangePage = async (newPage: number) => {
-    if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
+    if (
+      rows &&
+      (newPage + 1) * rowsPerPage > rows?.length &&
+      rows?.length < count
+    ) {
       const returnValue: ReturnDataType = await fetchScores(
         selectedGame,
         selectedTable.key,
         selectedTimeFilter,
         rowsPerPage,
-        (newPage + 2) * rowsPerPage,
+        newPage * rowsPerPage,
       );
       const leaderBoardValue: any = [];
       returnValue.data.forEach((value: any) => {
@@ -160,6 +164,7 @@ export default function EnhancedTable({
     });
     return columns;
   };
+
   return (
     <Box mb={{ xs: 10, sm: 0 }}>
       {!rows ? (
