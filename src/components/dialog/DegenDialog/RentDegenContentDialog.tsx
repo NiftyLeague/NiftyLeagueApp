@@ -266,13 +266,17 @@ const RentDegenContentDialog = ({
     }
   };
 
+  const refreshBalance = () => {
+    setRefreshAccKey(Math.random());
+  };
+
   const handleRefreshBalance = () => {
     sendEvent(
       GOOGLE_ANALYTICS.EVENTS.RENTAL_REFRESH_BALANCE_CLICKED,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
       'method',
     );
-    setRefreshAccKey(Math.random());
+    refreshBalance();
   };
 
   const handleGoCheckBalance = () => {
@@ -332,7 +336,7 @@ const RentDegenContentDialog = ({
         >
           <Typography variant="h5">Rental Overview</Typography>
         </Box>
-        <Stack direction="row" spacing={3.5} mt={0.5}>
+        <Stack direction="row" spacing={{ xs: 1.5, sm: 3.5 }} mt={0.5}>
           <Stack direction="column">
             <Stack direction="row" justifyContent="center">
               {degen?.id && (
@@ -558,7 +562,7 @@ const RentDegenContentDialog = ({
                           <FormControlLabel
                             label={
                               <Typography variant="caption">
-                                I have read the
+                                I have read the{' '}
                                 <Link
                                   sx={{
                                     mx: '4px',
@@ -568,7 +572,7 @@ const RentDegenContentDialog = ({
                                   onClick={openTOSDialog}
                                 >
                                   terms &amp; conditions
-                                </Link>
+                                </Link>{' '}
                                 regarding rentals
                               </Typography>
                             }
@@ -604,7 +608,7 @@ const RentDegenContentDialog = ({
           </Stack>
         </Stack>
         <Stack direction="column" mb={6}>
-          {purchasingNFTL && <CowSwapWidget />}
+          {purchasingNFTL && <CowSwapWidget refreshBalance={refreshBalance} />}
           <Typography variant="h5" mt={4} mb={1.5}>
             Stats
           </Typography>
