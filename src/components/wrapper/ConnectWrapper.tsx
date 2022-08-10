@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import React, { useCallback, useContext } from 'react';
 import useAuth from 'hooks/useAuth';
 

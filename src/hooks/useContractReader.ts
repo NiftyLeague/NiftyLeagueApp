@@ -3,7 +3,6 @@ import { useCallback, useState, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Contracts } from 'types/web3';
 import useAsyncInterval from './useAsyncInterval';
-import { READ_CONTRACT_DEFAULT_INTERVAL } from 'constants/index';
 
 /*
   Enables you to read values from contracts and keep track of them in the local React states
@@ -18,7 +17,6 @@ import { READ_CONTRACT_DEFAULT_INTERVAL } from 'constants/index';
   - Specify the name of the target contract
   - Specify the name of the function name to call from the contract
   - Pass in any args necessary
-  - Set a custom poll time or default to READ_CONTRACT_DEFAULT_INTERVAL if null
   - Provide a formatter to format the result
   - Provide a refreshKey if you wish to manually trigger a refetch
 */
@@ -84,12 +82,7 @@ export default function useContractReader(
     refreshKey,
   ]);
 
-  useAsyncInterval(
-    readContract,
-    pollTime || READ_CONTRACT_DEFAULT_INTERVAL,
-    true,
-    JSON.stringify(args),
-  );
+  useAsyncInterval(readContract, pollTime, true, JSON.stringify(args));
 
   return value;
 }

@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { Box, Button, Stack } from '@mui/material';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import useFetch from 'hooks/useFetch';
 import { NETWORK_NAME } from 'constants/networks';

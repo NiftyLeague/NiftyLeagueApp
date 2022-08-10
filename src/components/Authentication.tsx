@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Button, Typography, Container } from '@mui/material';
 
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import useAuth from 'hooks/useAuth';
 
 const ProfileVerification = (): JSX.Element => {

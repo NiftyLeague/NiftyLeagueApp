@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { ChainId } from '@sushiswap/sdk';
 import { utils } from 'ethers';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { COMICS_MERKLE_ROOT } from 'constants/contracts';
 
 const { getAddress, isAddress } = utils;

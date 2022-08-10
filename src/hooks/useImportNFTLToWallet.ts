@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { NFTL_CONTRACT } from 'constants/contracts';
 
 /*

@@ -8,7 +8,7 @@ import accountReducer, { initialAccountState } from 'store/accountReducer';
 
 // types
 import { TokenContextType } from 'types/auth';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { getProviderAndSigner } from 'helpers';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';

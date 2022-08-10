@@ -4,9 +4,9 @@ import {
   clearIntervalAsync,
 } from 'set-interval-async/dynamic';
 
-export default function useInterval(
+export default function useAsyncInterval(
   callback: () => Promise<void>,
-  delay: number,
+  delay: number | undefined,
   leading = true,
   refreshKey = '',
 ): void {
@@ -32,7 +32,7 @@ export default function useInterval(
       };
     };
 
-    if (delay !== null) {
+    if (delay) {
       // eslint-disable-next-line no-void
       void handleInterval();
     }
