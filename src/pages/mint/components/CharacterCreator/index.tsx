@@ -14,7 +14,7 @@ import { BigNumber } from 'ethers';
 import useRemovedTraits from 'hooks/useRemovedTraits';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { NotifyCallback } from 'types/notify';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import CharacterDarkBGImg from 'assets/images/backgrounds/character-creator-repeat-dark.png';
 import { NFT_CONTRACT } from 'constants/contracts';
 import { NETWORK_NAME } from 'constants/networks';

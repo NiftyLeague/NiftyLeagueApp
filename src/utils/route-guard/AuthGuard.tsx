@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // project imports
 import { GuardProps } from 'types';
 import { useContext, useEffect, useState } from 'react';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { ADDRESS_VERIFICATION } from 'constants/url';
 
 // ==============================|| AUTH GUARD ||============================== //

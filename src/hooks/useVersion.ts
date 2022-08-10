@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { isWindows, isMacOs } from 'react-device-detect';
 import { DEGEN_BASE_API_URL } from 'constants/url';
 

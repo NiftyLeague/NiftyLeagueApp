@@ -1,6 +1,6 @@
 import { NFT_CONTRACT } from 'constants/contracts';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';

@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { NFT_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
