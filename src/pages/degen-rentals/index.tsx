@@ -1,7 +1,6 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Button,
@@ -31,12 +30,10 @@ import useFetch from 'hooks/useFetch';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { NetworkContext } from 'NetworkProvider';
-import { Owner } from 'types/graph';
+import NetworkContext from 'contexts/NetworkContext';
 import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialog';
+import BalanceContext from 'contexts/BalanceContext';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -59,17 +56,7 @@ const DegenRentalsPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
-    useQuery(OWNER_QUERY, {
-      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-      variables: { address: address?.toLowerCase() },
-      skip: !address,
-    });
-
-  const isDegenOwner = useMemo(
-    () => (userDegens?.owner?.characterCount ?? 0) > 0,
-    [userDegens?.owner?.characterCount],
-  );
+  const { isDegenOwner } = useContext(BalanceContext);
 
   const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
     filteredData,

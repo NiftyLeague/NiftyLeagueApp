@@ -13,7 +13,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 import { BigNumber, BigNumberish, providers, utils } from 'ethers';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DialogContext } from 'components/dialog';
 import { formatNumberToDisplay } from 'utils/numbers';

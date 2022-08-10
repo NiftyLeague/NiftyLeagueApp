@@ -8,7 +8,7 @@ import useAuth from 'hooks/useAuth';
 import usePlayerProfile from 'hooks/usePlayerProfile';
 //@ts-ignore
 import ResponsiveTable from 'mui-responsive-table';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DataType, ReturnDataType, TableProps } from 'types/leaderboard';

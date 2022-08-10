@@ -5,7 +5,7 @@ import useContractReader from './useContractReader';
 import { NFTL_CONTRACT } from 'constants/contracts';
 
 export default function useClaimableNFTL(
-  writeContracts: Contracts,
+  contracts: Contracts,
   tokenIndices: number[],
   refreshKey?: string | number,
 ): number {
@@ -14,7 +14,7 @@ export default function useClaimableNFTL(
     return totalAccumulatedStr && utils.formatEther(totalAccumulatedStr);
   }, []);
   const totalAccumulated = useContractReader(
-    writeContracts,
+    contracts,
     NFTL_CONTRACT,
     'accumulatedMultiCheck',
     [tokenIndices],

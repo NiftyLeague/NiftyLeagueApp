@@ -33,13 +33,10 @@ import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
-import { NetworkContext } from 'NetworkProvider';
-import { Owner } from 'types/graph';
-import { useQuery } from '@apollo/client';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
+import NetworkContext from 'contexts/NetworkContext';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
+import BalanceContext from 'contexts/BalanceContext';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -70,18 +67,9 @@ const DashboardDegensPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const {
-    loading: loadingUserDegens,
-    data: userDegens,
-  }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
-    pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-    variables: { address: address?.toLowerCase() },
-    skip: !address,
-  });
+  const { loading: loadingUserDegens, characters } = useContext(BalanceContext);
 
   const loading = loadingAllRentals || loadingUserDegens;
-
-  const { characters = [] } = userDegens?.owner || {};
 
   const populatedDegens: Degen[] = useMemo(() => {
     if (!characters.length || !data) {

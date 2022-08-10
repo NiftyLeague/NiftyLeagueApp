@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Contract } from 'ethers';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { getContract } from 'helpers';
 import { COMICS_MERKLE_DISTRIBUTOR_ADDRESS } from 'constants/contracts';
 import COMICS_MERKLE_DISTRIBUTOR_ABI from 'constants/abis/comics-merkle-distributor.json';

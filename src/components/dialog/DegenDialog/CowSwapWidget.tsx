@@ -17,12 +17,10 @@ import { OrderKind } from '@cowprotocol/cow-sdk';
 import useAccount from 'hooks/useAccount';
 import useEtherBalance from 'hooks/useEtherBalance';
 import useRateEtherToNFTL from 'hooks/useRateEtherToNFTL';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
 import useImportNFTLToWallet from 'hooks/useImportNFTLToWallet';
-import useNFTLBalance from 'hooks/useNFTLBalance';
 import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
-import { BALANCE_INTERVAL } from 'constants/index';
 import { COW_PROTOCOL_URL } from 'constants/url';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import {
@@ -33,6 +31,7 @@ import {
 import TokenInfoBox from './TokenInfoBox';
 import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
 import NFTL from 'assets/images/logo.png';
+import BalanceContext from 'contexts/BalanceContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   purchaseNFTLBtn: {
@@ -64,18 +63,13 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
   const { address, targetNetwork, tx, userProvider, writeContracts } =
     useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const [refreshBalKey, setRefreshBalKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
   const { balance: etherBalance, refetch: refetchEthBalance } =
     useEtherBalance();
   const { rate: rateEtherToNftl, refetch: refetchRateEtherToNftl } =
     useRateEtherToNFTL();
   const { handleImportNFTLToWallet } = useImportNFTLToWallet();
-  const userNFTLBalance = useNFTLBalance(
-    address,
-    BALANCE_INTERVAL,
-    refreshBalKey,
-  );
+  const { userNFTLBalance, refreshNFTLBalance } = useContext(BalanceContext);
 
   const [inputEthAmount, setInputEthAmount] = useState<string>('');
   const [inputNftlAmount, setInputNftlAmount] = useState<string>('');
@@ -134,7 +128,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     if (orderDetail?.status === 'fulfilled') {
       setOrderFulfilled(true);
       setOrderBuyAmount(utils.formatEther(orderDetail?.buyAmount ?? ''));
-      setRefreshBalKey(Math.random());
+      refreshNFTLBalance();
     } else {
       setTimeout(() => {
         checkOrderStatus();
