@@ -19,7 +19,7 @@ import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { formatNumberToDisplay } from 'utils/numbers';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
 import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
@@ -51,7 +51,7 @@ export interface DegenCardProps {
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
   sx?: SxProps<Theme>;
-}
+}        
 
 const DegenClaimBal: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<{ tokenId: string }>>

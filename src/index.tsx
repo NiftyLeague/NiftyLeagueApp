@@ -16,7 +16,7 @@ import { store, persister } from 'store';
 import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
-import NetworkProvider from './NetworkProvider';
+import { NetworkProvider } from 'contexts/NetworkContext';
 import { SUBGRAPH_URI } from './constants';
 
 // style + assets

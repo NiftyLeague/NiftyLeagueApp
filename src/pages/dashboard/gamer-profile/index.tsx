@@ -1,7 +1,6 @@
 import { useContext, useMemo, createContext } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
-import { NetworkContext } from 'NetworkProvider';
-import { useQuery } from '@apollo/client';
+import NetworkContext from 'contexts/NetworkContext';
 import _ from 'lodash';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';
@@ -18,11 +17,9 @@ import EmptyState from 'components/EmptyState';
 import BottomInfo from './Stats/BottomInfo';
 
 import { DEGEN_BASE_API_URL } from 'constants/url';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
-import { Owner } from 'types/graph';
 import { Degen } from 'types/degens';
 import { sectionSpacing } from 'store/constant';
+import BalanceContext from 'contexts/BalanceContext';
 
 const defaultValue: {
   isLoadingProfile: boolean | undefined;
@@ -46,21 +43,9 @@ const GamerProfile = (): JSX.Element => {
 
   const {
     loading: loadingDegens,
-    data: userDegens,
-  }: { loading: boolean; data?: { owner: Owner } } = useQuery(OWNER_QUERY, {
-    pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-    variables: { address: address?.toLowerCase() },
-    skip: !address,
-  });
-
-  const characters = useMemo(() => {
-    const characterList = userDegens?.owner?.characters
-      ? [...userDegens.owner.characters]
-      : [];
-    return characterList.sort(
-      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
-    );
-  }, [userDegens]);
+    characters,
+    characterCount: degenCount,
+  } = useContext(BalanceContext);
 
   const filteredDegens: Degen[] = useMemo(() => {
     if (characters.length && data) {
@@ -74,8 +59,6 @@ const GamerProfile = (): JSX.Element => {
     () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
     [comicsBalance],
   );
-
-  const degenCount = userDegens?.owner?.characterCount || 0;
 
   const renderEmptyProfile = () => {
     return (

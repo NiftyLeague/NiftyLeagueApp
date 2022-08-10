@@ -11,6 +11,8 @@ import ThemeCustomization from 'themes';
 // auth provider
 import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
 import { useEffect } from 'react';
+import { WindowProvider } from 'contexts/WindowContext';
+import { BalanceProvider } from 'contexts/BalanceContext';
 
 // ==============================|| APP ||============================== //
 
@@ -23,17 +25,19 @@ const App = () => {
       },
       false,
     );
-  });
+  }, []);
 
   return (
     <ThemeCustomization>
       <Locales>
         <NavigationScroll>
           <AuthProvider>
-            <>
-              <Routes />
-              <Snackbar />
-            </>
+            <WindowProvider>
+              <BalanceProvider>
+                <Routes />
+                <Snackbar />
+              </BalanceProvider>
+            </WindowProvider>
           </AuthProvider>
         </NavigationScroll>
       </Locales>

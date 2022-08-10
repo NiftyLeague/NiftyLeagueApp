@@ -20,8 +20,8 @@ import useNetworkInfo from 'hooks/useNetworkInfo';
 import useContractLoader from 'hooks/useContractLoader';
 import useUserProvider from 'hooks/useUserProvider';
 import Notifier from 'helpers/Notifier';
-import { ALCHEMY_ID, DEBUG } from './constants';
-import { NETWORKS, VALID_ETHERS_NETWORKS } from './constants/networks';
+import { ALCHEMY_ID, DEBUG } from '../constants';
+import { NETWORKS, VALID_ETHERS_NETWORKS } from '../constants/networks';
 
 const { getDefaultProvider, Web3Provider } = providers;
 
@@ -126,9 +126,9 @@ const CONTEXT_INITIAL_STATE: Context = {
   writeContracts: {},
 };
 
-export const NetworkContext = createContext(CONTEXT_INITIAL_STATE);
+const NetworkContext = createContext(CONTEXT_INITIAL_STATE);
 
-const NetworkProvider = ({
+export const NetworkProvider = ({
   children,
 }: {
   children: React.ReactElement | React.ReactElement[];
@@ -165,24 +165,29 @@ const NetworkProvider = ({
   }, []);
 
   const loadWeb3Modal = useCallback(async () => {
-    const provider: Web3ModalProvider =
-      (await web3Modal.connect()) as Web3ModalProvider;
-    await updateWeb3ModalTheme();
-    setInjectedProvider(new Web3Provider(provider));
-    provider.on('accountsChanged', (accounts) => {
-      if (DEBUG) console.log('web3 accountsChanged:', accounts);
+    try {
+      const provider: Web3ModalProvider =
+        (await web3Modal.connect()) as Web3ModalProvider;
+      await updateWeb3ModalTheme();
       setInjectedProvider(new Web3Provider(provider));
-    });
-    provider.on('chainChanged', (chainId) => {
-      if (DEBUG) console.log('web3 chainChanged:', chainId);
-      setInjectedProvider(new Web3Provider(provider));
-    });
-    provider.on('connect', (info) => {
-      if (DEBUG) console.log('web3 info:', info);
-    });
-    provider.on('disconnect', (error) => {
-      if (DEBUG) console.log('web3 error:', error);
-    });
+      provider.on('accountsChanged', (accounts) => {
+        if (DEBUG) console.log('web3 accountsChanged:', accounts);
+        setInjectedProvider(new Web3Provider(provider));
+      });
+      provider.on('chainChanged', (chainId) => {
+        if (DEBUG) console.log('web3 chainChanged:', chainId);
+        setInjectedProvider(new Web3Provider(provider));
+      });
+      provider.on('connect', (info) => {
+        if (DEBUG) console.log('web3 info:', info);
+      });
+      provider.on('disconnect', (error) => {
+        if (DEBUG) console.log('web3 error:', error);
+      });
+    } catch (err) {
+      console.log('--------wallet connect error--------');
+      console.error(err);
+    }
   }, [setInjectedProvider, updateWeb3ModalTheme]);
 
   useEffect(() => {
@@ -264,4 +269,4 @@ const NetworkProvider = ({
   );
 };
 
-export default NetworkProvider;
+export default NetworkContext;
