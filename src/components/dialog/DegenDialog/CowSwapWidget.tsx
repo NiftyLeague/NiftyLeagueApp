@@ -28,6 +28,7 @@ import {
   getCowMarketPrice,
   getOrderDetail,
 } from 'utils/cowswap';
+import { DEBUG } from 'constants/index';
 import TokenInfoBox from './TokenInfoBox';
 import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
 import NFTL from 'assets/images/logo.png';
@@ -226,7 +227,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
       setOrderId(orderID);
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.log(err);
+      if (DEBUG) console.log(err);
     } finally {
       setPurchasing(false);
     }

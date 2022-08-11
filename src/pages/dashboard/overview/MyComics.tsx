@@ -76,7 +76,7 @@ const MyComics = (): JSX.Element => {
         actions={
           <Button
             variant="outlined"
-            onClick={() => navigate('/dashboard/comics')}
+            onClick={() => navigate('/dashboard/items')}
           >
             View All Comics
           </Button>
@@ -90,7 +90,7 @@ const MyComics = (): JSX.Element => {
               }}
               key={uuidv4()}
             >
-              <ComicPlaceholder imageWidth={158} imageHeight="100%" />
+              <ComicPlaceholder />
             </Box>
           ))
         ) : filteredComics.length ? (
