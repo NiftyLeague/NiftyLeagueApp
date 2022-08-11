@@ -28,6 +28,13 @@ import ItemThumbnailP4 from 'assets/images/comics/items/thumbnail/4.png';
 import ItemThumbnailP5 from 'assets/images/comics/items/thumbnail/5.png';
 import ItemThumbnailP6 from 'assets/images/comics/items/thumbnail/6.png';
 
+import ItemEmptyP1 from 'assets/images/comics/items/empty/1.svg';
+import ItemEmptyP2 from 'assets/images/comics/items/empty/2.svg';
+import ItemEmptyP3 from 'assets/images/comics/items/empty/3.svg';
+import ItemEmptyP4 from 'assets/images/comics/items/empty/4.svg';
+import ItemEmptyP5 from 'assets/images/comics/items/empty/5.svg';
+import ItemEmptyP6 from 'assets/images/comics/items/empty/6.svg';
+
 export const COMICS: Comic[] = [
   {
     id: 1,
@@ -89,58 +96,63 @@ export const ITEMS: Item[] = [
   {
     id: 1,
     title: 'Cape',
+    multiplier: 2,
     wearableName: '',
     balance: 0,
     image: ItemP1,
     thumbnail: ItemThumbnailP1,
+    empty: ItemEmptyP1,
   },
   {
     id: 2,
-    title: 'Halo',
+    title: 'Companion',
+    multiplier: 1,
     wearableName: '',
     balance: 0,
     image: ItemP2,
     thumbnail: ItemThumbnailP2,
+    empty: ItemEmptyP2,
+    isNew: true,
   },
   {
     id: 3,
-    title: 'Diamond Bat',
+    title: 'Halo',
+    multiplier: 1,
     wearableName: '',
     balance: 0,
     image: ItemP3,
     thumbnail: ItemThumbnailP3,
+    empty: ItemEmptyP3,
+    equipped: true,
   },
   {
     id: 4,
-    title: 'Bread Bat',
+    title: 'Diamond Bat',
+    multiplier: 1,
     wearableName: '',
     balance: 0,
     image: ItemP4,
     thumbnail: ItemThumbnailP4,
+    empty: ItemEmptyP4,
   },
   {
     id: 5,
     title: 'Purple Bat',
+    multiplier: 1,
     wearableName: '',
     balance: 0,
     image: ItemP5,
     thumbnail: ItemThumbnailP5,
+    empty: ItemEmptyP5,
   },
   {
     id: 6,
-    title: 'Companion Character',
+    title: 'Bread Bat',
+    multiplier: 1,
     wearableName: '',
     balance: 0,
     image: ItemP6,
     thumbnail: ItemThumbnailP6,
-  },
-  {
-    id: 7,
-    title: 'Mystery Item',
-    wearableName: '',
-    balance: 0,
-    // TODO: will update the mystery image
-    image: '',
-    thumbnail: '',
+    empty: ItemEmptyP6,
   },
 ];

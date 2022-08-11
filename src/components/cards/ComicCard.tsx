@@ -1,116 +1,129 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  Stack,
-  Typography,
-  useTheme,
-  Theme,
-  SxProps,
-} from '@mui/material';
-import { Comic, Item } from 'types/comic';
+import { Box, Theme, SxProps, Typography } from '@mui/material';
+import { Comic } from 'types/comic';
 import ImageCard from 'components/cards/ImageCard';
+import useComicDimension from 'hooks/useComicDimension';
 
 export interface ComicCardProps {
-  data: Comic | Item;
+  data: Comic;
   sx?: SxProps<Theme>;
-  actions?: React.ReactNode;
-  isItem?: boolean;
-  onViewComic?: React.MouseEventHandler<HTMLButtonElement>;
-  onBurnComic?: React.MouseEventHandler<HTMLButtonElement>;
+  isSelected?: boolean;
+  onViewComic?: () => void;
 }
 
-const ComicCard: React.FC<
-  React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
-> = ({ data, onViewComic, onBurnComic, sx, actions, isItem = false }) => {
-  const { image, title, balance, id, wearableName, thumbnail } = data;
-  const theme = useTheme();
+interface ComicCardPaneProps {
+  data: Comic;
+  sx?: SxProps<Theme>;
+  width: number;
+  height: number;
+}
 
-  const getActionsDefault = () => {
-    return (
-      <>
-        <Button variant="contained" fullWidth onClick={onViewComic}>
-          View Comic
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          fullWidth
-          onClick={onBurnComic}
-          disabled
-        >
-          Burn Comic
-        </Button>
-      </>
-    );
-  };
-
+const ComicCardPane: React.FC<ComicCardPaneProps> = ({
+  width,
+  height,
+  data,
+  sx,
+}) => {
+  const { image, title, thumbnail } = data;
   return (
-    <Card
-      sx={{
-        maxWidth: '425px',
-        border: `1px solid ${theme.palette.grey[800]}`,
-        backgroundColor: theme.palette.background.default,
-        flexDirection: 'row',
-        display: 'flex',
-        ...sx,
-      }}
-    >
-      <Stack flex="50%" sx={{ position: 'relative' }}>
+    <Box sx={sx}>
+      <Box
+        width={width}
+        height={height}
+        borderRadius="5px"
+        position="relative"
+        overflow="hidden"
+      >
         <ImageCard
           image={image}
           thumbnail={thumbnail}
           title={title}
           ratio={1}
         />
-      </Stack>
-      <Stack
-        justifyContent="space-between"
-        sx={{ width: '100%', padding: '12px' }}
-        flex="50%"
-      >
-        <Stack gap={1}>
-          <Stack
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h3" component="div">
-              {`${title} ${!isItem ? `#${id}` : ''}`}
-            </Typography>
-            <Typography
-              variant="body2"
+      </Box>
+    </Box>
+  );
+};
+
+const ComicCard: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<ComicCardProps>>
+> = ({ data, onViewComic, sx, isSelected = false }) => {
+  const { balance } = data;
+  const { width: comicCardWidth, height: comicCardHeight } =
+    useComicDimension();
+
+  const handleViewComic = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (!onViewComic) return;
+    onViewComic();
+  };
+
+  if (!balance)
+    return (
+      <Box
+        border="1px solid #363636"
+        borderRadius="5px"
+        width={comicCardWidth}
+        height={comicCardHeight}
+      />
+    );
+
+  return (
+    <Box
+      onClick={handleViewComic}
+      position="relative"
+      sx={{
+        borderRadius: '5px',
+        outline: isSelected ? '3px solid #620EDF' : 'none',
+        cursor: 'pointer',
+      }}
+    >
+      {balance === 1 ? (
+        <ComicCardPane
+          data={data}
+          width={comicCardWidth}
+          height={comicCardHeight}
+        />
+      ) : (
+        <Box width={comicCardWidth + 24} height={comicCardHeight + 16}>
+          {[0, 1, 2].map((item) => (
+            <ComicCardPane
+              data={data}
+              width={comicCardWidth}
+              height={comicCardHeight}
+              key={`ComicCardPane-${item}`}
               sx={{
-                color:
-                  balance === 0
-                    ? theme.palette.grey[800]
-                    : theme.palette.success.main,
+                position: 'absolute',
+                zIndex: 2 - item,
+                top: item * 8,
+                left: (item + 1) * 8,
               }}
+            />
+          ))}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            position="absolute"
+            width={38}
+            height={35}
+            sx={{
+              background: '#8F4BF4',
+              borderRadius: '5px',
+              bottom: 0,
+              left: 0,
+              zIndex: 3,
+            }}
+          >
+            <Typography
+              sx={{ fontSize: 20, color: '#FFFFFF', fontWeight: 700 }}
             >
-              {balance || 0}x
+              {balance}
             </Typography>
-          </Stack>
-          {wearableName && (
-            <Stack justifyContent="flex-start">
-              <Typography
-                sx={{
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  width: '95%',
-                }}
-                variant="body2"
-              >
-                {wearableName}
-              </Typography>
-            </Stack>
-          )}
-        </Stack>
-        <Stack gap={1} width="100%">
-          {actions || getActionsDefault()}
-        </Stack>
-      </Stack>
-    </Card>
+          </Box>
+        </Box>
+      )}
+    </Box>
   );
 };
 

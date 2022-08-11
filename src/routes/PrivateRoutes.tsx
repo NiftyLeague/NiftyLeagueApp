@@ -37,7 +37,7 @@ const PrivateRoutes = {
       element: <DashboardRentalPage />,
     },
     {
-      path: 'comics',
+      path: 'items',
       element: <DashboardComicsPage />,
     },
     {

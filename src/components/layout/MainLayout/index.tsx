@@ -153,8 +153,8 @@ const MainLayout = () => {
         return pageMeta.dashboard.title;
       case '/dashboard/degens':
         return pageMeta.dashboard.degens.title;
-      case '/dashboard/comics':
-        return pageMeta.dashboard.comics.title;
+      case '/dashboard/items':
+        return pageMeta.dashboard.items.title;
       case '/dashboard/rentals':
         return pageMeta.dashboard.rentals.title;
       default:

@@ -16,7 +16,7 @@ export const pageMeta = {
     degens: {
       title: 'My Degens | Nifty League ',
     },
-    comics: {
+    items: {
       title: 'My Comics & Items | Nifty League',
     },
     rentals: {
