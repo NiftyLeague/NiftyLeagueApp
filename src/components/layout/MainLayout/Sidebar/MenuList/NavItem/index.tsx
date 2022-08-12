@@ -4,7 +4,7 @@ import {
   forwardRef,
   useEffect,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -37,6 +37,7 @@ interface NavItemProps {
 // ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
 
 const NavItem = ({ item, level }: NavItemProps) => {
+  const { pathname }: { pathname: string } = useLocation();
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -82,17 +83,12 @@ const NavItem = ({ item, level }: NavItemProps) => {
     matchesSM && dispatch(openDrawer(false));
   };
 
-  // active menu item on page load
+  // active menu item when page load and route is changed
   useEffect(() => {
-    const currentIndex = document.location.pathname
-      .toString()
-      .split('/')
-      .findIndex((id) => id === item.id);
-    if (currentIndex > -1) {
+    if (pathname.toString().split('/').includes(item.id!)) {
       dispatch(activeItem([item.id!]));
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [item.id, pathname]);
 
   return (
     <ListItemButton
