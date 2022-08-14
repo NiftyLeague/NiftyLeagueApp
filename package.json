@@ -30,7 +30,7 @@
     "@mui/system": "^5.4.1",
     "@mui/utils": "^5.4.1",
     "@mui/x-data-grid": "^5.5.0",
-    "@openzeppelin/contracts": "4.7.1",
+    "@openzeppelin/contracts": "4.7.2",
     "@reduxjs/toolkit": "^1.7.2",
     "@sentry/react": "6.19.7",
     "@sentry/tracing": "6.19.7",
