@@ -158,6 +158,7 @@ const DashboardComicsPage = (): JSX.Element => {
                 px={2}
                 py={3}
                 width="100%"
+                justifyContent={{ xs: 'space-between', sm: 'inherit' }}
                 onClick={removeComicSelection}
               >
                 {renderComics}
@@ -211,7 +212,12 @@ const DashboardComicsPage = (): JSX.Element => {
                       <Divider color="#363636" />
                     </Stack>
                   )}
-                  <Grid container flexWrap="wrap" gap={2}>
+                  <Grid
+                    container
+                    flexWrap="wrap"
+                    gap={2}
+                    justifyContent={{ xs: 'space-between', sm: 'inherit' }}
+                  >
                     {renderItems}
                   </Grid>
                 </Stack>
