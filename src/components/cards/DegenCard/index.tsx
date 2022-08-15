@@ -51,7 +51,7 @@ export interface DegenCardProps {
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
   sx?: SxProps<Theme>;
-}        
+}
 
 const DegenClaimBal: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<{ tokenId: string }>>
