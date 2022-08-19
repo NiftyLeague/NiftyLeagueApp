@@ -161,7 +161,7 @@ const DegenRentalsPage = (): JSX.Element => {
         xl={isGridView ? 3 : 2}
         key={uuidv4()}
       >
-        <SkeletonDegenPlaceholder />
+        <SkeletonDegenPlaceholder size={isGridView ? 'normal' : 'small'} />
       </Grid>
     ),
     [isDrawerOpen, isGridView],
