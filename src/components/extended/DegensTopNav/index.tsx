@@ -34,6 +34,9 @@ const useStyles = makeStyles(() => ({
     padding: '5px 16px',
     '&.Mui-selected': {
       background: 'rgba(88, 32, 214, 0.2)',
+      '&:hover': {
+        background: 'rgba(88, 32, 214, 0.2)',
+      },
     },
     '& svg': {
       width: 20,
