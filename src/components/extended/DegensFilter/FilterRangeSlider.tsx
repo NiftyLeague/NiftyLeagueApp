@@ -14,22 +14,22 @@ const FilterRangeSlider = ({
   ...props
 }: Props): JSX.Element => (
   <Stack>
-    <Stack gap={1}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6">Min {label || ''}</Typography>
-        <Typography variant="h6">Max {label || ''}</Typography>
-      </Stack>
-      <Slider {...props} value={value} />
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="caption">
-          {value[0]}
-          {unit || ''}
-        </Typography>
-        <Typography variant="caption">
-          {value[1]}
-          {unit || ''}
-        </Typography>
-      </Stack>
+    <Stack gap={0.5}>
+      <Typography variant="h6">{`${value[0].toLocaleString()} - ${value[1].toLocaleString()} ${
+        unit || ''
+      }`}</Typography>
+      <Slider
+        {...props}
+        value={value}
+        sx={{
+          ml: 1,
+          width: 'calc(100% - 16px)',
+          '& .MuiSlider-thumb': {
+            background: 'rgb(30, 32, 35)',
+            border: '1px solid rgb(98, 14, 223)',
+          },
+        }}
+      />
     </Stack>
   </Stack>
 );
