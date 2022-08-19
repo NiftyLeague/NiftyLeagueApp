@@ -1,21 +1,25 @@
 import { MenuItemBaseProps } from 'types';
 
 const DegenSortOptions: MenuItemBaseProps[] = [
-  // {
-  //   value: 'name',
-  //   label: 'Name',
-  // },
   {
-    value: 'multiplier',
-    label: 'Multiplier',
+    value: 'priceUp',
+    label: 'Price Low to High',
   },
   {
-    value: 'rentals',
-    label: 'Rentals',
+    value: 'priceDown',
+    label: 'Price High to Low',
   },
   {
-    value: 'price',
-    label: 'Price',
+    value: 'mostRented',
+    label: 'Most Rented',
+  },
+  {
+    value: 'leastRented',
+    label: 'Least Rented',
+  },
+  {
+    value: 'recentRented',
+    label: 'Recently Rented',
   },
 ];
 
