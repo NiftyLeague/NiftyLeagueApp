@@ -1,19 +1,20 @@
 import { RENTAL_RENAME_URL } from 'constants/url';
+import useAuth from './useAuth';
 
 const useRentalRename = (
   degenId: string | undefined,
   rentalId: string | undefined,
   name: string | undefined,
 ): (() => Promise<void>) => {
+  const { authToken } = useAuth();
   const rent = async () => {
-    const auth = window.localStorage.getItem('authentication-token');
-    if (!auth || !degenId || !rentalId || !name) {
+    if (!authToken || !degenId || !rentalId || !name) {
       return;
     }
 
     const res = await fetch(RENTAL_RENAME_URL(rentalId), {
       method: 'POST',
-      headers: { authorizationToken: auth },
+      headers: { authorizationToken: authToken },
       body: JSON.stringify({
         degen_id: degenId,
         name,

@@ -3,7 +3,6 @@ export interface InitialLoginContextProps {
 }
 
 export type TokenContextType = InitialLoginContextProps & {
-  logout: () => void;
   signMsg: () => Promise<string | null>;
-  authToken: string;
+  authToken: string | undefined;
 };

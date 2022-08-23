@@ -15,18 +15,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
 import useTeminateRental from 'hooks/useTeminateRental';
+import useAuth from 'hooks/useAuth';
 
 const DashboardRentalPage = (): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
-
-  let headers;
-  if (authToken) {
-    headers = {
-      authorizationToken: authToken,
-    };
-  }
 
   const getFetchUrl = (): string => {
     switch (category) {
@@ -160,8 +155,12 @@ const DashboardRentalPage = (): JSX.Element => {
   };
 
   useEffect(() => {
+    if (!authToken) {
+      return;
+    }
+
     refetch();
-  }, [category, refetch]);
+  }, [authToken, category, refetch]);
 
   return (
     <Stack spacing={3}>

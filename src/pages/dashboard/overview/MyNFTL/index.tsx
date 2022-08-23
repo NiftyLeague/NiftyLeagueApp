@@ -34,10 +34,11 @@ import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import BalanceContext from 'contexts/BalanceContext';
+import useAuth from 'hooks/useAuth';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
-  const auth = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   const navigate = useNavigate();
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const {
@@ -104,7 +105,7 @@ const MyNFTL = (): JSX.Element => {
       });
       try {
         const response = await fetch(WITHDRAW_NFTL_SIGN, {
-          headers: { authorizationToken: auth as string },
+          headers: { authorizationToken: authToken as string },
           method: 'POST',
           body,
         });
@@ -138,13 +139,13 @@ const MyNFTL = (): JSX.Element => {
         return { txRes: null, error: error as Error };
       }
     },
-    [address, auth, tx, writeContracts],
+    [address, authToken, tx, writeContracts],
   );
 
   const handleRefreshBal = useCallback(async () => {
     try {
       const response = await fetch(WITHDRAW_NFTL_REFRESH, {
-        headers: { authorizationToken: auth as string },
+        headers: { authorizationToken: authToken as string },
         method: 'POST',
       });
       if (!response.ok) throw new Error(response.statusText);
@@ -153,7 +154,7 @@ const MyNFTL = (): JSX.Element => {
     } catch (error) {
       console.error('error', error);
     }
-  }, [auth]);
+  }, [authToken]);
 
   const handleBuyArcadeTokens = () => {
     setOpenBuyAT(true);

@@ -14,6 +14,7 @@ import { Degen } from 'types/degens';
 import { DISABLE_RENT_API_URL } from 'constants/url';
 import { toast } from 'react-toastify';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import useAuth from 'hooks/useAuth';
 
 interface Props {
   degen?: Degen;
@@ -28,34 +29,37 @@ const EnableDisableDegenDialogContent = ({
   onClose,
   onSuccess,
 }: Props): JSX.Element => {
-  const auth = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   const [agreement, setAgreement] = useState(false);
   const handleButtonClick = async () => {
-    if (auth && degen) {
-      const res = await fetch(
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        `${DISABLE_RENT_API_URL}${
-          isEnabled ? 'deactivate' : 'activate'
-        }?degen_id=${degen.id}`,
-        {
-          method: 'POST',
-          headers: { authorizationToken: auth },
-        },
-      );
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const json = await res.json();
+    if (!authToken || !degen) {
+      return;
+    }
+
+    const headers = { authorizationToken: authToken };
+    const res = await fetch(
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      `${DISABLE_RENT_API_URL}${
+        isEnabled ? 'deactivate' : 'activate'
+      }?degen_id=${degen.id}`,
+      {
+        method: 'POST',
+        headers,
+      },
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const json = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (json.statusCode) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (json.statusCode) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        toast.error(json.body, { theme: 'dark' });
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        toast.success(`${isEnabled ? 'Disable' : 'Enable'} successfully!`, {
-          theme: 'dark',
-        });
-        onSuccess?.();
-        onClose();
-      }
+      toast.error(json.body, { theme: 'dark' });
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      toast.success(`${isEnabled ? 'Disable' : 'Enable'} successfully!`, {
+        theme: 'dark',
+      });
+      onSuccess?.();
+      onClose();
     }
   };
 

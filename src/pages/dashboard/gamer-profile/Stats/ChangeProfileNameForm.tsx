@@ -10,6 +10,7 @@ import { PROFILE_RENAME_API } from 'constants/url';
 import { DialogContext } from 'components/dialog';
 
 import { useProfileRenameFee } from 'hooks/useGamerProfile';
+import useAuth from 'hooks/useAuth';
 
 interface ChangeProfileNameFormProps {
   updateNewName: (name: string) => void;
@@ -28,6 +29,7 @@ const ChangeProfileNameForm = ({
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { fee, loadingFee } = useProfileRenameFee();
   const [, setIsOpen] = useContext(DialogContext);
+  const { authToken } = useAuth();
 
   const {
     handleSubmit,
@@ -43,8 +45,7 @@ const ChangeProfileNameForm = ({
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const authToken = window.localStorage.getItem('authentication-token');
-    if (!data.name && !authToken) {
+    if (!data.name || !authToken) {
       return;
     }
 
