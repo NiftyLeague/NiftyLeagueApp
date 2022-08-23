@@ -5,7 +5,7 @@ export const NiftySmashersTables = [
     key: 'win_rate',
     display: 'WIN RATE',
     rows: [
-      { key: 'win_rate', display: 'WIN RATE' },
+      { key: 'win_rate', display: 'WIN RATE', primary: true },
       { key: 'matches', display: 'MATCHES PLAYED' },
     ],
   },
@@ -13,7 +13,7 @@ export const NiftySmashersTables = [
     key: 'earnings',
     display: 'TOP EARNERS',
     rows: [
-      { key: 'earnings', display: 'TOTAL NFTL EARNED' },
+      { key: 'earnings', display: 'TOTAL NFTL EARNED', primary: true },
       { key: 'matches', display: 'MATCHES PLAYED' },
       { key: 'avg_NFTL/match', display: 'AVG, NFTL/MATCH' },
       { key: 'kills', display: 'KILLS' },
@@ -24,7 +24,7 @@ export const NiftySmashersTables = [
     display: 'TOP KILLS',
     rows: [
       { key: 'matches', display: 'MATCHES PLAYED' },
-      { key: 'kills', display: 'KILLS' },
+      { key: 'kills', display: 'KILLS', primary: true },
     ],
   },
 ];
@@ -33,7 +33,7 @@ export const WenGameTables = [
   {
     key: 'score',
     display: 'HIGH SCORE',
-    rows: [{ key: 'score', display: 'HIGH SCORE' }],
+    rows: [{ key: 'score', display: 'HIGH SCORE', primary: true }],
   },
 ];
 
@@ -41,7 +41,7 @@ export const MtGawxTables = [
   {
     key: 'burnings',
     display: 'NFTL BURNED',
-    rows: [{ key: 'score', display: 'NFTL BURNED' }],
+    rows: [{ key: 'score', display: 'NFTL BURNED', primary: true }],
   },
 ];
 

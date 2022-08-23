@@ -9950,10 +9950,10 @@ ms@2.1.3, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mui-responsive-table@0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/mui-responsive-table/-/mui-responsive-table-0.6.6.tgz#74d11f031dd723a8d921f3574d372863ce5a8049"
-  integrity sha512-Ks6OUMeIVXRH1R1CDb1xkkVLUsO5A8RErGT2zhmLX8cKOpcJmxkTsoNlqb21zPuWfTsjoVUMSsZ7c8EDty3kFg==
+mui5-responsive-table@0.6.11:
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/mui5-responsive-table/-/mui5-responsive-table-0.6.11.tgz#a82dd8d1498729c342ccce39493c9fe76cca78c1"
+  integrity sha512-biSAbbZXTmRz8T2bJGaTCQanJ58gFMZ2pP+XatmvFMXFwgOI4ukW2JXJaMV37zfBfeDVGd5FYDX07SIw0F0mKA==
 
 multibase@^4.0.1:
   version "4.0.6"
