@@ -1,5 +1,6 @@
 import { RENTAL_PASS_INVENTORY_URL } from 'constants/url';
 import { useEffect, useState } from 'react';
+import useAuth from './useAuth';
 
 const useRentalPassCount = (
   degenId: string | undefined,
@@ -7,10 +8,10 @@ const useRentalPassCount = (
   const [loading, setLoading] = useState(true);
   const [rentalPassCount, setRentalPassCount] = useState<number>(0);
   const [error, setError] = useState(false);
+  const { authToken } = useAuth();
 
   useEffect(() => {
     async function resolveRental() {
-      const authToken = window.localStorage.getItem('authentication-token');
       if (!degenId || !authToken) {
         return;
       }
@@ -35,8 +36,7 @@ const useRentalPassCount = (
 
     // eslint-disable-next-line no-void
     void resolveRental();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [degenId]);
+  }, [degenId, authToken]);
 
   return [loading, error, rentalPassCount];
 };

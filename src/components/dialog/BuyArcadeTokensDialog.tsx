@@ -35,6 +35,7 @@ import {
 import arcadeToken from 'assets/images/icons/arcade_token.png';
 import useAccount from 'hooks/useAccount';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import useAuth from 'hooks/useAuth';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -55,6 +56,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   const [showError, setShowError] = useState<boolean>(false);
   const [isPending /*, setIsPending*/] = useState<boolean>(false);
   const [tokenCount, setTokenCount] = useState<number>(1);
+  const { authToken } = useAuth();
 
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
@@ -64,14 +66,12 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
     const response = await fetch(GET_PRODUCT(PRODUCT_ID, 'nftl'), {
       method: 'GET',
       headers: {
-        authorizationToken: window.localStorage.getItem(
-          'authentication-token',
-        ) as string,
+        authorizationToken: authToken || '',
       },
     });
     const body = await response.json();
     return body;
-  }, []);
+  }, [authToken]);
 
   useEffect(() => {
     if (open) {
@@ -102,9 +102,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
       const response = await fetch(PURCHASE_ARCADE_TOKEN_BALANCE_API, {
         method: 'post',
         headers: {
-          authorizationToken: window.localStorage.getItem(
-            'authentication-token',
-          ) as string,
+          authorizationToken: authToken || '',
         },
         body: JSON.stringify({
           id: PRODUCT_ID,
@@ -125,7 +123,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
     } catch {
       setShowError(true);
     }
-  }, [tokenCount, details, onSuccess]);
+  }, [authToken, tokenCount, details, onSuccess]);
 
   const handleHideError = () => {
     setShowError(false);

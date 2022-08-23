@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import ActiveRentalDialog from 'components/dialog/ActiveRentalDialog';
 import { ALL_RENTAL_API_URL } from 'constants/url';
+import useAuth from 'hooks/useAuth';
 import useFetch from 'hooks/useFetch';
 import { useEffect, useState } from 'react';
 import { Rentals } from 'types/rentals';
@@ -11,15 +12,11 @@ import MyNFTL from './MyNFTL';
 import MyRentals from './MyRentals';
 
 const DashboardOverview = (): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
-  let headers;
-  if (authToken) {
-    headers = {
-      authorizationToken: authToken,
-    };
-  }
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
+    enabled: !!authToken,
   });
 
   const [rental, setRental] = useState<Rentals>();
