@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useReducer, useContext, useState } from 'react';
+import React, {
+  createContext,
+  useEffect,
+  useReducer,
+  useContext,
+  useState,
+} from 'react';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
