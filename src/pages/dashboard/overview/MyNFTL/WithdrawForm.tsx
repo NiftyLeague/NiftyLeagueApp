@@ -27,20 +27,21 @@ import { WithdrawalHistory } from 'types/account';
 import { WITHDRAW_NFTL_AVAILABILITY } from 'constants/url';
 import { formatDateTime } from 'helpers/dateTime';
 import TermsOfServiceDialog from 'components/dialog/TermsOfServiceDialog';
+import useAuth from 'hooks/useAuth';
 
 const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
   const [withdrawDisabled, setWithdrawDisabled] = useState(false);
   const [availableIn, setAvailableIn] = useState(0);
   const [availableAt, setAvailableAt] = useState<number | undefined>();
-  const authToken = window.localStorage.getItem('authentication-token');
-  let headers;
-  if (authToken) headers = { authorizationToken: authToken };
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const { loading, data } = useFetch<{
     is_available: boolean;
     available_in: number;
     available_at?: number;
   }>(WITHDRAW_NFTL_AVAILABILITY, {
     headers,
+    enabled: !!authToken,
   });
 
   useEffect(() => {
