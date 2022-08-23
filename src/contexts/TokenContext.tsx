@@ -136,7 +136,6 @@ export const TokenProvider = ({
         ...state,
         signMsg,
         authToken,
-        isLoggedIn,
       }}
     >
       {children}
