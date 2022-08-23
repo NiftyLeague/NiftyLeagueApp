@@ -221,6 +221,7 @@ const DashboardDegensPage = (): JSX.Element => {
       <DegensFilter
         onFilter={handleFilter}
         defaultFilterValues={defaultValues as DegenFilter}
+        isDegenOwner={true}
       />
     ),
     [defaultValues, handleFilter],
