@@ -1,5 +1,6 @@
 import { RENTAL_RENAME_URL } from 'constants/url';
 import { useEffect, useState } from 'react';
+import useAuth from './useAuth';
 
 const useRentalRenameFee = (
   degenId: string | undefined,
@@ -7,13 +8,11 @@ const useRentalRenameFee = (
   const [loading, setLoading] = useState(true);
   const [rentalRenameFee, setRentalRenameFee] = useState<number>();
   const [error, setError] = useState(false);
+  const { authToken } = useAuth();
 
   useEffect(() => {
     async function resolveRental() {
-      const auth: string | undefined = window.localStorage.getItem(
-        'authentication-token',
-      ) as string;
-      if (!degenId && !auth) {
+      if (!degenId || !authToken) {
         return;
       }
 
@@ -21,7 +20,9 @@ const useRentalRenameFee = (
         setLoading(true);
         const res = await fetch(RENTAL_RENAME_URL(degenId as string), {
           method: 'GET',
-          headers: { authorizationToken: auth },
+          headers: {
+            authorizationToken: authToken,
+          },
         });
         if (res.status === 404 || res.status === 401) {
           throw Error('Not Found');
@@ -37,8 +38,7 @@ const useRentalRenameFee = (
 
     // eslint-disable-next-line no-void
     void resolveRental();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [degenId]);
+  }, [degenId, authToken]);
 
   return [loading, error, rentalRenameFee];
 };

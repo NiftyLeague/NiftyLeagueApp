@@ -18,6 +18,7 @@ import DegenInternalImage from './DegenInternalImage';
 
 import { Degen } from 'types/degens';
 import { UPDATE_PROFILE_AVATAR_API } from 'constants/url';
+import useAuth from 'hooks/useAuth';
 
 interface ProfileImageDialogProps {
   degens: Degen[] | undefined;
@@ -40,15 +41,16 @@ const ProfileImageContent = ({
   avatarFee,
 }) => {
   const [, setIsOpen] = useContext(DialogContext);
+  const { authToken } = useAuth();
 
   const handleSelectedDegen = async (degen: Degen) => {
-    const authToken = window.localStorage.getItem('authentication-token');
-    if (!degen?.id && !authToken) {
+    if (!degen?.id || !authToken) {
       return;
     }
+
     try {
       const response = await fetch(UPDATE_PROFILE_AVATAR_API, {
-        headers: { authorizationToken: authToken as string },
+        headers: { authorizationToken: authToken },
         method: 'POST',
         body: JSON.stringify({
           avatar: degen?.id,

@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { GAMER_ACCOUNT_API } from 'constants/url';
 import { Account } from 'types/account';
+import useAuth from './useAuth';
 
 const useAccount = (
   refreshKey?: string | number,
 ): { error: boolean; account: Account | undefined } => {
-  const auth = window.localStorage.getItem('authentication-token');
   const [account, setAccount] = useState<Account | undefined>(undefined);
   const [error, setAccError] = useState(false);
+  const { authToken } = useAuth();
 
   const fetchAccount = useCallback(async () => {
-    if (!auth) {
+    if (!authToken) {
       return;
     }
     try {
       const res = await fetch(GAMER_ACCOUNT_API, {
-        headers: { authorizationToken: auth },
+        headers: { authorizationToken: authToken },
       });
       if (res.status === 404) {
         setAccError(true);
@@ -28,11 +29,11 @@ const useAccount = (
     } catch (err) {
       setAccError(err);
     }
-  }, [auth]);
+  }, [authToken]);
 
   useEffect(() => {
-    if (auth) fetchAccount();
-  }, [auth, fetchAccount, refreshKey]);
+    if (authToken) fetchAccount();
+  }, [authToken, fetchAccount, refreshKey]);
 
   return { error, account };
 };
