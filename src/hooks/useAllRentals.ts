@@ -1,5 +1,6 @@
 import { ALL_RENTAL_API_URL } from 'constants/url';
 import { Rentals } from 'types/rentals';
+import useAuth from './useAuth';
 import useFetch from './useFetch';
 
 const useAllRentals = (): {
@@ -7,9 +8,9 @@ const useAllRentals = (): {
   rentals?: Rentals[];
   loadingRentals?: boolean;
 } => {
-  const auth = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   let headers;
-  if (auth) headers = { authorizationToken: auth };
+  if (authToken) headers = { authorizationToken: authToken };
   const { error, data, loading } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
   });

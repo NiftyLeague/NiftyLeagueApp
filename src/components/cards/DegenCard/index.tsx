@@ -26,6 +26,7 @@ import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-so
 import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import { Degen } from 'types/degens';
 import { DISABLE_RENT_API_URL } from 'constants/url';
+import useAuth from 'hooks/useAuth';
 
 const chipStyles = (isSmall: boolean) => ({
   color: 'white',
@@ -89,7 +90,7 @@ const DegenCard: React.FC<
   }) => {
     const { palette } = useTheme();
     const { id, name, multiplier, price, rental_count, is_active } = degen;
-    const authToken = window.localStorage.getItem('authentication-token');
+    const { authToken } = useAuth();
     const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
       useState<boolean>(false);
     const [isEnabled, setIsEnabled] = useState(is_active);

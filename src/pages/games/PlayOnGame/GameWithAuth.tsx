@@ -37,11 +37,10 @@ const Game = ({
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const authToken = window.localStorage.getItem('authentication-token');
   let headers;
-  if (authToken) {
+  if (auth) {
     headers = {
-      authorizationToken: authToken,
+      authorizationToken: auth,
     };
   }
   const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
@@ -138,6 +137,7 @@ const Game = ({
       <Stack direction="row" alignItems="flex-start">
         <Stack alignItems="flex-start">
           <Unity
+            key={auth}
             className="game-canvas"
             unityContext={unityContext}
             style={{

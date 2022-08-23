@@ -14,6 +14,26 @@ type Action<T> =
   | { type: 'fetched'; payload: T }
   | { type: 'error'; payload: Error };
 
+const initialState = {
+  loading: undefined,
+  error: undefined,
+  data: undefined,
+};
+
+// Keep state logic separated
+function fetchReducer<T>(state: State<T>, action: Action<T>): State<T> {
+  switch (action.type) {
+    case 'loading':
+      return { ...initialState, loading: true };
+    case 'fetched':
+      return { ...initialState, loading: false, data: action.payload };
+    case 'error':
+      return { ...initialState, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
 type Options = RequestInit & {
   enabled?: boolean;
 };
@@ -27,26 +47,6 @@ function useFetch<T = unknown>(
 
   // Used to prevent state update if the component is unmounted
   const cancelRequest = useRef<boolean>(false);
-
-  const initialState: State<T> = {
-    loading: undefined,
-    error: undefined,
-    data: undefined,
-  };
-
-  // Keep state logic separated
-  const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
-    switch (action.type) {
-      case 'loading':
-        return { ...initialState, loading: true };
-      case 'fetched':
-        return { ...initialState, loading: false, data: action.payload };
-      case 'error':
-        return { ...initialState, loading: false, error: action.payload };
-      default:
-        return state;
-    }
-  };
 
   const [state, dispatch] = useReducer(fetchReducer, initialState);
 
@@ -94,7 +94,7 @@ function useFetch<T = unknown>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, options?.enabled]);
 
-  return state;
+  return state as State<T>;
 }
 
 export default useFetch;

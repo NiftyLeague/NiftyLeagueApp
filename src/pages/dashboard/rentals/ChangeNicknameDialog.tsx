@@ -14,6 +14,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
+import useAuth from 'hooks/useAuth';
 
 interface Props {
   rental: RentalDataGrid;
@@ -32,7 +33,7 @@ const ChangeNicknameDialog = ({
   rental,
   updateNickname,
 }: Props): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
 
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { rentalId, degenId, renter, playerAddress } = rental;
@@ -51,9 +52,10 @@ const ChangeNicknameDialog = ({
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    if (!rentalId && !degenId && !data.name && !authToken) {
+    if (!rentalId || !degenId || !data.name || !authToken) {
       return;
     }
+
     setLoadingRename(true);
     const nicknames: { [address: string]: string } = JSON.parse(
       window.localStorage.getItem('player-nicknames') || '{}',

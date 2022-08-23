@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { GET_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
+import useAuth from './useAuth';
 
 /*
   ~ What it does? ~
@@ -28,14 +29,14 @@ interface ArcadeBalanceState {
 export default function useArcadeBalance(): ArcadeBalanceState {
   const [balanceRes, setBalanceRes] = useState<ArcadeBalanceInfo>();
   const [loading, setLoading] = useState<boolean>(true);
+  const { authToken } = useAuth();
 
   const fetchBalance = async () => {
     try {
-      const auth = window.localStorage.getItem('authentication-token');
-      if (!auth) return;
+      if (!authToken) return;
       setLoading(true);
       const res = await fetch(GET_ARCADE_TOKEN_BALANCE_API, {
-        headers: { authorizationToken: auth },
+        headers: { authorizationToken: authToken },
       });
       if (res.status === 200) {
         const json = await res.json();
@@ -49,7 +50,7 @@ export default function useArcadeBalance(): ArcadeBalanceState {
 
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [authToken]);
 
   return {
     arcadeBalance: balanceRes?.balance ?? 0,
