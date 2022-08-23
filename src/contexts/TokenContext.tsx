@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useReducer, useContext } from 'react';
+import React, {
+  createContext,
+  useEffect,
+  useReducer,
+  useContext,
+  useState,
+} from 'react';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
@@ -24,6 +30,7 @@ export const TokenProvider = ({
 }) => {
   const { address, userProvider } = useContext(NetworkContext);
   const [state, dispatch] = useReducer(accountReducer, initialAccountState);
+  const [authToken, setAuthToken] = useState('');
 
   const nonce = `0x${crypto.randomBytes(4).toString('hex')}`;
   const token = `${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}`;
@@ -117,6 +124,8 @@ export const TokenProvider = ({
 
             const auth = result.slice(1, -1);
             window.localStorage.setItem('authentication-token', auth);
+            setAuthToken(auth);
+
             window.localStorage.setItem('uuid-token', token);
             window.localStorage.setItem('nonce', nonce);
 
@@ -138,7 +147,7 @@ export const TokenProvider = ({
   };
 
   useEffect(() => {
-    if (address) signMsg();
+    if (address) setTimeout(signMsg, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
@@ -152,6 +161,7 @@ export const TokenProvider = ({
         ...state,
         logout,
         signMsg,
+        authToken,
       }}
     >
       {children}
