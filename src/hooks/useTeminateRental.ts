@@ -1,9 +1,10 @@
 import { TERMINATE_RENTAL_API_URL } from 'constants/url';
+import useAuth from './useAuth';
 
 const useTeminateRental = (rentalId: string | undefined) => {
+  const { authToken } = useAuth();
   const terminalRental = async () => {
-    const auth = window.localStorage.getItem('authentication-token');
-    if (!auth || !rentalId) {
+    if (!authToken || !rentalId) {
       return;
     }
 
@@ -13,7 +14,7 @@ const useTeminateRental = (rentalId: string | undefined) => {
       })}`,
       {
         method: 'POST',
-        headers: { authorizationToken: auth },
+        headers: { authorizationToken: authToken },
       },
     );
     return res;

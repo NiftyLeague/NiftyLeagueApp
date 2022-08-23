@@ -1,6 +1,7 @@
 import { ProfileAvatar } from 'types/account';
 import { GET_PROFILE_AVATARS_AND_COST_API } from 'constants/url';
 import useFetch from '../useFetch';
+import useAuth from 'hooks/useAuth';
 
 interface ProfileAvatarsRes {
   id: string;
@@ -12,13 +13,13 @@ const useProfileAvatarFee = (): {
   avatarsAndFee?: ProfileAvatarsRes;
   loadingAvatarsAndFee?: boolean;
 } => {
-  const auth = window.localStorage.getItem('authentication-token');
-  let headers;
-  if (auth) headers = { authorizationToken: auth };
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const { error, data, loading } = useFetch<ProfileAvatarsRes>(
     GET_PROFILE_AVATARS_AND_COST_API,
     {
       headers,
+      enabled: !!authToken,
     },
   );
   return {

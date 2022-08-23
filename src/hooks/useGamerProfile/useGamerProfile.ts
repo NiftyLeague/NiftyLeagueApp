@@ -1,4 +1,5 @@
 import { GET_GAMER_PROFILE_API } from 'constants/url';
+import useAuth from 'hooks/useAuth';
 import { Profile } from 'types/account';
 import useFetch from '../useFetch';
 
@@ -8,11 +9,12 @@ const useGamerProfile = (): {
   loadingProfile?: boolean;
   fetchUserProfile?: any;
 } => {
-  const auth = window.localStorage.getItem('authentication-token');
-  let headers;
-  if (auth) headers = { authorizationToken: auth };
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
+
   const { error, data, loading } = useFetch<Profile>(GET_GAMER_PROFILE_API, {
     headers,
+    enabled: !!authToken,
   });
 
   const fetchUserProfile = async () => {

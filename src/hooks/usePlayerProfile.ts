@@ -1,5 +1,6 @@
 import { MY_PROFILE_API_URL } from 'constants/url';
 import { Profile } from 'types/account';
+import useAuth from './useAuth';
 import useFetch from './useFetch';
 
 const usePlayerProfile = (): {
@@ -7,9 +8,9 @@ const usePlayerProfile = (): {
   profile?: Profile;
   loadingProfile?: boolean;
 } => {
-  const auth = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   let headers;
-  if (auth) headers = { authorizationToken: auth };
+  if (authToken) headers = { authorizationToken: authToken };
   const { error, data, loading } = useFetch<Profile>(MY_PROFILE_API_URL, {
     headers,
   });

@@ -22,6 +22,7 @@ import { RENAME_RENTAL_API_URL } from 'constants/url';
 // import { Degen } from 'types/degens';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
+import useAuth from 'hooks/useAuth';
 
 interface Props {
   rental: RentalDataGrid;
@@ -41,19 +42,10 @@ const RenameRentalDialogContent = ({
   rental,
   updateRentalName,
 }: Props): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   const dispatch = useDispatch();
   const [isLoadingRename, setLoadingRename] = useState(false);
   const { rentalId, degenId, renter } = rental;
-
-  // const { data: degenDetail } = useFetch<Degen>(
-  //   `${RENAME_RENTAL_API_URL}?id=${encodeURIComponent(id)}`,
-  //   {
-  //     headers: {
-  //       authorizationToken: authToken,
-  //     } as any,
-  //   },
-  // );
 
   const {
     handleSubmit,
@@ -71,7 +63,7 @@ const RenameRentalDialogContent = ({
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    if (!rentalId && !degenId && !data.name && !authToken) {
+    if (!rentalId || !degenId || !data.name || !authToken) {
       return;
     }
 

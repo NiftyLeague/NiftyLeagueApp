@@ -1,5 +1,6 @@
 import { RENT_URL } from 'constants/url';
 import { MyRental } from 'types/rental';
+import useAuth from './useAuth';
 
 const useRent = (
   degenId: string | undefined,
@@ -8,15 +9,15 @@ const useRent = (
   address: string,
   isUseRentalPass: boolean,
 ): (() => Promise<MyRental | undefined>) => {
+  const { authToken } = useAuth();
   const rent = async (): Promise<MyRental | undefined> => {
-    const auth = window.localStorage.getItem('authentication-token');
-    if (!auth || !degenId || !price) {
+    if (!authToken || !degenId || !price) {
       return undefined;
     }
 
     const res = await fetch(RENT_URL, {
       method: 'POST',
-      headers: { authorizationToken: auth },
+      headers: { authorizationToken: authToken },
       body: JSON.stringify({
         degen_id: degenId,
         position,
