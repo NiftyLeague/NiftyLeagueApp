@@ -9,10 +9,10 @@ const usePlayerProfile = (): {
   loadingProfile?: boolean;
 } => {
   const { authToken } = useAuth();
-  let headers;
-  if (authToken) headers = { authorizationToken: authToken };
+  const headers = { authorizationToken: authToken || '' };
   const { error, data, loading } = useFetch<Profile>(MY_PROFILE_API_URL, {
     headers,
+    enabled: !!authToken,
   });
   return { error, profile: data, loadingProfile: loading };
 };
