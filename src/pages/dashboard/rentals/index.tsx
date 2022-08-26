@@ -24,6 +24,7 @@ const DashboardRentalPage = (): JSX.Element => {
   const headers = { authorizationToken: authToken || '' };
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
+  const terminalRental = useTeminateRental();
 
   const getFetchUrl = (): string[] => {
     switch (category) {
@@ -88,10 +89,8 @@ const DashboardRentalPage = (): JSX.Element => {
   );
 
   const terminateRentalById = async (rentalId: string) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const terminalRental = useTeminateRental(rentalId);
     try {
-      const result: any = await terminalRental();
+      const result: any = await terminalRental(rentalId);
       if (!result.ok) {
         const errMsg = await result.text();
         toast.error(`Can not terminate the rental: ${errMsg}`, {

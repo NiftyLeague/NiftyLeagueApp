@@ -1,9 +1,9 @@
 import { TERMINATE_RENTAL_API_URL } from 'constants/url';
 import useAuth from './useAuth';
 
-const useTeminateRental = (rentalId: string | undefined) => {
+const useTeminateRental = () => {
   const { authToken } = useAuth();
-  const terminalRental = async () => {
+  const terminalRental = async (rentalId: string | undefined) => {
     if (!authToken || !rentalId) {
       return;
     }
