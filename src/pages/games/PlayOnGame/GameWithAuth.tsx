@@ -16,36 +16,29 @@ import Preloader from 'components/Preloader';
 import { Rentals } from 'types/rentals';
 import EarningCap from 'pages/dashboard/overview/EarningCap';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
+import useAuth from 'hooks/useAuth';
 
 interface GameProps {
-  auth: string;
   unityContext: UnityContext;
   arcadeTokenRequired?: boolean;
 }
 
-const Game = ({
-  auth,
-  unityContext,
-  arcadeTokenRequired = false,
-}: GameProps) => {
+const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
+  const { authToken } = useAuth();
   const location = useLocation();
   const { address, targetNetwork } = useContext(NetworkContext);
   const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
-  const authMsg = `true,${address || '0x0'},Vitalik,${auth},${favs}`;
+  const authMsg = `true,${address || '0x0'},Vitalik,${authToken},${favs}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  let headers;
-  if (auth) {
-    headers = {
-      authorizationToken: auth,
-    };
-  }
+  const headers = { authorizationToken: authToken || '' };
   const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
     headers,
-    enabled: unityContext.unityConfig.productName === 'NiftySmashers',
+    enabled:
+      !!authToken && unityContext.unityConfig.productName === 'NiftySmashers',
   });
 
   useEffect(() => {
@@ -137,7 +130,7 @@ const Game = ({
       <Stack direction="row" alignItems="flex-start">
         <Stack alignItems="flex-start">
           <Unity
-            key={auth}
+            key={authToken}
             className="game-canvas"
             unityContext={unityContext}
             style={{

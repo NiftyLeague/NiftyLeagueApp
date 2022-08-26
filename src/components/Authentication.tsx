@@ -31,11 +31,7 @@ export default function withVerification(
   Component: (props: any) => JSX.Element,
 ) {
   return (props: any): JSX.Element | null => {
-    const { isLoggedIn, authToken } = useAuth();
-    return isLoggedIn ? (
-      <Component {...props} auth={authToken} />
-    ) : (
-      <ProfileVerification />
-    );
+    const { isLoggedIn } = useAuth();
+    return isLoggedIn ? <Component {...props} /> : <ProfileVerification />;
   };
 }
