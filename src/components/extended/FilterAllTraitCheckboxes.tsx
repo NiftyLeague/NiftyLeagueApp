@@ -1,4 +1,4 @@
-import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { FormGroup, FormControlLabel, Checkbox, Typography } from '@mui/material';
 import { TRAIT_VALUE_MAP } from 'constants/cosmeticsFilters';
 import { FilterSource } from 'constants/filters';
 import { ChangeEvent, Dispatch, FC, SetStateAction, memo } from 'react';
@@ -54,9 +54,9 @@ const FilterAllTraitCheckboxes: FC<FilterAllTraitCheckboxesProps> = ({
               }
             />
           }
-          label={traitValue}
+          label={<Typography variant="body1">{traitValue}</Typography>}
           className={inputCheckFormControlStyle}
-          sx={{ flex: '0 0 50%' }}
+          sx={{ flex: '0 0 100%' }}
         />
       );
     })}
