@@ -45,7 +45,7 @@ const Sidebar = ({ window }: SidebarProps) => {
       <PerfectScrollbar
         component="div"
         style={{
-          height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+          height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 100px)',
           paddingLeft: '16px',
           paddingRight: '16px',
         }}
@@ -87,7 +87,7 @@ const Sidebar = ({ window }: SidebarProps) => {
             color: theme.palette.text.primary,
             borderRight: 'none',
             [theme.breakpoints.up('md')]: {
-              top: '88px',
+              top: '100px',
             },
           },
         }}

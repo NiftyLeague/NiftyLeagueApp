@@ -45,15 +45,19 @@ export const tranformDataByFilter = (
     }
 
     if (
-      multipliers.length === 2 &&
-      !(multiplier >= multipliers[0] && multiplier <= multipliers[1])
+      multipliers.length > 0 &&
+      !multipliers.find((value: string) =>
+        value === '3+' ? multiplier >= 3 : multiplier === Number(value),
+      )
     ) {
       return false;
     }
 
     if (
-      rentals.length === 2 &&
-      !(rental_count >= rentals[0] && rental_count <= rentals[1])
+      rentals.length > 0 &&
+      !rentals.find((value: string) =>
+        value === '3+' ? rental_count >= 3 : rental_count === Number(value),
+      )
     ) {
       return false;
     }
@@ -92,17 +96,16 @@ export const tranformDataByFilter = (
     return true;
   });
 
-  if (sort === 'name') {
-    result.sort((a, b) => a.name.localeCompare(b.name));
-  }
-  if (sort === 'multiplier') {
-    result.sort((a, b) => Number(b.multiplier) - Number(a.multiplier));
-  }
-  if (sort === 'rentals') {
-    result.sort((a, b) => Number(b.rental_count) - Number(a.rental_count));
-  }
-  if (sort === 'price') {
+  if (sort === 'priceUp') {
+    result.sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (sort === 'priceDown') {
     result.sort((a, b) => Number(b.price) - Number(a.price));
+  } else if (sort === 'mostRented') {
+    result.sort((a, b) => Number(b.total_rented) - Number(a.total_rented));
+  } else if (sort === 'leastRented') {
+    result.sort((a, b) => Number(a.total_rented) - Number(b.total_rented));
+  } else if (sort === 'recentRented') {
+    result.sort((a, b) => b.last_rented_at - a.last_rented_at);
   }
 
   return result;
@@ -123,17 +126,14 @@ export const updateFilterValue = (
     const value = params[key as keyof DegenFilter];
     if (key === 'searchTerm') {
       newFilter[key] = [value];
-      actions && actions[key]([value] || ['']);
     } else {
-      const isOverviewFilter =
-        ['prices', 'multipliers', 'rentals'].indexOf(key) !== -1;
       if (!value) {
         return;
       }
       const newValue = value
         .split('-')
         .map((type: number | string) =>
-          isOverviewFilter ? Number(type) : String(type),
+          key === 'prices' ? Number(type) : String(type),
         );
       actions &&
         actions[key](
@@ -152,26 +152,16 @@ export const getDefaultFilterValueFromData = (degens: Degen[] | undefined) => {
   }
   let minPrice = degens[0].price;
   let maxPrice = degens[0].price;
-  let minMultiplier = degens[0].multiplier;
-  let maxMultiplier = degens[0].multiplier;
-  let minRental = degens[0].rental_count;
-  let maxRental = degens[0].rental_count;
 
   degens.forEach((degen) => {
-    const { price, multiplier, rental_count } = degen;
+    const { price } = degen;
     minPrice = price < minPrice ? price : minPrice;
     maxPrice = price > maxPrice ? price : maxPrice;
-    minMultiplier = multiplier < minMultiplier ? multiplier : minMultiplier;
-    maxMultiplier = multiplier > maxMultiplier ? multiplier : maxMultiplier;
-    minRental = rental_count < minRental ? rental_count : minRental;
-    maxRental = rental_count > maxRental ? rental_count : maxRental;
   });
 
   const newFilterValues = {
     ...DEFAULT_STATIC_FILTER,
     prices: [minPrice, maxPrice],
-    multipliers: [minMultiplier, maxMultiplier],
-    rentals: [minRental, maxRental],
   };
 
   return newFilterValues;

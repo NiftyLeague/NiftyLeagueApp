@@ -1,9 +1,13 @@
 import { CardContent, CardActions, Skeleton, Stack } from '@mui/material';
 import MainCard from '../MainCard';
 
-const DegenPlaceholder = () => (
+interface DegenPlaceholderProps {
+  size?: 'normal' | 'small';
+}
+
+const DegenPlaceholder = ({ size = 'normal' }: DegenPlaceholderProps) => (
   <MainCard content={false} boxShadow={false} border={false}>
-    <Skeleton variant="rectangular" height={320} />
+    <Skeleton variant="rectangular" height={size === 'small' ? 200 : 320} />
     <CardContent sx={{ pb: 0, pt: 1 }}>
       <Stack
         direction="row"

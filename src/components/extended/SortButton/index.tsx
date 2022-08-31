@@ -1,5 +1,5 @@
-import { Menu, MenuItem, Stack, Typography } from '@mui/material';
-import { Children, cloneElement, ReactElement, useState } from 'react';
+import { Menu, MenuItem, Stack } from '@mui/material';
+import { Children, cloneElement, ReactElement, useRef, useState } from 'react';
 import { MenuItemBaseProps } from 'types';
 import { callAll } from 'utils';
 import DegenSortOptions from 'constants/sort';
@@ -25,6 +25,7 @@ const SortButton = ({
     defaultSelectedItemValue || sortOptions[0].value,
   );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const buttonRef = useRef(null);
   const isSortOpen = Boolean(anchorEl);
   const sortLabel = sortOptions.filter((items) => items.value === selectedSort);
 
@@ -50,19 +51,14 @@ const SortButton = ({
     children as React.ReactElement,
     {
       ...children?.props,
+      ref: buttonRef,
       onClick: callAll(handleOpenSortMenu, children?.props?.onClick),
     },
     sortLabel.length > 0 && sortLabel[0].label,
   );
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ display: { xs: 'none', sm: 'flex' } }}
-    >
-      <Typography variant="h5">{label}</Typography>
+    <Stack direction="row" alignItems="center" justifyContent="center">
       {Button}
       <Menu
         id="demo-positioned-menu"
@@ -77,6 +73,16 @@ const SortButton = ({
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',
+        }}
+        sx={{
+          '& .MuiPaper-root': {
+            background: '#1E2023',
+            borderRadius: '0px 0px 5px 5px',
+          },
+          '& .MuiMenuItem-root': {
+            width: (buttonRef?.current as any)?.clientWidth,
+            color: '#f5f5f5',
+          },
         }}
       >
         {sortOptions.map((option) => (

@@ -39,4 +39,20 @@ const tribes = [
 
 const backgrounds = ['Common', 'Rare', 'Meta', 'Legendary'];
 
-export { tribes, backgrounds };
+const rentals = ['1', '2', '3+'];
+
+const multipliers = ['1', '2', '3+'];
+
+const wearables = ['Hand', 'Back', 'Head', 'Pet'];
+
+export type FilterSource =
+  | 'prices'
+  | 'multipliers'
+  | 'rentals'
+  | 'tribes'
+  | 'backgrounds'
+  | 'cosmetics'
+  | 'wearables'
+  | 'searchTerm';
+
+export { tribes, backgrounds, rentals, multipliers, wearables };

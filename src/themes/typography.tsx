@@ -93,7 +93,7 @@ const Typography = (
         ? theme.palette.dark[800]
         : theme.palette.primary.light,
     width: '100%',
-    minHeight: 'calc(100vh - 88px)',
+    minHeight: 'calc(100vh - 100px)',
     flexGrow: 1,
     borderRadius: `${borderRadius}px`,
   },

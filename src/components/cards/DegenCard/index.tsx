@@ -28,22 +28,23 @@ import { Degen } from 'types/degens';
 import { DISABLE_RENT_API_URL } from 'constants/url';
 import useAuth from 'hooks/useAuth';
 
-const chipStyles = {
+const chipStyles = (isSmall: boolean) => ({
   color: 'white',
   borderRadius: 1,
   width: '100%',
-  fontSize: 11,
+  fontSize: isSmall ? 9 : 11,
   fontWeight: 'bold',
-  m: 0.5,
+  m: isSmall ? 0.25 : 0.5,
   '&:hover': {
     backgroundColor: 'transparent',
     cursor: 'auto',
     color: 'white',
   },
-};
+});
 
 export interface DegenCardProps {
   degen: Degen;
+  size?: 'small' | 'normal';
   isDashboardDegen?: boolean;
   degenEquipEnabled?: boolean;
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
@@ -55,8 +56,10 @@ export interface DegenCardProps {
 }
 
 const DegenClaimBal: React.FC<
-  React.PropsWithChildren<React.PropsWithChildren<{ tokenId: string }>>
-> = memo(({ tokenId }) => {
+  React.PropsWithChildren<
+    React.PropsWithChildren<{ tokenId: string; fontSize: string }>
+  >
+> = memo(({ tokenId, fontSize }) => {
   const { readContracts } = useContext(NetworkContext);
   const tokenIndices = [parseInt(tokenId, 10)];
   const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
@@ -65,7 +68,7 @@ const DegenClaimBal: React.FC<
     : 0;
   return (
     <Typography
-      sx={{ textAlign: 'center' }}
+      sx={{ textAlign: 'center', fontSize }}
     >{`${amountParsed} NFTL`}</Typography>
   );
 });
@@ -75,6 +78,7 @@ const DegenCard: React.FC<
 > = memo(
   ({
     degen,
+    size = 'normal',
     isDashboardDegen = false,
     degenEquipEnabled = false,
     onClickClaim,
@@ -116,6 +120,10 @@ const DegenCard: React.FC<
         }
       }
     };
+
+    const buttonFontSize = size === 'small' ? '10px' : '14px';
+    const tinyFontSize = size === 'small' ? '8px' : '12px';
+
     return (
       <Card
         sx={{
@@ -127,30 +135,35 @@ const DegenCard: React.FC<
           ...sx,
         }}
       >
-        {id && <DegenImage tokenId={id} />}
+        {id && (
+          <DegenImage
+            tokenId={id}
+            sx={{ height: size === 'small' ? 200 : undefined }}
+          />
+        )}
         <Stack
           direction="row"
           justifyContent="space-evenly"
-          sx={{ m: 1, width: 'auto' }}
+          sx={{ m: size === 'small' ? 0.5 : 1, width: 'auto' }}
         >
           <Chip
             chipcolor="rgb(75, 7, 175)"
             label={`${price} NFTL`}
-            sx={chipStyles}
+            sx={chipStyles(size === 'small')}
             variant="outlined"
             size="small"
           />
           <Chip
             chipcolor="rgb(75, 7, 175)"
             label={`${rental_count} Rentals`}
-            sx={chipStyles}
+            sx={chipStyles(size === 'small')}
             variant="outlined"
             size="small"
           />
           <Chip
             chipcolor="rgb(75, 7, 175)"
             label={`${multiplier}x`}
-            sx={chipStyles}
+            sx={chipStyles(size === 'small')}
             variant="outlined"
             size="small"
           />
@@ -168,7 +181,7 @@ const DegenCard: React.FC<
               },
             }}
           >
-            <Typography gutterBottom variant="h3">
+            <Typography gutterBottom variant={size === 'small' ? 'h4' : 'h3'}>
               {name || 'No Name DEGEN'}
             </Typography>
             {isDashboardDegen && (
@@ -186,8 +199,8 @@ const DegenCard: React.FC<
               }
               target="_blank"
               rel="nofollow"
-              variant="body2"
               color={palette.text.secondary}
+              sx={{ fontSize: buttonFontSize }}
             >
               {`#${id}`}
             </Link>
@@ -199,13 +212,16 @@ const DegenCard: React.FC<
             flexDirection: 'row',
             justifyContent: 'space-between',
             px: 2,
-            gap: 1,
+            gap: size === 'small' ? 0.5 : 1,
           }}
         >
           <Button
             variant="contained"
             fullWidth
-            sx={{ minWidth: '32%' }}
+            sx={{
+              minWidth: '32%',
+              fontSize: buttonFontSize,
+            }}
             onClick={onClickRent}
           >
             Rent
@@ -215,7 +231,10 @@ const DegenCard: React.FC<
               variant="outlined"
               color="primary"
               fullWidth
-              sx={{ minWidth: '32%' }}
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
               onClick={onClickEquip}
             >
               Equip
@@ -225,7 +244,10 @@ const DegenCard: React.FC<
               variant="outlined"
               color="primary"
               fullWidth
-              sx={{ minWidth: '32%' }}
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
               onClick={onClickDetail}
             >
               Traits
@@ -236,7 +258,10 @@ const DegenCard: React.FC<
               onClick={onClickClaim}
               variant="contained"
               fullWidth
-              sx={{ minWidth: '32%' }}
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
             >
               Claim
             </Button>
@@ -250,12 +275,12 @@ const DegenCard: React.FC<
             sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
           >
             <Typography
-              variant="body2"
               color={palette.grey[700]}
               sx={{
                 textDecoration: 'underline',
                 cursor: 'pointer',
                 textAlign: 'center',
+                fontSize: tinyFontSize,
               }}
               onClick={() => setIsEnableDisableDegenModalOpen(true)}
             >
@@ -270,16 +295,18 @@ const DegenCard: React.FC<
             >
               <Typography
                 sx={{
-                  fontSize: '12px',
+                  fontSize: tinyFontSize,
                   pr: '4px',
                 }}
               >
                 IP
               </Typography>
-
-              <DownloadSolid width="16" height="16" />
+              <DownloadSolid
+                width={size === 'small' ? 12 : 16}
+                height={size === 'small' ? 12 : 16}
+              />
             </Box>
-            <DegenClaimBal tokenId={id} />
+            <DegenClaimBal tokenId={id} fontSize={tinyFontSize} />
           </Stack>
         )}
         {isDashboardDegen && (

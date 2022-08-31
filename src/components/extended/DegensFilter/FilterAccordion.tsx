@@ -2,7 +2,8 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  useTheme,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { IconChevronDown } from '@tabler/icons';
 import { ReactNode } from 'react';
@@ -11,31 +12,58 @@ interface Props {
   summary: ReactNode;
   children: ReactNode;
   expanded?: boolean;
+  length?: number;
 }
 
 const FilterAccordion = ({
   summary,
   children,
   expanded = true,
+  length = 0,
 }: Props): JSX.Element => {
-  const theme = useTheme();
   return (
     <Accordion
       defaultExpanded={expanded}
       sx={{
-        backgroundColor: `${theme.palette.grey[800]}3d`,
-        '&:not(:last-child)': {
-          borderBottom: 0,
+        background: 'transparent',
+        '&.Mui-expanded': {
+          margin: 0,
         },
         '&:before': {
-          backgroundColor: theme.palette.grey[800],
+          display: 'none',
         },
-        marginTop: 1,
         width: '100%',
       }}
     >
-      <AccordionSummary expandIcon={<IconChevronDown />}>
-        {summary}
+      <AccordionSummary
+        expandIcon={<IconChevronDown width={18} />}
+        sx={{
+          minHeight: 36,
+          padding: '0px 14px',
+          '&.Mui-expanded': {
+            minHeight: 36,
+          },
+          '& .MuiAccordionSummary-content': {
+            my: 1,
+            '&.Mui-expanded': {
+              my: 1,
+            },
+          },
+        }}
+      >
+        <Stack
+          width="100%"
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          {summary}
+          {length > 0 && (
+            <Typography color="#D7DCFF" fontSize="10px" mr={1}>
+              {length}
+            </Typography>
+          )}
+        </Stack>
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
