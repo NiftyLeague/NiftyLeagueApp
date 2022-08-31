@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { isEmpty } from 'lodash';
 import {
   Button,
@@ -16,11 +17,17 @@ import {
   FormGroup,
   Stack,
   Typography,
-  useMediaQuery,
-  TextField,
 } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/system';
-import { backgrounds, tribes } from 'constants/filters';
+import {
+  FilterSource,
+  backgrounds,
+  multipliers,
+  rentals,
+  tribes,
+  wearables,
+} from 'constants/filters';
 import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import { DegenFilter } from 'types/degenFilter';
 import { updateFilterValue } from './utils';
@@ -28,30 +35,51 @@ import FilterAccordion from './FilterAccordion';
 import FilterRangeSlider from './FilterRangeSlider';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
-type FilterSource =
-  | 'prices'
-  | 'multipliers'
-  | 'rentals'
-  | 'tribes'
-  | 'backgrounds'
-  | 'cosmetics'
-  | 'searchTerm';
-
 interface DegensFilterProps {
   onFilter: (filter: DegenFilter) => void;
   defaultFilterValues: DegenFilter;
   isDegenOwner?: boolean;
+  searchTerm?: string;
 }
+
+const useStyles = makeStyles(() => ({
+  inputCheck: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingRight: 8,
+    color: '#4D4D4D',
+    '& .MuiSvgIcon-root': {
+      width: '0.75em',
+      height: '0.75em',
+    },
+  },
+  tribeCheckFormControl: {
+    marginLeft: -8,
+    minWidth: 108,
+  },
+  inputCheckFormControl: {
+    marginLeft: -8,
+    marginRight: 0,
+    '& .MuiFormControlLabel-label': {
+      fontSize: '0.75rem',
+      lineHeight: '0.75rem',
+    },
+  },
+  tribeName: {
+    marginLeft: 8,
+  },
+}));
 
 const DegensFilter = ({
   onFilter,
   defaultFilterValues,
   isDegenOwner,
+  searchTerm,
 }: DegensFilterProps): JSX.Element => {
+  const classes = useStyles();
   const theme = useTheme();
   const mountedRef = useRef(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const params = useMemo(
     () =>
       Object.fromEntries(searchParams.entries()) as {
@@ -61,15 +89,17 @@ const DegensFilter = ({
   );
 
   const isParamsEmpty = isEmpty(params);
+  const { displayMyItems } = useFlags();
 
   // Filter states
+  const [showMore, setShowMore] = useState(false);
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
     defaultFilterValues.prices,
   );
-  const [multipliersRangeValue, setMultipliersRangeValue] = useState<number[]>(
+  const [multipliersValue, setMultipliersValue] = useState<string[]>(
     defaultFilterValues.multipliers,
   );
-  const [rentalsRangeValue, setRentalsRangeValue] = useState<number[]>(
+  const [rentalsValue, setRentalsValue] = useState<string[]>(
     defaultFilterValues.rentals,
   );
   const [tribesValue, setTribesValue] = useState<string[]>(
@@ -81,8 +111,8 @@ const DegensFilter = ({
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
   );
-  const [searchTermValue, setSearchTermValue] = useState<string[]>(
-    defaultFilterValues.searchTerm,
+  const [wearablesValue, setWearablesValue] = useState<string[]>(
+    defaultFilterValues.wearables,
   );
 
   // Set search params from filter values
@@ -98,10 +128,10 @@ const DegensFilter = ({
           keyValue = { prices: pricesRangeValue.join('-') };
           break;
         case 'multipliers':
-          keyValue = { multipliers: multipliersRangeValue.join('-') };
+          keyValue = { multipliers: value };
           break;
         case 'rentals':
-          keyValue = { rentals: rentalsRangeValue.join('-') };
+          keyValue = { rentals: value };
           break;
         case 'tribes':
           keyValue = { tribes: value };
@@ -111,6 +141,9 @@ const DegensFilter = ({
           break;
         case 'cosmetics':
           keyValue = { cosmetics: value };
+          break;
+        case 'wearables':
+          keyValue = { wearables: value };
           break;
         case 'searchTerm':
           keyValue = { searchTerm: [value] };
@@ -126,13 +159,7 @@ const DegensFilter = ({
       }
       setSearchParams(newParams);
     },
-    [
-      multipliersRangeValue,
-      params,
-      pricesRangeValue,
-      rentalsRangeValue,
-      setSearchParams,
-    ],
+    [params, pricesRangeValue, setSearchParams],
   );
 
   // For checkbox filter
@@ -161,14 +188,14 @@ const DegensFilter = ({
 
   const setAllFilterValues = useCallback(() => {
     setPricesRangeValue(defaultFilterValues.prices);
-    setMultipliersRangeValue(defaultFilterValues.multipliers);
-    setRentalsRangeValue(defaultFilterValues.rentals);
+    setMultipliersValue(defaultFilterValues.multipliers);
+    setRentalsValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
     setBackgroundsValue(
       isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
     );
     setCosmeticsValue(defaultFilterValues.cosmetics);
-    setSearchTermValue(defaultFilterValues.searchTerm);
+    setWearablesValue(defaultFilterValues.wearables);
   }, [defaultFilterValues, isDegenOwner]);
 
   const handleReset = () => {
@@ -177,14 +204,10 @@ const DegensFilter = ({
     setSearchParams({});
   };
 
-  const handleChangeSearchTerm = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setSearchTermValue([value]);
-      handleChangeCommitted('searchTerm', value);
-    },
-    [handleChangeCommitted],
-  );
+  useEffect(() => {
+    if (searchTerm === undefined) return;
+    handleChangeCommitted('searchTerm', searchTerm);
+  }, [handleChangeCommitted, searchTerm]);
 
   // Updates local filter state on defaultFilterValues change
   useEffect(() => {
@@ -206,12 +229,12 @@ const DegensFilter = ({
       params,
       {
         prices: setPricesRangeValue,
-        multipliers: setMultipliersRangeValue,
-        rentals: setRentalsRangeValue,
+        multipliers: setMultipliersValue,
+        rentals: setRentalsValue,
         tribes: setTribesValue,
         backgrounds: setBackgroundsValue,
         cosmetics: setCosmeticsValue,
-        searchTerm: setSearchTermValue,
+        wearables: setWearablesValue,
       },
     );
     if (!params.backgrounds && !mountedRef.current && !isDegenOwner) {
@@ -228,51 +251,77 @@ const DegensFilter = ({
       tribes: newFilters.tribes,
       backgrounds: newFilters.backgrounds,
       cosmetics: newFilters.cosmetics,
+      wearables: newFilters.wearables,
       searchTerm: newFilters.searchTerm,
     });
   }, [defaultFilterValues, isDegenOwner, onFilter, params, setSearchParams]);
 
   return (
     <Stack
-      gap={1}
+      gap={1.5}
       sx={{
         overflowX: 'hidden',
         [theme.breakpoints.down('sm')]: {
-          paddingX: 2,
+          paddingY: 2,
         },
       }}
     >
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ padding: matchDownLG ? theme.spacing(2) : '' }}
-      >
-        <Typography variant="h4">Filter Rentals</Typography>
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="h3">Filter Rentals</Typography>
         <Stack direction="row" gap={2}>
           <Button
             variant="outlined"
             disabled={isParamsEmpty}
             onClick={handleReset}
+            sx={{ height: 28, color: '#f5f5f5' }}
           >
             Reset
           </Button>
         </Stack>
       </Stack>
-      <TextField
-        label="Search degens by token # or name"
-        name="search-degen-by-token-id-name"
-        variant="outlined"
-        size="small"
-        fullWidth
-        value={searchTermValue}
-        onChange={handleChangeSearchTerm}
-        sx={{ margin: '6px 0px 10px 0px' }}
-      />
-      <Stack>
+      <Stack py={1.5} borderRadius="10px" sx={{ background: '#1E2023' }}>
         <FilterAccordion
-          summary={<Typography variant="h5">Overview</Typography>}
-          expanded
+          summary={<Typography variant="h4">Tribe</Typography>}
+          expanded={false}
+          length={tribes.length}
+        >
+          <FormGroup sx={{ flexDirection: 'row' }}>
+            {tribes.map((tribe) => (
+              <FormControlLabel
+                key={tribe.name}
+                control={
+                  <Checkbox
+                    name={tribe.name}
+                    value={tribe.name}
+                    checked={tribesValue.includes(tribe.name)}
+                    className={classes.inputCheck}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'tribes',
+                        tribesValue,
+                        setTribesValue,
+                      )
+                    }
+                  />
+                }
+                label={
+                  <Stack direction="row" alignItems="center">
+                    <tribe.icon width={18} height={18} />
+                    <Typography variant="body1" className={classes.tribeName}>
+                      {tribe.name}
+                    </Typography>
+                  </Stack>
+                }
+                className={classes.tribeCheckFormControl}
+                sx={{ flex: '0 0 33.333333%' }}
+              />
+            ))}
+          </FormGroup>
+        </FilterAccordion>
+        <FilterAccordion
+          summary={<Typography variant="h4">Price</Typography>}
+          expanded={false}
         >
           <Stack gap={4}>
             <FilterRangeSlider
@@ -284,141 +333,189 @@ const DegensFilter = ({
               onChange={(_, value) => setPricesRangeValue(value as number[])}
               onChangeCommitted={() => handleChangeCommitted('prices')}
             />
-            <FilterRangeSlider
-              value={multipliersRangeValue}
-              min={defaultFilterValues.multipliers[0]}
-              max={defaultFilterValues.multipliers[1]}
-              unit="x"
-              label="Multipliers"
-              onChange={(_, value) =>
-                setMultipliersRangeValue(value as number[])
-              }
-              onChangeCommitted={() => handleChangeCommitted('multipliers')}
-            />
-            <FilterRangeSlider
-              value={rentalsRangeValue}
-              min={defaultFilterValues.rentals[0]}
-              max={defaultFilterValues.rentals[1]}
-              label="Rentals"
-              onChange={(_, value) => setRentalsRangeValue(value as number[])}
-              onChangeCommitted={() => handleChangeCommitted('rentals')}
-            />
           </Stack>
         </FilterAccordion>
         <FilterAccordion
-          summary={<Typography variant="h5">Tribe</Typography>}
-          expanded
-        >
-          <FormGroup sx={{ flexDirection: 'row' }}>
-            {tribes.map((tribe) => (
-              <FormControlLabel
-                key={tribe.name}
-                control={
-                  <Checkbox
-                    name={tribe.name}
-                    value={tribe.name}
-                    checked={tribesValue.includes(tribe.name)}
-                    icon={<tribe.icon />}
-                    checkedIcon={<tribe.icon />}
-                    disableRipple
-                    onChange={(e) =>
-                      handleCheckboxChange(
-                        e,
-                        'tribes',
-                        tribesValue,
-                        setTribesValue,
-                      )
-                    }
-                  />
-                }
-                label={tribe.name}
-                sx={{
-                  svg: {
-                    height: '22px',
-                    width: '22px',
-                  },
-                  background: tribesValue.includes(tribe.name)
-                    ? theme.palette.primary.main
-                    : theme.palette.dark[800],
-                  borderRadius: '16px',
-                  pl: 1,
-                  pr: 2,
-                  ml: 0,
-                  mb: '12px',
-                  '& .MuiCheckbox-root:': {
-                    padding: 0,
-                    mr: '8px',
-                  },
-                }}
-              />
-            ))}
-          </FormGroup>
-        </FilterAccordion>
-        <FilterAccordion
-          summary={<Typography variant="h5">Background</Typography>}
-          expanded
-        >
-          <FormGroup sx={{ flexDirection: 'row' }}>
-            {backgrounds.map((background) => (
-              <FormControlLabel
-                key={background}
-                control={
-                  <Checkbox
-                    name={background}
-                    value={background}
-                    checked={backgroundsValue.includes(background)}
-                    onChange={(e) =>
-                      handleCheckboxChange(
-                        e,
-                        'backgrounds',
-                        backgroundsValue,
-                        setBackgroundsValue,
-                      )
-                    }
-                  />
-                }
-                label={background}
-              />
-            ))}
-          </FormGroup>
-        </FilterAccordion>
-        <FilterAccordion
-          summary={<Typography variant="h5">Cosmetics</Typography>}
+          summary={<Typography variant="h4">Queue</Typography>}
           expanded={false}
+          length={rentals.length}
         >
-          {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
-            .sort()
-            .map((categoryKey) => {
-              const traitGroup = Object.entries(
-                CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
-              )
-                .sort((a: [string, string], b: [string, string]) =>
-                  a[1].localeCompare(b[1]),
-                )
-                .map((item) => item[0]);
-              return (
-                <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
-                  <FilterAccordion
-                    summary={
-                      <Typography variant="h5">
-                        {categoryKey} ({traitGroup.length})
-                      </Typography>
+          <FormGroup sx={{ flexDirection: 'column' }}>
+            {rentals.map((item) => (
+              <FormControlLabel
+                key={`Queue${item}`}
+                control={
+                  <Checkbox
+                    name={`Queue${item}`}
+                    value={item}
+                    checked={rentalsValue.includes(item)}
+                    className={classes.inputCheck}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'rentals',
+                        rentalsValue,
+                        setRentalsValue,
+                      )
                     }
-                    expanded={false}
-                  >
-                    <FilterAllTraitCheckboxes
-                      traitGroup={traitGroup}
-                      categoryKey={categoryKey}
-                      cosmeticsValue={cosmeticsValue}
-                      onCheckboxChange={handleCheckboxChange}
-                      setCosmeticsValue={setCosmeticsValue}
-                      params={params}
-                    />
-                  </FilterAccordion>
-                </FormGroup>
-              );
-            })}
+                  />
+                }
+                label={<Typography variant="body1">{item}</Typography>}
+                className={classes.inputCheckFormControl}
+              />
+            ))}
+          </FormGroup>
         </FilterAccordion>
+        <FilterAccordion
+          summary={<Typography variant="h4">Multiplier</Typography>}
+          expanded={false}
+          length={multipliers.length}
+        >
+          <FormGroup sx={{ flexDirection: 'column' }}>
+            {multipliers.map((item) => (
+              <FormControlLabel
+                key={`Multiplier${item}`}
+                control={
+                  <Checkbox
+                    name={`Multiplier${item}`}
+                    value={item}
+                    checked={multipliersValue.includes(item)}
+                    className={classes.inputCheck}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'multipliers',
+                        multipliersValue,
+                        setMultipliersValue,
+                      )
+                    }
+                  />
+                }
+                label={<Typography variant="body1">{item}</Typography>}
+                className={classes.inputCheckFormControl}
+              />
+            ))}
+          </FormGroup>
+        </FilterAccordion>
+        {displayMyItems && (
+          <FilterAccordion
+            summary={<Typography variant="h4">Wearable</Typography>}
+            expanded={false}
+            length={wearables.length}
+          >
+            <FormGroup sx={{ flexDirection: 'row' }}>
+              {wearables.map((wearable) => (
+                <FormControlLabel
+                  key={wearable}
+                  control={
+                    <Checkbox
+                      name={wearable}
+                      value={wearable}
+                      checked={wearablesValue.includes(wearable)}
+                      className={classes.inputCheck}
+                      onChange={(e) =>
+                        handleCheckboxChange(
+                          e,
+                          'wearables',
+                          wearablesValue,
+                          setWearablesValue,
+                        )
+                      }
+                    />
+                  }
+                  label={<Typography variant="body1">{wearable}</Typography>}
+                  className={classes.inputCheckFormControl}
+                  sx={{ flex: '0 0 50%' }}
+                />
+              ))}
+            </FormGroup>
+          </FilterAccordion>
+        )}
+        {!showMore ? (
+          <Typography
+            variant="body1"
+            sx={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              margin: '0 14px',
+              lineHeight: '36px',
+            }}
+            onClick={() => setShowMore(true)}
+          >
+            More
+          </Typography>
+        ) : (
+          <>
+            <FilterAccordion
+              summary={<Typography variant="h4">Background</Typography>}
+              length={backgrounds.length}
+              expanded={false}
+            >
+              <FormGroup sx={{ flexDirection: 'row' }}>
+                {backgrounds.map((background) => (
+                  <FormControlLabel
+                    key={background}
+                    control={
+                      <Checkbox
+                        name={background}
+                        value={background}
+                        checked={backgroundsValue.includes(background)}
+                        className={classes.inputCheck}
+                        onChange={(e) =>
+                          handleCheckboxChange(
+                            e,
+                            'backgrounds',
+                            backgroundsValue,
+                            setBackgroundsValue,
+                          )
+                        }
+                      />
+                    }
+                    label={
+                      <Typography variant="body1">{background}</Typography>
+                    }
+                    className={classes.inputCheckFormControl}
+                    sx={{ flex: '0 0 50%' }}
+                  />
+                ))}
+              </FormGroup>
+            </FilterAccordion>
+            {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
+              .sort()
+              .map((categoryKey) => {
+                const traitGroup = Object.entries(
+                  CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
+                )
+                  .sort((a: [string, string], b: [string, string]) =>
+                    a[1].localeCompare(b[1]),
+                  )
+                  .map((item) => item[0]);
+                return (
+                  <FormGroup key={categoryKey} sx={{ flexDirection: 'row' }}>
+                    <FilterAccordion
+                      summary={
+                        <Typography variant="h4">{categoryKey}</Typography>
+                      }
+                      length={traitGroup.length}
+                      expanded={false}
+                    >
+                      <FilterAllTraitCheckboxes
+                        traitGroup={traitGroup}
+                        categoryKey={categoryKey}
+                        cosmeticsValue={cosmeticsValue}
+                        onCheckboxChange={handleCheckboxChange}
+                        setCosmeticsValue={setCosmeticsValue}
+                        inputCheckBoxStyle={classes.inputCheck}
+                        inputCheckFormControlStyle={
+                          classes.inputCheckFormControl
+                        }
+                      />
+                    </FilterAccordion>
+                  </FormGroup>
+                );
+              })}
+          </>
+        )}
       </Stack>
     </Stack>
   );

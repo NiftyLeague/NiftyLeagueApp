@@ -18,7 +18,8 @@ const EmptyState: React.FC<
       <Card
         sx={{
           mx: 'auto',
-          width: 400,
+          mt: 5,
+          width: { xs: 'calc(100% - 24px)', sm: 400 },
           bgcolor: 'transparent',
           border: noBorder ? 'none' : `1px solid${theme.palette.primary.main}`,
           boxShadow: 'none',

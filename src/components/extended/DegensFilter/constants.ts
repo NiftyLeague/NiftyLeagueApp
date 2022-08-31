@@ -2,12 +2,13 @@ import { DegenFilter } from 'types/degenFilter';
 
 const DEFAULT_STATIC_FILTER: DegenFilter = {
   prices: [100, 3500],
-  multipliers: [1, 10],
-  rentals: [0, 10],
+  multipliers: [],
+  rentals: [],
   tribes: [],
   backgrounds: [],
-  sort: 'name',
+  sort: 'priceUp',
   cosmetics: [],
+  wearables: [],
   searchTerm: [''],
 };
 
