@@ -44,12 +44,18 @@ interface DegensFilterProps {
 
 const useStyles = makeStyles(() => ({
   inputCheck: {
-    padding: 4,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingRight: 8,
     color: '#4D4D4D',
     '& .MuiSvgIcon-root': {
       width: '0.75em',
       height: '0.75em',
     },
+  },
+  tribeCheckFormControl: {
+    marginLeft: -8,
+    minWidth: 108,
   },
   inputCheckFormControl: {
     marginLeft: -8,
@@ -58,6 +64,9 @@ const useStyles = makeStyles(() => ({
       fontSize: '0.75rem',
       lineHeight: '0.75rem',
     },
+  },
+  tribeName: {
+    marginLeft: 8,
   },
 }));
 
@@ -264,7 +273,7 @@ const DegensFilter = ({
             variant="outlined"
             disabled={isParamsEmpty}
             onClick={handleReset}
-            sx={{ height: 28, color: '#620EDF' }}
+            sx={{ height: 28, color: '#f5f5f5' }}
           >
             Reset
           </Button>
@@ -282,7 +291,6 @@ const DegensFilter = ({
                 key={tribe.name}
                 control={
                   <Checkbox
-                    size="small"
                     name={tribe.name}
                     value={tribe.name}
                     checked={tribesValue.includes(tribe.name)}
@@ -297,8 +305,15 @@ const DegensFilter = ({
                     }
                   />
                 }
-                label={tribe.name}
-                className={classes.inputCheckFormControl}
+                label={
+                  <Stack direction="row" alignItems="center">
+                    <tribe.icon width={18} height={18} />
+                    <Typography variant="body1" className={classes.tribeName}>
+                      {tribe.name}
+                    </Typography>
+                  </Stack>
+                }
+                className={classes.tribeCheckFormControl}
                 sx={{ flex: '0 0 33.333333%' }}
               />
             ))}
@@ -331,7 +346,6 @@ const DegensFilter = ({
                 key={`Queue${item}`}
                 control={
                   <Checkbox
-                    size="small"
                     name={`Queue${item}`}
                     value={item}
                     checked={rentalsValue.includes(item)}
@@ -346,7 +360,7 @@ const DegensFilter = ({
                     }
                   />
                 }
-                label={item}
+                label={<Typography variant="body1">{item}</Typography>}
                 className={classes.inputCheckFormControl}
               />
             ))}
@@ -363,7 +377,6 @@ const DegensFilter = ({
                 key={`Multiplier${item}`}
                 control={
                   <Checkbox
-                    size="small"
                     name={`Multiplier${item}`}
                     value={item}
                     checked={multipliersValue.includes(item)}
@@ -378,7 +391,7 @@ const DegensFilter = ({
                     }
                   />
                 }
-                label={item}
+                label={<Typography variant="body1">{item}</Typography>}
                 className={classes.inputCheckFormControl}
               />
             ))}
@@ -396,7 +409,6 @@ const DegensFilter = ({
                   key={wearable}
                   control={
                     <Checkbox
-                      size="small"
                       name={wearable}
                       value={wearable}
                       checked={wearablesValue.includes(wearable)}
@@ -411,7 +423,7 @@ const DegensFilter = ({
                       }
                     />
                   }
-                  label={wearable}
+                  label={<Typography variant="body1">{wearable}</Typography>}
                   className={classes.inputCheckFormControl}
                   sx={{ flex: '0 0 50%' }}
                 />
@@ -459,7 +471,9 @@ const DegensFilter = ({
                         }
                       />
                     }
-                    label={background}
+                    label={
+                      <Typography variant="body1">{background}</Typography>
+                    }
                     className={classes.inputCheckFormControl}
                     sx={{ flex: '0 0 50%' }}
                   />

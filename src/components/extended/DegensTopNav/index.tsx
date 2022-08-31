@@ -78,6 +78,9 @@ const DegensTopNav = ({
         value={searchTerm}
         onChange={handleChangeSearchTerm}
         className={classes.searchTextField}
+        InputLabelProps={{
+          style: { color: '#e0e0e0' },
+        }}
       />
       <Stack direction="row" justifyContent="space-between" gap={1}>
         <SortButton handleSort={handleSort}>
@@ -90,6 +93,7 @@ const DegensTopNav = ({
               fontWeight: 400,
               border: '1px solid #620EDF',
               padding: '3px 16px',
+              color: '#f5f5f5',
             }}
           />
         </SortButton>

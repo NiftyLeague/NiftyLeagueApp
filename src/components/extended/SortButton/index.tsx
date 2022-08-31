@@ -81,7 +81,7 @@ const SortButton = ({
           },
           '& .MuiMenuItem-root': {
             width: (buttonRef?.current as any)?.clientWidth,
-            color: '#620EDF',
+            color: '#f5f5f5',
           },
         }}
       >
