@@ -132,8 +132,11 @@ export const TokenProvider = ({
   };
 
   useEffect(() => {
-    if (address) setTimeout(signMsg, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (address) {
+      setTimeout(signMsg, 0);
+    } else if (state.isLoggedIn) {
+      dispatch({ type: LOGOUT });
+    }
   }, [address]);
 
   return (
