@@ -44,7 +44,9 @@ const MyDegens = (): JSX.Element => {
 
   const degens = useMemo(() => {
     if (characters.length && degensData) {
-      const mapDegens = characters.map((character) => degensData[character.id]);
+      const mapDegens = characters
+        .map((character) => degensData[character.id])
+        .filter(Boolean);
       return mapDegens;
     }
     return [];
