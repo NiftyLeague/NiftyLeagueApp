@@ -165,24 +165,31 @@ const NetworkProvider = ({
   }, []);
 
   const loadWeb3Modal = useCallback(async () => {
-    const provider: Web3ModalProvider =
-      (await web3Modal.connect()) as Web3ModalProvider;
-    await updateWeb3ModalTheme();
-    setInjectedProvider(new Web3Provider(provider));
-    provider.on('accountsChanged', (accounts) => {
-      if (DEBUG) console.log('web3 accountsChanged:', accounts);
+    const timestampBeforeConnect = performance.now();
+    console.log('---timestampBeforeConnect----');
+    try {
+      const provider: Web3ModalProvider =
+        (await web3Modal.connect()) as Web3ModalProvider;
+      await updateWeb3ModalTheme();
       setInjectedProvider(new Web3Provider(provider));
-    });
-    provider.on('chainChanged', (chainId) => {
-      if (DEBUG) console.log('web3 chainChanged:', chainId);
-      setInjectedProvider(new Web3Provider(provider));
-    });
-    provider.on('connect', (info) => {
-      if (DEBUG) console.log('web3 info:', info);
-    });
-    provider.on('disconnect', (error) => {
-      if (DEBUG) console.log('web3 error:', error);
-    });
+      provider.on('accountsChanged', (accounts) => {
+        if (DEBUG) console.log('web3 accountsChanged:', accounts);
+        setInjectedProvider(new Web3Provider(provider));
+      });
+      provider.on('chainChanged', (chainId) => {
+        if (DEBUG) console.log('web3 chainChanged:', chainId);
+        setInjectedProvider(new Web3Provider(provider));
+      });
+      provider.on('connect', (info) => {
+        if (DEBUG) console.log('web3 info:', info);
+      });
+      provider.on('disconnect', (error) => {
+        if (DEBUG) console.log('web3 error:', error);
+      });
+    } catch (err) {
+      console.log('---ms----', performance.now() - timestampBeforeConnect);
+      console.error(err);
+    }
   }, [setInjectedProvider, updateWeb3ModalTheme]);
 
   useEffect(() => {
@@ -234,8 +241,12 @@ const NetworkProvider = ({
         return;
       }
 
-      const addr = await signer.getAddress();
-      setAddress(addr);
+      try {
+        const addr = await signer.getAddress();
+        setAddress(addr);
+      } catch (err) {
+        setAddress('');
+      }
     })();
   }, [signer]);
 
