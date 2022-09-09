@@ -67,9 +67,9 @@ const web3Modal = new Web3Modal({
   cacheProvider: true,
   theme: 'dark',
   providerOptions: {
-    // injected: {
-    //   package: null,
-    // },
+    injected: {
+      package: null,
+    },
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
