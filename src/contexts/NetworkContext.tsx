@@ -22,6 +22,7 @@ import useUserProvider from 'hooks/useUserProvider';
 import Notifier from 'helpers/Notifier';
 import { ALCHEMY_ID, DEBUG } from '../constants';
 import { NETWORKS, VALID_ETHERS_NETWORKS } from '../constants/networks';
+import { toast } from 'react-toastify';
 
 const { getDefaultProvider, Web3Provider } = providers;
 
@@ -165,8 +166,6 @@ export const NetworkProvider = ({
   }, []);
 
   const loadWeb3Modal = useCallback(async () => {
-    const timestampBeforeConnect = performance.now();
-    console.log('---timestampBeforeConnect----');
     try {
       const provider: Web3ModalProvider =
         (await web3Modal.connect()) as Web3ModalProvider;
@@ -187,8 +186,17 @@ export const NetworkProvider = ({
         if (DEBUG) console.log('web3 error:', error);
       });
     } catch (err) {
-      console.log('---ms----', performance.now() - timestampBeforeConnect);
       console.error(err);
+      if (err.message === 'User Rejected') {
+        toast.error(
+          "User Rejected! Please unlock your wallet if you haven't yet!",
+          {
+            theme: 'dark',
+          },
+        );
+      } else {
+        toast.error(err.message, { theme: 'dark' });
+      }
     }
   }, [setInjectedProvider, updateWeb3ModalTheme]);
 
