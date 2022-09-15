@@ -29,7 +29,7 @@ export const NiftySmashersTables = [
   },
 ];
 
-export const WenGameTables = [
+const WenGameTables = [
   {
     key: 'score',
     display: 'HIGH SCORE',
@@ -37,7 +37,7 @@ export const WenGameTables = [
   },
 ];
 
-export const MtGawxTables = [
+const MtGawxTables = [
   {
     key: 'burnings',
     display: 'NFTL BURNED',
@@ -45,10 +45,19 @@ export const MtGawxTables = [
   },
 ];
 
+const CryptoWinterTables = [
+  {
+    key: 'score',
+    display: 'HIGH SCORE',
+    rows: [{ key: 'score', display: 'HIGH SCORE', primary: true }],
+  },
+];
+
 export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
   MtGawx = 'MT. GAWX',
+  CryptoWinter = 'Crypto Winter',
 }
 
 export enum TimeFilter {
@@ -65,6 +74,11 @@ export const LEADERBOARD_GAME_LIST = [
   },
   { key: 'wen_game', display: Game.WenGame, tables: WenGameTables },
   { key: 'nftl_burner', display: Game.MtGawx, tables: MtGawxTables },
+  {
+    key: 'crypto_winter',
+    display: Game.CryptoWinter,
+    tables: CryptoWinterTables,
+  },
 ];
 
 export const LEADERBOARD_TIME_FILTERS = [
