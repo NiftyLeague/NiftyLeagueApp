@@ -1,4 +1,9 @@
-import { FormGroup, FormControlLabel, Checkbox, Typography } from '@mui/material';
+import {
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+} from '@mui/material';
 import { TRAIT_VALUE_MAP } from 'constants/cosmeticsFilters';
 import { FilterSource } from 'constants/filters';
 import { ChangeEvent, Dispatch, FC, SetStateAction, memo } from 'react';
