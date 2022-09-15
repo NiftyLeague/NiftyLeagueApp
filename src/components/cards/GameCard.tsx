@@ -48,7 +48,7 @@ const CardGameContent = ({
               color: theme.palette.warning.main,
             }}
           >
-            coming 2023
+            Coming 2023
           </Typography>
         )}
         {required && (

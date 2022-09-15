@@ -120,6 +120,7 @@ const GamerProfile = (): JSX.Element => {
         <BottomInfo
           nifty_smashers={profile?.stats?.nifty_smashers}
           wen_game={profile?.stats?.wen_game}
+          crypto_winter={profile?.stats?.crypto_winter}
         />
       </SectionSlider>
     );

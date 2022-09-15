@@ -12,21 +12,24 @@ import {
 import ProgressGamer from './ProgressGamer';
 import GameCard from 'components/cards/GameCard';
 import LeftInfo from './LeftInfo';
-import WenGameContent from './WenGameContent';
+import MiniGameContent from './MiniGameContent';
 import { GamerProfileContext } from '../index';
 
-import { ProfileNiftySmsher, ProfileWenGame } from 'types/account';
+import { ProfileNiftySmsher, ProfileMiniGame } from 'types/account';
 import NiftySmashers from 'assets/images/games/nifty-smashers.gif';
 import WenGame from 'assets/images/games/wen.gif';
+import CryptoWinter from 'assets/images/games/crypto-winter.png';
 
 interface BottomInfoProps {
   nifty_smashers: ProfileNiftySmsher | undefined;
-  wen_game: ProfileWenGame | undefined;
+  wen_game: ProfileMiniGame | undefined;
+  crypto_winter: ProfileMiniGame | undefined;
 }
 
 const BottomInfo = ({
   nifty_smashers,
   wen_game,
+  crypto_winter,
 }: BottomInfoProps): JSX.Element => {
   const { isLoadingProfile } = useContext(GamerProfileContext);
 
@@ -128,7 +131,7 @@ const BottomInfo = ({
                   </Typography>
                 </Typography>
               </Stack>
-              <WenGameContent data={wen_game} />
+              <MiniGameContent data={wen_game} />
               <Button
                 color="secondary"
                 component={Link}
@@ -141,6 +144,64 @@ const BottomInfo = ({
           }
         />
       </Grid>
+      {crypto_winter && (
+        <Grid item sm={12} md={6} lg={4} xl={3}>
+          <GameCard
+            image={CryptoWinter}
+            contents={
+              <Stack
+                padding="16px"
+                gap={2}
+                flex={1}
+                justifyContent="space-between"
+              >
+                <ProgressGamer size="sm" data={crypto_winter} />
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="h3" component="div">
+                    CRYPTO WINTER
+                  </Typography>
+                  <Typography variant="h4" component="div">
+                    {isLoadingProfile ? (
+                      <Skeleton
+                        variant="rectangular"
+                        sx={{ display: 'inline-block' }}
+                        width="15%"
+                        height="19.76px"
+                      />
+                    ) : (
+                      `${Math.round(crypto_winter?.xp || 0)}/${
+                        crypto_winter?.rank_xp_next
+                      }`
+                    )}
+                    <Typography
+                      variant="h4"
+                      component="div"
+                      color={theme.palette.grey[400]}
+                      display="inline"
+                      ml="4px"
+                    >
+                      XP
+                    </Typography>
+                  </Typography>
+                </Stack>
+                <MiniGameContent data={crypto_winter} />
+                <Button
+                  color="secondary"
+                  component={Link}
+                  href="/leaderboards"
+                  target="_blank"
+                >
+                  View Leaderboards
+                </Button>
+              </Stack>
+            }
+          />
+        </Grid>
+      )}
     </Grid>
   );
 };
