@@ -39,19 +39,18 @@ const CardGameContent = ({
           <Typography gutterBottom variant="h3" component="div">
             {title}
           </Typography>
+        </Stack>
+        {isComingSoon && (
           <Typography
-            gutterBottom
             variant="body2"
-            component="div"
+            gutterBottom
             sx={{
-              color: isComingSoon
-                ? theme.palette.warning.main
-                : theme.palette.success.main,
+              color: theme.palette.warning.main,
             }}
           >
-            {isComingSoon && 'coming soon'}
+            coming 2023
           </Typography>
-        </Stack>
+        )}
         {required && (
           <Typography
             variant="body2"
@@ -85,47 +84,41 @@ const CardGameContent = ({
         )}
       </CardContent>
       <CardActions>
-        {isComingSoon ? (
-          <Button variant="contained" fullWidth disabled color="inherit">
-            Coming Soon
-          </Button>
-        ) : (
-          <Stack
-            direction="row"
-            flexWrap="wrap"
-            columnGap={1}
-            rowGap={2}
-            width="100%"
-          >
-            {actions || (
-              <>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  sx={{
-                    minWidth: 80,
-                    flex: 1,
-                  }}
-                  onClick={onPlayOnDesktopClick}
-                >
-                  Play on Desktop
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  sx={{
-                    minWidth: 80,
-                    flex: 1,
-                  }}
-                  onClick={onPlayOnWebClick}
-                >
-                  Play on Web
-                </Button>
-              </>
-            )}
-          </Stack>
-        )}
+        <Stack
+          direction="row"
+          flexWrap="wrap"
+          columnGap={1}
+          rowGap={2}
+          width="100%"
+        >
+          {actions || (
+            <>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  minWidth: 80,
+                  flex: 1,
+                }}
+                onClick={onPlayOnDesktopClick}
+              >
+                Play on Desktop
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                sx={{
+                  minWidth: 80,
+                  flex: 1,
+                }}
+                onClick={onPlayOnWebClick}
+              >
+                Play on Web
+              </Button>
+            </>
+          )}
+        </Stack>
       </CardActions>
     </Stack>
   );

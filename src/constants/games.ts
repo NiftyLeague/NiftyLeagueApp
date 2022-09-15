@@ -89,6 +89,8 @@ export const getGameViewedAnalyticsEventName = (pathname: string) => {
     eventName = GOOGLE_ANALYTICS.EVENTS.WEN_GAME_VIEWED;
   } else if (pathname.includes('mt-gawx')) {
     eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_GAME_VIEWED;
+  } else if (pathname.includes('crypto-winter')) {
+    eventName = GOOGLE_ANALYTICS.EVENTS.CRYPTO_WINTER_GAME_VIEWED;
   }
   return eventName;
 };
