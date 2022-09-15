@@ -37,16 +37,20 @@ export const GOOGLE_ANALYTICS = {
     WEN_GAME_VIEWED: 'wen_game_viewed',
     NIFTY_SMASHERS_GAME_VIEWED: 'nifty_smashers_game_viewed',
     MT_GAWX_GAME_VIEWED: 'mt_gawx_game_viewed',
+    CRYPTO_WINTER_GAME_VIEWED: 'crypto_winter_game_viewed',
     // Leaderboard
     WEN_GAME_LEADERBOARD_VIEWED: 'wen_game_leaderboard_viewed',
     NIFTY_SMASHERS_LEADERBOARD_VIEWED: 'nifty_smashers_leaderboard_viewed',
     MT_GAWX_LEADERBOARD_VIEWED: 'mt_gawx_leaderboard_viewed',
+    CRYPTO_WINTER_LEADERBOARD_VIEWED: 'crypto_winter_leaderboard_viewed',
     LEADERBOARD_GAME_FILTER_CHANGED: 'leaderboard_game_filter_changed',
     LEADERBOARD_TYPE_FILTER_CHANGED: 'leaderboard_type_filter_changed',
     LEADERBOARD_CHECK_YOUR_RANK_CLICKED_WEN: 'check_your_rank_clicked_wen',
     LEADERBOARD_CHECK_YOUR_RANK_CLICKED_SMASHERS:
       'check_your_rank_clicked_smashers',
     LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_GAWX: 'check_your_rank_clicked_gawx',
+    LEADERBOARD_CHECK_YOUR_RANK_CLICKED_CRYPTO_WINTER:
+      'check_your_rank_clicked_crypto_winter',
   },
   CATEGORIES: {
     ECOMMERCE: 'ecommerce',
