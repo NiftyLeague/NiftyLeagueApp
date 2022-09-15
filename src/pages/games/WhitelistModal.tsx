@@ -23,6 +23,9 @@ const useStyles = makeStyles(() => ({
     '&::placeholder': {
       color: '#B4B5C3',
     },
+    '@media (max-width: 768px)': {
+      borderRadius: '5px',
+    },
   },
   submitButton: {
     background: '#620EDF',
@@ -51,12 +54,12 @@ const WhitelistModal = (): JSX.Element => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(email);
+    // Need to integrate whitelist api here
     e.preventDefault();
   };
 
   return (
-    <Container sx={{ textAlign: 'center', pt: 4 }}>
+    <Container sx={{ textAlign: 'center', pt: { xs: 1, md: 4 }, px: 0 }}>
       <form onSubmit={handleSubmit} className={classes.form}>
         <input
           name="email"

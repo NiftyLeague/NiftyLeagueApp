@@ -64,7 +64,7 @@ const GameList = () => {
           description="The first NFT brawler on the Ethereum blockchain!"
           image={NiftySmashers}
           onlineCounter={200}
-          autoHeight={true}
+          autoHeight={false}
           actions={
             <>
               <Dialog>
@@ -165,7 +165,7 @@ const GameList = () => {
               <Dialog>
                 <DialogTrigger>
                   <Button variant="outlined" fullWidth>
-                    Get Exclusive Acess
+                    Get Notified
                   </Button>
                 </DialogTrigger>
                 <DialogContent
@@ -176,12 +176,14 @@ const GameList = () => {
                       maxWidth: 473,
                     },
                     '& h2': {
-                      fontSize: '32px',
-                      lineHeight: '44px',
+                      fontSize: { xs: '18px', md: '28px' },
+                      lineHeight: { xs: '24px', md: '36px' },
                       textAlign: 'center',
+                      paddingTop: '36px',
                     },
                     '& .MuiDialogContent-root': {
                       border: 'none',
+                      paddingBottom: '36px',
                     },
                   }}
                 >
