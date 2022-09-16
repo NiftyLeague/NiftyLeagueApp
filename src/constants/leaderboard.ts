@@ -57,7 +57,7 @@ export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
   MtGawx = 'MT. GAWX',
-  CryptoWinter = 'Crypto Winter',
+  CryptoWinter = 'CRYPTO WINTER',
 }
 
 export enum TimeFilter {
@@ -110,6 +110,9 @@ export const getGameLeaderboardViewedAnalyticsEventName = (
     case 'nftl_burner':
       eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_LEADERBOARD_VIEWED;
       break;
+    case 'crypto_winter':
+      eventName = GOOGLE_ANALYTICS.EVENTS.CRYPTO_WINTER_LEADERBOARD_VIEWED;
+      break;
     default:
       break;
   }
@@ -130,6 +133,11 @@ export const getLeaderboardRankAnalyticsEventName = (selectedGame: string) => {
     case 'nftl_burner':
       eventName =
         GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_GAWX;
+      break;
+    case 'crypto_winter':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS
+          .LEADERBOARD_CHECK_YOUR_RANK_CLICKED_CRYPTO_WINTER;
       break;
     default:
       break;
