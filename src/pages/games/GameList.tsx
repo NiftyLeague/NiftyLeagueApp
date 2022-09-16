@@ -61,6 +61,7 @@ const GameList = () => {
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
           title="Nifty Smashers"
+          required=" "
           description="The first NFT brawler on the Ethereum blockchain!"
           image={NiftySmashers}
           onlineCounter={200}
@@ -103,7 +104,7 @@ const GameList = () => {
           required="Arcade Tokens Required"
           description="Play this single-player baseball inspired arcade game and rank as high as you can!"
           image={WenThumbnail}
-          autoHeight={true}
+          autoHeight={false}
           actions={
             <ConnectWrapper
               color="primary"
@@ -131,7 +132,7 @@ const GameList = () => {
           required="Arcade Tokens Required"
           description="Play this single-player dodgeball-inspired arcade game and rank as high as you can!"
           image={CryptoWinterThumbnail}
-          autoHeight={true}
+          autoHeight={false}
           actions={
             <ConnectWrapper
               color="primary"
@@ -156,7 +157,9 @@ const GameList = () => {
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
           title="Nifty Tennis"
-          description="The first NFT tennis game on the Ethereum blockchain!"
+          description={
+            'The first NFT tennis game on the Ethereum blockchain!\n\n'
+          }
           isComingSoon
           image={NiftyTennis}
           autoHeight={true}
@@ -170,16 +173,17 @@ const GameList = () => {
                 </DialogTrigger>
                 <DialogContent
                   aria-labelledby="exclusive-access-to-nifty-tennis"
-                  dialogTitle="Be the first one to receive exclusive access to Nifty Tennis"
+                  dialogTitle={`Get Notified When\nCrypto Winter Is Out!`}
                   sx={{
                     '& .MuiPaper-root': {
                       maxWidth: 473,
                     },
                     '& h2': {
-                      fontSize: { xs: '18px', md: '28px' },
-                      lineHeight: { xs: '24px', md: '36px' },
+                      fontSize: { xs: '22px', md: '28px' },
+                      lineHeight: { xs: '28px', md: '36px' },
                       textAlign: 'center',
                       paddingTop: '36px',
+                      whiteSpace: 'pre-line',
                     },
                     '& .MuiDialogContent-root': {
                       border: 'none',
