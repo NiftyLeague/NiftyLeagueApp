@@ -173,7 +173,7 @@ const GameList = () => {
                 </DialogTrigger>
                 <DialogContent
                   aria-labelledby="exclusive-access-to-nifty-tennis"
-                  dialogTitle={`Get Notified When\nCrypto Winter Is Out!`}
+                  dialogTitle={`Get Notified When\nNifty Tennis Is Out!`}
                   sx={{
                     '& .MuiPaper-root': {
                       maxWidth: 473,
