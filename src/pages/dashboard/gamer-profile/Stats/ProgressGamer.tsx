@@ -4,11 +4,11 @@ import { linearProgressClasses } from '@mui/material/LinearProgress';
 import {
   ProfileTotal,
   ProfileNiftySmsher,
-  ProfileWenGame,
+  ProfileMiniGame,
 } from 'types/account';
 
 interface ProgressGamerProps {
-  data: ProfileTotal | ProfileNiftySmsher | ProfileWenGame;
+  data: ProfileTotal | ProfileNiftySmsher | ProfileMiniGame;
   size?: 'sm' | 'md';
 }
 
