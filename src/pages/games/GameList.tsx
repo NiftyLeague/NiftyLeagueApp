@@ -61,7 +61,7 @@ const GameList = () => {
       <Grid item sm={12} md={6} lg={4} xl={3}>
         <GameCard
           title="Nifty Smashers"
-          required=" "
+          required="DEGEN Required"
           description="The first NFT brawler on the Ethereum blockchain!"
           image={NiftySmashers}
           onlineCounter={200}
