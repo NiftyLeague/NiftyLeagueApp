@@ -21,13 +21,7 @@ const GamesPage = () => {
           </Button>
         }
       >
-        <Grid
-          container
-          flexDirection="row"
-          flexWrap="wrap"
-          rowSpacing={8}
-          columnSpacing={2}
-        >
+        <Grid container flexDirection="row" flexWrap="wrap" rowSpacing={4}>
           <GameList />
         </Grid>
       </SectionSlider>

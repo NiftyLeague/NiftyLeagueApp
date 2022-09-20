@@ -101,7 +101,7 @@ const MainLayout = () => {
 
   const header = useMemo(
     () => (
-      <Toolbar>
+      <Toolbar sx={{ py: { xs: 1, lg: 2 } }}>
         <Header />
       </Toolbar>
     ),
