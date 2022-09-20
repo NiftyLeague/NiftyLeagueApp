@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Theme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import useAuth from 'hooks/useAuth';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
@@ -15,7 +16,30 @@ import WenThumbnail from 'assets/images/games/wen.gif';
 import MtGawxThumbnail from 'assets/images/games/mt-gawx.gif';
 import CryptoWinterThumbnail from 'assets/images/games/crypto-winter.png';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  gridItem: {
+    paddingRight: 16,
+    paddingBottom: 32,
+    border: 'none',
+    [theme.breakpoints.between('lg', 'xl')]: {
+      '&:nth-child(-n+3)': {
+        borderBottom: '1px solid #474747',
+      },
+    },
+    [theme.breakpoints.up('xl')]: {
+      '&:nth-child(-n+4)': {
+        borderBottom: '1px solid #474747',
+      },
+    },
+    [theme.breakpoints.down('md')]: {
+      paddingRight: 0,
+      paddingBottom: 0,
+    },
+  },
+}));
+
 const GameList = () => {
+  const { gridItem } = useStyles();
   const navigate = useNavigate();
   const {
     arcadeBalance,
@@ -58,7 +82,7 @@ const GameList = () => {
 
   return (
     <>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
+      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Nifty Smashers"
           required="DEGEN Required"
@@ -98,7 +122,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
+      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="WEN Game"
           required="Arcade Tokens Required"
@@ -126,7 +150,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
+      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Crypto Winter"
           required="Arcade Tokens Required"
@@ -154,7 +178,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
+      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Nifty Tennis"
           description={
@@ -198,7 +222,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3}>
+      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Mt. Gawx"
           required=" "
