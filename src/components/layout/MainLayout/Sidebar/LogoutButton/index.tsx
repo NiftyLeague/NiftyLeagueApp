@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import useAuth from 'hooks/useAuth';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useContext } from 'react';
 
 export interface LogoutButtonProps {

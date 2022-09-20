@@ -20,6 +20,9 @@ const WenGamePage = Loadable(
 const MtGawxGamePage = Loadable(
   lazy(() => import('pages/games/PlayOnGame/MtGawxGame')),
 );
+const CryptoWinterGamePage = Loadable(
+  lazy(() => import('pages/games/PlayOnGame/CryptoWinterGame')),
+);
 const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
@@ -69,6 +72,10 @@ const PublicRoutes = {
     {
       path: '/games/mt-gawx',
       element: <MtGawxGamePage />,
+    },
+    {
+      path: '/games/crypto-winter',
+      element: <CryptoWinterGamePage />,
     },
     {
       path: '/verification',

@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import useClaimCallback from 'hooks/comics/useClaimCallback';
 import useUserUnclaimedAmount, {
   ClaimResult,

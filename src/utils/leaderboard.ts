@@ -56,11 +56,11 @@ export const fetchScores = async (
       ...data,
       stats: {
         ...data.stats,
-        score: data.score,
+        score: Number(data.score ?? '0').toLocaleString(),
         'avg_NFTL/match': avg,
         win_rate: `${rate}%`,
-        earnings: earningsParsed,
-        kills,
+        earnings: earningsParsed.toLocaleString(),
+        kills: kills.toLocaleString(),
       },
     };
   });

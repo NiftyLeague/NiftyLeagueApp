@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useCallback, useState, useContext, useEffect } from 'react';
 import { Degen } from 'types/degens';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
@@ -16,14 +16,14 @@ const ClaimDegenContentDialog = ({
   degen,
   onClose,
 }: ClaimDegenContentDialogProps) => {
-  const { tx, writeContracts } = useContext(NetworkContext);
+  const { tx, readContracts, writeContracts } = useContext(NetworkContext);
   const [mockAccumulated, setMockAccumulated] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
   const tokenId: any = degen?.id;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const tokenIndices = [parseInt(tokenId, 10)];
   const totalAccumulated = useClaimableNFTL(
-    writeContracts,
+    readContracts,
     tokenIndices,
     refreshKey,
   );

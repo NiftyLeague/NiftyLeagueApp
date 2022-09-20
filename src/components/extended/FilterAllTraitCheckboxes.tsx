@@ -1,18 +1,41 @@
-import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+} from '@mui/material';
 import { TRAIT_VALUE_MAP } from 'constants/cosmeticsFilters';
-import { memo } from 'react';
+import { FilterSource } from 'constants/filters';
+import { ChangeEvent, Dispatch, FC, SetStateAction, memo } from 'react';
 
-const FilterAllTraitCheckboxes = ({
+interface FilterAllTraitCheckboxesProps {
+  cosmeticsValue: string[];
+  traitGroup: string[];
+  categoryKey: string;
+  inputCheckBoxStyle: any;
+  inputCheckFormControlStyle: any;
+  setCosmeticsValue: Dispatch<SetStateAction<string[]>>;
+  onCheckboxChange: (
+    e: ChangeEvent<HTMLInputElement>,
+    source: FilterSource,
+    state: string[],
+    setState: Dispatch<SetStateAction<string[]>>,
+  ) => void;
+}
+
+const FilterAllTraitCheckboxes: FC<FilterAllTraitCheckboxesProps> = ({
   cosmeticsValue,
   onCheckboxChange,
   setCosmeticsValue,
   traitGroup,
   categoryKey,
-  params,
-}) => (
+  inputCheckBoxStyle,
+  inputCheckFormControlStyle,
+}: FilterAllTraitCheckboxesProps) => (
   <FormGroup
     sx={{
       flexDirection: 'row',
+      rowGap: 0.5,
     }}
   >
     {traitGroup.map((traitKey) => {
@@ -25,6 +48,7 @@ const FilterAllTraitCheckboxes = ({
               name={traitValue}
               value={traitKey}
               checked={cosmeticsValue.includes(traitKey)}
+              className={inputCheckBoxStyle}
               onChange={(e) =>
                 onCheckboxChange(
                   e,
@@ -35,7 +59,9 @@ const FilterAllTraitCheckboxes = ({
               }
             />
           }
-          label={traitValue}
+          label={<Typography variant="body1">{traitValue}</Typography>}
+          className={inputCheckFormControlStyle}
+          sx={{ flex: '0 0 100%' }}
         />
       );
     })}
@@ -47,6 +73,5 @@ const FilterAllTraitCheckboxes = ({
 export default memo(
   FilterAllTraitCheckboxes,
   (prevProps, nextProps) =>
-    prevProps.cosmeticsValue === nextProps.cosmeticsValue &&
-    prevProps.params === nextProps.params,
+    prevProps.cosmeticsValue === nextProps.cosmeticsValue,
 );

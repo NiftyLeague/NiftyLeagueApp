@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import useMerkleDistributorContract from './useMerkleDistributorContract';
 import useUserClaimData from './useUserClaimData';

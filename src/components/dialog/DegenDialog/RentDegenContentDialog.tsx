@@ -22,7 +22,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { useQuery } from '@apollo/client';
 import useRentalPassCount from 'hooks/useRentalPassCount';
 import useAccount from 'hooks/useAccount';
 import { Degen } from 'types/degens';
@@ -30,17 +29,14 @@ import { ethers } from 'ethers';
 import useRent from 'hooks/useRent';
 import { toast } from 'react-toastify';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { NetworkContext } from 'NetworkProvider';
 import { sendEvent } from 'utils/google-analytics';
 import TermsOfServiceDialog from '../TermsOfServiceDialog';
-import { Owner } from 'types/graph';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { CHARACTERS_SUBGRAPH_INTERVAL } from 'constants/index';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
 import { formatNumberToDisplay } from 'utils/numbers';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 import CowSwapWidget from './CowSwapWidget';
+import BalanceContext from 'contexts/BalanceContext';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -119,7 +115,6 @@ const RentDegenContentDialog = ({
 }: RentDegenContentDialogProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { address } = useContext(NetworkContext);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
   const [agreement, setAgreement] = useState<boolean>(
@@ -135,17 +130,7 @@ const RentDegenContentDialog = ({
   const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [disabledRentFor, setDisabledRentFor] = useState<boolean>(false);
   const [purchasingNFTL, setPurchasingNFTL] = useState<boolean>(false);
-  const { data: userDegens }: { loading: boolean; data?: { owner: Owner } } =
-    useQuery(OWNER_QUERY, {
-      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-      variables: { address: address?.toLowerCase() },
-      skip: !address,
-    });
-
-  const isDegenOwner = useMemo(
-    () => (userDegens?.owner?.characterCount ?? 0) > 0,
-    [userDegens?.owner?.characterCount],
-  );
+  const { isDegenOwner } = useContext(BalanceContext);
 
   const accountBalance = account?.balance ?? 0;
   const sufficientBalance = useMemo(
@@ -266,13 +251,17 @@ const RentDegenContentDialog = ({
     }
   };
 
+  const refreshBalance = () => {
+    setRefreshAccKey(Math.random());
+  };
+
   const handleRefreshBalance = () => {
     sendEvent(
       GOOGLE_ANALYTICS.EVENTS.RENTAL_REFRESH_BALANCE_CLICKED,
       GOOGLE_ANALYTICS.CATEGORIES.ECOMMERCE,
       'method',
     );
-    setRefreshAccKey(Math.random());
+    refreshBalance();
   };
 
   const handleGoCheckBalance = () => {
@@ -332,7 +321,7 @@ const RentDegenContentDialog = ({
         >
           <Typography variant="h5">Rental Overview</Typography>
         </Box>
-        <Stack direction="row" spacing={3.5} mt={0.5}>
+        <Stack direction="row" spacing={{ xs: 1.5, sm: 3.5 }} mt={0.5}>
           <Stack direction="column">
             <Stack direction="row" justifyContent="center">
               {degen?.id && (
@@ -558,7 +547,7 @@ const RentDegenContentDialog = ({
                           <FormControlLabel
                             label={
                               <Typography variant="caption">
-                                I have read the
+                                I have read the{' '}
                                 <Link
                                   sx={{
                                     mx: '4px',
@@ -568,7 +557,7 @@ const RentDegenContentDialog = ({
                                   onClick={openTOSDialog}
                                 >
                                   terms &amp; conditions
-                                </Link>
+                                </Link>{' '}
                                 regarding rentals
                               </Typography>
                             }
@@ -604,7 +593,7 @@ const RentDegenContentDialog = ({
           </Stack>
         </Stack>
         <Stack direction="column" mb={6}>
-          {purchasingNFTL && <CowSwapWidget />}
+          {purchasingNFTL && <CowSwapWidget refreshBalance={refreshBalance} />}
           <Typography variant="h5" mt={4} mb={1.5}>
             Stats
           </Typography>

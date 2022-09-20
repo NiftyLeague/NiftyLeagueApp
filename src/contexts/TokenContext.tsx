@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useReducer, useContext } from 'react';
+import React, {
+  createContext,
+  useEffect,
+  useReducer,
+  useContext,
+  useState,
+} from 'react';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
@@ -8,7 +14,7 @@ import accountReducer, { initialAccountState } from 'store/accountReducer';
 
 // types
 import { TokenContextType } from 'types/auth';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { getProviderAndSigner } from 'helpers';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
@@ -24,6 +30,7 @@ export const TokenProvider = ({
 }) => {
   const { address, userProvider } = useContext(NetworkContext);
   const [state, dispatch] = useReducer(accountReducer, initialAccountState);
+  const [authToken, setAuthToken] = useState<string | undefined>();
 
   const nonce = `0x${crypto.randomBytes(4).toString('hex')}`;
   const token = `${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}-${uuidv4()}`;
@@ -40,12 +47,8 @@ export const TokenProvider = ({
         })
         .catch(() => null);
       if (result && result.slice(1, -1) === address.toLowerCase()) {
-        dispatch({
-          type: LOGIN,
-          payload: {
-            isLoggedIn: true,
-          },
-        });
+        setAuthToken(prevAuth);
+        dispatch({ type: LOGIN });
         return true;
       }
       window.localStorage.removeItem('authentication-token');
@@ -87,28 +90,17 @@ export const TokenProvider = ({
           })
             .then((res) => {
               if (res.status === 404) {
-                dispatch({
-                  type: LOGOUT,
-                });
+                dispatch({ type: LOGOUT });
                 throw Error('Failed to verify signature!');
               }
               return res.text();
             })
             .catch(() => {
-              dispatch({
-                type: LOGOUT,
-              });
+              dispatch({ type: LOGOUT });
               throw Error('Failed to verify signature!');
             });
 
           if (result?.length) {
-            dispatch({
-              type: LOGIN,
-              payload: {
-                isLoggedIn: true,
-              },
-            });
-
             sendEvent(
               GOOGLE_ANALYTICS.EVENTS.LOGIN,
               GOOGLE_ANALYTICS.CATEGORIES.ENGAGEMENT,
@@ -117,8 +109,12 @@ export const TokenProvider = ({
 
             const auth = result.slice(1, -1);
             window.localStorage.setItem('authentication-token', auth);
+            setAuthToken(auth);
+
             window.localStorage.setItem('uuid-token', token);
             window.localStorage.setItem('nonce', nonce);
+
+            dispatch({ type: LOGIN });
 
             return auth;
           }
@@ -130,31 +126,25 @@ export const TokenProvider = ({
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
-      dispatch({
-        type: LOGOUT,
-      });
+      dispatch({ type: LOGOUT });
       return null;
     }
   };
 
   useEffect(() => {
     if (address) {
-      signMsg();
+      setTimeout(signMsg, 0);
     } else if (state.isLoggedIn) {
       dispatch({ type: LOGOUT });
     }
   }, [address]);
 
-  const logout = () => {
-    dispatch({ type: LOGOUT });
-  };
-
   return (
     <TokenContext.Provider
       value={{
         ...state,
-        logout,
         signMsg,
+        authToken,
       }}
     >
       {children}

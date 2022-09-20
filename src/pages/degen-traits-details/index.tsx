@@ -1,6 +1,6 @@
 import { NFT_CONTRACT } from 'constants/contracts';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
@@ -8,11 +8,13 @@ import { toast } from 'react-toastify';
 import ViewTraitsContentDialog from 'components/dialog/DegenDialog/ViewTraitsContentDialog';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import DegenDialog from 'components/dialog/DegenDialog';
+import useAuth from 'hooks/useAuth';
 
 const DegenTraitsDetailsPage = (): JSX.Element => {
   const { id: tokenId } = useParams();
   const { readContracts } = useContext(NetworkContext);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const { authToken } = useAuth();
 
   const [character, setCharacter] = useState<CharacterType>({
     name: null,
@@ -66,30 +68,27 @@ const DegenTraitsDetailsPage = (): JSX.Element => {
     });
   };
 
-  const getDegenDetail = useCallback(
-    async (authToken) => {
-      if (!tokenId || !authToken) {
-        return;
-      }
+  const getDegenDetail = useCallback(async () => {
+    if (!tokenId || !authToken) {
+      return;
+    }
 
-      try {
-        const res = await fetch(GET_DEGEN_DETAIL_URL(tokenId), {
-          method: 'GET',
-          headers: { authorizationToken: authToken },
-        });
+    try {
+      const res = await fetch(GET_DEGEN_DETAIL_URL(tokenId), {
+        method: 'GET',
+        headers: { authorizationToken: authToken },
+      });
 
-        if (res.status === 404) {
-          throw Error('Not Found');
-        }
-        const json = await res.json();
-        setDegenDetail(json);
-      } catch (err) {
-        if (DEBUG) console.error(err.message);
-        toast.error(err.message, { theme: 'dark' });
+      if (res.status === 404) {
+        throw Error('Not Found');
       }
-    },
-    [tokenId],
-  );
+      const json = await res.json();
+      setDegenDetail(json);
+    } catch (err) {
+      if (DEBUG) console.error(err.message);
+      toast.error(err.message, { theme: 'dark' });
+    }
+  }, [authToken, tokenId]);
   const getCharacter = useCallback(async () => {
     const characterData = {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -103,17 +102,15 @@ const DegenTraitsDetailsPage = (): JSX.Element => {
   }, [readContracts, tokenId]);
 
   useEffect(() => {
-    const authToken = window.localStorage.getItem('authentication-token');
-
     if (tokenId && readContracts && readContracts[NFT_CONTRACT] && authToken) {
       // eslint-disable-next-line no-void
       void getCharacter();
       // eslint-disable-next-line no-void
-      void getDegenDetail(authToken);
+      void getDegenDetail();
     } else {
       resetDialog();
     }
-  }, [tokenId, readContracts, getCharacter, getDegenDetail]);
+  }, [tokenId, readContracts, getCharacter, getDegenDetail, authToken]);
 
   return degen ? (
     <>

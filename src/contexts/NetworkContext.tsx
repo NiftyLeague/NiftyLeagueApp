@@ -20,8 +20,8 @@ import useNetworkInfo from 'hooks/useNetworkInfo';
 import useContractLoader from 'hooks/useContractLoader';
 import useUserProvider from 'hooks/useUserProvider';
 import Notifier from 'helpers/Notifier';
-import { ALCHEMY_ID, DEBUG } from './constants';
-import { NETWORKS, VALID_ETHERS_NETWORKS } from './constants/networks';
+import { ALCHEMY_ID, DEBUG } from '../constants';
+import { NETWORKS, VALID_ETHERS_NETWORKS } from '../constants/networks';
 import { toast } from 'react-toastify';
 
 const { getDefaultProvider, Web3Provider } = providers;
@@ -127,9 +127,9 @@ const CONTEXT_INITIAL_STATE: Context = {
   writeContracts: {},
 };
 
-export const NetworkContext = createContext(CONTEXT_INITIAL_STATE);
+const NetworkContext = createContext(CONTEXT_INITIAL_STATE);
 
-const NetworkProvider = ({
+export const NetworkProvider = ({
   children,
 }: {
   children: React.ReactElement | React.ReactElement[];
@@ -283,4 +283,4 @@ const NetworkProvider = ({
   );
 };
 
-export default NetworkProvider;
+export default NetworkContext;

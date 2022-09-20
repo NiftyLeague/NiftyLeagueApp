@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { NFT_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
@@ -13,6 +13,7 @@ import { GET_DEGEN_DETAIL_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { toast } from 'react-toastify';
 import EquipDegenContentDialog from './EquipDegenContentDialog';
+import useAuth from 'hooks/useAuth';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -59,6 +60,7 @@ const DegenDialog = ({
   const tokenId = degen?.id || 0;
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const { readContracts } = useContext(NetworkContext);
+  const { authToken } = useAuth();
   const [degenDetail, setDegenDetail] = useState<GetDegenResponse>();
   const [character, setCharacter] = useState<CharacterType>({
     name: null,
@@ -79,7 +81,6 @@ const DegenDialog = ({
   };
 
   useEffect(() => {
-    const authToken = window.localStorage.getItem('authentication-token');
     async function getCharacter() {
       const characterData = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -130,7 +131,7 @@ const DegenDialog = ({
     } else {
       resetDialog();
     }
-  }, [tokenId, readContracts, open]);
+  }, [tokenId, readContracts, open, authToken]);
 
   const displayName = name || 'No Name DEGEN';
   const traits: { [traitType: string]: number } = traitList.reduce(
