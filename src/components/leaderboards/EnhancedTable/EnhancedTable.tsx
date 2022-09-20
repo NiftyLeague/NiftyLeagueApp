@@ -186,7 +186,7 @@ export default function EnhancedTable({
               />
             </>
           )}
-          {isLoggedIn && (
+          {isLoggedIn && selectedGame !== 'crypto_winter' && (
             <Typography
               variant="h4"
               color={palette.primary.main}
