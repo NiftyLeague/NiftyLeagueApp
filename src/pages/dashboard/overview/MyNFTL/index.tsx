@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { useContext, useState, useCallback, useEffect } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -12,28 +12,19 @@ import {
 } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
-import { useQuery } from '@apollo/client';
 import { BigNumber, providers, utils } from 'ethers';
 
 import { sectionSpacing } from 'store/constant';
 import SectionTitle from 'components/sections/SectionTitle';
 import HoverDataCard from 'components/cards/HoverDataCard';
 import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
-import { NetworkContext } from 'NetworkProvider';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import { Owner } from 'types/graph';
+import NetworkContext from 'contexts/NetworkContext';
 import useArcadeBalance from 'hooks/useArcadeBalance';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import useNFTLBalance from 'hooks/useNFTLBalance';
 import useAccount from 'hooks/useAccount';
 // import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
-import {
-  BALANCE_INTERVAL,
-  CHARACTERS_SUBGRAPH_INTERVAL,
-  DEBUG,
-} from 'constants/index';
+import { DEBUG } from 'constants/index';
 import { WITHDRAW_NFTL_SIGN, WITHDRAW_NFTL_REFRESH } from 'constants/url';
 import DepositForm from './DepositForm';
 import RefreshBalanceForm from './RefreshBalanceForm';
@@ -42,10 +33,12 @@ import TokenInfoCard from 'components/cards/TokenInfoCard';
 import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import BalanceContext from 'contexts/BalanceContext';
+import useAuth from 'hooks/useAuth';
 
 const MyNFTL = (): JSX.Element => {
   const theme = useTheme();
-  const auth = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
   const navigate = useNavigate();
   const { address, writeContracts, tx } = useContext(NetworkContext);
   const {
@@ -54,46 +47,17 @@ const MyNFTL = (): JSX.Element => {
     refetch: refetchArcadeBal,
   } = useArcadeBalance();
   const [refreshTimeout, setRefreshTimeout] = useState(0);
-  const [refreshBalKey, setRefreshBalKey] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { enableWenGame } = useFlags();
   const [openBuyAT, setOpenBuyAT] = useState(false);
   // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
-  const userNFTLBalance = useNFTLBalance(
-    address,
-    BALANCE_INTERVAL,
-    refreshBalKey,
-  );
-
-  const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
-    useQuery(OWNER_QUERY, {
-      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-      variables: { address: address?.toLowerCase() },
-      skip: !address,
-    });
-
-  const characters = useMemo(() => {
-    const characterList = data?.owner?.characters
-      ? [...data.owner.characters]
-      : [];
-    return characterList.sort(
-      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
-    );
-  }, [data]);
-
-  const tokenIndices = useMemo(
-    () => characters.map((char) => parseInt(char.id, 10)),
-    [characters],
-  );
+  const { userNFTLBalance, refreshNFTLBalance } = useContext(BalanceContext);
 
   const [mockAccrued, setMockAccrued] = useState(0);
-  const [refreshClaimKey, setRefreshClaimKey] = useState(0);
-  const totalAccrued = useClaimableNFTL(
-    writeContracts,
-    tokenIndices,
-    refreshClaimKey,
-  );
+  const { totalAccrued, refreshClaimableNFTL, tokenIndices, loading } =
+    useContext(BalanceContext);
+
   useEffect(() => {
     if (totalAccrued) setMockAccrued(totalAccrued);
   }, [totalAccrued]);
@@ -105,7 +69,7 @@ const MyNFTL = (): JSX.Element => {
     const res = await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
     if (res) {
       setMockAccrued(0);
-      setTimeout(() => setRefreshClaimKey(Math.random() + 1), 5000);
+      setTimeout(refreshClaimableNFTL, 5000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenIndices, totalAccrued, tx, writeContracts]);
@@ -121,7 +85,7 @@ const MyNFTL = (): JSX.Element => {
         ),
       );
       setRefreshAccKey(Math.random());
-      setRefreshBalKey(Math.random());
+      refreshNFTLBalance();
       return txRes;
     },
     [tx, writeContracts],
@@ -141,7 +105,7 @@ const MyNFTL = (): JSX.Element => {
       });
       try {
         const response = await fetch(WITHDRAW_NFTL_SIGN, {
-          headers: { authorizationToken: auth as string },
+          headers: { authorizationToken: authToken as string },
           method: 'POST',
           body,
         });
@@ -167,7 +131,7 @@ const MyNFTL = (): JSX.Element => {
         );
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('TX_DATA', txRes);
-        setRefreshBalKey(Math.random());
+        refreshNFTLBalance();
         setRefreshAccKey(Math.random());
         return { txRes };
       } catch (error) {
@@ -175,13 +139,13 @@ const MyNFTL = (): JSX.Element => {
         return { txRes: null, error: error as Error };
       }
     },
-    [address, auth, tx, writeContracts],
+    [address, authToken, tx, writeContracts],
   );
 
   const handleRefreshBal = useCallback(async () => {
     try {
       const response = await fetch(WITHDRAW_NFTL_REFRESH, {
-        headers: { authorizationToken: auth as string },
+        headers: { authorizationToken: authToken as string },
         method: 'POST',
       });
       if (!response.ok) throw new Error(response.statusText);
@@ -190,7 +154,7 @@ const MyNFTL = (): JSX.Element => {
     } catch (error) {
       console.error('error', error);
     }
-  }, [auth]);
+  }, [authToken]);
 
   const handleBuyArcadeTokens = () => {
     setOpenBuyAT(true);

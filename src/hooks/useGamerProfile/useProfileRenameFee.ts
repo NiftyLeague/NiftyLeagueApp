@@ -1,4 +1,5 @@
 import { PROFILE_RENAME_API } from 'constants/url';
+import useAuth from 'hooks/useAuth';
 import useFetch from '../useFetch';
 
 const useProfileRenameFee = (): {
@@ -6,14 +7,14 @@ const useProfileRenameFee = (): {
   fee?: number;
   loadingFee?: boolean;
 } => {
-  const auth = window.localStorage.getItem('authentication-token');
-  let headers;
-  if (auth) headers = { authorizationToken: auth };
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const { error, data, loading } = useFetch<{
     id: string;
     price: number;
   }>(PROFILE_RENAME_API, {
     headers,
+    enabled: !!authToken,
   });
   return { errorFee: error, fee: data?.price, loadingFee: loading };
 };

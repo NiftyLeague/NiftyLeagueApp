@@ -19,7 +19,8 @@ export interface Profile {
   stats: {
     nifty_smashers: ProfileNiftySmsher;
     total: ProfileTotal;
-    wen_game: ProfileWenGame;
+    wen_game: ProfileMiniGame;
+    crypto_winter: ProfileMiniGame;
   };
   name: string;
   name_cased: string;
@@ -54,7 +55,7 @@ export interface ProfileNiftySmsher extends ProfileTotal {
   deaths: number;
   rounds: number;
 }
-export interface ProfileWenGame {
+export interface ProfileMiniGame {
   dodges: number;
   hits: number;
   machine_hits: number;

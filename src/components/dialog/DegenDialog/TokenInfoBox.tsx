@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Box, InputBase, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
-import { formatNumberToDisplay } from 'utils/numbers';
+import { debounce } from 'lodash';
+import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
 import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
+import { OrderKind } from '@cowprotocol/cow-sdk';
 
 export interface TokenInfoBoxProps {
   balance: number;
@@ -11,14 +13,16 @@ export interface TokenInfoBoxProps {
   name: string;
   slug: string;
   value: string;
+  transactionValue: string;
+  kind: string;
   setValue: (value: string) => void;
+  getMarketPrice: (kind: OrderKind, amount: string) => void;
 }
 
 const useStyles = makeStyles(() => ({
   swapBox: {
     background: '#161622',
     border: '1px solid #282B3F',
-    borderRadius: '10px',
     padding: '12px 12px 4px 12px',
     height: 93,
     width: '100%',
@@ -31,6 +35,14 @@ const useStyles = makeStyles(() => ({
   infoUSD: {
     color: '#4D4D4F',
     position: 'absolute',
+  },
+  transactionBox: {
+    borderRadius: '0px 0px 10px 10px',
+    border: '1px solid #282B3F',
+    padding: 12,
+  },
+  transactionValue: {
+    fontSize: '20px !important',
   },
 }));
 
@@ -58,7 +70,10 @@ const TokenInfoBox = ({
   name,
   slug,
   value,
+  transactionValue,
+  kind,
   setValue,
+  getMarketPrice,
 }: TokenInfoBoxProps) => {
   const classes = useStyles();
   const { price, refetch } = useTokenUSDPrice({ slug });
@@ -70,12 +85,26 @@ const TokenInfoBox = ({
     return () => clearInterval(timer);
   }, [refetch]);
 
+  const debouncedGetMarketplace = useRef(
+    debounce(async (amount) => {
+      if (!amount || Number(amount) === 0) return;
+      getMarketPrice(kind === 'From' ? OrderKind.SELL : OrderKind.BUY, amount);
+    }, 300),
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      debouncedGetMarketplace.cancel();
+    };
+  }, [debouncedGetMarketplace]);
+
   const handleChangeValue = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => {
     const newValue = e.target.value;
     if (!isNaN(Number(newValue))) {
       setValue(newValue);
+      debouncedGetMarketplace(newValue);
     } else {
       e.preventDefault();
     }
@@ -103,71 +132,93 @@ const TokenInfoBox = ({
   }, [price, value]);
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      className={classes.swapBox}
-    >
-      <Stack
-        direction="row"
-        alignItems="center"
-        px={1}
-        py={0.5}
-        className={classes.tokenBox}
-        spacing={0.5}
-      >
-        {icon}
-        <Typography variant="body1" fontWeight="bold">
-          {name}
-        </Typography>
-      </Stack>
-      <Stack
-        direction="row"
-        alignItems="center"
-        spacing={1}
-        width="100%"
+    <Stack direction="column">
+      <Box
+        display="flex"
+        flexDirection="column"
         justifyContent="space-between"
+        className={classes.swapBox}
+        sx={{ borderRadius: transactionValue ? '10px 10px 0px 0px' : '10px' }}
       >
         <Stack
           direction="row"
           alignItems="center"
-          spacing={1}
-          flex={1}
-          position="relative"
-          overflow="hidden"
+          px={1}
+          py={0.5}
+          className={classes.tokenBox}
+          spacing={0.5}
         >
-          <TokenAmountInput
-            inputProps={{
-              autoComplete: 'off',
-              autoCorrect: 'off',
-              inputMode: 'decimal',
-              minLength: 1,
-              maxLength: 79,
-              pattern: '^[0-9]*[.,]?[0-9]*$',
-              title: 'Token Amount',
-            }}
-            placeholder="0.00"
-            value={value}
-            onChange={handleChangeValue}
-            onKeyDown={handleKeyDown}
-          />
-          {value !== '0' && priceInfo && (
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-              className={classes.infoUSD}
-              sx={{ left: value.length > 0 ? value.length * 19 + 10 : 86 }}
-            >
-              {`~$${priceInfo}`}
-            </Typography>
-          )}
+          {icon}
+          <Typography variant="body1" fontWeight="bold">
+            {name}
+          </Typography>
         </Stack>
-        <Typography variant="body1" fontWeight="bold" sx={{ color: '#4D4D4F' }}>
-          {`Balance: ${balance ? formatNumberToDisplay(balance) : '0.00'}`}
-        </Typography>
-      </Stack>
-    </Box>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          width="100%"
+          justifyContent="space-between"
+        >
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            flex={1}
+            position="relative"
+            overflow="hidden"
+          >
+            <TokenAmountInput
+              inputProps={{
+                autoComplete: 'off',
+                autoCorrect: 'off',
+                inputMode: 'decimal',
+                minLength: 1,
+                maxLength: 79,
+                pattern: '^[0-9]*[.,]?[0-9]*$',
+                title: 'Token Amount',
+              }}
+              placeholder="0.00"
+              value={value}
+              onChange={handleChangeValue}
+              onKeyDown={handleKeyDown}
+            />
+            {value !== '0' && priceInfo && (
+              <Typography
+                variant="body1"
+                fontWeight="bold"
+                className={classes.infoUSD}
+                sx={{ left: value.length > 0 ? value.length * 19 + 10 : 86 }}
+              >
+                {`~$${priceInfo}`}
+              </Typography>
+            )}
+          </Stack>
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+            sx={{ color: '#4D4D4F' }}
+          >
+            {`Balance: ${
+              balance ? formatNumberToDisplay2(balance, 4) : '0.00'
+            }`}
+          </Typography>
+        </Stack>
+      </Box>
+      {transactionValue && (
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          className={classes.transactionBox}
+        >
+          <Typography>{`${kind} (incl. fee)`}</Typography>
+          <Typography className={classes.transactionValue}>
+            {`${formatNumberToDisplay2(Number(transactionValue), 4)}`}
+          </Typography>
+        </Stack>
+      )}
+    </Stack>
   );
 };
 

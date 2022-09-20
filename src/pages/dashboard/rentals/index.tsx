@@ -5,7 +5,9 @@ import { toast } from 'react-toastify';
 import MyRentalsDataGrid from './MyRentalsDataGrid';
 import {
   ALL_RENTAL_API_URL,
+  ALL_RENTAL_API_URL_INACTIVE,
   MY_RENTAL_API_URL,
+  MY_RENTAL_API_URL_INACTIVE,
   RENTED_FROM_ME_API_URL,
 } from 'constants/url';
 import { Rentals, RentalType } from 'types/rentals';
@@ -15,68 +17,61 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useQuery } from 'react-query';
 import { getUniqueListBy } from 'utils/array';
 import useTeminateRental from 'hooks/useTeminateRental';
+import useAuth from 'hooks/useAuth';
 
 const DashboardRentalPage = (): JSX.Element => {
-  const authToken = window.localStorage.getItem('authentication-token');
+  const { authToken } = useAuth();
+  const headers = { authorizationToken: authToken || '' };
   const [rentals, setRentals] = useState<Rentals[] | any>([]);
   const [category, setCategory] = useState<RentalType>('all');
+  const terminalRental = useTeminateRental();
 
-  let headers;
-  if (authToken) {
-    headers = {
-      authorizationToken: authToken,
-    };
-  }
-
-  const getFetchUrl = (): string => {
+  const getFetchUrl = (): string[] => {
     switch (category) {
+      case 'all':
+        return [
+          ALL_RENTAL_API_URL,
+          ALL_RENTAL_API_URL_INACTIVE,
+          RENTED_FROM_ME_API_URL,
+          MY_RENTAL_API_URL,
+          MY_RENTAL_API_URL_INACTIVE,
+        ];
       case 'owned-sponsorship':
       case 'non-owned-sponsorship':
-        return ALL_RENTAL_API_URL;
+        return [ALL_RENTAL_API_URL, ALL_RENTAL_API_URL_INACTIVE];
 
       case 'direct-rental':
       case 'recruited':
-        return MY_RENTAL_API_URL;
+        return [MY_RENTAL_API_URL, MY_RENTAL_API_URL_INACTIVE];
 
       case 'direct-renter':
-        return RENTED_FROM_ME_API_URL;
+        return [RENTED_FROM_ME_API_URL];
 
       default:
-        return ALL_RENTAL_API_URL;
+        return [ALL_RENTAL_API_URL, ALL_RENTAL_API_URL_INACTIVE];
     }
   };
 
   const fetchRentals = async (): Promise<Rentals[]> => {
-    if (category === 'all') {
-      const [allRentalsResponse, rentedFromMeResponse, myRentalsResponse] =
-        await Promise.all([
-          fetch(ALL_RENTAL_API_URL, {
-            method: 'GET',
-            headers,
-          }),
-          fetch(RENTED_FROM_ME_API_URL, {
-            method: 'GET',
-            headers,
-          }),
-          fetch(MY_RENTAL_API_URL, {
-            method: 'GET',
-            headers,
-          }),
-        ]);
+    const urls = getFetchUrl();
+    const responses = await Promise.all(
+      urls.map((url) =>
+        fetch(url, {
+          method: 'GET',
+          headers,
+        }),
+      ),
+    );
 
-      const allRentals = (await allRentalsResponse.json()) as any[];
-      const rentedFromMe = (await rentedFromMeResponse.json()) as any[];
-      const myRentals = (await myRentalsResponse.json()) as any[];
-      const totalRentals = allRentals.concat(rentedFromMe).concat(myRentals);
-      return getUniqueListBy(totalRentals, 'id');
-    } else {
-      const response = await fetch(getFetchUrl(), {
-        method: 'GET',
-        headers,
-      });
-      const data = await response.json();
-      return data;
-    }
+    const rentalArrays = await Promise.all(
+      responses.map((response) => response.json()),
+    );
+
+    const totalRentals = rentalArrays.reduce((flattened, arr) => [
+      ...flattened,
+      ...arr,
+    ]);
+    return getUniqueListBy(totalRentals, 'id');
   };
 
   const { data, isLoading, isFetching, refetch } = useQuery<Rentals[]>(
@@ -94,10 +89,8 @@ const DashboardRentalPage = (): JSX.Element => {
   );
 
   const terminateRentalById = async (rentalId: string) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const terminalRental = useTeminateRental(rentalId);
     try {
-      const result: any = await terminalRental();
+      const result: any = await terminalRental(rentalId);
       if (!result.ok) {
         const errMsg = await result.text();
         toast.error(`Can not terminate the rental: ${errMsg}`, {
@@ -160,8 +153,12 @@ const DashboardRentalPage = (): JSX.Element => {
   };
 
   useEffect(() => {
+    if (!authToken) {
+      return;
+    }
+
     refetch();
-  }, [category, refetch]);
+  }, [authToken, category, refetch]);
 
   return (
     <Stack spacing={3}>

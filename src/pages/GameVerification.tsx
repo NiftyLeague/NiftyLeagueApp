@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Container from '@mui/material/Container';
 
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { getProviderAndSigner } from 'helpers';
 import { WALLET_VERIFICATION } from 'constants/url';
 

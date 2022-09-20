@@ -67,6 +67,15 @@ export default function ThemeCustomization({ children }: Props) {
       },
       typography: themeTypography,
       customShadows: themeCustomShadows,
+      breakpoints: {
+        values: {
+          xs: 0,
+          sm: 600,
+          md: 1020,
+          lg: 1360,
+          xl: 1750,
+        },
+      },
     }),
     [rtlLayout, theme, themeCustomShadows, themeTypography],
   );

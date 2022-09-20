@@ -5,7 +5,7 @@ export const NiftySmashersTables = [
     key: 'win_rate',
     display: 'WIN RATE',
     rows: [
-      { key: 'win_rate', display: 'WIN RATE' },
+      { key: 'win_rate', display: 'WIN RATE', primary: true },
       { key: 'matches', display: 'MATCHES PLAYED' },
     ],
   },
@@ -13,7 +13,7 @@ export const NiftySmashersTables = [
     key: 'earnings',
     display: 'TOP EARNERS',
     rows: [
-      { key: 'earnings', display: 'TOTAL NFTL EARNED' },
+      { key: 'earnings', display: 'TOTAL NFTL EARNED', primary: true },
       { key: 'matches', display: 'MATCHES PLAYED' },
       { key: 'avg_NFTL/match', display: 'AVG, NFTL/MATCH' },
       { key: 'kills', display: 'KILLS' },
@@ -24,24 +24,32 @@ export const NiftySmashersTables = [
     display: 'TOP KILLS',
     rows: [
       { key: 'matches', display: 'MATCHES PLAYED' },
-      { key: 'kills', display: 'KILLS' },
+      { key: 'kills', display: 'KILLS', primary: true },
     ],
   },
 ];
 
-export const WenGameTables = [
+const WenGameTables = [
   {
     key: 'score',
     display: 'HIGH SCORE',
-    rows: [{ key: 'score', display: 'HIGH SCORE' }],
+    rows: [{ key: 'score', display: 'HIGH SCORE', primary: true }],
   },
 ];
 
-export const MtGawxTables = [
+const MtGawxTables = [
   {
     key: 'burnings',
     display: 'NFTL BURNED',
-    rows: [{ key: 'score', display: 'NFTL BURNED' }],
+    rows: [{ key: 'score', display: 'NFTL BURNED', primary: true }],
+  },
+];
+
+const CryptoWinterTables = [
+  {
+    key: 'score',
+    display: 'HIGH SCORE',
+    rows: [{ key: 'score', display: 'HIGH SCORE', primary: true }],
   },
 ];
 
@@ -49,6 +57,7 @@ export enum Game {
   NiftySmashers = 'NIFTY SMASHERS',
   WenGame = 'WEN GAME',
   MtGawx = 'MT. GAWX',
+  CryptoWinter = 'CRYPTO WINTER',
 }
 
 export enum TimeFilter {
@@ -65,6 +74,11 @@ export const LEADERBOARD_GAME_LIST = [
   },
   { key: 'wen_game', display: Game.WenGame, tables: WenGameTables },
   { key: 'nftl_burner', display: Game.MtGawx, tables: MtGawxTables },
+  {
+    key: 'crypto_winter',
+    display: Game.CryptoWinter,
+    tables: CryptoWinterTables,
+  },
 ];
 
 export const LEADERBOARD_TIME_FILTERS = [
@@ -96,6 +110,9 @@ export const getGameLeaderboardViewedAnalyticsEventName = (
     case 'nftl_burner':
       eventName = GOOGLE_ANALYTICS.EVENTS.MT_GAWX_LEADERBOARD_VIEWED;
       break;
+    case 'crypto_winter':
+      eventName = GOOGLE_ANALYTICS.EVENTS.CRYPTO_WINTER_LEADERBOARD_VIEWED;
+      break;
     default:
       break;
   }
@@ -116,6 +133,11 @@ export const getLeaderboardRankAnalyticsEventName = (selectedGame: string) => {
     case 'nftl_burner':
       eventName =
         GOOGLE_ANALYTICS.EVENTS.LEADERBOARD_CHECK_YOUR_RANK_CLICKED_MT_GAWX;
+      break;
+    case 'crypto_winter':
+      eventName =
+        GOOGLE_ANALYTICS.EVENTS
+          .LEADERBOARD_CHECK_YOUR_RANK_CLICKED_CRYPTO_WINTER;
       break;
     default:
       break;

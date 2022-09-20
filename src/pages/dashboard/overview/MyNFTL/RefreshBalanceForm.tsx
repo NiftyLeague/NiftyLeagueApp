@@ -23,8 +23,9 @@ import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
 import useContractReader from 'hooks/useContractReader';
 import { WithdrawalHistory } from 'types/account';
 import { formatDateTime } from 'helpers/dateTime';
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT } from 'constants/contracts';
+import { BALANCE_INTERVAL } from 'constants/index';
 
 function useBalanceManagerNonce(address: string): number {
   const { writeContracts } = useContext(NetworkContext);
@@ -34,6 +35,7 @@ function useBalanceManagerNonce(address: string): number {
     GAME_ACCOUNT_CONTRACT,
     'nonce',
     [address],
+    BALANCE_INTERVAL,
   ) as BigNumber;
   useEffect(() => {
     if (result && result !== nonce) setNonce(result);
@@ -178,7 +180,7 @@ interface RefreshFormProps {
   onRefresh: () => Promise<void>;
 }
 
-const RefreshForm = ({
+const RefreshBalanceForm = ({
   refreshTimeout,
   onRefresh,
 }: RefreshFormProps): JSX.Element => {
@@ -236,4 +238,4 @@ const RefreshForm = ({
   );
 };
 
-export default RefreshForm;
+export default RefreshBalanceForm;

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Button, Typography, Container } from '@mui/material';
 
-import { NetworkContext } from 'NetworkProvider';
+import NetworkContext from 'contexts/NetworkContext';
 import useAuth from 'hooks/useAuth';
 
 const ProfileVerification = (): JSX.Element => {
@@ -32,11 +32,6 @@ export default function withVerification(
 ) {
   return (props: any): JSX.Element | null => {
     const { isLoggedIn } = useAuth();
-    const auth = window.localStorage.getItem('authentication-token');
-    return isLoggedIn ? (
-      <Component {...props} auth={auth} />
-    ) : (
-      <ProfileVerification />
-    );
+    return isLoggedIn ? <Component {...props} /> : <ProfileVerification />;
   };
 }

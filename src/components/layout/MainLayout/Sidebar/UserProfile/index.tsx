@@ -7,21 +7,18 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { NetworkContext } from 'NetworkProvider';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { Owner } from 'types/graph';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
+import NetworkContext from 'contexts/NetworkContext';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { NFTL_CONTRACT } from 'constants/contracts';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import { sendUserId } from 'utils/google-analytics';
 import { formatNumberToDisplay } from 'utils/numbers';
-import { CHARACTERS_SUBGRAPH_INTERVAL, DEBUG } from 'constants/index';
+import { DEBUG } from 'constants/index';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';
 import { ProfileAvatar } from 'types/account';
 import useAuth from 'hooks/useAuth';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
+import BalanceContext from 'contexts/BalanceContext';
 
 export interface UserProfileProps {}
 
@@ -30,35 +27,10 @@ const UserProfile: React.FC<
 > = () => {
   const { palette } = useTheme();
   const { address, writeContracts, tx } = useContext(NetworkContext);
-
-  const { loading, data }: { loading: boolean; data?: { owner: Owner } } =
-    useQuery(OWNER_QUERY, {
-      pollInterval: CHARACTERS_SUBGRAPH_INTERVAL,
-      variables: { address: address?.toLowerCase() },
-      skip: !address,
-    });
-
-  const characters = useMemo(() => {
-    const characterList = data?.owner?.characters
-      ? [...data.owner.characters]
-      : [];
-    return characterList.sort(
-      (a, b) => parseInt(a.id, 10) - parseInt(b.id, 10),
-    );
-  }, [data]);
-
-  const tokenIndices = useMemo(
-    () => characters.map((char) => parseInt(char.id, 10)),
-    [characters],
-  );
+  const { totalAccrued, tokenIndices, loading, refreshClaimableNFTL } =
+    useContext(BalanceContext);
 
   const [mockAccumulated, setMockAccumulated] = useState(0);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const totalAccumulated = useClaimableNFTL(
-    writeContracts,
-    tokenIndices,
-    refreshKey,
-  );
   const [username, setUserName] = useState<string | undefined>('');
   const [avatar, setAvatar] = useState<ProfileAvatar | undefined>(undefined);
   const { fetchUserProfile } = useGamerProfile();
@@ -82,18 +54,18 @@ const UserProfile: React.FC<
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (totalAccumulated) setMockAccumulated(totalAccumulated);
-  }, [totalAccumulated]);
+    if (totalAccrued) setMockAccumulated(totalAccrued);
+  }, [totalAccrued]);
 
   const handleClaimNFTL = useCallback(async () => {
     // eslint-disable-next-line no-console
-    if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
+    if (DEBUG) console.log('claim', tokenIndices, totalAccrued);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
     setMockAccumulated(0);
-    setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+    setTimeout(refreshClaimableNFTL, 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenIndices, totalAccumulated, tx, writeContracts]);
+  }, [tokenIndices, totalAccrued, tx, writeContracts]);
 
   return (
     <Box

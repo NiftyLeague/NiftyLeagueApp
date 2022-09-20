@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
@@ -6,10 +6,7 @@ import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import { getLeaderboardRankAnalyticsEventName } from 'constants/leaderboard';
 import useAuth from 'hooks/useAuth';
 import usePlayerProfile from 'hooks/usePlayerProfile';
-//@ts-ignore
-import ResponsiveTable from 'mui-responsive-table';
-import { NetworkContext } from 'NetworkProvider';
-import { useContext, useEffect, useState } from 'react';
+import ResponsiveTable from 'mui5-responsive-table';
 import { toast } from 'react-toastify';
 import { DataType, ReturnDataType, TableProps } from 'types/leaderboard';
 import { sendEvent } from 'utils/google-analytics';
@@ -64,7 +61,7 @@ export default function EnhancedTable({
       selectedGame,
       selectedTable.key,
       selectedTimeFilter,
-      rowsPerPage * 3,
+      rowsPerPage,
       0,
     );
     const leaderBoardValue: any = [];
@@ -82,13 +79,17 @@ export default function EnhancedTable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, selectedTable.key, selectedTimeFilter]);
   const handleChangePage = async (newPage: number) => {
-    if (rows && (newPage + 3) * rowsPerPage > rows?.length) {
+    if (
+      rows &&
+      (newPage + 1) * rowsPerPage > rows?.length &&
+      rows?.length < count
+    ) {
       const returnValue: ReturnDataType = await fetchScores(
         selectedGame,
         selectedTable.key,
         selectedTimeFilter,
         rowsPerPage,
-        (newPage + 2) * rowsPerPage,
+        newPage * rowsPerPage,
       );
       const leaderBoardValue: any = [];
       returnValue.data.forEach((value: any) => {
@@ -156,10 +157,12 @@ export default function EnhancedTable({
         field: headerCell.key,
         headerName: headerCell.display,
         width: 250,
+        primary: headerCell.primary,
       });
     });
     return columns;
   };
+
   return (
     <Box mb={{ xs: 10, sm: 0 }}>
       {!rows ? (
@@ -183,7 +186,7 @@ export default function EnhancedTable({
               />
             </>
           )}
-          {isLoggedIn && (
+          {isLoggedIn && selectedGame !== 'crypto_winter' && (
             <Typography
               variant="h4"
               color={palette.primary.main}

@@ -101,7 +101,7 @@ const MainLayout = () => {
 
   const header = useMemo(
     () => (
-      <Toolbar>
+      <Toolbar sx={{ py: { xs: 1, lg: 2 } }}>
         <Header />
       </Toolbar>
     ),
@@ -191,7 +191,9 @@ const MainLayout = () => {
           <PerfectScrollbar
             style={{
               padding: matchDownSm ? '10px 20px' : '20px 40px',
-              height: !matchUpMd ? 'calc(100vh - 120px)' : 'calc(100vh - 88px)',
+              height: !matchUpMd
+                ? 'calc(100vh - 120px)'
+                : 'calc(100vh - 100px)',
             }}
           >
             {getContent()}

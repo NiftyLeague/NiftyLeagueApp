@@ -43,7 +43,7 @@ const CollapsibleSidebarLayout = ({
           ...(!matchDownLG && {
             position: 'fixed',
             // Follows how mainLayout sets the marginTop value
-            top: theme.typography.mainContent.marginTop || 108,
+            // top: theme.typography.mainContent.marginTop || 108,
           }),
           '& .MuiDrawer-paper': {
             height: matchDownLG ? '100%' : 'auto',
@@ -62,8 +62,8 @@ const CollapsibleSidebarLayout = ({
       >
         <PerfectScrollbar
           style={{
-            height: matchDownLG ? '100vh' : 'calc(100vh - 88px)',
-            padding: '16px',
+            height: matchDownLG ? '100vh' : 'calc(100vh - 152px)',
+            padding: '20px 16px',
           }}
         >
           {renderDrawer()}
@@ -95,8 +95,8 @@ const CollapsibleSidebarLayout = ({
       >
         <PerfectScrollbar
           style={{
-            padding: matchDownSm ? '10px 20px' : '20px 40px',
-            height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+            padding: matchDownSm ? '10px 16px' : '16px 24px',
+            height: !matchUpMd ? 'calc(100vh - 280px)' : 'calc(100vh - 152px)',
           }}
         >
           {renderMain()}

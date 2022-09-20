@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen } from 'types/degens';
-import { NetworkContext } from 'NetworkProvider';
-import useNFTLBalance from 'hooks/useNFTLBalance';
+import NetworkContext from 'contexts/NetworkContext';
 import { BigNumber, BigNumberish, utils } from 'ethers';
 import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
@@ -19,6 +18,7 @@ import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import RenameStepper from './RenameStepper';
+import BalanceContext from 'contexts/BalanceContext';
 
 interface Props {
   degen?: Degen;
@@ -27,7 +27,7 @@ interface Props {
 
 const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const { address, tx, writeContracts } = useContext(NetworkContext);
-  const userNFTLBalance = useNFTLBalance(address);
+  const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));

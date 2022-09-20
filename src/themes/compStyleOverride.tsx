@@ -26,7 +26,7 @@ export default function componentStyleOverrides(
           borderRadius: '4px',
         },
         outlinedPrimary: {
-          color: '#fff',
+          color: '#f5f5f5',
           borderColor: theme.palette.primary.main,
         },
       },

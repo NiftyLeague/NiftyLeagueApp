@@ -32,7 +32,7 @@ const SectionSlider = ({
     centerPadding: '0',
     slidesToShow: 4,
     slidesToScroll: 1,
-    infinite: false,
+    infinite: true,
     responsive: [
       {
         breakpoint: 1700,

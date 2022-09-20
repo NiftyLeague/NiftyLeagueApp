@@ -10,7 +10,7 @@ import Snackbar from 'components/extended/Snackbar';
 
 // auth provider
 import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
-import NetworkProvider from 'NetworkProvider';
+import { NetworkProvider } from 'contexts/NetworkContext';
 
 const App = () => (
   <Locales>
