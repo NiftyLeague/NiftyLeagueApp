@@ -191,8 +191,8 @@ const GameList = () => {
             <>
               <Dialog>
                 <DialogTrigger>
-                  <Button variant="outlined" fullWidth>
-                    Get Notified
+                  <Button variant="outlined" fullWidth disabled>
+                    {false ? 'Get Notified' : 'Play in Browser'}
                   </Button>
                 </DialogTrigger>
                 <DialogContent
