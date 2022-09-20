@@ -1,7 +1,5 @@
 import { useRoutes } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import Loadable from 'components/Loadable';
-import { lazy } from 'react';
 
 // routes
 import PrivateRoutes from './PrivateRoutes';
@@ -13,25 +11,16 @@ import useGoogleAnalytics from 'hooks/useGoogleAnalytics';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
-const DashboardGamerProfilePage = Loadable(
-  lazy(() => import('pages/dashboard/gamer-profile')),
-);
-
 export default function ThemeRoutes() {
   let privateRoutes = PrivateRoutes;
   useGoogleAnalytics();
   const { displayGamerProfile } = useFlags();
-
-  if (displayGamerProfile) {
+  if (displayGamerProfile === false) {
     privateRoutes = {
       ...PrivateRoutes,
-      children: [
-        ...PrivateRoutes.children,
-        {
-          path: 'gamer-profile',
-          element: <DashboardGamerProfilePage />,
-        },
-      ],
+      children: PrivateRoutes.children.filter(
+        (child) => child.path !== 'gamer-profile',
+      ),
     };
   }
 
