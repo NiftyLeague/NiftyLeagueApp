@@ -27,7 +27,11 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   const { authToken } = useAuth();
   const location = useLocation();
   const { address, targetNetwork } = useContext(NetworkContext);
-  const { arcadeBalance, refetch: refetchArcadeBal } = useArcadeBalance();
+  const {
+    arcadeBalance,
+    loading: arcadeLoading,
+    refetch: refetchArcadeBal,
+  } = useArcadeBalance();
   const favs = window.localStorage.getItem('FAV_DEGENS') || '';
   const authMsg = `true,${address || '0x0'},Vitalik,${authToken},${favs}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
@@ -119,6 +123,10 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   const handleOnClickFullscreen = () => {
     (window as any).unityInstance.setFullscreen(true);
   };
+
+  if (arcadeTokenRequired && arcadeLoading) {
+    return <></>;
+  }
 
   if (arcadeTokenRequired && Number(arcadeBalance) === 0) {
     return <ArcadeTokensRequired refetchArcadeBal={refetchArcadeBal} />;
