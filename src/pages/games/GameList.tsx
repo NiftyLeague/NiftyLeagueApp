@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingRight: 16,
     paddingBottom: 32,
     border: 'none',
-    [theme.breakpoints.between('lg', 'xl')]: {
+    [theme.breakpoints.between('md', 'xl')]: {
       '&:nth-child(-n+3)': {
         borderBottom: '1px solid #474747',
       },
@@ -31,8 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderBottom: '1px solid #474747',
       },
     },
-    [theme.breakpoints.down('md')]: {
-      paddingRight: 0,
+    [theme.breakpoints.down('sm')]: {
       paddingBottom: 0,
     },
   },
@@ -82,7 +81,7 @@ const GameList = () => {
 
   return (
     <>
-      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
+      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Nifty Smashers"
           required="DEGEN Required"
@@ -122,7 +121,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
+      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="WEN Game"
           required="Arcade Tokens Required"
@@ -150,7 +149,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
+      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Crypto Winter"
           required="Arcade Tokens Required"
@@ -178,7 +177,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
+      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Mt. Gawx"
           required=" "
@@ -205,7 +204,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item sm={12} md={6} lg={4} xl={3} className={gridItem}>
+      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Nifty Tennis"
           description={
