@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Signer, providers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ChainId } from '@sushiswap/sdk';
-import Web3Modal from 'web3modal';
+import Web3Modal, { providers as Web3ModalProviders} from 'web3modal';
 import isEmpty from 'lodash/isEmpty';
 
 import {
@@ -77,6 +77,22 @@ const web3Modal = new Web3Modal({
         infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
       },
     },
+    ...(window.ethereum
+      ? {}
+      : {
+          'custom-metamask': {
+            display: {
+              logo: Web3ModalProviders.METAMASK.logo,
+              name: 'Install MetaMask',
+              description: 'Connect using browser wallet',
+            },
+            package: {},
+            connector: async () => {
+              window.open('https://metamask.io');
+              throw new Error('MetaMask not installed');
+            },
+          },
+        }),
   },
 });
 
