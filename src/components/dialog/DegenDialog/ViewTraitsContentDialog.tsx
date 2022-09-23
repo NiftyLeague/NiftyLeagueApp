@@ -142,9 +142,11 @@ const ViewTraitsContentDialog = ({
             </Grid>
           </Stack>
           <Stack direction="column" gap={1} width="100%">
-            <Button variant="contained" fullWidth onClick={onRent || onClaim}>
-              {onRent ? 'Rent Degen' : 'Claim Degen'}
-            </Button>
+            {false && (
+              <Button variant="contained" fullWidth onClick={onRent || onClaim}>
+                {onRent ? 'Rent Degen' : 'Claim Degen'}
+              </Button>
+            )}
             {onClose && (
               <Button fullWidth onClick={onClose}>
                 Close
