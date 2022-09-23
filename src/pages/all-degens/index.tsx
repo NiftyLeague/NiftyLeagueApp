@@ -38,7 +38,7 @@ import DegensTopNav from 'components/extended/DegensTopNav';
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
 
-const DegenRentalsPage = (): JSX.Element => {
+const AllRentalsPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -290,4 +290,4 @@ const DegenRentalsPage = (): JSX.Element => {
   );
 };
 
-export default DegenRentalsPage;
+export default AllRentalsPage;

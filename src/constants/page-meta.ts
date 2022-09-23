@@ -2,8 +2,8 @@ export const pageMeta = {
   main: {
     title: 'Nifty League NFT Gaming App',
   },
-  degenRentals: {
-    title: 'NFT Rentals | Nifty League',
+  allDegens: {
+    title: 'All DEGENs | Nifty League',
   },
   games: {
     title: 'NFT Games | Nifty League',
