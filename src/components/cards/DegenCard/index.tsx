@@ -215,17 +215,19 @@ const DegenCard: React.FC<
             gap: size === 'small' ? 0.5 : 1,
           }}
         >
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              minWidth: '32%',
-              fontSize: buttonFontSize,
-            }}
-            onClick={onClickRent}
-          >
-            Rent
-          </Button>
+          {false && (
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
+              onClick={onClickRent}
+            >
+              Rent
+            </Button>
+          )}
           {degenEquipEnabled && isDashboardDegen && onClickEquip ? (
             <Button
               variant="outlined"
@@ -274,18 +276,20 @@ const DegenCard: React.FC<
             alignItems="center"
             sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
           >
-            <Typography
-              color={palette.grey[700]}
-              sx={{
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                textAlign: 'center',
-                fontSize: tinyFontSize,
-              }}
-              onClick={() => setIsEnableDisableDegenModalOpen(true)}
-            >
-              {isEnabled ? 'Disable' : 'Enable'} Rentals
-            </Typography>
+            {false && (
+              <Typography
+                color={palette.grey[700]}
+                sx={{
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  fontSize: tinyFontSize,
+                }}
+                onClick={() => setIsEnableDisableDegenModalOpen(true)}
+              >
+                {isEnabled ? 'Disable' : 'Enable'} Rentals
+              </Typography>
+            )}
             <Box
               sx={{
                 display: 'flex',

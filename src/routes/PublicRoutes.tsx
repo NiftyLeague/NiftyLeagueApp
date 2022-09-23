@@ -23,7 +23,7 @@ const MtGawxGamePage = Loadable(
 const CryptoWinterGamePage = Loadable(
   lazy(() => import('pages/games/PlayOnGame/CryptoWinterGame')),
 );
-const DegenRentalsPage = Loadable(lazy(() => import('pages/degen-rentals')));
+const AllRentalsPage = Loadable(lazy(() => import('pages/all-degens')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
 
@@ -38,28 +38,30 @@ const PublicRoutes = {
   ),
   children: [
     {
+      path: false ? '/games' : '/',
+      element: <GamesPage />,
+    },
+    /*    
+    {
       path: '/',
       element: <NiftyLeagueAppPage />,
     },
+*/
     {
       path: '/leaderboards',
       element: <LeaderboardPage />,
     },
     {
-      path: '/degen-rentals',
-      element: <DegenRentalsPage />,
+      path: '/all-degens',
+      element: <AllRentalsPage />,
     },
     {
       path: '/degens/:id',
       element: <DegenTraitsDetailsPage />,
     },
     {
-      path: '/degen-rentals/:walletAddress',
-      element: <DegenRentalsPage />,
-    },
-    {
-      path: '/games',
-      element: <GamesPage />,
+      path: '/all-degens/:walletAddress',
+      element: <AllRentalsPage />,
     },
     {
       path: '/games/smashers',
