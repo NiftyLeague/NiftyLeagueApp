@@ -17,7 +17,7 @@ export const tranformDataByFilter = (
   }: DegenFilter,
 ): Degen[] => {
   const walletAddress = window.location.pathname.replace(
-    /(\/(degen-rentals)|\/)/g,
+    /(\/(all-degens)|\/)/g,
     '',
   );
   let result = degens.filter((degen: Degen) => {
