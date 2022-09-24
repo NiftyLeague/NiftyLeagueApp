@@ -21,6 +21,15 @@ const PublicItems = {
   type: 'group',
   children: [
     {
+      id: false ? 'games' : '',
+      title: 'Games',
+      type: 'item',
+      url: false ? '/games' : '/',
+      icon: icons.IconDeviceGamepad,
+      breadcrumbs: false,
+    },
+    /*
+    {
       id: '',
       title: 'Nifty League App',
       type: 'item',
@@ -28,20 +37,13 @@ const PublicItems = {
       icon: icons.IconLayoutGrid,
       breadcrumbs: false,
     },
+*/
     {
-      id: 'degen-rentals',
-      title: 'DEGEN Rentals',
+      id: 'all-degens',
+      title: 'All DEGENs',
       type: 'item',
-      url: '/degen-rentals',
+      url: '/all-degens',
       icon: icons.IconTag,
-      breadcrumbs: false,
-    },
-    {
-      id: 'games',
-      title: 'Games',
-      type: 'item',
-      url: '/games',
-      icon: icons.IconDeviceGamepad,
       breadcrumbs: false,
     },
     {
