@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Signer, providers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ChainId } from '@sushiswap/sdk';
-import Web3Modal, { providers as Web3ModalProviders} from 'web3modal';
+import Web3Modal, { providers as Web3ModalProviders } from 'web3modal';
 import isEmpty from 'lodash/isEmpty';
 
 import {
@@ -20,20 +20,18 @@ import useNetworkInfo from 'hooks/useNetworkInfo';
 import useContractLoader from 'hooks/useContractLoader';
 import useUserProvider from 'hooks/useUserProvider';
 import Notifier from 'helpers/Notifier';
-import { ALCHEMY_ID, DEBUG } from '../constants';
-import { NETWORKS, VALID_ETHERS_NETWORKS } from '../constants/networks';
 import { toast } from 'react-toastify';
+import { NetworkName } from 'types/web3';
+import { NETWORKS, VALID_ETHERS_NETWORKS } from 'constants/networks';
+import { ALCHEMY_ID, DEBUG } from 'constants/index';
 
 const { getDefaultProvider, Web3Provider } = providers;
 
 if (window.ethereum)
   (window.ethereum as Ethereumish).autoRefreshOnNetworkChange = false;
 
-// 📡 What chain are your contracts deployed to? (localhost, rinkeby, mainnet)
-const targetNetwork =
-  NETWORKS[
-    process.env.REACT_APP_NETWORK as 'localhost' | 'rinkeby' | 'mainnet'
-  ];
+// 📡 What chain are your contracts deployed to? (localhost, goerli, mainnet)
+const targetNetwork = NETWORKS[process.env.REACT_APP_NETWORK as NetworkName];
 
 // 🛰 providers
 if (DEBUG) console.log('📡 Connecting to Mainnet Ethereum');
