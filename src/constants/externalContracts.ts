@@ -37,19 +37,13 @@ const EXTERNAL_CONTRACTS: {
       abi: COMICS_MERKLE_ABI,
     },
   },
-  [ChainId.ROPSTEN]: {
+  [ChainId.GÖRLI]: {
     MerkleDistributor: {
-      address: MERKLE_DISTRIBUTOR_ADDRESS[ChainId.ROPSTEN],
-      abi: MERKLE_ABI,
-    },
-  },
-  [ChainId.RINKEBY]: {
-    MerkleDistributor: {
-      address: MERKLE_DISTRIBUTOR_ADDRESS[ChainId.RINKEBY],
+      address: MERKLE_DISTRIBUTOR_ADDRESS[ChainId.GÖRLI],
       abi: MERKLE_ABI,
     },
     ComicsMerkleDistributor: {
-      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[ChainId.RINKEBY],
+      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[ChainId.GÖRLI],
       abi: COMICS_MERKLE_ABI,
     },
   },

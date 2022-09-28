@@ -1,17 +1,19 @@
 // assets
 import {
   IconDeviceGamepad,
-  IconTag,
   IconLayoutGrid,
   IconListNumbers,
+  IconSquarePlus,
+  IconTag,
 } from '@tabler/icons';
 
 // constant
 const icons = {
   IconDeviceGamepad,
-  IconTag,
   IconLayoutGrid,
   IconListNumbers,
+  IconSquarePlus,
+  IconTag,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -38,6 +40,14 @@ const PublicItems = {
       breadcrumbs: false,
     },
 */
+    {
+      id: 'mint-o-matic',
+      title: 'Mint-o-Matic',
+      type: 'item',
+      url: '/mint-o-matic',
+      icon: icons.IconSquarePlus,
+      breadcrumbs: false,
+    },
     {
       id: 'all-degens',
       title: 'All DEGENs',

@@ -6,9 +6,9 @@ import { lazy } from 'react';
 import GuestGuard from 'utils/route-guard/GuestGuard';
 
 // sample page routing
-const NiftyLeagueAppPage = Loadable(
-  lazy(() => import('pages/nifty-league-app')),
-);
+// const NiftyLeagueAppPage = Loadable(
+//   lazy(() => import('pages/nifty-league-app')),
+// );
 const LeaderboardPage = Loadable(lazy(() => import('pages/leaderboard')));
 const GamesPage = Loadable(lazy(() => import('pages/games')));
 const SmashersGamePage = Loadable(
@@ -46,7 +46,7 @@ const PublicRoutes = {
       path: '/',
       element: <NiftyLeagueAppPage />,
     },
-*/
+    */
     {
       path: '/leaderboards',
       element: <LeaderboardPage />,

@@ -40,15 +40,7 @@ export interface Contracts {
   [contractName: string]: ethers.Contract;
 }
 
-export type NetworkName =
-  | 'localhost'
-  | 'mainnet'
-  | 'ropsten'
-  | 'rinkeby'
-  | 'goerli'
-  | 'kovan'
-  | 'matic'
-  | 'maticmum';
+export type NetworkName = 'localhost' | 'mainnet' | 'goerli';
 
 export interface Network {
   blockExplorer: string;
