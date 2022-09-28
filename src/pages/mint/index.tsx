@@ -36,14 +36,14 @@ const MintPage = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="h2" component="div" textAlign="center">
+        <Typography variant="h1" component="div" textAlign="center">
           Please connect your wallet.
         </Typography>
         <Button
           variant="contained"
           color="primary"
           onClick={handleConnectWallet}
-          sx={{ mt: 2 }}
+          sx={{ mt: 4 }}
         >
           Connect Wallet
         </Button>
@@ -59,14 +59,14 @@ const MintPage = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="h2" component="div" textAlign="center">
+        <Typography variant="h1" component="div" textAlign="center">
           This page is accessible to DEGEN owners only.
         </Typography>
         <Button
           variant="contained"
           color="primary"
           onClick={handleBuyDegen}
-          sx={{ mt: 2 }}
+          sx={{ mt: 4 }}
         >
           Buy A DEGEN
         </Button>
