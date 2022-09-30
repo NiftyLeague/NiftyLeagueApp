@@ -7,11 +7,16 @@ import ErrorBoundary from 'components/ErrorBoundary';
 import Preloader from 'components/Preloader';
 import CharacterCreator from './components/CharacterCreator';
 import { DEGEN_PURCHASE_URL } from 'constants/url';
+import { useSearchParams } from 'react-router-dom';
 
 const MintPage = () => {
   const { isDegenOwner } = useContext(BalanceContext);
   const { address, loadWeb3Modal } = useContext(NetworkContext);
   const { isLoggedIn, signMsg } = useAuth();
+  const [searchParams] = useSearchParams();
+  const { nifty_artists: isForNiftyArtists } = Object.fromEntries(
+    searchParams.entries(),
+  );
 
   const handleConnectWallet = useCallback(() => {
     if (!address) {
@@ -28,50 +33,52 @@ const MintPage = () => {
     window.open(DEGEN_PURCHASE_URL, '_blank');
   };
 
-  if (!isLoggedIn) {
-    return (
-      <Stack
-        width="100%"
-        height="100%"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Typography variant="h1" component="div" textAlign="center">
-          Please connect your wallet.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleConnectWallet}
-          sx={{ mt: 4 }}
+  if (!isForNiftyArtists) {
+    if (!isLoggedIn) {
+      return (
+        <Stack
+          width="100%"
+          height="100%"
+          alignItems="center"
+          justifyContent="center"
         >
-          Connect Wallet
-        </Button>
-      </Stack>
-    );
-  }
+          <Typography variant="h1" component="div" textAlign="center">
+            Please connect your wallet.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConnectWallet}
+            sx={{ mt: 4 }}
+          >
+            Connect Wallet
+          </Button>
+        </Stack>
+      );
+    }
 
-  if (!isDegenOwner) {
-    return (
-      <Stack
-        width="100%"
-        height="100%"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Typography variant="h1" component="div" textAlign="center">
-          This page is accessible to DEGEN owners only.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBuyDegen}
-          sx={{ mt: 4 }}
+    if (!isDegenOwner) {
+      return (
+        <Stack
+          width="100%"
+          height="100%"
+          alignItems="center"
+          justifyContent="center"
         >
-          Buy A DEGEN
-        </Button>
-      </Stack>
-    );
+          <Typography variant="h1" component="div" textAlign="center">
+            This page is accessible to DEGEN owners only.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleBuyDegen}
+            sx={{ mt: 4 }}
+          >
+            Buy A DEGEN
+          </Button>
+        </Stack>
+      );
+    }
   }
 
   return (
