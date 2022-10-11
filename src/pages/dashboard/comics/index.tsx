@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Box,
@@ -33,6 +34,7 @@ const DashboardComicsPage = (): JSX.Element => {
   const [selectedSubIndex, setSelectedSubIndex] = useState<number>(-1);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const { displayMyItems } = useFlags();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -73,6 +75,8 @@ const DashboardComicsPage = (): JSX.Element => {
   const handleBuyComic = () => {
     window.open(COMIC_PURCHASE_URL, '_blank');
   };
+
+  const handleLaunchBurner = () => navigate('burner');
 
   const renderComics = useMemo(() => {
     if (comicsBalance.length === 0 && loadingComics) {
@@ -141,7 +145,11 @@ const DashboardComicsPage = (): JSX.Element => {
             isSlider={false}
             actions={
               <Box>
-                <Button variant="contained" sx={{ height: 28 }}>
+                <Button
+                  variant="contained"
+                  sx={{ height: 28 }}
+                  onClick={handleLaunchBurner}
+                >
                   Launch Comics Burner
                 </Button>
               </Box>
