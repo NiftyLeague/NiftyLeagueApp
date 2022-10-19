@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Box,
   FormControl,
@@ -38,8 +39,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function LeaderBoards(): JSX.Element {
   const { listItemButtonStyle } = useStyles();
+  const [searchParams] = useSearchParams();
+  const { game: defaultGame } = Object.fromEntries(searchParams.entries());
   const [selectedGame, setGame] = useState<string>(
-    LEADERBOARD_GAME_LIST[0].key,
+    defaultGame &&
+      LEADERBOARD_GAME_LIST.some((game) => game.key === defaultGame)
+      ? defaultGame
+      : LEADERBOARD_GAME_LIST[0].key,
   );
   const [selectedTable, setTable] = useState<TableType>(NiftySmashersTables[0]);
   const [selectedType, setType] = useState<string>(NiftySmashersTables[0].key);
