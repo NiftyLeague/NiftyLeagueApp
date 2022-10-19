@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function LeaderBoards(): JSX.Element {
   const { listItemButtonStyle } = useStyles();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { game: defaultGame } = Object.fromEntries(searchParams.entries());
   const [selectedGame, setGame] = useState<string>(
     defaultGame &&
@@ -56,7 +56,10 @@ export default function LeaderBoards(): JSX.Element {
     if (eventName) {
       sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD);
     }
-  }, [selectedGame]);
+    setSearchParams({
+      game: selectedGame,
+    });
+  }, [selectedGame, setSearchParams]);
 
   const handleChangeGame = (event: SelectChangeEvent) => {
     const gameKey = event.target.value;
