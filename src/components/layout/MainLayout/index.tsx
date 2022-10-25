@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation } from 'react-router-dom';
@@ -13,7 +13,11 @@ import {
   CssBaseline,
   Toolbar,
   useMediaQuery,
+  Icon,
+  Typography,
+  Button,
 } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
 
 // project imports
 import Breadcrumbs from 'components/extended/Breadcrumbs';
@@ -28,6 +32,9 @@ import { useDispatch, useSelector } from 'store';
 // assets
 import { IconChevronRight } from '@tabler/icons';
 import { pageMeta } from 'constants/page-meta';
+import NetworkContext from 'contexts/NetworkContext';
+import { NETWORKS } from 'constants/networks';
+import { capitalize } from 'utils/string';
 
 interface MainStyleProps {
   theme: Theme;
@@ -93,6 +100,9 @@ const MainLayout = () => {
   const dispatch = useDispatch();
   const { drawerOpen } = useSelector((state) => state.menu);
   const { container } = useConfig();
+
+  const { address, targetNetwork, selectedChainId, switchToNetwork } =
+    useContext(NetworkContext);
 
   React.useEffect(() => {
     dispatch(openDrawer(!matchDownMd));
@@ -179,6 +189,36 @@ const MainLayout = () => {
           transition: drawerOpen ? theme.transitions.create('width') : 'none',
         }}
       >
+        {address &&
+          targetNetwork?.name &&
+          targetNetwork.chainId !== selectedChainId && (
+            <Box
+              sx={{
+                display: 'flex',
+                backgroundColor: theme.palette.error.light,
+                width: '100%',
+                position: 'absolute',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              height={68}
+              zIndex={1}
+            >
+              <Icon sx={{ width: 24, height: 24 }}>
+                <WarningIcon />
+              </Icon>
+              <Typography px={2} fontSize={20} fontWeight={600}>
+                Please switch to {capitalize(targetNetwork.name)}
+              </Typography>
+              <Button
+                sx={{ padding: '2px 16px'}}
+                variant="contained"
+                onClick={() => switchToNetwork(targetNetwork.chainId)}
+              >
+                Switch
+              </Button>
+            </Box>
+          )}
         {header}
       </AppBar>
 
