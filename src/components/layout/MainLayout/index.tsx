@@ -33,7 +33,6 @@ import { useDispatch, useSelector } from 'store';
 import { IconChevronRight } from '@tabler/icons';
 import { pageMeta } from 'constants/page-meta';
 import NetworkContext from 'contexts/NetworkContext';
-import { NETWORKS } from 'constants/networks';
 import { capitalize } from 'utils/string';
 
 interface MainStyleProps {
@@ -211,7 +210,7 @@ const MainLayout = () => {
                 Please switch to {capitalize(targetNetwork.name)}
               </Typography>
               <Button
-                sx={{ padding: '2px 16px'}}
+                sx={{ padding: '2px 16px' }}
                 variant="contained"
                 onClick={() => switchToNetwork(targetNetwork.chainId)}
               >

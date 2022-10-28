@@ -18,7 +18,6 @@ const CollapsibleSidebarLayout = ({
   setIsDrawerOpen,
 }: Props): JSX.Element => {
   const theme = useTheme();
-  const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
