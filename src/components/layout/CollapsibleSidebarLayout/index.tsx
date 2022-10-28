@@ -18,7 +18,6 @@ const CollapsibleSidebarLayout = ({
   setIsDrawerOpen,
 }: Props): JSX.Element => {
   const theme = useTheme();
-  const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -29,8 +28,8 @@ const CollapsibleSidebarLayout = ({
 
   // close sidebar when widow size below 'md' breakpoint
   useEffect(() => {
-    setIsDrawerOpen(!matchDownLG);
-  }, [matchDownLG, setIsDrawerOpen]);
+    setIsDrawerOpen(!matchDownSm);
+  }, [matchDownSm, setIsDrawerOpen]);
 
   return (
     <Stack direction="row" position="relative" alignItems="start">
@@ -40,13 +39,13 @@ const CollapsibleSidebarLayout = ({
           width: drawerWidth,
           flexShrink: 0,
           zIndex: isDrawerOpen ? 1100 : -1,
-          ...(!matchDownLG && {
+          ...(!matchDownSm && {
             position: 'fixed',
             // Follows how mainLayout sets the marginTop value
             // top: theme.typography.mainContent.marginTop || 108,
           }),
           '& .MuiDrawer-paper': {
-            height: matchDownLG ? '100%' : 'auto',
+            height: matchDownSm ? '100%' : 'auto',
             backgroundColor: theme.palette.dark.main,
             width: drawerWidth,
             boxSizing: 'border-box',
@@ -54,7 +53,7 @@ const CollapsibleSidebarLayout = ({
             border: 'none',
           },
         }}
-        variant={matchDownLG ? 'temporary' : 'persistent'}
+        variant={matchDownSm ? 'temporary' : 'persistent'}
         anchor="left"
         open={isDrawerOpen}
         ModalProps={{ keepMounted: true }}
@@ -62,7 +61,7 @@ const CollapsibleSidebarLayout = ({
       >
         <PerfectScrollbar
           style={{
-            height: matchDownLG ? '100vh' : 'calc(100vh - 152px)',
+            height: matchDownSm ? '100vh' : 'calc(100vh - 152px)',
             padding: '20px 16px',
           }}
         >
@@ -85,9 +84,9 @@ const CollapsibleSidebarLayout = ({
               easing: theme.transitions.easing.easeOut,
               duration: theme.transitions.duration.shorter,
             }),
-            marginLeft: `${drawerWidth}px`,
+            marginLeft: `${matchDownSm ? 0 : drawerWidth}px`,
           }),
-          [theme.breakpoints.down('lg')]: {
+          [theme.breakpoints.down('md')]: {
             paddingLeft: 0,
             marginLeft: 0,
           },
