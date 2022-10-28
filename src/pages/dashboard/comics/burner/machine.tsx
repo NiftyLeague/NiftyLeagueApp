@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import useInterval from 'hooks/useInterval';
+import IMXContext, { Context } from 'contexts/IMXContext';
+import { Button } from '@mui/material';
 
 import MachineMain from 'assets/images/comics/burner/machine/machine_main_1.png';
 import MachineFX1 from 'assets/images/comics/burner/machine/fx_combined_01.png';
@@ -28,6 +30,12 @@ import ButtonBurn4 from 'assets/images/comics/burner/machine/button_burn_4.png';
 import ButtonBurn5 from 'assets/images/comics/burner/machine/button_burn_5.png';
 import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 
+// Placeholders
+import PlaceholderComics from 'assets/images/comics/burner/machine/placeholder_comics_1.png';
+import PlaceholderText from 'assets/images/comics/burner/machine/placeholder_text_1.png';
+import PlaceholderBurn from 'assets/images/comics/burner/machine/placeholder_burnanim_1.png';
+import PlaceholderWearables from 'assets/images/comics/burner/machine/placeholder_wearables_1.png';
+
 const MachineFrame = ({ frames, interval = 0 }) => {
   const frame = frames[(interval + 1) % frames.length];
   return (
@@ -41,7 +49,7 @@ const MachineFrame = ({ frames, interval = 0 }) => {
         right: 0,
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: '600px',
+        width: '550px',
         maxWidth: '90%',
         height: 'auto',
       }}
@@ -49,7 +57,46 @@ const MachineFrame = ({ frames, interval = 0 }) => {
   );
 };
 
-const ComicsBurnerMachine = () => {
+const MachineButton = ({
+  disabled = false,
+  height,
+  left,
+  name,
+  onClick,
+  top,
+  width,
+}: {
+  disabled: boolean;
+  height: number;
+  left: number;
+  name: string;
+  onClick: () => void;
+  top: number;
+  width: number;
+}) => {
+  return (
+    <Button
+      disabled={disabled}
+      name={name}
+      onClick={onClick}
+      sx={{
+        height,
+        left,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        position: 'absolute',
+        right: 0,
+        top,
+        width,
+      }}
+      // variant="contained"
+    />
+  );
+};
+
+const ComicsBurnerMachine: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<{ imx: Context }>>
+> = memo(({ imx }) => {
   const [fastCount, setFastCount] = useState<number>(0);
   const [slowCount, setSlowCount] = useState<number>(0);
 
@@ -77,10 +124,12 @@ const ComicsBurnerMachine = () => {
         ]}
         interval={fastCount}
       />
-      <MachineFrame
-        frames={[ButtonConnect1, ButtonConnect2]}
-        interval={slowCount}
-      />
+      {imx.wallet === 'undefined' ? (
+        <MachineFrame
+          frames={[ButtonConnect1, ButtonConnect2]}
+          interval={slowCount}
+        />
+      ) : null}
       <MachineFrame frames={[ButtonHelp]} />
       <MachineFrame
         frames={[ButtonArrowComicsL1, ButtonArrowComicsL2]}
@@ -109,8 +158,32 @@ const ComicsBurnerMachine = () => {
         interval={slowCount}
       />
       <MachineFrame frames={[ButtonQ]} />
+      {/* Placeholders */}
+      <MachineFrame frames={[PlaceholderComics]} />
+      <MachineFrame frames={[PlaceholderText]} />
+      <MachineFrame frames={[PlaceholderBurn]} />
+      <MachineFrame frames={[PlaceholderWearables]} />
+    </>
+  );
+});
+
+const ComicsBurnerMachineWithContext = () => {
+  const imx = useContext(IMXContext);
+  console.log('CONTEXT', imx);
+  return (
+    <>
+      <ComicsBurnerMachine imx={imx} />
+      <MachineButton
+        disabled={imx.wallet !== 'undefined'}
+        height={25}
+        name="Connect Wallet"
+        onClick={imx.linkSetup}
+        width={135}
+        top={45}
+        left={-200}
+      />
     </>
   );
 };
 
-export default ComicsBurnerMachine;
+export default ComicsBurnerMachineWithContext;
