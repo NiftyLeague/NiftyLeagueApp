@@ -81,8 +81,7 @@ const BottomInfo = ({
               <Button
                 color="secondary"
                 component={Link}
-                href="/leaderboards"
-                target="_blank"
+                href="/leaderboards?game=nifty_smashers"
               >
                 View Leaderboards
               </Button>
@@ -135,8 +134,7 @@ const BottomInfo = ({
               <Button
                 color="secondary"
                 component={Link}
-                href="/leaderboards"
-                target="_blank"
+                href="/leaderboards?game=wen_game"
               >
                 View Leaderboards
               </Button>
@@ -192,8 +190,7 @@ const BottomInfo = ({
                 <Button
                   color="secondary"
                   component={Link}
-                  href="/leaderboards"
-                  target="_blank"
+                  href="/leaderboards?game=crypto_winter"
                 >
                   View Leaderboards
                 </Button>

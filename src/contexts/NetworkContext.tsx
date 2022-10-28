@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { Signer, providers } from 'ethers';
+import { ethers, Signer, providers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ChainId } from '@sushiswap/sdk';
 import Web3Modal, { providers as Web3ModalProviders } from 'web3modal';
@@ -108,9 +108,9 @@ const logoutOfWeb3Modal = () => {
 interface Context {
   address: string;
   loadWeb3Modal: () => Promise<void>;
-  localChainId?: number;
   localProvider: LocalProvider;
   logoutOfWeb3Modal: () => void;
+  switchToNetwork: (chainId: number) => void;
   mainnetProvider: MainnetProvider;
   readContracts: Contracts;
   selectedChainId?: number;
@@ -126,7 +126,7 @@ interface Context {
 const CONTEXT_INITIAL_STATE: Context = {
   address: '',
   loadWeb3Modal: async () => new Promise(() => null),
-  localChainId: undefined,
+  switchToNetwork: (chainId: number) => {},
   localProvider,
   logoutOfWeb3Modal,
   mainnetProvider,
@@ -162,7 +162,6 @@ export const NetworkProvider = ({
   const signer = userProvider?.getSigner();
 
   // You can warn the user if you would like them to be on a specific network
-  const { chainId: localChainId } = useNetworkInfo(localProvider);
   const { chainId: selectedChainId } = useNetworkInfo(userProvider);
 
   // The Notifier wraps transactions and provides notificiations
@@ -214,6 +213,25 @@ export const NetworkProvider = ({
     }
   }, [setInjectedProvider, updateWeb3ModalTheme]);
 
+  const switchToNetwork = useCallback(
+    async (chainId: number) => {
+      if (!userProvider) {
+        return;
+      }
+      try {
+        const transactionStatus = await userProvider.send(
+          'wallet_switchEthereumChain',
+          [{ chainId: ethers.utils.hexValue(chainId) }],
+        );
+        return transactionStatus;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('Switching network already pending - ', error);
+      }
+    },
+    [userProvider],
+  );
+
   useEffect(() => {
     // eslint-disable-next-line no-void
     if (web3Modal.cachedProvider) void loadWeb3Modal();
@@ -228,7 +246,6 @@ export const NetworkProvider = ({
     if (
       DEBUG &&
       address &&
-      localChainId &&
       localProvider &&
       mainnetProvider &&
       !isEmpty(readContracts) &&
@@ -241,21 +258,13 @@ export const NetworkProvider = ({
       console.log('🌎 mainnetProvider', mainnetProvider);
       console.log('📡 userProvider', userProvider);
       console.log('📡 localProvider', localProvider);
-      console.log('🏠 localChainId', localChainId);
       console.log('🕵🏻‍♂️ selectedChainId:', selectedChainId);
       console.log('🔭 targetNetwork:', targetNetwork);
       console.log('👩‍💼 user address:', address);
       console.log('📝 readContracts', readContracts);
       console.log('🔐 writeContracts', writeContracts);
     }
-  }, [
-    address,
-    localChainId,
-    readContracts,
-    selectedChainId,
-    userProvider,
-    writeContracts,
-  ]);
+  }, [address, readContracts, selectedChainId, userProvider, writeContracts]);
 
   useEffect(() => {
     (async () => {
@@ -275,7 +284,6 @@ export const NetworkProvider = ({
   const context = {
     address,
     loadWeb3Modal,
-    localChainId,
     localProvider,
     logoutOfWeb3Modal,
     mainnetProvider,
@@ -283,6 +291,7 @@ export const NetworkProvider = ({
     selectedChainId,
     signer,
     targetNetwork,
+    switchToNetwork,
     tx,
     userProvider,
     validAccount: Boolean(web3Modal.cachedProvider),
