@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+import { Button } from '@mui/material';
 import useInterval from 'hooks/useInterval';
 
 import Machine from './machine';
@@ -38,7 +39,7 @@ const ComicsBurner = () => {
       >
         ← Back to Comics &amp; Wearables
       </Button>
-      <>
+      {/* <>
         <h1>{count}</h1>
         <button onClick={() => setPlaying(!isPlaying)}>
           {isPlaying ? 'pause' : 'play'}
@@ -52,7 +53,7 @@ const ComicsBurner = () => {
             value={delay}
           />
         </p>
-      </>
+      </> */}
       <Machine />
     </>
   );

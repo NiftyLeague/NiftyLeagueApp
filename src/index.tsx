@@ -17,6 +17,7 @@ import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
 import { NetworkProvider } from 'contexts/NetworkContext';
+import { IMXProvider } from 'contexts/IMXContext';
 import { SUBGRAPH_URI } from './constants';
 
 // style + assets
@@ -50,15 +51,17 @@ root.render(
   <ApolloProvider client={client}>
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persister}>
-            <ConfigProvider>
-              <BrowserRouter basename={BASE_PATH}>
-                <App />
-              </BrowserRouter>
-            </ConfigProvider>
-          </PersistGate>
-        </Provider>
+        <IMXProvider>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persister}>
+              <ConfigProvider>
+                <BrowserRouter basename={BASE_PATH}>
+                  <App />
+                </BrowserRouter>
+              </ConfigProvider>
+            </PersistGate>
+          </Provider>
+        </IMXProvider>
       </NetworkProvider>
     </QueryClientProvider>
   </ApolloProvider>,
