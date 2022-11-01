@@ -32,7 +32,6 @@ import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 
 // Placeholders
 import PlaceholderText from 'assets/images/comics/burner/machine/placeholder_text_1.png';
-import PlaceholderBurn from 'assets/images/comics/burner/machine/placeholder_burnanim_1.png';
 import PlaceholderWearables from 'assets/images/comics/burner/machine/placeholder_wearables_1.png';
 
 const ComicsBurnerMachine: React.FC<
@@ -43,13 +42,13 @@ const ComicsBurnerMachine: React.FC<
 
   useInterval(() => {
     setFastCount(fastCount + 1);
-  }, 10000);
-  // }, 100);
+    // }, 10000);
+  }, 100);
 
   useInterval(() => {
     setSlowCount(slowCount + 1);
-  }, 30000);
-  // }, 300);
+    // }, 30000);
+  }, 300);
 
   return (
     <>
@@ -103,7 +102,6 @@ const ComicsBurnerMachine: React.FC<
       <MachineFrame frames={[ButtonQ]} />
       {/* Placeholders */}
       <MachineFrame frames={[PlaceholderText]} />
-      <MachineFrame frames={[PlaceholderBurn]} />
       <MachineFrame frames={[PlaceholderWearables]} />
     </>
   );

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import xor from 'lodash/xor';
 import makeStyles from '@mui/styles/makeStyles';
 import {
@@ -35,9 +34,14 @@ const gridStyles = {
   rowGap: '0 !important',
 };
 
-export default function ComicsGrid() {
+export default function ComicsGrid({
+  selectedComics,
+  setSelectedComics,
+}: {
+  selectedComics: Comic[];
+  setSelectedComics: React.Dispatch<React.SetStateAction<Comic[]>>;
+}) {
   const classes = useStyles();
-  const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
 
   const handleSelectComic = (comic) => {
@@ -73,7 +77,7 @@ export default function ComicsGrid() {
               cursor: 'pointer',
               ...(selectedComics.includes(comic) && {
                 boxShadow: '0 0 8px rgba(81, 203, 238, 1)',
-                border: '2px solid rgba(81, 203, 238, 1)',
+                border: '3px solid rgba(81, 203, 238, 1)',
               }),
             }}
           />
