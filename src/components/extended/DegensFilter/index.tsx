@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {
   Button,
   Checkbox,

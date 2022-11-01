@@ -60,6 +60,7 @@
     "react-countdown": "2.3.2",
     "react-device-detect": "2.2.2",
     "react-dom": "^18.1.0",
+    "react-draggable": "4.4.5",
     "react-ga4": "1.4.1",
     "react-helmet": "6.1.0",
     "react-hook-form": "^7.26.1",

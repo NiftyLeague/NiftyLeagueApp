@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
