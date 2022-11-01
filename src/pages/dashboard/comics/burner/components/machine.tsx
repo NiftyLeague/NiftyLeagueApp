@@ -1,7 +1,7 @@
 import React, { memo, useContext, useState } from 'react';
 import useInterval from 'hooks/useInterval';
 import IMXContext, { Context } from 'contexts/IMXContext';
-import { Button } from '@mui/material';
+import MachineFrame from './machine-frame';
 
 import MachineMain from 'assets/images/comics/burner/machine/machine_main_1.png';
 import MachineFX1 from 'assets/images/comics/burner/machine/fx_combined_01.png';
@@ -31,68 +31,9 @@ import ButtonBurn5 from 'assets/images/comics/burner/machine/button_burn_5.png';
 import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 
 // Placeholders
-import PlaceholderComics from 'assets/images/comics/burner/machine/placeholder_comics_1.png';
 import PlaceholderText from 'assets/images/comics/burner/machine/placeholder_text_1.png';
 import PlaceholderBurn from 'assets/images/comics/burner/machine/placeholder_burnanim_1.png';
 import PlaceholderWearables from 'assets/images/comics/burner/machine/placeholder_wearables_1.png';
-
-const MachineFrame = ({ frames, interval = 0 }) => {
-  const frame = frames[(interval + 1) % frames.length];
-  return (
-    <img
-      src={frame}
-      alt={`Machine Frame: ${frame}`}
-      className="pixelated"
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '550px',
-        maxWidth: '90%',
-        height: 'auto',
-      }}
-    />
-  );
-};
-
-const MachineButton = ({
-  disabled = false,
-  height,
-  left,
-  name,
-  onClick,
-  top,
-  width,
-}: {
-  disabled: boolean;
-  height: number;
-  left: number;
-  name: string;
-  onClick: () => void;
-  top: number;
-  width: number;
-}) => {
-  return (
-    <Button
-      disabled={disabled}
-      name={name}
-      onClick={onClick}
-      sx={{
-        height,
-        left,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        position: 'absolute',
-        right: 0,
-        top,
-        width,
-      }}
-      // variant="contained"
-    />
-  );
-};
 
 const ComicsBurnerMachine: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<{ imx: Context }>>
@@ -102,11 +43,13 @@ const ComicsBurnerMachine: React.FC<
 
   useInterval(() => {
     setFastCount(fastCount + 1);
-  }, 100);
+  }, 10000);
+  // }, 100);
 
   useInterval(() => {
     setSlowCount(slowCount + 1);
-  }, 300);
+  }, 30000);
+  // }, 300);
 
   return (
     <>
@@ -159,7 +102,6 @@ const ComicsBurnerMachine: React.FC<
       />
       <MachineFrame frames={[ButtonQ]} />
       {/* Placeholders */}
-      <MachineFrame frames={[PlaceholderComics]} />
       <MachineFrame frames={[PlaceholderText]} />
       <MachineFrame frames={[PlaceholderBurn]} />
       <MachineFrame frames={[PlaceholderWearables]} />
@@ -169,21 +111,7 @@ const ComicsBurnerMachine: React.FC<
 
 const ComicsBurnerMachineWithContext = () => {
   const imx = useContext(IMXContext);
-  console.log('CONTEXT', imx);
-  return (
-    <>
-      <ComicsBurnerMachine imx={imx} />
-      <MachineButton
-        disabled={imx.wallet !== 'undefined'}
-        height={25}
-        name="Connect Wallet"
-        onClick={imx.linkSetup}
-        width={135}
-        top={45}
-        left={-200}
-      />
-    </>
-  );
+  return <ComicsBurnerMachine imx={imx} />;
 };
 
 export default ComicsBurnerMachineWithContext;
