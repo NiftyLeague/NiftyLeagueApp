@@ -2,6 +2,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IMXContext from 'contexts/IMXContext';
+import { Comic } from 'types/comic';
 
 import { Button } from '@mui/material';
 // import useInterval from 'hooks/useInterval';
@@ -10,12 +11,15 @@ import Machine from './components/machine';
 import MachineButton from './components/machine-button';
 import HelpDialog from './components/help-dialog';
 import ComicsGrid from './components/comics-grid';
+import SatoshiAnimations from './components/satoshi-animations';
 
 const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
   console.log('CONTEXT', imx);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
+  const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
+  const [burning, setBurning] = useState(false);
 
   // // The counters
   // const [count, setCount] = useState<number>(0);
@@ -81,7 +85,19 @@ const ComicsBurner = () => {
         top={100}
         left={220}
       />
-      <ComicsGrid />
+      <ComicsGrid
+        selectedComics={selectedComics}
+        setSelectedComics={setSelectedComics}
+      />
+      <SatoshiAnimations burning={burning} />
+      <MachineButton
+        height={48}
+        name="Burn Button"
+        onClick={() => setBurning(true)}
+        width={360}
+        top={850}
+        left={0}
+      />
     </>
   );
 };
