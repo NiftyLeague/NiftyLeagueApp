@@ -10,7 +10,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import ComicCard from 'components/cards/ComicCard';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
@@ -33,7 +32,6 @@ const DashboardComicsPage = (): JSX.Element => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [selectedSubIndex, setSelectedSubIndex] = useState<number>(-1);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
-  const { displayMyItems } = useFlags();
   const navigate = useNavigate();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
@@ -191,53 +189,51 @@ const DashboardComicsPage = (): JSX.Element => {
             </Stack>
           )}
         </Stack>
-        {displayMyItems && (
-          <Stack direction="row" gap={5}>
-            <SectionSlider firstSection title="My Wearables" isSlider={false}>
-              <Stack>
-                <Stack
-                  minHeight={375}
-                  border="1px solid #363636"
-                  borderRadius="5px"
-                  px={2}
-                  pt={4}
-                  pb={2}
-                  width="100%"
-                  spacing={3}
-                  onClick={removeItemSelection}
-                >
-                  {selectedItem?.balance && selectedItem?.balance > 1 && (
-                    <Stack spacing={4}>
-                      <Stack
-                        direction={{ xs: 'column', lg: 'row' }}
-                        spacing={{ xs: 2, lg: 10 }}
-                      >
-                        <WearableItemCard data={selectedItem} />
-                        <Grid container flexWrap="wrap" gap={2.5}>
-                          {renderSubItems}
-                        </Grid>
-                      </Stack>
-                      <Divider color="#363636" />
+        <Stack direction="row" gap={5}>
+          <SectionSlider firstSection title="My Wearables" isSlider={false}>
+            <Stack>
+              <Stack
+                minHeight={375}
+                border="1px solid #363636"
+                borderRadius="5px"
+                px={2}
+                pt={4}
+                pb={2}
+                width="100%"
+                spacing={3}
+                onClick={removeItemSelection}
+              >
+                {selectedItem?.balance && selectedItem?.balance > 1 && (
+                  <Stack spacing={4}>
+                    <Stack
+                      direction={{ xs: 'column', lg: 'row' }}
+                      spacing={{ xs: 2, lg: 10 }}
+                    >
+                      <WearableItemCard data={selectedItem} />
+                      <Grid container flexWrap="wrap" gap={2.5}>
+                        {renderSubItems}
+                      </Grid>
                     </Stack>
-                  )}
-                  <Grid
-                    container
-                    flexWrap="wrap"
-                    gap={2}
-                    justifyContent={{ xs: 'space-between', sm: 'inherit' }}
-                  >
-                    {renderItems}
-                  </Grid>
-                </Stack>
+                    <Divider color="#363636" />
+                  </Stack>
+                )}
+                <Grid
+                  container
+                  flexWrap="wrap"
+                  gap={2}
+                  justifyContent={{ xs: 'space-between', sm: 'inherit' }}
+                >
+                  {renderItems}
+                </Grid>
               </Stack>
-            </SectionSlider>
-            {!isTablet && (
-              <Stack mt={7.5}>
-                <ItemDetail data={selectedItem} subIndex={selectedSubIndex} />
-              </Stack>
-            )}
-          </Stack>
-        )}
+            </Stack>
+          </SectionSlider>
+          {!isTablet && (
+            <Stack mt={7.5}>
+              <ItemDetail data={selectedItem} subIndex={selectedSubIndex} />
+            </Stack>
+          )}
+        </Stack>
       </Stack>
       {isTablet && (
         <ViewComicDialog
