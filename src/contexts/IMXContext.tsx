@@ -12,6 +12,7 @@ import NetworkContext from 'contexts/NetworkContext';
 export interface Context {
   balance?: ImmutableMethodResults.ImmutableGetBalanceResult;
   client?: ImmutableXClient;
+  inventory?: ImmutableMethodResults.ImmutableGetAssetsResult;
   link: Link;
   linkSetup: () => Promise<void>;
   wallet: string;
@@ -20,6 +21,7 @@ export interface Context {
 const CONTEXT_INITIAL_STATE: Context = {
   balance: undefined,
   client: undefined,
+  inventory: undefined,
   link: new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
   linkSetup: async () => new Promise(() => null),
   wallet: 'undefined',
@@ -42,6 +44,8 @@ export const IMXProvider = ({
   const [wallet, setWallet] = useState('undefined');
   const [balance, setBalance] =
     useState<ImmutableMethodResults.ImmutableGetBalanceResult>(Object);
+  const [inventory, setInventory] =
+    useState<ImmutableMethodResults.ImmutableGetAssetsResult>(Object);
   const [client, setClient] = useState<ImmutableXClient>(Object);
 
   // set user wallet and balance from IMX or ETH network context
@@ -49,6 +53,7 @@ export const IMXProvider = ({
     async (user) => {
       setWallet(user);
       setBalance(await client.getBalance({ user, tokenAddress: 'eth' }));
+      setInventory(await client.getAssets({ user, sell_orders: true }));
     },
     [client],
   );
@@ -75,8 +80,12 @@ export const IMXProvider = ({
     updateUser(res.address);
   }, [link, updateUser]);
 
+  console.log('IMX inventory', inventory);
+
   return (
-    <IMXContext.Provider value={{ balance, client, link, linkSetup, wallet }}>
+    <IMXContext.Provider
+      value={{ balance, client, inventory, link, linkSetup, wallet }}
+    >
       {children}
     </IMXContext.Provider>
   );
