@@ -1,10 +1,10 @@
-import { DEGEN_BASE_BACKGROUND_URL } from 'constants/url';
+import { CONTRACTS_API_BASE_URL } from 'constants/url';
 import useFetch from './useFetch';
 
 const useBackgroundType = (
   tokenId: string | number,
 ): { loading?: boolean; error?: Error; background?: string } => {
-  const backgroundAPI = `${DEGEN_BASE_BACKGROUND_URL}/mainnet/degen/${tokenId}/background`;
+  const backgroundAPI = `${CONTRACTS_API_BASE_URL}/mainnet/degen/${tokenId}/background`;
   const {
     loading,
     error,
