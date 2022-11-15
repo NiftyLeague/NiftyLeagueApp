@@ -9,6 +9,8 @@ export const GAME_ACCOUNT_CONTRACT = 'BalanceManager';
 
 export const COMICS_CONTRACT = 'NiftyLaunchComics';
 
+export const COMICS_BURNER_CONTRACT = 'NiftyBurningComicsL2';
+
 export const MERKLE_DISTRIBUTOR_ADDRESS = {
   [LOCAL_CHAIN_ID]: '0x998abeb3E57409262aE5b751f60747921B33613E',
   [ChainId.MAINNET]: '0x921c673a4d2f6a429551c0726316c1ad07571db5',
@@ -33,4 +35,9 @@ export const COWSWAP_VAULT_RELAYER_ADDRESS =
 export const WETH_ADDRESS = {
   [ChainId.MAINNET]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   [ChainId.GÖRLI]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+};
+
+export const IMX_NL_ITEMS = {
+  [ChainId.MAINNET]: '0x8f0b9e16a18324eae8ed1208c75202836613dbbb', // TODO: add mainnet on deploy
+  [ChainId.GÖRLI]: '0x8f0b9e16a18324eae8ed1208c75202836613dbbb',
 };
