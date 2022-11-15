@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 
 // third party
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -52,7 +52,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
         <IMXProvider>
-          <Provider store={store}>
+          <ReduxProvider store={store}>
             <PersistGate loading={null} persistor={persister}>
               <ConfigProvider>
                 <BrowserRouter basename={BASE_PATH}>
@@ -60,7 +60,7 @@ root.render(
                 </BrowserRouter>
               </ConfigProvider>
             </PersistGate>
-          </Provider>
+          </ReduxProvider>
         </IMXProvider>
       </NetworkProvider>
     </QueryClientProvider>

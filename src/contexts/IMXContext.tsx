@@ -1,11 +1,13 @@
 import React, {
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
 import { Link, ImmutableXClient, ImmutableMethodResults } from '@imtbl/imx-sdk';
+import NetworkContext from 'contexts/NetworkContext';
 
 export interface Context {
   balance?: ImmutableMethodResults.ImmutableGetBalanceResult;
@@ -30,6 +32,7 @@ export const IMXProvider = ({
 }: {
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
+  const { address } = useContext(NetworkContext);
   // initialise Immutable X Link SDK
   const link = useMemo(
     () => new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
@@ -41,6 +44,15 @@ export const IMXProvider = ({
     useState<ImmutableMethodResults.ImmutableGetBalanceResult>(Object);
   const [client, setClient] = useState<ImmutableXClient>(Object);
 
+  // set user wallet and balance from IMX or ETH network context
+  const updateUser = useCallback(
+    async (user) => {
+      setWallet(user);
+      setBalance(await client.getBalance({ user, tokenAddress: 'eth' }));
+    },
+    [client],
+  );
+
   useEffect(() => {
     buildIMX();
   }, []);
@@ -51,15 +63,17 @@ export const IMXProvider = ({
     setClient(await ImmutableXClient.build({ publicApiUrl }));
   }
 
+  useEffect(() => {
+    if (address) {
+      updateUser(address);
+    }
+  }, [address, client, updateUser]);
+
   // register and/or setup a user
   const linkSetup = useCallback(async () => {
-    console.log('linkSetup');
     const res = await link.setup({});
-    setWallet(res.address);
-    setBalance(
-      await client.getBalance({ user: res.address, tokenAddress: 'eth' }),
-    );
-  }, [client, link]);
+    updateUser(res.address);
+  }, [link, updateUser]);
 
   return (
     <IMXContext.Provider value={{ balance, client, link, linkSetup, wallet }}>
