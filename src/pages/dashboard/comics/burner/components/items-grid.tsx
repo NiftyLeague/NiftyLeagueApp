@@ -108,7 +108,7 @@ export default function ItemsGrid() {
           loading="lazy"
           width="31%"
         />
-        <div className={classes.title} style={{ width: '40%', margin: 'auto' }}>
+        <div className={classes.title} style={{ width: '38%', margin: 'auto' }}>
           <span>CITADEL KEY</span>
           <span>7X</span>
         </div>

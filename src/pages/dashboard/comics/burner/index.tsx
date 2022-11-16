@@ -1,10 +1,10 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 import IMXContext from 'contexts/IMXContext';
 import NetworkContext from 'contexts/NetworkContext';
-import { COMICS_BURNER_CONTRACT } from 'constants/contracts';
+import { COMICS_BURNER_CONTRACT, COMICS_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
 import { Comic } from 'types/comic';
 
@@ -18,8 +18,9 @@ import ItemsGrid from './components/items-grid';
 const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
-  const { tx, writeContracts } = useContext(NetworkContext);
+  const { address, tx, writeContracts } = useContext(NetworkContext);
   console.log('CONTEXT', imx);
+  const [isApprovedForAll, setIsApprovedForAll] = useState(false);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
   const [burnCount, setBurnCount] = useState([0, 0, 0, 0, 0, 0]);
@@ -27,20 +28,49 @@ const ComicsBurner = () => {
   const burnDisabled =
     burning || selectedComics.length < 1 || burnCount.every((c) => !c);
 
+  useEffect(() => {
+    const getAllowance = async () => {
+      const burnContract = writeContracts[COMICS_BURNER_CONTRACT];
+      const burnContractAddress = burnContract.address;
+      const comicsContract = writeContracts[COMICS_CONTRACT];
+      const approved = (await comicsContract.isApprovedForAll(
+        address,
+        burnContractAddress,
+      )) as boolean;
+      setIsApprovedForAll(approved);
+    };
+    if (
+      writeContracts &&
+      writeContracts[COMICS_BURNER_CONTRACT] &&
+      writeContracts[COMICS_CONTRACT]
+    ) {
+      // eslint-disable-next-line no-void
+      void getAllowance();
+    }
+  }, [address, writeContracts]);
+
+  const handleSetApproval = useCallback(async () => {
+    const burnContract = writeContracts[COMICS_BURNER_CONTRACT];
+    if (!isApprovedForAll) {
+      const burnContractAddress = burnContract.address;
+      const comicsContract = writeContracts[COMICS_CONTRACT];
+      await tx(comicsContract.setApprovalForAll(burnContractAddress, true));
+    }
+  }, [isApprovedForAll, tx, writeContracts]);
+
   const handleBurn = useCallback(async () => {
+    if (!isApprovedForAll) await handleSetApproval();
     setBurning(true);
     // eslint-disable-next-line no-console
     if (DEBUG) console.log('burn comics', burnCount);
-    // TODO: handle setting contract as approver and sending comics
-    const res = await tx(
-      writeContracts[COMICS_BURNER_CONTRACT].burnComics(burnCount),
-    );
+    const burnContract = writeContracts[COMICS_BURNER_CONTRACT];
+    const res = await tx(burnContract.burnComics(burnCount));
     setBurning(false);
     if (res) {
       setBurnCount([0, 0, 0, 0, 0, 0]);
       setSelectedComics([]);
     }
-  }, [tx, writeContracts, burnCount]);
+  }, [burnCount, handleSetApproval, isApprovedForAll, tx, writeContracts]);
 
   const handleReturnPage = () => navigate('/dashboard/items');
 
