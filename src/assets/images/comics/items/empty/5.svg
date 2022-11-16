@@ -1,12 +1,1 @@
-<svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_4762_1493)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M29.3358 58.6423C29.3202 43.9619 26.9593 12.1062 26.601 3.55149C26.5211 1.64531 28.3899 0.490234 30.5934 0.490234C32.7967 0.490234 34.654 1.64475 34.5856 3.55149C34.2792 12.1062 32.0046 43.9619 31.8342 58.6423C31.4363 59.0697 29.7336 59.0782 29.3358 58.6423Z" stroke="#757575" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M31.8507 57.5129C33.0766 57.7331 33.5672 58.236 33.5672 59.0426C33.5672 60.0269 32.2346 60.826 30.5934 60.826C28.952 60.826 27.6195 60.0269 27.6195 59.0426C27.6195 58.2523 28.1422 57.7467 29.3304 57.5129" stroke="#757575" stroke-width="0.00954268" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M27.8696 3.58447C29.6855 4.40525 31.5012 4.41176 33.317 3.58447" stroke="#757575" stroke-width="0.00954268" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<defs>
-<clipPath id="clip0_4762_1493">
-<rect width="60.95" height="60.95" fill="white" transform="translate(0.199997 0.199951)"/>
-</clipPath>
-</defs>
-</svg>
+<svg width="62" height="62" viewBox="0 0 47 328" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"><g id="baseballbat"><path d="M16.293,314.505c-0.084,-79.002 -12.789,-250.432 -14.717,-296.469c-0.43,-10.258 9.627,-16.474 21.485,-16.474c11.857,0 21.852,6.213 21.484,16.474c-1.649,46.037 -13.89,217.467 -14.807,296.469c-2.141,2.3 -11.304,2.346 -13.445,0Z" style="fill:none;stroke:#757575;stroke-width:3.13px;"/><path d="M29.827,308.427c6.597,1.185 9.237,3.891 9.237,8.232c0,5.297 -7.171,9.597 -16.003,9.597c-8.833,0 -16.004,-4.3 -16.004,-9.597c-0,-4.253 2.813,-6.974 9.207,-8.232" style="fill:none;stroke:#757575;stroke-width:3.13px;"/><path d="M8.403,18.213c9.772,4.417 19.543,4.452 29.315,-0" style="fill:none;stroke:#757575;stroke-width:3.13px;"/></g></svg>
