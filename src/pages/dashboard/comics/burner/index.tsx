@@ -13,6 +13,7 @@ import MachineButton from './components/machine-button';
 import HelpDialog from './components/help-dialog';
 import ComicsGrid from './components/comics-grid';
 import SatoshiAnimations from './components/satoshi-animations';
+import ItemsGrid from './components/items-grid';
 
 const ComicsBurner = () => {
   const navigate = useNavigate();
@@ -23,7 +24,8 @@ const ComicsBurner = () => {
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
   const [burnCount, setBurnCount] = useState([0, 0, 0, 0, 0, 0]);
   const [burning, setBurning] = useState(false);
-  const burnDisabled = burning || selectedComics.length < 1;
+  const burnDisabled =
+    burning || selectedComics.length < 1 || burnCount.every((c) => !c);
 
   const handleBurn = useCallback(async () => {
     setBurning(true);
@@ -86,6 +88,7 @@ const ComicsBurner = () => {
         top={850}
         left={0}
       />
+      <ItemsGrid />
     </>
   );
 };

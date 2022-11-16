@@ -15,9 +15,6 @@ import ButtonBurn4 from 'assets/images/comics/burner/machine/button_burn_4.png';
 import ButtonBurn5 from 'assets/images/comics/burner/machine/button_burn_5.png';
 import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 
-// Placeholders
-import PlaceholderWearables from 'assets/images/comics/burner/machine/placeholder_wearables_1.png';
-
 const ComicsBurnerMachine: React.FC<
   React.PropsWithChildren<
     React.PropsWithChildren<{ burnDisabled: boolean; imx: Context }>
@@ -54,8 +51,6 @@ const ComicsBurnerMachine: React.FC<
         />
       )}
       <MachineFrame frames={[ButtonQ]} />
-      {/* Placeholders */}
-      <MachineFrame frames={[PlaceholderWearables]} />
     </>
   );
 });
