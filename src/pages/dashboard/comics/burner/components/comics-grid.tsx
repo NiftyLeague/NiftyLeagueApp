@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
     fontSize: 20,
-    width: 300,
+    width: 290,
     display: 'flex',
     justifyContent: 'space-between',
     color: 'navy',
