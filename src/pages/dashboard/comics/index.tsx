@@ -118,7 +118,7 @@ const DashboardComicsPage = (): JSX.Element => {
         </Grid>
       ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedItem]);
+  }, [selectedItem, imx.itemsBalance]);
 
   const renderSubItems = useMemo(() => {
     if (!selectedItem?.balance || selectedItem?.balance <= 1) return null;
@@ -193,7 +193,7 @@ const DashboardComicsPage = (): JSX.Element => {
           )}
         </Stack>
         <Stack direction="row" gap={5}>
-          <SectionSlider firstSection title="My Wearables" isSlider={false}>
+          <SectionSlider firstSection title="My Items" isSlider={false}>
             <Stack>
               <Stack
                 minHeight={375}
