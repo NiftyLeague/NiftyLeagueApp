@@ -36,7 +36,7 @@ import ItemEmptyP3 from 'assets/images/comics/items/empty/3.svg';
 import ItemEmptyP4 from 'assets/images/comics/items/empty/4.svg';
 import ItemEmptyP5 from 'assets/images/comics/items/empty/5.svg';
 import ItemEmptyP6 from 'assets/images/comics/items/empty/6.svg';
-import ItemEmptyP7 from 'assets/images/comics/items/empty/6.svg';
+import ItemEmptyP7 from 'assets/images/comics/items/empty/7.svg';
 
 export const COMICS: Comic[] = [
   {
