@@ -20,6 +20,7 @@ const ComicsBurner = () => {
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
   const [burning, setBurning] = useState(false);
+  const burnDisabled = burning || selectedComics.length < 1;
 
   // // The counters
   // const [count, setCount] = useState<number>(0);
@@ -66,7 +67,7 @@ const ComicsBurner = () => {
           />
         </p>
       </> */}
-      <Machine />
+      <Machine burnDisabled={burnDisabled} />
       <MachineButton
         disabled={imx.wallet !== 'undefined'}
         height={25}
@@ -91,6 +92,7 @@ const ComicsBurner = () => {
       />
       <SatoshiAnimations burning={burning} />
       <MachineButton
+        disabled={burnDisabled}
         height={48}
         name="Burn Button"
         onClick={() => setBurning(true)}

@@ -4,14 +4,7 @@ import IMXContext, { Context } from 'contexts/IMXContext';
 import MachineFrame from './machine-frame';
 
 import MachineMain from 'assets/images/comics/burner/machine/machine_main_1.png';
-import MachineFX1 from 'assets/images/comics/burner/machine/fx_combined_01.png';
-import MachineFX2 from 'assets/images/comics/burner/machine/fx_combined_02.png';
-import MachineFX3 from 'assets/images/comics/burner/machine/fx_combined_03.png';
-import MachineFX4 from 'assets/images/comics/burner/machine/fx_combined_04.png';
-import MachineFX5 from 'assets/images/comics/burner/machine/fx_combined_05.png';
-import MachineFX6 from 'assets/images/comics/burner/machine/fx_combined_06.png';
-import MachineFX7 from 'assets/images/comics/burner/machine/fx_combined_07.png';
-import MachineFX8 from 'assets/images/comics/burner/machine/fx_combined_08.png';
+import MachineFX from 'assets/images/comics/burner/machine/machinefx.gif';
 import ButtonConnect1 from 'assets/images/comics/burner/machine/button_connectwallet_01.png';
 import ButtonConnect2 from 'assets/images/comics/burner/machine/button_connectwallet_02.png';
 import ButtonHelp from 'assets/images/comics/burner/machine/button_help_1.png';
@@ -35,70 +28,56 @@ import PlaceholderText from 'assets/images/comics/burner/machine/placeholder_tex
 import PlaceholderWearables from 'assets/images/comics/burner/machine/placeholder_wearables_1.png';
 
 const ComicsBurnerMachine: React.FC<
-  React.PropsWithChildren<React.PropsWithChildren<{ imx: Context }>>
-> = memo(({ imx }) => {
-  const [fastCount, setFastCount] = useState<number>(0);
-  const [slowCount, setSlowCount] = useState<number>(0);
+  React.PropsWithChildren<
+    React.PropsWithChildren<{ burnDisabled: boolean; imx: Context }>
+  >
+> = memo(({ burnDisabled, imx }) => {
+  const [count, setCount] = useState<number>(0);
 
   useInterval(() => {
-    setFastCount(fastCount + 1);
-    // }, 10000);
-  }, 100);
-
-  useInterval(() => {
-    setSlowCount(slowCount + 1);
+    setCount(count + 1);
     // }, 30000);
-  }, 300);
+  }, 500);
 
   return (
     <>
       <MachineFrame frames={[MachineMain]} />
-      <MachineFrame
-        frames={[
-          MachineFX1,
-          MachineFX2,
-          MachineFX3,
-          MachineFX4,
-          MachineFX5,
-          MachineFX6,
-          MachineFX7,
-          MachineFX8,
-        ]}
-        interval={fastCount}
-      />
+      <MachineFrame frames={[MachineFX]} />
       {imx.wallet === 'undefined' ? (
         <MachineFrame
           frames={[ButtonConnect1, ButtonConnect2]}
-          interval={slowCount}
+          interval={count}
         />
       ) : null}
       <MachineFrame frames={[ButtonHelp]} />
       <MachineFrame
         frames={[ButtonArrowComicsL1, ButtonArrowComicsL2]}
-        interval={slowCount}
+        interval={count}
       />
       <MachineFrame
         frames={[ButtonArrowComicsR1, ButtonArrowComicsR2]}
-        interval={slowCount}
+        interval={count}
       />
       <MachineFrame
         frames={[ButtonArrowCountL1, ButtonArrowCountL2]}
-        interval={slowCount}
+        interval={count}
       />
       <MachineFrame
         frames={[ButtonArrowCountR1, ButtonArrowCountR2]}
-        interval={slowCount}
+        interval={count}
       />
-      <MachineFrame
-        frames={[
-          ButtonBurn1,
-          ButtonBurn2,
-          ButtonBurn3,
-          ButtonBurn4,
-          ButtonBurn5,
-        ]}
-        interval={slowCount}
-      />
+      {!burnDisabled && (
+        <MachineFrame
+          frames={[
+            ButtonBurn1,
+            ButtonBurn2,
+            ButtonBurn3,
+            ButtonBurn4,
+            ButtonBurn5,
+          ]}
+          interval={count}
+        />
+      )}
       <MachineFrame frames={[ButtonQ]} />
       {/* Placeholders */}
       <MachineFrame frames={[PlaceholderText]} />
@@ -107,9 +86,9 @@ const ComicsBurnerMachine: React.FC<
   );
 });
 
-const ComicsBurnerMachineWithContext = () => {
+const ComicsBurnerMachineWithContext = ({ burnDisabled = false }) => {
   const imx = useContext(IMXContext);
-  return <ComicsBurnerMachine imx={imx} />;
+  return <ComicsBurnerMachine imx={imx} burnDisabled={burnDisabled} />;
 };
 
 export default ComicsBurnerMachineWithContext;
