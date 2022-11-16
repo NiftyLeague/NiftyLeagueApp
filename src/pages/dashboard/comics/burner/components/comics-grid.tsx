@@ -79,7 +79,7 @@ export default function ComicsGrid({
 
   const handleManualSetBurnCount = (comic: Comic, value: string) => {
     const newBurnCount = [...burnCount];
-    newBurnCount[comic.id - 1] = parseInt(value);
+    newBurnCount[comic.id - 1] = !value ? 0 : parseInt(value);
     setBurnCount(newBurnCount);
   };
 

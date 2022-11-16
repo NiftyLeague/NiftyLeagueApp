@@ -1,11 +1,12 @@
-// import { ChangeEvent } from 'react';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import IMXContext from 'contexts/IMXContext';
-import { Comic } from 'types/comic';
-
 import { Button } from '@mui/material';
-// import useInterval from 'hooks/useInterval';
+
+import IMXContext from 'contexts/IMXContext';
+import NetworkContext from 'contexts/NetworkContext';
+import { COMICS_BURNER_CONTRACT } from 'constants/contracts';
+import { DEBUG } from 'constants/index';
+import { Comic } from 'types/comic';
 
 import Machine from './components/machine';
 import MachineButton from './components/machine-button';
@@ -16,6 +17,7 @@ import SatoshiAnimations from './components/satoshi-animations';
 const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
+  const { tx, writeContracts } = useContext(NetworkContext);
   console.log('CONTEXT', imx);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
@@ -23,24 +25,20 @@ const ComicsBurner = () => {
   const [burning, setBurning] = useState(false);
   const burnDisabled = burning || selectedComics.length < 1;
 
-  // // The counters
-  // const [count, setCount] = useState<number>(0);
-  // // Dynamic delay
-  // const [delay, setDelay] = useState<number>(1000);
-  // // ON/OFF
-  // const [isPlaying, setPlaying] = useState<boolean>(false);
-
-  // useInterval(
-  //   () => {
-  //     setCount(count + 1);
-  //   },
-  //   // Delay in milliseconds or null to stop it
-  //   isPlaying ? delay : null,
-  // );
-
-  // const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setDelay(Number(event.target.value));
-  // };
+  const handleBurn = useCallback(async () => {
+    setBurning(true);
+    // eslint-disable-next-line no-console
+    if (DEBUG) console.log('burn comics', burnCount);
+    // TODO: handle setting contract as approver and sending comics
+    const res = await tx(
+      writeContracts[COMICS_BURNER_CONTRACT].burnComics(burnCount),
+    );
+    setBurning(false);
+    if (res) {
+      setBurnCount([0, 0, 0, 0, 0, 0]);
+      setSelectedComics([]);
+    }
+  }, [tx, writeContracts, burnCount]);
 
   const handleReturnPage = () => navigate('/dashboard/items');
 
@@ -53,21 +51,6 @@ const ComicsBurner = () => {
       >
         ← Back to Comics &amp; Wearables
       </Button>
-      {/* <>
-        <h1>{count}</h1>
-        <button onClick={() => setPlaying(!isPlaying)}>
-          {isPlaying ? 'pause' : 'play'}
-        </button>
-        <p>
-          <label htmlFor="delay">Delay: </label>
-          <input
-            type="number"
-            name="delay"
-            onChange={handleChange}
-            value={delay}
-          />
-        </p>
-      </> */}
       <Machine burnDisabled={burnDisabled} />
       <MachineButton
         disabled={imx.wallet !== 'undefined'}
@@ -98,7 +81,7 @@ const ComicsBurner = () => {
         disabled={burnDisabled}
         height={48}
         name="Burn Button"
-        onClick={() => setBurning(true)}
+        onClick={handleBurn}
         width={360}
         top={850}
         left={0}
