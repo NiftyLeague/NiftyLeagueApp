@@ -90,9 +90,9 @@ export default function ItemsGrid() {
                 <>
                   <span>{item.name}</span>
                   <span>
+                    x
                     {imx.itemsBalance.find((i) => i.id === item.id)?.balance ||
                       0}
-                    X
                   </span>
                 </>
               }
@@ -111,7 +111,7 @@ export default function ItemsGrid() {
         />
         <div className={classes.title} style={{ width: '38%', margin: 'auto' }}>
           <span>CITADEL KEY</span>
-          <span>{imx.itemsBalance.find((i) => i.id === 7)?.balance || 0}X</span>
+          <span>x{imx.itemsBalance.find((i) => i.id === 7)?.balance || 0}</span>
         </div>
       </div>
     </div>

@@ -189,7 +189,7 @@ export default function ComicsGrid({
                 ) : (
                   <>
                     <span>#{comic.id}</span>
-                    <span>{comic.balance}X</span>
+                    <span>x{comic.balance}</span>
                   </>
                 )
               }
