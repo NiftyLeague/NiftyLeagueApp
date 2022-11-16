@@ -19,7 +19,6 @@ const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
   const { address, tx, writeContracts } = useContext(NetworkContext);
-  console.log('CONTEXT', imx);
   const [isApprovedForAll, setIsApprovedForAll] = useState(false);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
@@ -81,7 +80,7 @@ const ComicsBurner = () => {
         sx={{ height: 28 }}
         onClick={handleReturnPage}
       >
-        ← Back to Comics &amp; Wearables
+        ← Back to Comics &amp; Items
       </Button>
       <Machine burnDisabled={burnDisabled} />
       <MachineButton

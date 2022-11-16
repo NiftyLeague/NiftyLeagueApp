@@ -96,9 +96,6 @@ export const IMXProvider = ({
     updateUser(res.address);
   }, [link, updateUser]);
 
-  console.log('IMX inventory', inventory);
-  console.log('IMX itemsBalance', itemsBalance);
-
   return (
     <IMXContext.Provider
       value={{
