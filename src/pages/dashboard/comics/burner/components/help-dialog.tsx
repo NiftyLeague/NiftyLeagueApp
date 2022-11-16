@@ -37,21 +37,25 @@ export default function DraggableDialog({ open, setOpen }) {
           COMICS for in-game WEARABLE ITEMS!
           <ul style={{ lineHeight: 2 }}>
             <li>
-              First connect your wallet with the CONNECT WALLET button at the
-              top left of the machine.
+              First, if not already connected, connect your wallet with the
+              CONNECT WALLET button at the top left of the machine.
             </li>
             <li>
               Each COMIC burned yields 1 WEARABLE ITEM. You can also get a
               CITADEL KEY by burning a FULL SET of COMICS 1-6.
             </li>
-            <li>CONSOLE 1 shows you the amount of COMICS you currently own.</li>
             <li>
-              In CONSOLE 2 select the COMIC and the amount you would like to
-              burn for WEARABLE ITEMS.
+              CONSOLE 1 shows you the amount of COMICS you currently own and
+              allows you to select the comics you want to burn along with the
+              counts.
             </li>
             <li>
-              In CONSOLE 3 on SATOSHI'S MONITOR you will see a preview of the
-              WEARABLE ITEM and the AMOUNT of that ITEM you will receive.
+              CONSOLE 2 shows you the total keys and items you will receive for
+              burning.
+            </li>
+            <li>
+              CONSOLE 3 is just some rad animations by our one and only spike!
+              Watch Satoshi burn those comics when you click the burn button!
             </li>
             <li>
               When you are satisfied press the BURN FOR WEARABLE button on
