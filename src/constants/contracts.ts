@@ -38,6 +38,6 @@ export const WETH_ADDRESS = {
 };
 
 export const IMX_NL_ITEMS = {
-  [ChainId.MAINNET]: '0xf5Bb757BBf6cfab02e221E882c32E859Fb324C41', // TODO: add mainnet on deploy
-  [ChainId.GÖRLI]: '0xf5Bb757BBf6cfab02e221E882c32E859Fb324C41',
+  [ChainId.MAINNET]: '0xbf1238C6aF46C19169c921e6058E330a97040CFD', // TODO: add mainnet on deploy
+  [ChainId.GÖRLI]: '0xbf1238C6aF46C19169c921e6058E330a97040CFD',
 };
