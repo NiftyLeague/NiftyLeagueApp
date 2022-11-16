@@ -24,6 +24,7 @@ const ComicsBurner = () => {
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
   const [burnCount, setBurnCount] = useState([0, 0, 0, 0, 0, 0]);
   const [burning, setBurning] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const burnDisabled =
     burning || selectedComics.length < 1 || burnCount.every((c) => !c);
 
@@ -68,6 +69,7 @@ const ComicsBurner = () => {
     if (res) {
       setBurnCount([0, 0, 0, 0, 0, 0]);
       setSelectedComics([]);
+      setTimeout(() => setRefreshKey(Math.random() + 1), 2000);
     }
   }, [burnCount, handleSetApproval, isApprovedForAll, tx, writeContracts]);
 
@@ -106,6 +108,7 @@ const ComicsBurner = () => {
         setBurnCount={setBurnCount}
         burnCount={burnCount}
         setSelectedComics={setSelectedComics}
+        refreshKey={refreshKey}
       />
       <SatoshiAnimations burning={burning} />
       <MachineButton
