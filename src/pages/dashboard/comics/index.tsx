@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -15,7 +15,7 @@ import ComicCard from 'components/cards/ComicCard';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
 import SectionSlider from 'components/sections/SectionSlider';
 
-import { ITEMS } from 'constants/comics';
+import IMXContext from 'contexts/IMXContext';
 import { Comic, Item } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
 import { COMIC_PURCHASE_URL } from 'constants/url';
@@ -33,6 +33,7 @@ const DashboardComicsPage = (): JSX.Element => {
   const [selectedSubIndex, setSelectedSubIndex] = useState<number>(-1);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const navigate = useNavigate();
+  const imx = useContext(IMXContext);
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -100,20 +101,22 @@ const DashboardComicsPage = (): JSX.Element => {
   }, [comicsBalance, loadingComics, selectedComic]);
 
   const renderItems = useMemo(() => {
-    return ITEMS.filter(
-      (item) =>
-        !selectedItem?.balance ||
-        selectedItem?.balance <= 1 ||
-        item.id !== selectedItem?.id,
-    ).map((item) => (
-      <Grid item key={item.id}>
-        <WearableItemCard
-          data={item}
-          onViewItem={() => handleViewItem(item)}
-          isSelected={item.id === selectedItem?.id}
-        />
-      </Grid>
-    ));
+    return imx.itemsBalance
+      .filter(
+        (item) =>
+          !selectedItem?.balance ||
+          selectedItem?.balance <= 1 ||
+          item.id !== selectedItem?.id,
+      )
+      .map((item) => (
+        <Grid item key={item.id}>
+          <WearableItemCard
+            data={item}
+            onViewItem={() => handleViewItem(item)}
+            isSelected={item.id === selectedItem?.id}
+          />
+        </Grid>
+      ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedItem]);
 

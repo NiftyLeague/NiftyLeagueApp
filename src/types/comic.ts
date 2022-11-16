@@ -12,7 +12,7 @@ export interface Comic {
 export interface Item {
   id: number | null;
   title: string;
-  multiplier: number;
+  multiplier?: number;
   wearableName?: string;
   balance?: number;
   image: string;
