@@ -60,14 +60,17 @@ export default function ComicsGrid({
   selectedComics,
   setBurnCount,
   setSelectedComics,
+  refreshKey,
 }: {
   burnCount: number[];
   selectedComics: Comic[];
   setBurnCount: React.Dispatch<React.SetStateAction<number[]>>;
   setSelectedComics: React.Dispatch<React.SetStateAction<Comic[]>>;
+  refreshKey: number;
 }) {
   const classes = useStyles();
-  const { comicsBalance, loading: loadingComics } = useComicsBalance();
+  const { comicsBalance, loading: loadingComics } =
+    useComicsBalance(refreshKey);
   const keyCount = useMemo(
     () => (burnCount.some((v) => v === 0) ? 0 : Math.min(...burnCount)),
     [burnCount],
