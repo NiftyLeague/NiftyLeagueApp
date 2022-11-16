@@ -8,11 +8,15 @@ import React, {
 } from 'react';
 import { Link, ImmutableXClient, ImmutableMethodResults } from '@imtbl/imx-sdk';
 import NetworkContext from 'contexts/NetworkContext';
+import { IMX_NL_ITEMS } from 'constants/contracts';
+import useItemsBalance from 'hooks/useItemsBalance';
+import { Item } from 'types/comic';
 
 export interface Context {
   balance?: ImmutableMethodResults.ImmutableGetBalanceResult;
   client?: ImmutableXClient;
   inventory?: ImmutableMethodResults.ImmutableGetAssetsResult;
+  itemsBalance: Item[];
   link: Link;
   linkSetup: () => Promise<void>;
   loading: boolean;
@@ -23,6 +27,7 @@ const CONTEXT_INITIAL_STATE: Context = {
   balance: undefined,
   client: undefined,
   inventory: undefined,
+  itemsBalance: [],
   link: new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
   linkSetup: async () => new Promise(() => null),
   loading: true,
@@ -36,7 +41,7 @@ export const IMXProvider = ({
 }: {
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
-  const { address } = useContext(NetworkContext);
+  const { address, selectedChainId } = useContext(NetworkContext);
   // initialise Immutable X Link SDK
   const link = useMemo(
     () => new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
@@ -50,16 +55,23 @@ export const IMXProvider = ({
     useState<ImmutableMethodResults.ImmutableGetAssetsResult>(Object);
   const [client, setClient] = useState<ImmutableXClient>(Object);
   const [loading, setLoading] = useState(true);
+  const { itemsBalance } = useItemsBalance(inventory);
 
   // set user wallet and balance from IMX or ETH network context
   const updateUser = useCallback(
     async (user) => {
       setWallet(user);
       setBalance(await client.getBalance({ user, tokenAddress: 'eth' }));
-      setInventory(await client.getAssets({ user, sell_orders: true }));
+      if (selectedChainId)
+        setInventory(
+          await client.getAssets({
+            user,
+            collection: IMX_NL_ITEMS[selectedChainId],
+          }),
+        );
       setLoading(false);
     },
-    [client],
+    [client, selectedChainId],
   );
 
   useEffect(() => {
@@ -85,10 +97,20 @@ export const IMXProvider = ({
   }, [link, updateUser]);
 
   console.log('IMX inventory', inventory);
+  console.log('IMX itemsBalance', itemsBalance);
 
   return (
     <IMXContext.Provider
-      value={{ balance, client, inventory, link, linkSetup, loading, wallet }}
+      value={{
+        balance,
+        client,
+        inventory,
+        itemsBalance,
+        link,
+        linkSetup,
+        loading,
+        wallet,
+      }}
     >
       {children}
     </IMXContext.Provider>

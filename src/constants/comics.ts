@@ -147,7 +147,7 @@ export const ITEMS: Item[] = [
   {
     id: 6,
     title: 'Companion',
-    multiplier: 1,
+    multiplier: 3,
     wearableName: '',
     balance: 0,
     image: ItemP6,
