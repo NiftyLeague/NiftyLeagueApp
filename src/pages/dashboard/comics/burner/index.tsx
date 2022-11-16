@@ -19,6 +19,7 @@ const ComicsBurner = () => {
   console.log('CONTEXT', imx);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
+  const [burnCount, setBurnCount] = useState([0, 0, 0, 0, 0, 0]);
   const [burning, setBurning] = useState(false);
   const burnDisabled = burning || selectedComics.length < 1;
 
@@ -88,6 +89,8 @@ const ComicsBurner = () => {
       />
       <ComicsGrid
         selectedComics={selectedComics}
+        setBurnCount={setBurnCount}
+        burnCount={burnCount}
         setSelectedComics={setSelectedComics}
       />
       <SatoshiAnimations burning={burning} />
