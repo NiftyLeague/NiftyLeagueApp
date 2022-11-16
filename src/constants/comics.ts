@@ -28,7 +28,7 @@ import ItemThumbnailP3 from 'assets/images/comics/items/thumbnail/3.png';
 import ItemThumbnailP4 from 'assets/images/comics/items/thumbnail/4.png';
 import ItemThumbnailP5 from 'assets/images/comics/items/thumbnail/5.png';
 import ItemThumbnailP6 from 'assets/images/comics/items/thumbnail/6.png';
-import ItemThumbnailP7 from 'assets/images/comics/items/thumbnail/6.png';
+import ItemThumbnailP7 from 'assets/images/comics/items/thumbnail/7.png';
 
 import ItemEmptyP1 from 'assets/images/comics/items/empty/1.svg';
 import ItemEmptyP2 from 'assets/images/comics/items/empty/2.svg';
