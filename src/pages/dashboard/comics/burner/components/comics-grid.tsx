@@ -12,8 +12,24 @@ import {
 } from '@mui/material';
 import BurnIcon from '@mui/icons-material/Whatshot';
 
+import ComicP1 from 'assets/images/comics/burner/comics/page1.png';
+import ComicP2 from 'assets/images/comics/burner/comics/page2.png';
+import ComicP3 from 'assets/images/comics/burner/comics/page3.png';
+import ComicP4 from 'assets/images/comics/burner/comics/page4.png';
+import ComicP5 from 'assets/images/comics/burner/comics/page5.png';
+import ComicP6 from 'assets/images/comics/burner/comics/page6.png';
+
 import useComicsBalance from 'hooks/useComicsBalance';
 import { Comic } from 'types/comic';
+
+const COMPRESSED_COMIC_IMAGES = [
+  ComicP1,
+  ComicP2,
+  ComicP3,
+  ComicP4,
+  ComicP5,
+  ComicP6,
+];
 
 const useStyles = makeStyles({
   titleWrap: {
@@ -126,8 +142,8 @@ export default function ComicsGrid({
         {comicsBalance.map((comic) => (
           <ImageListItem key={comic.image}>
             <img
-              src={`${comic.image}?w=248&fit=crop&auto=format`}
-              srcSet={`${comic.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              src={COMPRESSED_COMIC_IMAGES[comic.id - 1]}
+              // srcSet={`${comic.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
               alt={comic.title}
               onClick={() => handleSelectComic(comic)}
               style={{
