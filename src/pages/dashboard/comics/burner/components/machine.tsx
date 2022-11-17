@@ -31,7 +31,7 @@ const ComicsBurnerMachine: React.FC<
     <>
       <MachineFrame frames={[MachineMain]} />
       <MachineFrame frames={[MachineFX]} />
-      {imx.wallet === 'undefined' ? (
+      {!imx.registeredUser ? (
         <MachineFrame
           frames={[ButtonConnect1, ButtonConnect2]}
           interval={count}
