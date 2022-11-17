@@ -13,6 +13,7 @@ import ButtonBurn2 from 'assets/images/comics/burner/machine/button_burn_2.png';
 import ButtonBurn3 from 'assets/images/comics/burner/machine/button_burn_3.png';
 import ButtonBurn4 from 'assets/images/comics/burner/machine/button_burn_4.png';
 import ButtonBurn5 from 'assets/images/comics/burner/machine/button_burn_5.png';
+import ButtonBurnDisabled from 'assets/images/comics/burner/machine/button_burn_gray_01.png';
 import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 
 const ComicsBurnerMachine: React.FC<
@@ -37,7 +38,7 @@ const ComicsBurnerMachine: React.FC<
         />
       ) : null}
       <MachineFrame frames={[ButtonHelp]} />
-      {!burnDisabled && (
+      {!burnDisabled ? (
         <MachineFrame
           frames={[
             ButtonBurn1,
@@ -48,6 +49,8 @@ const ComicsBurnerMachine: React.FC<
           ]}
           interval={count}
         />
+      ) : (
+        <MachineFrame frames={[ButtonBurnDisabled]} />
       )}
       <MachineFrame frames={[ButtonQ]} />
     </>
