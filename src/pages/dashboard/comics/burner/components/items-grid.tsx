@@ -68,7 +68,9 @@ export default function ItemsGrid() {
     />
   ) : (
     <div style={containerStyles}>
-      <div>ITEMS I OWN</div>
+      <div>
+        ITEMS I OWN <em>*new items take several minutes*</em>
+      </div>
       <ImageList
         gap={10}
         cols={3}

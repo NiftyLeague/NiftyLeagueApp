@@ -20,6 +20,7 @@ export interface Context {
   link: Link;
   linkSetup: () => Promise<void>;
   loading: boolean;
+  registeredUser: boolean;
   setIMXRefreshKey: React.Dispatch<React.SetStateAction<number>>;
   wallet: string;
 }
@@ -32,6 +33,7 @@ const CONTEXT_INITIAL_STATE: Context = {
   link: new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
   linkSetup: async () => new Promise(() => null),
   loading: true,
+  registeredUser: false,
   setIMXRefreshKey: () => {},
   wallet: 'undefined',
 };
@@ -59,6 +61,7 @@ export const IMXProvider = ({
   const [loading, setLoading] = useState(true);
   const { itemsBalance } = useItemsBalance(inventory);
   const [imxRefreshKey, setIMXRefreshKey] = useState(0);
+  const [registeredUser, setRegisteredUser] = useState(false);
 
   // set user wallet and balance from IMX or ETH network context
   const updateUser = useCallback(
@@ -73,6 +76,12 @@ export const IMXProvider = ({
           }),
         );
       setLoading(false);
+      try {
+        const response = await client.getUser({ user });
+        if (response) setRegisteredUser(true);
+      } catch {
+        setRegisteredUser(false);
+      }
     },
     [client, selectedChainId],
   );
@@ -96,6 +105,7 @@ export const IMXProvider = ({
   // register and/or setup a user
   const linkSetup = useCallback(async () => {
     const res = await link.setup({});
+    setRegisteredUser(true);
     updateUser(res.address);
   }, [link, updateUser]);
 
@@ -109,6 +119,7 @@ export const IMXProvider = ({
         link,
         linkSetup,
         loading,
+        registeredUser,
         setIMXRefreshKey,
         wallet,
       }}
