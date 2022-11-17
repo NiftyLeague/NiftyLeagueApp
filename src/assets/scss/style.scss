@@ -10,6 +10,15 @@ body {
   overflow: hidden;
 }
 
+.pixelated {
+  /* IE, only works on <img> tags */
+  -ms-interpolation-mode: nearest-neighbor;
+  /* Firefox */
+  image-rendering: crisp-edges;
+  /* Chromium + Safari */
+  image-rendering: pixelated;
+}
+
 // ==============================|| LIGHT BOX ||============================== //
 .slick-arrow:before {
   color: $grey500;
@@ -254,16 +263,16 @@ body {
   cursor: pointer;
 }
 .leaderboard-icon.win-rate {
-  fill:gold;
+  fill: gold;
 }
 .leaderboard-icon.xp {
-  fill:white;
+  fill: white;
 }
 .leaderboard-icon.kills {
-  fill:greenyellow;
+  fill: greenyellow;
 }
-.web3modal-modal-lightbox { 
-  z-index: 10000 !important; 
+.web3modal-modal-lightbox {
+  z-index: 10000 !important;
 }
 .inventory {
   width: 30px;
@@ -271,7 +280,7 @@ body {
   box-sizing: border-box;
   border-radius: 10px;
   &:active {
-    outline: 3px solid #5820D6;
+    outline: 3px solid #5820d6;
     outline-offset: -3px;
   }
 }

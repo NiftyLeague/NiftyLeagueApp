@@ -31,10 +31,10 @@ const PrivateItems = {
           url: '/dashboard/degens',
         },
         {
-          id: 'comics',
+          id: 'items',
           title: 'Comics & Items',
           type: 'item',
-          url: '/dashboard/comics',
+          url: '/dashboard/items',
         },
         {
           id: 'rentals',

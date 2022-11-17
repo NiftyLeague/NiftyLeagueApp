@@ -3,7 +3,7 @@ import {
   EthereumTransactionLog,
   EthereumTransactionData,
   SDKError,
-} from 'bnc-sdk/dist/types/src/interfaces';
+} from 'bnc-sdk';
 import { EthereumRpcError, EthereumProviderError } from 'eth-rpc-errors';
 
 type Transaction =

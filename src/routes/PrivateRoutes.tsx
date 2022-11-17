@@ -14,6 +14,9 @@ const DashboardRentalPage = Loadable(
 const DashboardComicsPage = Loadable(
   lazy(() => import('pages/dashboard/comics')),
 );
+const DashboardComicsBurnerPage = Loadable(
+  lazy(() => import('pages/dashboard/comics/burner')),
+);
 const DashboardDegensPage = Loadable(
   lazy(() => import('pages/dashboard/degens')),
 );
@@ -40,8 +43,12 @@ const PrivateRoutes = {
       element: <DashboardRentalPage />,
     },
     {
-      path: 'comics',
+      path: 'items',
       element: <DashboardComicsPage />,
+    },
+    {
+      path: 'items/burner',
+      element: <DashboardComicsBurnerPage />,
     },
     {
       path: 'degens',

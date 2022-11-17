@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import makeStyles from '@mui/styles/makeStyles';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import useComicsBalance from 'hooks/useComicsBalance';
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
