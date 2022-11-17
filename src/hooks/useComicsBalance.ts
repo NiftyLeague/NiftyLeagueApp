@@ -15,7 +15,7 @@ import { Comic } from 'types/comic';
   const yourBalance = useComicsBalance();
 */
 
-export default function useComicsBalance(): {
+export default function useComicsBalance(refreshKey = 0): {
   comicsBalance: Comic[];
   loading: boolean;
 } {
@@ -50,7 +50,7 @@ export default function useComicsBalance(): {
       // eslint-disable-next-line no-void
       void checkUserComics();
     }
-  }, [address, readContracts]);
+  }, [address, readContracts, refreshKey]);
 
   return { comicsBalance, loading };
 }

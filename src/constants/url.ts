@@ -3,6 +3,8 @@ import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
 
+export const CONTRACTS_API_BASE_URL = 'https://api.niftyleague.com';
+
 export const MY_PROFILE_API_URL = `${BASE_API_URL}/stats/profile`;
 
 export const SUBGRAPH_CACHE_URL = `${BASE_API_URL}/info?network=${
@@ -15,7 +17,6 @@ export const ADDRESS_VERIFICATION = `${BASE_API_URL}/verification/address`;
 
 // Degen API url
 export const DEGEN_BASE_API_URL = 'https://nifty-league.s3.amazonaws.com';
-export const DEGEN_BASE_BACKGROUND_URL = 'https://api.nifty-league.com';
 export const DEGEN_BASE_IMAGE_URL = `${DEGEN_BASE_API_URL}/degens`;
 
 // Rentals API url

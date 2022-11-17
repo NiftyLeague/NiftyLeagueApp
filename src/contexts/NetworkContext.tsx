@@ -2,6 +2,7 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { ethers, Signer, providers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { ChainId } from '@sushiswap/sdk';
 import Web3Modal, { providers as Web3ModalProviders } from 'web3modal';
 import isEmpty from 'lodash/isEmpty';
@@ -68,6 +69,12 @@ const web3Modal = new Web3Modal({
   providerOptions: {
     injected: {
       package: null,
+    },
+    walletlink: {
+      package: CoinbaseWalletSDK, // Required
+      options: {
+        infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+      },
     },
     walletconnect: {
       package: WalletConnectProvider, // required

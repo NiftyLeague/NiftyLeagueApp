@@ -42,7 +42,7 @@ const PublicItems = {
 */
     {
       id: 'mint-o-matic',
-      title: 'Mint-o-Matic',
+      title: 'Mint-O-Matic',
       type: 'item',
       url: '/mint-o-matic',
       icon: icons.IconSquarePlus,

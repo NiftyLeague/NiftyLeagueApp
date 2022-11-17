@@ -1,132 +1,262 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { Grid, Stack, Button } from '@mui/material';
-import { useFlags } from 'launchdarkly-react-client-sdk';
+import {
+  Box,
+  Divider,
+  Grid,
+  Stack,
+  Button,
+  useMediaQuery,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import ComicCard from 'components/cards/ComicCard';
-import EmptyState from 'components/EmptyState';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
 import SectionSlider from 'components/sections/SectionSlider';
-import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
 
-import { ITEMS } from 'constants/comics';
-import { cardSpacing } from 'store/constant';
-import { Comic } from 'types/comic';
+import IMXContext from 'contexts/IMXContext';
+import { Comic, Item } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
 import { COMIC_PURCHASE_URL } from 'constants/url';
+import ComicDetail from 'components/cards/ComicDetail';
+import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
+import BuyComicCard from 'components/cards/BuyComicCard';
+import WearableItemCard from 'components/cards/WearableItemCard';
+import WearableSubItemCard from 'components/cards/WearableSubItemCard';
+import ItemDetail from 'components/cards/ItemDetail';
+import ViewItemDialog from 'components/dialog/ViewItemDialog';
 
 const DashboardComicsPage = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [selectedSubIndex, setSelectedSubIndex] = useState<number>(-1);
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
-  const filteredComics = useMemo(
-    () => comicsBalance.filter((comic) => comic.balance && comic.balance > 0),
-    [comicsBalance],
-  );
-  const { displayMyItems } = useFlags();
+  const navigate = useNavigate();
+  const imx = useContext(IMXContext);
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleViewComic = useCallback(
-    (comic: Comic) => setSelectedComic(comic),
-    [],
-  );
+  const handleViewComic = (comic: Comic) => {
+    setSelectedComic(comic);
+  };
 
-  const handleCloseDialog = useCallback(() => {
+  const handleViewItem = (item: Item) => {
+    removeSubItemSelection();
+    setSelectedItem(item);
+  };
+
+  const handleViewSubItem = (index: number) => {
+    setSelectedSubIndex(index);
+  };
+
+  const removeComicSelection = () => {
     setSelectedComic(null);
-  }, []);
+  };
+
+  const removeItemSelection = () => {
+    setSelectedItem(null);
+    removeSubItemSelection();
+  };
+
+  const removeSubItemSelection = () => {
+    setSelectedSubIndex(-1);
+  };
+
+  const handleCloseComicDialog = () => {
+    removeComicSelection();
+  };
+
+  const handleCloseItemDialog = () => {
+    removeItemSelection();
+  };
 
   const handleBuyComic = () => {
     window.open(COMIC_PURCHASE_URL, '_blank');
   };
 
+  const handleLaunchBurner = () => navigate('burner');
+
   const renderComics = useMemo(() => {
-    if (filteredComics.length === 0) {
+    if (comicsBalance.length === 0 && loadingComics) {
       if (loadingComics) {
-        return [...Array(4)].map(() => (
-          <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
+        return [...Array(6)].map(() => (
+          <Grid item key={uuidv4()}>
             <ComicPlaceholder />
           </Grid>
         ));
       }
-      return (
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          display="flex"
-          height="100%"
-        >
-          <EmptyState
-            message="You don't own any Comics yet."
-            buttonText="Buy a Comic"
-            onClick={handleBuyComic}
+    } else if (comicsBalance.length > 0) {
+      return comicsBalance.map((comic) => (
+        <Grid item key={comic.id}>
+          <ComicCard
+            data={comic}
+            onViewComic={() => handleViewComic(comic)}
+            isSelected={comic.id === selectedComic?.id}
           />
-        </Grid>
-      );
-    }
-    if (filteredComics.length !== 0) {
-      return filteredComics.map((comic) => (
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
-          <ComicCard data={comic} onViewComic={() => handleViewComic(comic)} />
         </Grid>
       ));
     }
     return null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredComics, loadingComics]);
+  }, [comicsBalance, loadingComics, selectedComic]);
 
   const renderItems = useMemo(() => {
-    return ITEMS.map((item) => (
-      <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={uuidv4()}>
-        <ComicCard
-          data={item}
-          isItem
-          actions={
-            item.title === 'Mystery Item' ? (
-              <Button variant="contained" fullWidth disabled>
-                ?
-              </Button>
-            ) : (
-              <>
-                <Button variant="contained" fullWidth disabled>
-                  Equip Item
-                </Button>
-                <Button variant="contained" fullWidth disabled>
-                  Unequip Item
-                </Button>
-              </>
-            )
-          }
+    return imx.itemsBalance
+      .filter(
+        (item) =>
+          !selectedItem?.balance ||
+          selectedItem?.balance <= 1 ||
+          item.id !== selectedItem?.id,
+      )
+      .map((item) => (
+        <Grid item key={item.id}>
+          <WearableItemCard
+            data={item}
+            onViewItem={() => handleViewItem(item)}
+            isSelected={item.id === selectedItem?.id}
+          />
+        </Grid>
+      ));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedItem, imx.itemsBalance]);
+
+  const renderSubItems = useMemo(() => {
+    if (!selectedItem?.balance || selectedItem?.balance <= 1) return null;
+    return Array.from(Array(selectedItem?.balance).keys()).map((itemIndex) => (
+      <Grid item key={`WearableSubItem-${itemIndex}`}>
+        <WearableSubItemCard
+          data={selectedItem}
+          itemIndex={itemIndex}
+          onViewItem={() => handleViewSubItem(itemIndex)}
+          isSelected={itemIndex === selectedSubIndex}
+          sx={{ height: '100%', justifyContent: 'center' }}
         />
       </Grid>
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ITEMS]);
+  }, [selectedItem, selectedSubIndex]);
 
   return (
     <>
       <Stack gap={4}>
-        <SectionSlider firstSection title="My Comics" isSlider={false}>
-          <Grid container direction="row" flexWrap="wrap" spacing={cardSpacing}>
-            {renderComics}
-          </Grid>
-        </SectionSlider>
-        {displayMyItems && (
-          <SectionSlider firstSection title="My Items" isSlider={false}>
-            <Grid
-              container
-              direction="row"
-              flexWrap="wrap"
-              spacing={cardSpacing}
-            >
-              {renderItems}
-            </Grid>
+        <Stack direction="row" gap={5}>
+          <SectionSlider
+            firstSection
+            title="My Comics"
+            isSlider={false}
+            actions={
+              <Box>
+                <Button
+                  variant="contained"
+                  sx={{ height: 28 }}
+                  onClick={handleLaunchBurner}
+                >
+                  Launch Comics Burner
+                </Button>
+              </Box>
+            }
+          >
+            <Stack>
+              <Grid
+                container
+                flexWrap="wrap"
+                gap={2}
+                minHeight={375}
+                border="1px solid #363636"
+                borderRadius="5px"
+                px={2}
+                py={3}
+                width="100%"
+                justifyContent={{ xs: 'space-between', sm: 'inherit' }}
+                onClick={removeComicSelection}
+              >
+                {renderComics}
+                {comicsBalance.length > 0 && (
+                  <Grid item>
+                    <BuyComicCard
+                      onBuyComic={handleBuyComic}
+                      isNew={
+                        !comicsBalance.some(
+                          (comic) => comic.balance && comic.balance > 0,
+                        )
+                      }
+                    />
+                  </Grid>
+                )}
+              </Grid>
+            </Stack>
           </SectionSlider>
-        )}
+          {!isTablet && (
+            <Stack mt={7.5}>
+              <ComicDetail data={selectedComic} />
+            </Stack>
+          )}
+        </Stack>
+        <Stack direction="row" gap={5}>
+          <SectionSlider firstSection title="My Items" isSlider={false}>
+            <Stack>
+              <Stack
+                minHeight={375}
+                border="1px solid #363636"
+                borderRadius="5px"
+                px={2}
+                pt={4}
+                pb={2}
+                width="100%"
+                spacing={3}
+                onClick={removeItemSelection}
+              >
+                {selectedItem?.balance && selectedItem?.balance > 1 && (
+                  <Stack spacing={4}>
+                    <Stack
+                      direction={{ xs: 'column', lg: 'row' }}
+                      spacing={{ xs: 2, lg: 10 }}
+                    >
+                      <WearableItemCard data={selectedItem} />
+                      <Grid container flexWrap="wrap" gap={2.5}>
+                        {renderSubItems}
+                      </Grid>
+                    </Stack>
+                    <Divider color="#363636" />
+                  </Stack>
+                )}
+                <Grid
+                  container
+                  flexWrap="wrap"
+                  gap={2}
+                  justifyContent={{ xs: 'space-between', sm: 'inherit' }}
+                >
+                  {renderItems}
+                </Grid>
+              </Stack>
+            </Stack>
+          </SectionSlider>
+          {!isTablet && (
+            <Stack mt={7.5}>
+              <ItemDetail data={selectedItem} subIndex={selectedSubIndex} />
+            </Stack>
+          )}
+        </Stack>
       </Stack>
-      <ViewComicDialog
-        comic={selectedComic}
-        open={Boolean(selectedComic)}
-        onClose={handleCloseDialog}
-      />
+      {isTablet && (
+        <ViewComicDialog
+          comic={selectedComic}
+          open={Boolean(selectedComic)}
+          onClose={handleCloseComicDialog}
+        />
+      )}
+      {isTablet && (
+        <ViewItemDialog
+          item={selectedItem}
+          subIndex={selectedSubIndex}
+          open={
+            Boolean(selectedItem) &&
+            !!selectedItem?.balance &&
+            (selectedItem?.balance === 1 || selectedSubIndex >= 0)
+          }
+          onClose={handleCloseItemDialog}
+        />
+      )}
     </>
   );
 };

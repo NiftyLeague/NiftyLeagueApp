@@ -34,20 +34,11 @@ const loadHardhatContract = (
   contractName: string,
   signer: Signer | Provider,
 ) => {
-  const newContract = new Contract(
+  return new Contract(
     require(`../contracts/${networkName}/${contractName}.address.js`),
     require(`../contracts/${networkName}/${contractName}.abi.json`),
     signer,
   );
-  try {
-    // @ts-expect-error ts-migrate(2542) FIXME: Index signature in type 'Contract' only permits re... Remove this comment to see the full error message
-    newContract.bytecode =
-      require(`../contracts/${networkName}/${contractName}.bytecode.js`) as string;
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-  }
-  return newContract;
 };
 
 interface Config {

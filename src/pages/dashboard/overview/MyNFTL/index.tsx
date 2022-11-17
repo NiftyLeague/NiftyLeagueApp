@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState, useCallback, useEffect } from 'react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -48,7 +47,6 @@ const MyNFTL = (): JSX.Element => {
   } = useArcadeBalance();
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const { enableWenGame } = useFlags();
   const [openBuyAT, setOpenBuyAT] = useState(false);
   // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
@@ -196,55 +194,49 @@ const MyNFTL = (): JSX.Element => {
           My Tokens
         </SectionTitle>
       </Grid>
-      {enableWenGame && (
-        <>
-          <Grid item xs={12}>
-            <TokenInfoCard
-              title="Arcade Token Balance"
-              secondary={`${arcadeBalance} Tokens`}
-              isLoading={arcadeBalanceLoading}
-              customStyle={{
-                backgroundColor: theme.palette.background.default,
-                border: '1px solid',
-                borderColor: theme.palette.grey[800],
-                borderRadius: '8px',
-              }}
-              actions={
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  paddingX={{ xl: 1, xs: 3 }}
-                  paddingY={{ xl: 0.5, xs: 1.5 }}
-                >
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleBuyArcadeTokens}
-                  >
-                    Buy Tokens
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={handlePlayArcade}
-                  >
-                    Play Arcade
-                  </Button>
-                </Stack>
-              }
-            />
-          </Grid>
-          <BuyArcadeTokensDialog
-            open={openBuyAT}
-            onSuccess={() => {
-              setOpenBuyAT(false);
-              refetchArcadeBal();
+      <>
+        <Grid item xs={12}>
+          <TokenInfoCard
+            title="Arcade Token Balance"
+            secondary={`${arcadeBalance} Tokens`}
+            isLoading={arcadeBalanceLoading}
+            customStyle={{
+              backgroundColor: theme.palette.background.default,
+              border: '1px solid',
+              borderColor: theme.palette.grey[800],
+              borderRadius: '8px',
             }}
-            onClose={() => setOpenBuyAT(false)}
+            actions={
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                paddingX={{ xl: 1, xs: 3 }}
+                paddingY={{ xl: 0.5, xs: 1.5 }}
+              >
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={handleBuyArcadeTokens}
+                >
+                  Buy Tokens
+                </Button>
+                <Button fullWidth variant="outlined" onClick={handlePlayArcade}>
+                  Play Arcade
+                </Button>
+              </Stack>
+            }
           />
-        </>
-      )}
+        </Grid>
+        <BuyArcadeTokensDialog
+          open={openBuyAT}
+          onSuccess={() => {
+            setOpenBuyAT(false);
+            refetchArcadeBal();
+          }}
+          onClose={() => setOpenBuyAT(false)}
+        />
+      </>
       <Grid item xs={12}>
         <Grid container spacing={sectionSpacing}>
           <Grid item xl={6} lg={12} md={12} sm={12} xs={12}>
