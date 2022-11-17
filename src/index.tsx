@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 
 // third party
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -17,6 +17,7 @@ import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
 import { NetworkProvider } from 'contexts/NetworkContext';
+import { IMXProvider } from 'contexts/IMXContext';
 import { SUBGRAPH_URI } from './constants';
 
 // style + assets
@@ -50,15 +51,17 @@ root.render(
   <ApolloProvider client={client}>
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persister}>
-            <ConfigProvider>
-              <BrowserRouter basename={BASE_PATH}>
-                <App />
-              </BrowserRouter>
-            </ConfigProvider>
-          </PersistGate>
-        </Provider>
+        <IMXProvider>
+          <ReduxProvider store={store}>
+            <PersistGate loading={null} persistor={persister}>
+              <ConfigProvider>
+                <BrowserRouter basename={BASE_PATH}>
+                  <App />
+                </BrowserRouter>
+              </ConfigProvider>
+            </PersistGate>
+          </ReduxProvider>
+        </IMXProvider>
       </NetworkProvider>
     </QueryClientProvider>
   </ApolloProvider>,

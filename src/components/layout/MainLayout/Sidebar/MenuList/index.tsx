@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 // material-ui
 import { Typography } from '@mui/material';
@@ -20,10 +19,9 @@ const getMenuItemsByLoginStatus = (loginStatus: boolean) => {
 };
 
 const MenuList = () => {
-  const { displayGamerProfile } = useFlags();
   const { isLoggedIn } = useAuth();
   let lastItems: any = getMenuItemsByLoginStatus(isLoggedIn).items;
-  if (displayGamerProfile && lastItems.length > 1) {
+  if (lastItems.length > 1) {
     let item = lastItems[1].children[0].children;
     if (lastItems[1] && !item.find((t) => t.id === 'gamer-profile')) {
       lastItems[1].children[0].children.splice(1, 0, {
