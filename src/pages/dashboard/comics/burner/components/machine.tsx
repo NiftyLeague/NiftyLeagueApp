@@ -14,8 +14,8 @@ import ButtonBurn3 from 'assets/images/comics/burner/machine/button_burn_3.png';
 import ButtonBurn4 from 'assets/images/comics/burner/machine/button_burn_4.png';
 import ButtonBurn5 from 'assets/images/comics/burner/machine/button_burn_5.png';
 import ButtonBurnDisabled1 from 'assets/images/comics/burner/machine/button_burn_gray_01.png';
-import ButtonBurnDisabled2 from 'assets/images/comics/burner/machine/button_burn_gray_01.png';
-import ButtonBurnDisabled3 from 'assets/images/comics/burner/machine/button_burn_gray_01.png';
+import ButtonBurnDisabled2 from 'assets/images/comics/burner/machine/selectcomics_button_02.png';
+import ButtonBurnDisabled3 from 'assets/images/comics/burner/machine/connectwalletabove_button_01.png';
 import ButtonQ from 'assets/images/comics/burner/machine/button_q_1.png';
 import { Comic } from 'types/comic';
 
@@ -59,13 +59,13 @@ const ComicsBurnerMachine: React.FC<
       ) : (
         <>
           {!imx.registeredUser ? (
-            <MachineFrame frames={[ButtonBurnDisabled1]} />
+            <MachineFrame frames={[ButtonBurnDisabled3]} />
           ) : null}
           {selectedComics.length < 1 ? (
             <MachineFrame frames={[ButtonBurnDisabled2]} />
           ) : null}
           {imx.registeredUser && selectedComics.length > 1 ? (
-            <MachineFrame frames={[ButtonBurnDisabled3]} />
+            <MachineFrame frames={[ButtonBurnDisabled1]} />
           ) : null}
         </>
       )}

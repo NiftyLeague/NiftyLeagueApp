@@ -73,6 +73,7 @@ export const IMXProvider = ({
           await client.getAssets({
             user,
             collection: IMX_NL_ITEMS[selectedChainId],
+            page_size: 200,
           }),
         );
       setLoading(false);
