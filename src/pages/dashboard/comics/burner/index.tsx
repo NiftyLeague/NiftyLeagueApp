@@ -18,11 +18,11 @@ import ItemsGrid from './components/items-grid';
 const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
-  const { setIMXRefreshKey } = imx;
   const { address, tx, writeContracts } = useContext(NetworkContext);
   const [isApprovedForAll, setIsApprovedForAll] = useState(false);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [selectedComics, setSelectedComics] = useState<Comic[]>([]);
+  const [itemCounts, setItemsCounts] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [burnCount, setBurnCount] = useState([0, 0, 0, 0, 0, 0]);
   const [burning, setBurning] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -31,6 +31,12 @@ const ComicsBurner = () => {
     burning ||
     selectedComics.length < 1 ||
     burnCount.every((c) => !c);
+
+  useEffect(() => {
+    if (imx.itemsBalance) {
+      setItemsCounts(imx.itemsBalance.map((it) => it.balance || 0));
+    }
+  }, [imx.itemsBalance]);
 
   useEffect(() => {
     const getAllowance = async () => {
@@ -71,16 +77,27 @@ const ComicsBurner = () => {
     const res = await tx(burnContract.burnComics(burnCount));
     setBurning(false);
     if (res) {
-      setBurnCount([0, 0, 0, 0, 0, 0]);
       setSelectedComics([]);
+      const keyCount = burnCount.some((v) => v === 0)
+        ? 0
+        : Math.min(...burnCount);
+      setItemsCounts([
+        itemCounts[0] + burnCount[0] - keyCount,
+        itemCounts[1] + burnCount[1] - keyCount,
+        itemCounts[2] + burnCount[2] - keyCount,
+        itemCounts[3] + burnCount[3] - keyCount,
+        itemCounts[4] + burnCount[4] - keyCount,
+        itemCounts[5] + burnCount[5] - keyCount,
+        itemCounts[6] + keyCount,
+      ]);
+      setBurnCount([0, 0, 0, 0, 0, 0]);
       setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
-      setTimeout(() => setIMXRefreshKey(Math.random() + 1), 5000);
     }
   }, [
     burnCount,
     handleSetApproval,
     isApprovedForAll,
-    setIMXRefreshKey,
+    itemCounts,
     tx,
     writeContracts,
   ]);
@@ -96,7 +113,7 @@ const ComicsBurner = () => {
       >
         ← Back to Comics &amp; Items
       </Button>
-      <Machine burnDisabled={burnDisabled} />
+      <Machine burnDisabled={burnDisabled} selectedComics={selectedComics} />
       <MachineButton
         disabled={imx.registeredUser}
         height={25}
@@ -132,7 +149,7 @@ const ComicsBurner = () => {
         top={850}
         left={0}
       />
-      <ItemsGrid />
+      <ItemsGrid itemCounts={itemCounts} />
     </>
   );
 };

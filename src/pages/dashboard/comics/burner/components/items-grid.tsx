@@ -54,7 +54,7 @@ const gridStyles = {
   marginBottom: 0,
 };
 
-export default function ItemsGrid() {
+export default function ItemsGrid({ itemCounts }: { itemCounts: number[] }) {
   const classes = useStyles();
   const imx = useContext(IMXContext);
 
@@ -68,9 +68,7 @@ export default function ItemsGrid() {
     />
   ) : (
     <div style={containerStyles}>
-      <div>
-        ITEMS I OWN <em>*new items take several minutes*</em>
-      </div>
+      <div>ITEMS I OWN</div>
       <ImageList
         gap={10}
         cols={3}
@@ -91,11 +89,7 @@ export default function ItemsGrid() {
               title={
                 <>
                   <span>{item.name}</span>
-                  <span>
-                    x
-                    {imx.itemsBalance.find((i) => i.id === item.id)?.balance ||
-                      0}
-                  </span>
+                  <span>x{itemCounts[item.id - 1]}</span>
                 </>
               }
               position="below"
@@ -113,7 +107,7 @@ export default function ItemsGrid() {
         />
         <div className={classes.title} style={{ width: '35%', margin: 'auto' }}>
           <span>CITADEL KEY</span>
-          <span>x{imx.itemsBalance.find((i) => i.id === 7)?.balance || 0}</span>
+          <span>x{itemCounts[6]}</span>
         </div>
       </div>
     </div>
