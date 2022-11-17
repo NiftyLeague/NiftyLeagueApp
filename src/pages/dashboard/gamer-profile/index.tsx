@@ -1,7 +1,7 @@
 import { useContext, useMemo, createContext } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
-import _ from 'lodash';
+import merge from 'lodash/merge';
 
 import { useGamerProfile } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
@@ -84,7 +84,7 @@ const GamerProfile = (): JSX.Element => {
             degens={
               filteredDegens &&
               avatarsAndFee?.avatars &&
-              _.merge(filteredDegens, avatarsAndFee?.avatars)
+              merge(filteredDegens, avatarsAndFee?.avatars)
             }
           />
         </Grid>

@@ -3,10 +3,7 @@ import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 import axios, { AxiosResponse } from 'axios';
 import Notify, { API, InitOptions } from 'bnc-notify';
-import {
-  EthereumTransactionLog,
-  EthereumTransactionData,
-} from 'bnc-sdk/dist/types/src/interfaces';
+import { EthereumTransactionLog, EthereumTransactionData } from 'bnc-sdk';
 import {
   BigNumber,
   Contract,

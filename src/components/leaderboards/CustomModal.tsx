@@ -78,24 +78,24 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
         aria-describedby="unstyled-modal-description"
         open={open}
         onClose={handleClose}
-        components={{
-          Backdrop,
-        }}
       >
-        <Box
-          sx={{
-            ...style(theme),
-            backgroundImage: `url(${
-              flag === 'score'
-                ? WenLeaderBoardBG
-                : flag === 'burnings'
-                ? MtGawxLeaderBoardBG
-                : NiftySmashersLeaderBoardBg
-            })`,
-          }}
-        >
-          {child}
-        </Box>
+        <>
+          <Backdrop />
+          <Box
+            sx={{
+              ...style(theme),
+              backgroundImage: `url(${
+                flag === 'score'
+                  ? WenLeaderBoardBG
+                  : flag === 'burnings'
+                  ? MtGawxLeaderBoardBG
+                  : NiftySmashersLeaderBoardBg
+              })`,
+            }}
+          >
+            {child}
+          </Box>
+        </>
       </StyledModal>
     </>
   );

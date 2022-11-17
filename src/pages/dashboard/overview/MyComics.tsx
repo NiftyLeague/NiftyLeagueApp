@@ -2,7 +2,6 @@
 import { useMemo, useState } from 'react';
 import { Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import ComicCard from 'components/cards/ComicCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import { Comic } from 'types/comic';
@@ -76,31 +75,19 @@ const MyComics = (): JSX.Element => {
         actions={
           <Button
             variant="outlined"
-            onClick={() => navigate('/dashboard/comics')}
+            onClick={() => navigate('/dashboard/items')}
           >
             View All Comics
           </Button>
         }
       >
         {loading ? (
-          [...Array(2)].map(() => (
-            <Box
-              sx={{
-                px: 1,
-              }}
-              key={uuidv4()}
-            >
-              <ComicPlaceholder imageWidth={158} imageHeight="100%" />
-            </Box>
-          ))
+          <Box px={1}>
+            <ComicPlaceholder />
+          </Box>
         ) : filteredComics.length ? (
           filteredComics.map((comic) => (
-            <Box
-              sx={{
-                px: 1,
-              }}
-              key={comic.wearableName}
-            >
+            <Box px={1} key={comic.wearableName}>
               <ComicCard
                 data={comic}
                 onViewComic={() => handleViewComic(comic)}
