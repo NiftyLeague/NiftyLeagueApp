@@ -3,7 +3,7 @@ import useInterval from 'hooks/useInterval';
 import IMXContext, { Context } from 'contexts/IMXContext';
 import MachineFrame from './machine-frame';
 
-import MachineMain from 'assets/images/comics/burner/machine/machine_main_2.png';
+import MachineMain from 'assets/images/comics/burner/machine/machine_main_3.png';
 import MachineFX from 'assets/images/comics/burner/machine/fx_combined_02.gif';
 import ButtonConnect1 from 'assets/images/comics/burner/machine/button_connectwallet_01.png';
 import ButtonConnect2 from 'assets/images/comics/burner/machine/button_connectwallet_02.png';
@@ -24,7 +24,6 @@ const ComicsBurnerMachine: React.FC<
 
   useInterval(() => {
     setCount(count + 1);
-    // }, 30000);
   }, 500);
 
   return (

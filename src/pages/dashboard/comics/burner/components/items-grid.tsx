@@ -109,7 +109,7 @@ export default function ItemsGrid() {
           loading="lazy"
           width="31%"
         />
-        <div className={classes.title} style={{ width: '38%', margin: 'auto' }}>
+        <div className={classes.title} style={{ width: '35%', margin: 'auto' }}>
           <span>CITADEL KEY</span>
           <span>x{imx.itemsBalance.find((i) => i.id === 7)?.balance || 0}</span>
         </div>

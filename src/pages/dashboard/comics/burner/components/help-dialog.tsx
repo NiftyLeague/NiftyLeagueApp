@@ -33,7 +33,7 @@ export default function DraggableDialog({ open, setOpen }) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Welcome to SATOSHI'S COMICs BURNING MACHINE! Here you can burn your
+          Welcome to SATOSHI'S COMICS BURNING MACHINE where you can burn your
           COMICS for in-game WEARABLE ITEMS!
           <ul style={{ lineHeight: 2 }}>
             <li>
@@ -41,33 +41,43 @@ export default function DraggableDialog({ open, setOpen }) {
               CONNECT WALLET button at the top left of the machine.
             </li>
             <li>
-              Each COMIC burned yields 1 WEARABLE ITEM. You can also get a
-              CITADEL KEY by burning a FULL SET of COMICS 1-6.
+              Each COMIC burned yields 1 WEARABLE ITEM. You can also create a
+              CITADEL KEY by burning a FULL SET of COMICS.
+              <ul>
+                <li>COMIC 1 = CAPE</li>
+                <li>COMIC 2 = HALO</li>
+                <li>COMIC 3 = DIAMOND BAT</li>
+                <li>COMIC 4 = BREAD BAT</li>
+                <li>COMIC 5 = PURPLE BAT</li>
+                <li>COMIC 6 = COMPANION</li>
+                <li>COMIC 1+2+3+4+5+6 = CITADEL KEY</li>
+              </ul>
             </li>
             <li>
-              CONSOLE 1 shows you the amount of COMICS you currently own and
-              allows you to select the comics you want to burn along with the
-              counts.
+              CONSOLE 1 shows you the amount of COMICS you currently own, and
+              allows you to select the COMICS and amounts of each you wish to
+              burn.
             </li>
             <li>
-              CONSOLE 2 shows you the total keys and items you will receive for
-              burning.
+              CONSOLE 2 shows you the total KEYS and ITEMS you'll receive for
+              burning your selected COMICS.
             </li>
             <li>
-              CONSOLE 3 is just some rad animations by our one and only spike!
-              Watch Satoshi burn those comics when you click the burn button!
+              Once you are satisfied with your selection, hit the "BURN 4
+              WEARABLES!" button on CONSOLE 4. <br />
+              <strong>
+                *NOTE: When you burn a COMIC, it's gone for good!*
+              </strong>
             </li>
             <li>
-              When you are satisfied press the BURN FOR WEARABLE button on
-              CONSOLE 4.
+              CONSOLE 3 shows a real-time animation of Satoshi transforming your
+              crisp COMICS into sparkly new WEARABLES or RARE KEYS with his
+              fiery COMICS BURNER machine!
             </li>
             <li>
-              An animation will play as SATOSHI transforms your COMICS into
-              ITEMS or KEYS.
-            </li>
-            <li>
-              Your new ITEMS are now in your IMX WALLET and will show in CONSOLE
-              5.
+              Congratulations! Your freshly-minted ITEMS are now in your IMX
+              WALLET and will show up in CONSOLE 5, as well as on the COMICS &
+              ITEMS page in your DASHBOARD.
             </li>
           </ul>
         </DialogContentText>

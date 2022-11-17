@@ -28,7 +28,8 @@ const ComicDetail: React.FC<
       position="relative"
       overflow="hidden"
       minWidth={345}
-      height={375}
+      height={350}
+      margin="auto"
     >
       <ImageCard image={image} thumbnail={thumbnail} title={title} ratio={1} />
     </Box>
