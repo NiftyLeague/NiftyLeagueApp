@@ -18,6 +18,7 @@ import ItemsGrid from './components/items-grid';
 const ComicsBurner = () => {
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
+  const { setIMXRefreshKey } = imx;
   const { address, tx, writeContracts } = useContext(NetworkContext);
   const [isApprovedForAll, setIsApprovedForAll] = useState(false);
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
@@ -69,9 +70,17 @@ const ComicsBurner = () => {
     if (res) {
       setBurnCount([0, 0, 0, 0, 0, 0]);
       setSelectedComics([]);
-      setTimeout(() => setRefreshKey(Math.random() + 1), 2000);
+      setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+      setTimeout(() => setIMXRefreshKey(Math.random() + 1), 5000);
     }
-  }, [burnCount, handleSetApproval, isApprovedForAll, tx, writeContracts]);
+  }, [
+    burnCount,
+    handleSetApproval,
+    isApprovedForAll,
+    setIMXRefreshKey,
+    tx,
+    writeContracts,
+  ]);
 
   const handleReturnPage = () => navigate('/dashboard/items');
 
