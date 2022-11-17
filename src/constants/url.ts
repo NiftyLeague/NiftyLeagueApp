@@ -1,4 +1,6 @@
+import { ChainId } from '@sushiswap/sdk';
 import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
+import { IMX_NL_ITEMS } from './contracts';
 
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
@@ -73,6 +75,15 @@ export const DEGEN_PURCHASE_URL = 'https://opensea.io/collection/niftydegen';
 // Comic Purchase URL
 export const COMIC_PURCHASE_URL =
   'https://opensea.io/collection/nifty-league-launch-comics';
+
+export const ITEM_PURCHASE_URL = {
+  [ChainId.MAINNET]: `https://market.immutable.com/collections/${
+    IMX_NL_ITEMS[ChainId.MAINNET]
+  }`,
+  [ChainId.GÖRLI]: `https://market.sandbox.immutable.com/collections/${
+    IMX_NL_ITEMS[ChainId.GÖRLI]
+  }`,
+};
 
 export const CONVERT_TOKEN_TO_USD_URL =
   'https://price-api.crypto.com/price/v1/exchange/';
