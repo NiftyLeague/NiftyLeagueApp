@@ -27,7 +27,10 @@ const ComicsBurner = () => {
   const [burning, setBurning] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const burnDisabled =
-    burning || selectedComics.length < 1 || burnCount.every((c) => !c);
+    !imx.registeredUser ||
+    burning ||
+    selectedComics.length < 1 ||
+    burnCount.every((c) => !c);
 
   useEffect(() => {
     const getAllowance = async () => {
@@ -95,7 +98,7 @@ const ComicsBurner = () => {
       </Button>
       <Machine burnDisabled={burnDisabled} />
       <MachineButton
-        disabled={imx.wallet !== 'undefined'}
+        disabled={imx.registeredUser}
         height={25}
         name="Connect Wallet"
         onClick={imx.linkSetup}
