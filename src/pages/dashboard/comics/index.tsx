@@ -16,12 +16,13 @@ import ViewComicDialog from 'components/dialog/ViewComicDialog';
 import SectionSlider from 'components/sections/SectionSlider';
 
 import IMXContext from 'contexts/IMXContext';
+import NetworkContext from 'contexts/NetworkContext';
 import { Comic, Item } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
-import { COMIC_PURCHASE_URL } from 'constants/url';
+import { COMIC_PURCHASE_URL, ITEM_PURCHASE_URL } from 'constants/url';
 import ComicDetail from 'components/cards/ComicDetail';
 import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
-import BuyComicCard from 'components/cards/BuyComicCard';
+import BuyCard from 'components/cards/BuyCard';
 import WearableItemCard from 'components/cards/WearableItemCard';
 import WearableSubItemCard from 'components/cards/WearableSubItemCard';
 import ItemDetail from 'components/cards/ItemDetail';
@@ -34,6 +35,7 @@ const DashboardComicsPage = (): JSX.Element => {
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const navigate = useNavigate();
   const imx = useContext(IMXContext);
+  const { selectedChainId } = useContext(NetworkContext);
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -71,8 +73,12 @@ const DashboardComicsPage = (): JSX.Element => {
     removeItemSelection();
   };
 
-  const handleBuyComic = () => {
+  const handleBuyComics = () => {
     window.open(COMIC_PURCHASE_URL, '_blank');
+  };
+
+  const handleBuyItems = () => {
+    window.open(ITEM_PURCHASE_URL[selectedChainId as number], '_blank');
   };
 
   const handleLaunchBurner = () => navigate('burner');
@@ -173,8 +179,8 @@ const DashboardComicsPage = (): JSX.Element => {
                 {renderComics}
                 {comicsBalance.length > 0 && (
                   <Grid item>
-                    <BuyComicCard
-                      onBuyComic={handleBuyComic}
+                    <BuyCard
+                      onBuy={handleBuyComics}
                       isNew={
                         !comicsBalance.some(
                           (comic) => comic.balance && comic.balance > 0,
@@ -227,6 +233,18 @@ const DashboardComicsPage = (): JSX.Element => {
                   justifyContent={{ xs: 'space-between', sm: 'inherit' }}
                 >
                   {renderItems}
+                  {imx.itemsBalance.length > 0 && (
+                    <Grid item>
+                      <BuyCard
+                        onBuy={handleBuyItems}
+                        isNew={
+                          !imx.itemsBalance.some(
+                            (it) => it.balance && it.balance > 0,
+                          )
+                        }
+                      />
+                    </Grid>
+                  )}
                 </Grid>
               </Stack>
             </Stack>
