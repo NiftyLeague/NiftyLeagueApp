@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
+import xor from 'lodash/xor';
 import { useSearchParams } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
@@ -64,6 +65,9 @@ const DashboardDegensPage = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [layoutMode, setLayoutMode] = useState<string>('gridView');
   const { enableEquip } = useFlags();
+  const [favs, setFavs] = useState(
+    window.localStorage.getItem('FAV_DEGENS')?.split(',') || [],
+  );
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -208,6 +212,18 @@ const DashboardDegensPage = (): JSX.Element => {
 
   const isGridView = layoutMode === 'gridView';
 
+  const handleClickFavorite = useCallback(
+    (degen) => {
+      const newFavs = xor(
+        favs.filter((f) => f),
+        [degen.id],
+      );
+      window.localStorage.setItem('FAV_DEGENS', newFavs.toString());
+      setFavs(newFavs);
+    },
+    [favs],
+  );
+
   const renderSkeletonItem = useCallback(
     () => (
       <Grid
@@ -250,24 +266,28 @@ const DashboardDegensPage = (): JSX.Element => {
       >
         <DegenCard
           degen={degen}
-          size={isGridView ? 'normal' : 'small'}
-          isDashboardDegen
           degenEquipEnabled={enableEquip}
+          favs={favs}
+          isDashboardDegen
+          onClickClaim={() => handleClaimDegen(degen)}
           onClickDetail={() => handleViewTraits(degen)}
           onClickEditName={() => handleClickEditName(degen)}
-          onClickClaim={() => handleClaimDegen(degen)}
-          onClickRent={() => handleRentDegen(degen)}
           onClickEquip={() => handleEquipDegen(degen)}
+          onClickFavorite={() => handleClickFavorite(degen)}
+          onClickRent={() => handleRentDegen(degen)}
+          size={isGridView ? 'normal' : 'small'}
         />
       </Grid>
     ),
     [
       enableEquip,
+      favs,
       handleClaimDegen,
       handleClickEditName,
+      handleClickFavorite,
+      handleEquipDegen,
       handleRentDegen,
       handleViewTraits,
-      handleEquipDegen,
       isDrawerOpen,
       isGridView,
     ],

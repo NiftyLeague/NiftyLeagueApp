@@ -14,6 +14,8 @@ import {
   Dialog,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import FavoriteIconFilled from '@mui/icons-material/Favorite';
+import FavoriteIconOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 import { toast } from 'react-toastify';
 import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
@@ -47,11 +49,13 @@ export interface DegenCardProps {
   size?: 'small' | 'normal';
   isDashboardDegen?: boolean;
   degenEquipEnabled?: boolean;
+  favs?: string[];
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
   onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickFavorite?: React.MouseEventHandler<HTMLDivElement>;
   sx?: SxProps<Theme>;
 }
 
@@ -78,18 +82,21 @@ const DegenCard: React.FC<
 > = memo(
   ({
     degen,
-    size = 'normal',
-    isDashboardDegen = false,
     degenEquipEnabled = false,
+    favs = [],
+    isDashboardDegen = false,
+    size = 'normal',
+    sx,
     onClickClaim,
     onClickDetail,
     onClickEditName,
     onClickRent,
     onClickEquip,
-    sx,
+    onClickFavorite,
   }) => {
     const { palette } = useTheme();
     const { id, name, multiplier, price, rental_count, is_active } = degen;
+    const fav = favs.some((f) => f === id);
     const { authToken } = useAuth();
     const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
       useState<boolean>(false);
@@ -290,25 +297,41 @@ const DegenCard: React.FC<
                 {isEnabled ? 'Disable' : 'Enable'} Rentals
               </Typography>
             )}
-            <Box
-              sx={{
-                display: 'flex',
-                cursor: 'pointer',
-              }}
-              onClick={onClickDownload}
-            >
-              <Typography
-                sx={{
-                  fontSize: tinyFontSize,
-                  pr: '4px',
-                }}
+            <Box sx={{ display: 'flex' }}>
+              <Box
+                sx={{ cursor: 'pointer', marginRight: 1 }}
+                onClick={onClickFavorite}
               >
-                IP
-              </Typography>
-              <DownloadSolid
-                width={size === 'small' ? 12 : 16}
-                height={size === 'small' ? 12 : 16}
-              />
+                {fav ? (
+                  <FavoriteIconFilled
+                    sx={{ fontSize: size === 'small' ? 12 : 16 }}
+                  />
+                ) : (
+                  <FavoriteIconOutlined
+                    sx={{ fontSize: size === 'small' ? 12 : 16 }}
+                  />
+                )}
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  cursor: 'pointer',
+                }}
+                onClick={onClickDownload}
+              >
+                <Typography
+                  sx={{
+                    fontSize: tinyFontSize,
+                    pr: '4px',
+                  }}
+                >
+                  IP
+                </Typography>
+                <DownloadSolid
+                  width={size === 'small' ? 12 : 16}
+                  height={size === 'small' ? 12 : 16}
+                />
+              </Box>
             </Box>
             <DegenClaimBal tokenId={id} fontSize={tinyFontSize} />
           </Stack>
