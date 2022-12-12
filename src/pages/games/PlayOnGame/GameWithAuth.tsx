@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { isOpera, browserName } from 'react-device-detect';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { Box, Button, Stack } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
@@ -166,6 +167,14 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   );
 };
 
-const GameWithAuth = withVerification((props: GameProps) => Game(props));
+const GameWithAuth = withVerification((props: GameProps) =>
+  isOpera ? (
+    <Box component="h2" textAlign="center" mt={8}>
+      {browserName} Browser Not Supported
+    </Box>
+  ) : (
+    Game(props)
+  ),
+);
 
 export default GameWithAuth;
