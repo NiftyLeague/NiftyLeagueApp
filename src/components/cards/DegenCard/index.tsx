@@ -14,8 +14,8 @@ import {
   Dialog,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import FavoriteIconFilled from '@mui/icons-material/Favorite';
-import FavoriteIconOutlined from '@mui/icons-material/FavoriteBorderOutlined';
+// import FavoriteIconFilled from '@mui/icons-material/Favorite';
+// import FavoriteIconOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 import { toast } from 'react-toastify';
 import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
@@ -96,7 +96,7 @@ const DegenCard: React.FC<
   }) => {
     const { palette } = useTheme();
     const { id, name, multiplier, price, rental_count, is_active } = degen;
-    const fav = favs.some((f) => f === id);
+    // const fav = favs.some((f) => f === id);
     const { authToken } = useAuth();
     const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
       useState<boolean>(false);
@@ -298,7 +298,7 @@ const DegenCard: React.FC<
               </Typography>
             )}
             <Box sx={{ display: 'flex' }}>
-              <Box
+              {/* <Box
                 sx={{ cursor: 'pointer', marginRight: 1 }}
                 onClick={onClickFavorite}
               >
@@ -311,7 +311,7 @@ const DegenCard: React.FC<
                     sx={{ fontSize: size === 'small' ? 12 : 16 }}
                   />
                 )}
-              </Box>
+              </Box> */}
               <Box
                 sx={{
                   display: 'flex',
