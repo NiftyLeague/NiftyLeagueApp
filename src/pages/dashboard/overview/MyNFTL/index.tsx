@@ -20,7 +20,6 @@ import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import NetworkContext from 'contexts/NetworkContext';
 import useArcadeBalance from 'hooks/useArcadeBalance';
 import useAccount from 'hooks/useAccount';
-// import usePlayerProfile from 'hooks/usePlayerProfile';
 import { formatNumberToDisplay } from 'utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
 import { DEBUG } from 'constants/index';
@@ -48,7 +47,6 @@ const MyNFTL = (): JSX.Element => {
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const [openBuyAT, setOpenBuyAT] = useState(false);
-  // const { profile, error: profileError } = usePlayerProfile();
   const { account, error: accError } = useAccount(refreshAccKey);
   const { userNFTLBalance, refreshNFTLBalance } = useContext(BalanceContext);
 

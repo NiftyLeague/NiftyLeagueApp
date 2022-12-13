@@ -3,10 +3,9 @@ import { Grid, Stack, Typography } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
 import merge from 'lodash/merge';
 
-import { useGamerProfile } from 'hooks/useGamerProfile';
+import { useGamerProfile, useProfileAvatarFee } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useComicsBalance from 'hooks/useComicsBalance';
-import { useProfileAvatarFee } from 'hooks/useGamerProfile';
 
 import SectionSlider from 'components/sections/SectionSlider';
 import ImageProfile from './ImageProfile';

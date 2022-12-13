@@ -33,8 +33,7 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
     loading: arcadeLoading,
     refetch: refetchArcadeBal,
   } = useArcadeBalance();
-  const favs = window.localStorage.getItem('FAV_DEGENS') || '';
-  const authMsg = `true,${address || '0x0'},Vitalik,${authToken},${favs}`;
+  const authMsg = `true,${address || '0x0'},Vitalik,${authToken}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
