@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
+import xor from 'lodash/xor';
 import { useSearchParams } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
@@ -26,8 +27,14 @@ import {
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
-import { DEGEN_BASE_API_URL, DEGEN_PURCHASE_URL } from 'constants/url';
+import {
+  DEGEN_BASE_API_URL,
+  DEGEN_PURCHASE_URL,
+  PROFILE_FAV_DEGENS_API,
+} from 'constants/url';
+import { useProfileFavDegens } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
+import useAuth from 'hooks/useAuth';
 import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
@@ -46,6 +53,7 @@ const handleBuyDegen = () => {
 };
 
 const DashboardDegensPage = (): JSX.Element => {
+  const { authToken } = useAuth();
   const { address } = useContext(NetworkContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
@@ -64,6 +72,17 @@ const DashboardDegensPage = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [layoutMode, setLayoutMode] = useState<string>('gridView');
   const { enableEquip } = useFlags();
+  const { favs: favsData } = useProfileFavDegens();
+  const [favs, setFavs] = useState<string[]>(
+    window.localStorage.getItem('FAV_DEGENS')?.split(',') || [],
+  );
+
+  useEffect(() => {
+    if (favsData && favsData !== 'null') {
+      setFavs(favsData.split(','));
+      window.localStorage.setItem('FAV_DEGENS', favsData);
+    }
+  }, [favsData]);
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -208,6 +227,27 @@ const DashboardDegensPage = (): JSX.Element => {
 
   const isGridView = layoutMode === 'gridView';
 
+  const handleClickFavorite = useCallback(
+    async (degen) => {
+      const newFavs = xor(
+        favs.filter((f) => f),
+        [degen.id],
+      );
+      await fetch(`${PROFILE_FAV_DEGENS_API}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          favorites: newFavs.toString(),
+        }),
+        headers: {
+          authorizationToken: authToken,
+        } as any,
+      });
+      window.localStorage.setItem('FAV_DEGENS', newFavs.toString());
+      setFavs(newFavs);
+    },
+    [authToken, favs],
+  );
+
   const renderSkeletonItem = useCallback(
     () => (
       <Grid
@@ -250,24 +290,28 @@ const DashboardDegensPage = (): JSX.Element => {
       >
         <DegenCard
           degen={degen}
-          size={isGridView ? 'normal' : 'small'}
-          isDashboardDegen
           degenEquipEnabled={enableEquip}
+          favs={favs}
+          isDashboardDegen
+          onClickClaim={() => handleClaimDegen(degen)}
           onClickDetail={() => handleViewTraits(degen)}
           onClickEditName={() => handleClickEditName(degen)}
-          onClickClaim={() => handleClaimDegen(degen)}
-          onClickRent={() => handleRentDegen(degen)}
           onClickEquip={() => handleEquipDegen(degen)}
+          onClickFavorite={() => handleClickFavorite(degen)}
+          onClickRent={() => handleRentDegen(degen)}
+          size={isGridView ? 'normal' : 'small'}
         />
       </Grid>
     ),
     [
       enableEquip,
+      favs,
       handleClaimDegen,
       handleClickEditName,
+      handleClickFavorite,
+      handleEquipDegen,
       handleRentDegen,
       handleViewTraits,
-      handleEquipDegen,
       isDrawerOpen,
       isGridView,
     ],
