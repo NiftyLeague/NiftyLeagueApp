@@ -26,7 +26,7 @@
     "@hookform/resolvers": "^2.8.8",
     "@imtbl/imx-sdk": "1.37.0",
     "@mui/icons-material": "5.10.14",
-    "@mui/lab": "^5.0.0-alpha.68",
+    "@mui/lab": "^5.0.0-alpha.116",
     "@mui/material": "^5.4.1",
     "@mui/styles": "^5.4.1",
     "@mui/system": "^5.4.1",
