@@ -34,7 +34,7 @@
     "@mui/x-data-grid": "^5.5.0",
     "@openzeppelin/contracts": "4.7.3",
     "@reduxjs/toolkit": "^1.7.2",
-    "@sentry/react": "7.19.0",
+    "@sentry/react": "7.31.1",
     "@sentry/tracing": "7.19.0",
     "@sushiswap/sdk": "5.0.0-canary.116",
     "@tabler/icons": "^1.53.0",
