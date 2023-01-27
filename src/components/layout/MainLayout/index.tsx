@@ -228,11 +228,12 @@ const MainLayout = () => {
               sx={{
                 display: 'flex',
                 backgroundColor: theme.palette.success.light,
-                width: '100%',
+                paddingX: 1,
                 position: 'absolute',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'black',
+                alignSelf: 'center',
               }}
               height={40}
               zIndex={1}
