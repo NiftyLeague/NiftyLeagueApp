@@ -9,7 +9,7 @@ import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
 import {
   DEGEN_BASE_API_URL,
-  DEGEN_PURCHASE_URL,
+  DEGEN_OPENSEA_URL,
   PROFILE_FAV_DEGENS_API,
 } from 'constants/url';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
@@ -73,13 +73,13 @@ const MyDegens = (): JSX.Element => {
   }, [characters, degensData]);
 
   const settings = {
-    slidesToShow: 3,
+    slidesToShow: 2,
     adaptiveHeight: true,
     responsive: [
       {
-        breakpoint: 1750,
+        breakpoint: 1350,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
         },
       },
       {
@@ -104,7 +104,7 @@ const MyDegens = (): JSX.Element => {
   };
 
   const handleBuyDegen = () => {
-    window.open(DEGEN_PURCHASE_URL, '_blank');
+    window.open(DEGEN_OPENSEA_URL, '_blank');
   };
 
   const handleClickEditName = (degen: Degen): void => {

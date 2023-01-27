@@ -29,7 +29,7 @@ import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout
 import SectionTitle from 'components/sections/SectionTitle';
 import {
   DEGEN_BASE_API_URL,
-  DEGEN_PURCHASE_URL,
+  DEGEN_OPENSEA_URL,
   PROFILE_FAV_DEGENS_API,
 } from 'constants/url';
 import { useProfileFavDegens } from 'hooks/useGamerProfile';
@@ -49,7 +49,7 @@ import DegensTopNav from 'components/extended/DegensTopNav';
 const DEGENS_PER_PAGE = 12;
 
 const handleBuyDegen = () => {
-  window.open(DEGEN_PURCHASE_URL, '_blank');
+  window.open(DEGEN_OPENSEA_URL, '_blank');
 };
 
 const DashboardDegensPage = (): JSX.Element => {
