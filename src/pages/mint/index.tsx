@@ -6,7 +6,7 @@ import useAuth from 'hooks/useAuth';
 import ErrorBoundary from 'components/ErrorBoundary';
 import Preloader from 'components/Preloader';
 import CharacterCreator from './components/CharacterCreator';
-import { DEGEN_PURCHASE_URL } from 'constants/url';
+import { DEGEN_OPENSEA_URL } from 'constants/url';
 import { useSearchParams } from 'react-router-dom';
 
 const MintPage = () => {
@@ -30,7 +30,7 @@ const MintPage = () => {
   const [progress, setProgress] = useState(0);
 
   const handleBuyDegen = () => {
-    window.open(DEGEN_PURCHASE_URL, '_blank');
+    window.open(DEGEN_OPENSEA_URL, '_blank');
   };
 
   if (!isForNiftyArtists) {

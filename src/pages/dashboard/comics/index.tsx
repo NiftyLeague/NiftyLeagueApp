@@ -19,7 +19,7 @@ import IMXContext from 'contexts/IMXContext';
 import NetworkContext from 'contexts/NetworkContext';
 import { Comic, Item } from 'types/comic';
 import useComicsBalance from 'hooks/useComicsBalance';
-import { COMIC_PURCHASE_URL, ITEM_PURCHASE_URL } from 'constants/url';
+import { COMICS_OPENSEA_URL, ITEM_PURCHASE_URL } from 'constants/url';
 import ComicDetail from 'components/cards/ComicDetail';
 import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
 import BuyCard from 'components/cards/BuyCard';
@@ -74,7 +74,7 @@ const DashboardComicsPage = (): JSX.Element => {
   };
 
   const handleBuyComics = () => {
-    window.open(COMIC_PURCHASE_URL, '_blank');
+    window.open(COMICS_OPENSEA_URL, '_blank');
   };
 
   const handleBuyItems = () => {

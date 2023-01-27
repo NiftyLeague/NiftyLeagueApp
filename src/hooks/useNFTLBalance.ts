@@ -18,10 +18,10 @@ export default function useNFTLBalance(
   address: string,
   refreshKey?: string | number,
 ): number {
-  const { writeContracts } = useContext(NetworkContext);
+  const { readContracts } = useContext(NetworkContext);
   const [balance, setBalance] = useState(BigNumber.from(0));
   const result = useContractReader(
-    writeContracts,
+    readContracts,
     NFTL_CONTRACT,
     'balanceOf',
     [address],

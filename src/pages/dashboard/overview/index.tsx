@@ -1,36 +1,38 @@
+// import { useEffect, useState } from 'react';
+// import ActiveRentalDialog from 'components/dialog/ActiveRentalDialog';
+// import { ALL_RENTAL_API_URL } from 'constants/url';
+// import useFetch from 'hooks/useFetch';
+// import { Rentals } from 'types/rentals';
+// import EarningCap from './EarningCap';
+// import MyRentals from './MyRentals';
+// import useAuth from 'hooks/useAuth';
 import { Grid } from '@mui/material';
-import ActiveRentalDialog from 'components/dialog/ActiveRentalDialog';
-import { ALL_RENTAL_API_URL } from 'constants/url';
-import useAuth from 'hooks/useAuth';
-import useFetch from 'hooks/useFetch';
-import { useEffect, useState } from 'react';
-import { Rentals } from 'types/rentals';
-import EarningCap from './EarningCap';
 import MyComics from './MyComics';
 import MyDegens from './MyDegens';
+import MyItems from './MyItems';
 import MyNFTL from './MyNFTL';
-import MyRentals from './MyRentals';
+import MyStats from './MyStats';
 
 const DashboardOverview = (): JSX.Element => {
-  const { authToken } = useAuth();
-  const headers = { authorizationToken: authToken || '' };
-  const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
-    headers,
-    enabled: !!authToken,
-  });
+  // const { authToken } = useAuth();
+  // const headers = { authorizationToken: authToken || '' };
+  // const { data } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+  //   headers,
+  //   enabled: !!authToken,
+  // });
 
-  const [rental, setRental] = useState<Rentals>();
-  const [rentals, setRentals] = useState<Rentals[] | any>([]);
+  // const [rental, setRental] = useState<Rentals>();
+  // const [rentals, setRentals] = useState<Rentals[] | any>([]);
 
-  useEffect(() => {
-    if (data) {
-      setRentals(data);
+  // useEffect(() => {
+  //   if (data) {
+  //     setRentals(data);
 
-      if (data.length > 0) {
-        setRental(data[0]);
-      }
-    }
-  }, [data]);
+  //     if (data.length > 0) {
+  //       setRental(data[0]);
+  //     }
+  //   }
+  // }, [data]);
 
   return (
     <Grid
@@ -45,11 +47,14 @@ const DashboardOverview = (): JSX.Element => {
             <MyNFTL />
           </Grid>
           <Grid item xs={12}>
+            <MyStats />
+          </Grid>
+          {/* <Grid item xs={12}>
             <EarningCap rentals={rentals} />
           </Grid>
           <Grid item xs={12}>
             <MyRentals rentals={rentals} />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={7}>
@@ -64,11 +69,14 @@ const DashboardOverview = (): JSX.Element => {
           <Grid item xs={12}>
             <MyComics />
           </Grid>
+          <Grid item xs={12}>
+            <MyItems />
+          </Grid>
         </Grid>
       </Grid>
-      {rental && (
+      {/* {rental && (
         <ActiveRentalDialog degenId={rentals[0].degen_id} rental={rental} />
-      )}
+      )} */}
     </Grid>
   );
 };

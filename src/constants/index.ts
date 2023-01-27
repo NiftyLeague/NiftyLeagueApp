@@ -7,7 +7,7 @@ export const ALCHEMY_ID: { [key in ChainId]?: string } = {
 };
 
 export const SUBGRAPH_URI = `${process.env.REACT_APP_SUBGRAPH_URI as string}${
-  process.env.REACT_APP_SUBGRAPH_VERSION as string
+  process.env.REACT_APP_SUBGRAPH_VERSION || ''
 }`;
 
 export const DEBUG =

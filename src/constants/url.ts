@@ -70,11 +70,11 @@ export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
 export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
 
 // DEGEN Purchase URL
-export const DEGEN_PURCHASE_URL = 'https://opensea.io/collection/niftydegen';
+export const DEGEN_OPENSEA_URL = 'https://opensea.io/collection/niftydegen';
 
 // Comic Purchase URL
-export const COMIC_PURCHASE_URL =
-  'https://opensea.io/collection/nifty-league-launch-comics';
+export const COMICS_OPENSEA_URL =
+  'https://opensea.io/collection/nifty-league-comics';
 
 export const ITEM_PURCHASE_URL = {
   [ChainId.MAINNET]: `https://market.immutable.com/collections/${
