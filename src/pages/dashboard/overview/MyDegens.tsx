@@ -1,18 +1,26 @@
 /* eslint-disable no-nested-ternary */
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import xor from 'lodash/xor';
+import { v4 as uuidv4 } from 'uuid';
 import { Box, Button, Grid, Dialog, Stack } from '@mui/material';
+
 import { DegenCardInView as DegenCard } from 'components/cards/DegenCard';
 import SectionSlider from 'components/sections/SectionSlider';
-import { useContext, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useFetch from 'hooks/useFetch';
-import { Degen } from 'types/degens';
-import { DEGEN_BASE_API_URL, DEGEN_PURCHASE_URL } from 'constants/url';
+import {
+  DEGEN_BASE_API_URL,
+  DEGEN_PURCHASE_URL,
+  PROFILE_FAV_DEGENS_API,
+} from 'constants/url';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
-import { v4 as uuidv4 } from 'uuid';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import BalanceContext from 'contexts/BalanceContext';
+import useFetch from 'hooks/useFetch';
+import { useProfileFavDegens } from 'hooks/useGamerProfile';
+import useAuth from 'hooks/useAuth';
+import { Degen } from 'types/degens';
 
 const BoxDegenStyles = {
   px: 1,
@@ -28,6 +36,7 @@ const BoxDegenStyles = {
 };
 
 const MyDegens = (): JSX.Element => {
+  const { authToken } = useAuth();
   const [selectedDegen, setSelectedDegen] = useState<Degen>();
   const [isRenameDegenModalOpen, setIsRenameDegenModalOpen] =
     useState<boolean>(false);
@@ -35,6 +44,17 @@ const MyDegens = (): JSX.Element => {
   const [isClaimDialog, setIsClaimDialog] = useState<boolean>(false);
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { favs: favsData } = useProfileFavDegens();
+  const [favs, setFavs] = useState<string[]>(
+    window.localStorage.getItem('FAV_DEGENS')?.split(',') || [],
+  );
+
+  useEffect(() => {
+    if (favsData && favsData !== 'null') {
+      setFavs(favsData.split(','));
+      window.localStorage.setItem('FAV_DEGENS', favsData);
+    }
+  }, [favsData]);
 
   const { loading, characters } = useContext(BalanceContext);
 
@@ -113,6 +133,27 @@ const MyDegens = (): JSX.Element => {
     setIsDegenModalOpen(true);
   };
 
+  const handleClickFavorite = useCallback(
+    async (degen) => {
+      const newFavs = xor(
+        favs.filter((f) => f),
+        [degen.id],
+      );
+      await fetch(`${PROFILE_FAV_DEGENS_API}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          favorites: newFavs.toString(),
+        }),
+        headers: {
+          authorizationToken: authToken,
+        } as any,
+      });
+      window.localStorage.setItem('FAV_DEGENS', newFavs.toString());
+      setFavs(newFavs);
+    },
+    [authToken, favs],
+  );
+
   return (
     <>
       <SectionSlider
@@ -140,11 +181,13 @@ const MyDegens = (): JSX.Element => {
             <Box sx={BoxDegenStyles} key={degen.id}>
               <DegenCard
                 degen={degen}
+                favs={favs}
                 isDashboardDegen
                 onClickDetail={() => handleViewTraits(degen)}
                 onClickEditName={() => handleClickEditName(degen)}
                 onClickClaim={() => handleClaimDegen(degen)}
                 onClickRent={() => handleRentDegen(degen)}
+                onClickFavorite={() => handleClickFavorite(degen)}
               />
             </Box>
           ))
