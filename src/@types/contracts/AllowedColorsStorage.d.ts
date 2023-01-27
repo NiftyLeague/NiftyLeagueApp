@@ -13,62 +13,62 @@ import {
   ContractTransaction,
   Overrides,
   CallOverrides,
-} from "ethers";
-import { BytesLike } from "@ethersproject/bytes";
-import { Listener, Provider } from "@ethersproject/providers";
-import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
+} from 'ethers';
+import { BytesLike } from '@ethersproject/bytes';
+import { Listener, Provider } from '@ethersproject/providers';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
+import type { TypedEventFilter, TypedEvent, TypedListener } from './common';
 
 interface AllowedColorsStorageInterface extends ethers.utils.Interface {
   functions: {
-    "isAllowedColor(uint256,uint256)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "setAllowedColorsOnTribe(uint256,uint256[],bool)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
+    'isAllowedColor(uint256,uint256)': FunctionFragment;
+    'owner()': FunctionFragment;
+    'renounceOwnership()': FunctionFragment;
+    'setAllowedColorsOnTribe(uint256,uint256[],bool)': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "isAllowedColor",
-    values: [BigNumberish, BigNumberish]
+    functionFragment: 'isAllowedColor',
+    values: [BigNumberish, BigNumberish],
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setAllowedColorsOnTribe",
-    values: [BigNumberish, BigNumberish[], boolean]
+    functionFragment: 'renounceOwnership',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [string]
+    functionFragment: 'setAllowedColorsOnTribe',
+    values: [BigNumberish, BigNumberish[], boolean],
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'transferOwnership',
+    values: [string],
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "isAllowedColor",
-    data: BytesLike
+    functionFragment: 'isAllowedColor',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setAllowedColorsOnTribe",
-    data: BytesLike
+    functionFragment: 'renounceOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
+    functionFragment: 'setAllowedColorsOnTribe',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: 'transferOwnership',
+    data: BytesLike,
   ): Result;
 
   events: {
-    "OwnershipTransferred(address,address)": EventFragment;
+    'OwnershipTransferred(address,address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
 }
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -81,26 +81,26 @@ export class AllowedColorsStorage extends BaseContract {
   deployed(): Promise<this>;
 
   listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): Array<TypedListener<EventArgsArray, EventArgsObject>>;
   off<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   on<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   once<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): this;
 
   listeners(eventName?: string): Array<Listener>;
@@ -113,7 +113,7 @@ export class AllowedColorsStorage extends BaseContract {
   queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
     event: TypedEventFilter<EventArgsArray, EventArgsObject>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
   interface: AllowedColorsStorageInterface;
@@ -122,57 +122,57 @@ export class AllowedColorsStorage extends BaseContract {
     isAllowedColor(
       tribe: BigNumberish,
       color: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[boolean]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     setAllowedColorsOnTribe(
       tribe: BigNumberish,
       colors: BigNumberish[],
       allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
   };
 
   isAllowedColor(
     tribe: BigNumberish,
     color: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<boolean>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   setAllowedColorsOnTribe(
     tribe: BigNumberish,
     colors: BigNumberish[],
     allowed: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   callStatic: {
     isAllowedColor(
       tribe: BigNumberish,
       color: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<boolean>;
 
     owner(overrides?: CallOverrides): Promise<string>;
@@ -183,19 +183,19 @@ export class AllowedColorsStorage extends BaseContract {
       tribe: BigNumberish,
       colors: BigNumberish[],
       allowed: boolean,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
   };
 
   filters: {
-    "OwnershipTransferred(address,address)"(
+    'OwnershipTransferred(address,address)'(
       previousOwner?: string | null,
-      newOwner?: string | null
+      newOwner?: string | null,
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
@@ -203,7 +203,7 @@ export class AllowedColorsStorage extends BaseContract {
 
     OwnershipTransferred(
       previousOwner?: string | null,
-      newOwner?: string | null
+      newOwner?: string | null,
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
@@ -214,25 +214,25 @@ export class AllowedColorsStorage extends BaseContract {
     isAllowedColor(
       tribe: BigNumberish,
       color: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     setAllowedColorsOnTribe(
       tribe: BigNumberish,
       colors: BigNumberish[],
       allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
   };
 
@@ -240,25 +240,25 @@ export class AllowedColorsStorage extends BaseContract {
     isAllowedColor(
       tribe: BigNumberish,
       color: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     setAllowedColorsOnTribe(
       tribe: BigNumberish,
       colors: BigNumberish[],
       allowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
   };
 }

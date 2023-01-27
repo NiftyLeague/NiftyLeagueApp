@@ -13,41 +13,41 @@ import {
   ContractTransaction,
   Overrides,
   CallOverrides,
-} from "ethers";
-import { BytesLike } from "@ethersproject/bytes";
-import { Listener, Provider } from "@ethersproject/providers";
-import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
+} from 'ethers';
+import { BytesLike } from '@ethersproject/bytes';
+import { Listener, Provider } from '@ethersproject/providers';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
+import type { TypedEventFilter, TypedEvent, TypedListener } from './common';
 
 interface TokenTimelockInterface extends ethers.utils.Interface {
   functions: {
-    "beneficiary()": FunctionFragment;
-    "release()": FunctionFragment;
-    "releaseTime()": FunctionFragment;
-    "token()": FunctionFragment;
+    'beneficiary()': FunctionFragment;
+    'release()': FunctionFragment;
+    'releaseTime()': FunctionFragment;
+    'token()': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "beneficiary",
-    values?: undefined
+    functionFragment: 'beneficiary',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "release", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'release', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "releaseTime",
-    values?: undefined
+    functionFragment: 'releaseTime',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "token", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'token', values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "beneficiary",
-    data: BytesLike
+    functionFragment: 'beneficiary',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'release', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "releaseTime",
-    data: BytesLike
+    functionFragment: 'releaseTime',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
 
   events: {};
 }
@@ -58,26 +58,26 @@ export class TokenTimelock extends BaseContract {
   deployed(): Promise<this>;
 
   listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): Array<TypedListener<EventArgsArray, EventArgsObject>>;
   off<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   on<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   once<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): this;
 
   listeners(eventName?: string): Array<Listener>;
@@ -90,7 +90,7 @@ export class TokenTimelock extends BaseContract {
   queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
     event: TypedEventFilter<EventArgsArray, EventArgsObject>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
   interface: TokenTimelockInterface;
@@ -99,7 +99,7 @@ export class TokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<[string]>;
 
     release(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     releaseTime(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -110,7 +110,7 @@ export class TokenTimelock extends BaseContract {
   beneficiary(overrides?: CallOverrides): Promise<string>;
 
   release(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   releaseTime(overrides?: CallOverrides): Promise<BigNumber>;
@@ -133,7 +133,7 @@ export class TokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<BigNumber>;
 
     release(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     releaseTime(overrides?: CallOverrides): Promise<BigNumber>;
@@ -145,7 +145,7 @@ export class TokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     release(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     releaseTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
