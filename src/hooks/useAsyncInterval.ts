@@ -26,7 +26,7 @@ export default function useAsyncInterval(
 
     const handleInterval = async () => {
       if (leading) await tick();
-      const id = setIntervalAsync(tick, delay);
+      const id = setIntervalAsync(tick, delay as number);
       return async () => {
         await clearIntervalAsync(id);
       };
