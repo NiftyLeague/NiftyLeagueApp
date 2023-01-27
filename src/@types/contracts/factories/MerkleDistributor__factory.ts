@@ -2,140 +2,140 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import { Provider } from "@ethersproject/providers";
+import { Contract, Signer, utils } from 'ethers';
+import { Provider } from '@ethersproject/providers';
 import type {
   MerkleDistributor,
   MerkleDistributorInterface,
-} from "../MerkleDistributor";
+} from '../MerkleDistributor';
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "token_",
-        type: "address",
+        internalType: 'address',
+        name: 'token_',
+        type: 'address',
       },
       {
-        internalType: "bytes32",
-        name: "merkleRoot_",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'merkleRoot_',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "nonpayable",
-    type: "constructor",
+    stateMutability: 'nonpayable',
+    type: 'constructor',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: false,
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'index',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
       },
     ],
-    name: "Claimed",
-    type: "event",
+    name: 'Claimed',
+    type: 'event',
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'index',
+        type: 'uint256',
       },
       {
-        internalType: "address",
-        name: "account",
-        type: "address",
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
       },
       {
-        internalType: "bytes32[]",
-        name: "merkleProof",
-        type: "bytes32[]",
+        internalType: 'bytes32[]',
+        name: 'merkleProof',
+        type: 'bytes32[]',
       },
     ],
-    name: "claim",
+    name: 'claim',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
       },
     ],
-    name: "collectUnclaimed",
+    name: 'collectUnclaimed',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'index',
+        type: 'uint256',
       },
     ],
-    name: "isClaimed",
+    name: 'isClaimed',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "merkleRoot",
+    name: 'merkleRoot',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "token",
+    name: 'token',
     outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ];
 
@@ -146,7 +146,7 @@ export class MerkleDistributor__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): MerkleDistributor {
     return new Contract(address, _abi, signerOrProvider) as MerkleDistributor;
   }

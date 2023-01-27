@@ -14,18 +14,22 @@ jobs:
           node-version: 16.18.1
           cache: 'yarn'
       - name: Install dependencies
-        uses: borales/actions-yarn@v3.0.0
+        uses: borales/actions-yarn@v4
         with:
           cmd: install
       - name: Run prettier
-        uses: borales/actions-yarn@v3.0.0
+        uses: borales/actions-yarn@v4
         with:
           cmd: format
       - name: Check linter
-        uses: borales/actions-yarn@v3.0.0
+        uses: borales/actions-yarn@v4
         with:
           cmd: lint
-      - name: Build the project
-        uses: borales/actions-yarn@v3.0.0
+      - name: Type check
+        uses: borales/actions-yarn@v4
         with:
-          cmd: build
+          cmd: check-types
+      - name: Build the project
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build:test

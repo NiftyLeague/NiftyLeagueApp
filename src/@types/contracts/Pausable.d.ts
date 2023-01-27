@@ -12,28 +12,28 @@ import {
   BaseContract,
   ContractTransaction,
   CallOverrides,
-} from "ethers";
-import { BytesLike } from "@ethersproject/bytes";
-import { Listener, Provider } from "@ethersproject/providers";
-import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
+} from 'ethers';
+import { BytesLike } from '@ethersproject/bytes';
+import { Listener, Provider } from '@ethersproject/providers';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
+import type { TypedEventFilter, TypedEvent, TypedListener } from './common';
 
 interface PausableInterface extends ethers.utils.Interface {
   functions: {
-    "paused()": FunctionFragment;
+    'paused()': FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
 
   events: {
-    "Paused(address)": EventFragment;
-    "Unpaused(address)": EventFragment;
+    'Paused(address)': EventFragment;
+    'Unpaused(address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Paused'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Unpaused'): EventFragment;
 }
 
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
@@ -46,26 +46,26 @@ export class Pausable extends BaseContract {
   deployed(): Promise<this>;
 
   listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): Array<TypedListener<EventArgsArray, EventArgsObject>>;
   off<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   on<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   once<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>
+    listener: TypedListener<EventArgsArray, EventArgsObject>,
   ): this;
   removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>
+    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
   ): this;
 
   listeners(eventName?: string): Array<Listener>;
@@ -78,7 +78,7 @@ export class Pausable extends BaseContract {
   queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
     event: TypedEventFilter<EventArgsArray, EventArgsObject>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
   interface: PausableInterface;
@@ -94,14 +94,14 @@ export class Pausable extends BaseContract {
   };
 
   filters: {
-    "Paused(address)"(
-      account?: null
+    'Paused(address)'(
+      account?: null,
     ): TypedEventFilter<[string], { account: string }>;
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "Unpaused(address)"(
-      account?: null
+    'Unpaused(address)'(
+      account?: null,
     ): TypedEventFilter<[string], { account: string }>;
 
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
