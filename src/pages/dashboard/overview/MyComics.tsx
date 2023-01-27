@@ -9,6 +9,7 @@ import EmptyState from 'components/EmptyState';
 import ViewComicDialog from 'components/dialog/ViewComicDialog';
 import useComicsBalance from 'hooks/useComicsBalance';
 import ComicPlaceholder from 'components/cards/Skeleton/ComicPlaceholder';
+import { COMICS_OPENSEA_URL } from 'constants/url';
 
 const MyComics = (): JSX.Element => {
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
@@ -28,38 +29,29 @@ const MyComics = (): JSX.Element => {
   };
 
   const handleBuyComics = () => {
-    window.open(
-      'https://opensea.io/collection/nifty-league-launch-comics',
-      '_blank',
-    );
+    window.open(COMICS_OPENSEA_URL, '_blank');
   };
 
   const settings = {
-    slidesToShow: 3,
+    slidesToShow: 4,
     adaptiveHeight: true,
     responsive: [
       {
         breakpoint: 1750,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
         },
       },
       {
         breakpoint: 1350,
         settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 1200,
-        settings: {
-          slidesToShow: 2,
+          slidesToShow: 6,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 4,
         },
       },
     ],
