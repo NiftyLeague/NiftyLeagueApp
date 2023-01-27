@@ -7,6 +7,7 @@
     "prepare": "husky install",
     "start": "react-app-rewired start",
     "build": "react-app-rewired --max_old_space_size=8198 build",
+    "build:test": "CI=false react-app-rewired --max_old_space_size=8198 build",
     "test": "react-app-rewired test --watchAll=false",
     "eject": "react-app-rewired eject",
     "lint": "npm run lint:script",
