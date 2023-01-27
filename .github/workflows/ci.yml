@@ -25,6 +25,10 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: lint
+      - name: Type check
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: check-types
       - name: Build the project
         uses: borales/actions-yarn@v4
         with:

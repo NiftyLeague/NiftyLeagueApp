@@ -5,7 +5,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { IconChevronDown } from '@tabler/icons';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -36,7 +36,7 @@ const FilterAccordion = ({
       }}
     >
       <AccordionSummary
-        expandIcon={<IconChevronDown width={18} />}
+        expandIcon={<KeyboardArrowDownIcon width={18} />}
         sx={{
           minHeight: 36,
           padding: '0px 14px',
