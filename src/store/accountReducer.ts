@@ -14,6 +14,7 @@ export const initialAccountState: InitialLoginContextProps = {
 };
 
 const accountReducer = (
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   state = initialAccountState,
   action: AccountReducerActionProps,
 ) => {
