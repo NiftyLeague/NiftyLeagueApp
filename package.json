@@ -42,7 +42,7 @@
     "@walletconnect/web3-provider": "1.8.0",
     "axios": "^0.27.2",
     "bnc-notify": "1.9.6",
-    "bnc-sdk": "4.6.0",
+    "bnc-sdk": "4.6.5",
     "burner-provider": "1.0.38",
     "clsx": "1.2.1",
     "csstype": "^3.0.10",
