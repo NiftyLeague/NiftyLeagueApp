@@ -41,7 +41,7 @@
     "@tabler/icons": "^1.53.0",
     "@walletconnect/web3-provider": "1.8.0",
     "axios": "^0.27.2",
-    "bnc-notify": "1.9.6",
+    "bnc-notify": "1.9.8",
     "bnc-sdk": "4.6.0",
     "burner-provider": "1.0.38",
     "clsx": "1.2.1",
