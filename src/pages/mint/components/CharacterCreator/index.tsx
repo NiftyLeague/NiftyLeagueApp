@@ -28,9 +28,7 @@ const buildVersion = isMobileOnly
   ? (process.env.REACT_APP_UNITY_MOBILE_CREATOR_BASE_VERSION as string)
   : (process.env.REACT_APP_UNITY_CREATOR_BASE_VERSION as string);
 
-const useCompressed = Boolean(
-  process.env.REACT_APP_UNITY_USE_COMPRESSED || 'true',
-);
+const useCompressed = process.env.REACT_APP_UNITY_USE_COMPRESSED !== 'false';
 
 const creatorContext = new UnityContext({
   loaderUrl: `${baseUrl}/Build/${buildVersion}.loader.js`,
