@@ -28,11 +28,17 @@ const buildVersion = isMobileOnly
   ? (process.env.REACT_APP_UNITY_MOBILE_CREATOR_BASE_VERSION as string)
   : (process.env.REACT_APP_UNITY_CREATOR_BASE_VERSION as string);
 
+const useCompressed = Boolean(
+  process.env.REACT_APP_UNITY_USE_COMPRESSED || 'true',
+);
+
 const creatorContext = new UnityContext({
   loaderUrl: `${baseUrl}/Build/${buildVersion}.loader.js`,
-  dataUrl: `${baseUrl}/Build/${buildVersion}.data.br`,
-  frameworkUrl: `${baseUrl}/Build/${buildVersion}.framework.js.br`,
-  codeUrl: `${baseUrl}/Build/${buildVersion}.wasm.br`,
+  dataUrl: `${baseUrl}/Build/${buildVersion}.data${useCompressed ? '.br' : ''}`,
+  frameworkUrl: `${baseUrl}/Build/${buildVersion}.framework.js${
+    useCompressed ? '.br' : ''
+  }`,
+  codeUrl: `${baseUrl}/Build/${buildVersion}.wasm${useCompressed ? '.br' : ''}`,
   streamingAssetsUrl: `${baseUrl}/StreamingAssets`,
   companyName: 'NiftyLeague',
   productName: 'NiftyCreator',
