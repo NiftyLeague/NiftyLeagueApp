@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 // material-ui
@@ -18,7 +18,6 @@ import {
   Button,
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
-import BurnIcon from '@mui/icons-material/Whatshot';
 
 // project imports
 import Breadcrumbs from 'components/extended/Breadcrumbs';
@@ -96,7 +95,6 @@ const MainLayout = () => {
   const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
   const location = useLocation();
-  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { drawerOpen } = useSelector((state) => state.menu);
@@ -217,41 +215,6 @@ const MainLayout = () => {
                 onClick={() => switchToNetwork(targetNetwork.chainId)}
               >
                 Switch
-              </Button>
-            </Box>
-          )}
-        {address &&
-          targetNetwork?.name &&
-          targetNetwork.chainId === selectedChainId &&
-          location.pathname === '/' && (
-            <Box
-              sx={{
-                display: 'flex',
-                backgroundColor: theme.palette.success.light,
-                paddingX: 1,
-                position: 'absolute',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'black',
-                alignSelf: 'center',
-              }}
-              height={40}
-              zIndex={1}
-            >
-              <Icon sx={{ width: 24, height: 24 }}>
-                <BurnIcon />
-              </Icon>
-              <Typography px={2} fontSize={20} fontWeight={600}>
-                Comic Burner is now live!!
-              </Typography>
-              <Button
-                sx={{ padding: '2px 16px' }}
-                variant="contained"
-                onClick={() => {
-                  navigate('/dashboard/items/burner');
-                }}
-              >
-                Check it out
               </Button>
             </Box>
           )}
