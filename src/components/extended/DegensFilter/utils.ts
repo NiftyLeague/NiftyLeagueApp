@@ -96,7 +96,11 @@ export const tranformDataByFilter = (
     return true;
   });
 
-  if (sort === 'priceUp') {
+  if (sort === 'idUp') {
+    result.sort((a, b) => Number(a.id) - Number(b.id));
+  } else if (sort === 'idDown') {
+    result.sort((a, b) => Number(b.id) - Number(a.id));
+  } else if (sort === 'priceUp') {
     result.sort((a, b) => Number(a.price) - Number(b.price));
   } else if (sort === 'priceDown') {
     result.sort((a, b) => Number(b.price) - Number(a.price));
