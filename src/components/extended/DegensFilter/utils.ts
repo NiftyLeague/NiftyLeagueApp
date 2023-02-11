@@ -64,7 +64,12 @@ export const tranformDataByFilter = (
 
     if (
       tribes.length > 0 &&
-      !tribes.find((trb: string) => tribe === trb.toLocaleLowerCase())
+      !tribes.find(
+        (trb: string) =>
+          tribe === trb.toLocaleLowerCase() ||
+          // TODO: remove unnecessary check once fetch data is updated
+          (!tribe && trb.toLocaleLowerCase() === 'hydra'),
+      )
     ) {
       return false;
     }
