@@ -116,7 +116,7 @@ const DashboardDegensPage = (): JSX.Element => {
           price_daily: 0,
           rental_count: 0,
           total_rented: 0,
-          tribe: 'egg',
+          tribe: 'Hydra',
         },
     );
 
