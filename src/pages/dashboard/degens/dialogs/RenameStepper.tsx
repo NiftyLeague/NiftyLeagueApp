@@ -16,7 +16,7 @@ import Stepper from '@mui/material/Stepper';
 import DoneAll from '@mui/icons-material/DoneAll';
 import HowToReg from '@mui/icons-material/HowToReg';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import NFTL from 'assets/images/nl_logo_white.png';
+import NFTL from 'assets/images/logo.png';
 
 const icons: { [index: string]: React.ReactElement } = {
   1: <img src={NFTL} alt="NFTL" width={30} />,
