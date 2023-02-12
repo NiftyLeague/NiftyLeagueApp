@@ -23,7 +23,7 @@ const MtGawxGamePage = Loadable(
 const CryptoWinterGamePage = Loadable(
   lazy(() => import('pages/games/PlayOnGame/CryptoWinterGame')),
 );
-const AllRentalsPage = Loadable(lazy(() => import('pages/all-degens')));
+const AllDegensPage = Loadable(lazy(() => import('pages/all-degens')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
 
@@ -52,16 +52,16 @@ const PublicRoutes = {
       element: <LeaderboardPage />,
     },
     {
-      path: '/all-degens',
-      element: <AllRentalsPage />,
+      path: '/degens',
+      element: <AllDegensPage />,
     },
     {
       path: '/degens/:id',
       element: <DegenTraitsDetailsPage />,
     },
     {
-      path: '/all-degens/:walletAddress',
-      element: <AllRentalsPage />,
+      path: '/degens/:walletAddress',
+      element: <AllDegensPage />,
     },
     {
       path: '/games/smashers',

@@ -117,7 +117,7 @@ const MainLayout = () => {
     [],
   );
   const isNoFilterPage =
-    location && /(all-degens|dashboard\/degens)/.test(location.pathname);
+    location && /(degens|dashboard\/degens)/.test(location.pathname);
 
   const getContent = () => {
     if (container) {
@@ -152,7 +152,7 @@ const MainLayout = () => {
     switch (location.pathname) {
       case '/':
         return pageMeta.main.title;
-      case '/all-degens':
+      case '/degens':
         return pageMeta.allDegens.title;
       case '/games':
         return pageMeta.games.title;

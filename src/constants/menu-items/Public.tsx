@@ -5,6 +5,7 @@ import {
   IconListNumbers,
   IconSquarePlus,
   IconTag,
+  IconMoodCrazyHappy,
 } from '@tabler/icons';
 
 // constant
@@ -14,6 +15,7 @@ const icons = {
   IconListNumbers,
   IconSquarePlus,
   IconTag,
+  IconMoodCrazyHappy,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -49,11 +51,11 @@ const PublicItems = {
       breadcrumbs: false,
     },
     {
-      id: 'all-degens',
+      id: 'degens',
       title: 'All DEGENs',
       type: 'item',
-      url: '/all-degens',
-      icon: icons.IconTag,
+      url: '/degens',
+      icon: icons.IconMoodCrazyHappy,
       breadcrumbs: false,
     },
     {
