@@ -156,6 +156,14 @@ const MainLayout = () => {
         return pageMeta.allDegens.title;
       case '/games':
         return pageMeta.games.title;
+      case '/games/smashers':
+        return pageMeta.games.smashers.title;
+      case '/games/wen-game':
+        return pageMeta.games.wen.title;
+      case '/games/crypto-winter':
+        return pageMeta.games.cryptoWinter.title;
+      case '/games/mt-gawx':
+        return pageMeta.games.mt_gawx.title;
       case '/mint-o-matic':
         return pageMeta.mint_o_matic.title;
       case '/leaderboards':
