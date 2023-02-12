@@ -31,7 +31,7 @@ import {
 import { DEBUG } from 'constants/index';
 import TokenInfoBox from './TokenInfoBox';
 import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
-import NFTL from 'assets/images/logo.png';
+import NFTL from 'assets/images/NFTL.png';
 import BalanceContext from 'contexts/BalanceContext';
 
 const useStyles = makeStyles((theme: Theme) => ({

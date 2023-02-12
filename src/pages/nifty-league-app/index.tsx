@@ -127,7 +127,7 @@ const NiftyLeagueAppPage = () => {
               },
             }}
           >
-            <Link to="/all-degens" onClick={handleViewAllTraits}>
+            <Link to="/degens" onClick={handleViewAllTraits}>
               <Button variant="outlined">View All Rentals</Button>
             </Link>
           </Box>

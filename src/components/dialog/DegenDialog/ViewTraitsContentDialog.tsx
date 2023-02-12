@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import { sendEvent } from 'utils/google-analytics';
 import { v4 as uuidv4 } from 'uuid';
+import OpenSea from 'assets/images/icons/OpenSea.png';
 
 export interface ViewTraitsContentDialogProps {
   degen?: Degen;
@@ -66,9 +67,18 @@ const ViewTraitsContentDialog = ({
               {displayName}
             </Typography>
           )}
-          <Typography color="gray">#{degen?.id}</Typography>
+          <a
+            href={`https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${degen?.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Typography color="gray" sx={{ textDecoration: 'none' }}>
+              DEGEN ID #{degen?.id}{' '}
+              <img src={OpenSea} alt="NiftyLogo" width="16" />
+            </Typography>
+          </a>
         </Stack>
-        <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
+        {/* <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
           <Typography color="rgb(75, 7, 175)">
             {degenDetail?.multiplier}x Multiplier
           </Typography>
@@ -78,7 +88,7 @@ const ViewTraitsContentDialog = ({
           <Typography color="rgb(75, 7, 175)">
             {degenDetail?.price} NFTL/ 1 Week
           </Typography>
-        </Stack>
+        </Stack> */}
         <Stack direction="column" alignItems="center" gap={1}>
           <Typography color="gray">
             Owned by{' '}
@@ -142,11 +152,11 @@ const ViewTraitsContentDialog = ({
             </Grid>
           </Stack>
           <Stack direction="column" gap={1} width="100%">
-            {false && (
+            {/* {false && (
               <Button variant="contained" fullWidth onClick={onRent || onClaim}>
                 {onRent ? 'Rent Degen' : 'Claim Degen'}
               </Button>
-            )}
+            )} */}
             {onClose && (
               <Button fullWidth onClick={onClose}>
                 Close

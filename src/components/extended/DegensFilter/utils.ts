@@ -17,7 +17,7 @@ export const tranformDataByFilter = (
   }: DegenFilter,
 ): Degen[] => {
   const walletAddress = window.location.pathname.replace(
-    /(\/(all-degens)|\/)/g,
+    /(\/(degens)|\/)/g,
     '',
   );
   let result = degens.filter((degen: Degen) => {
@@ -64,7 +64,12 @@ export const tranformDataByFilter = (
 
     if (
       tribes.length > 0 &&
-      !tribes.find((trb: string) => tribe === trb.toLocaleLowerCase())
+      !tribes.find(
+        (trb: string) =>
+          tribe === trb.toLocaleLowerCase() ||
+          // TODO: remove unnecessary check once fetch data is updated
+          (!tribe && trb.toLocaleLowerCase() === 'hydra'),
+      )
     ) {
       return false;
     }
@@ -96,7 +101,11 @@ export const tranformDataByFilter = (
     return true;
   });
 
-  if (sort === 'priceUp') {
+  if (sort === 'idUp') {
+    result.sort((a, b) => Number(a.id) - Number(b.id));
+  } else if (sort === 'idDown') {
+    result.sort((a, b) => Number(b.id) - Number(a.id));
+  } else if (sort === 'priceUp') {
     result.sort((a, b) => Number(a.price) - Number(b.price));
   } else if (sort === 'priceDown') {
     result.sort((a, b) => Number(b.price) - Number(a.price));
