@@ -36,12 +36,12 @@ const PrivateItems = {
           type: 'item',
           url: '/dashboard/items',
         },
-        {
-          id: 'rentals',
-          title: 'Rentals',
-          type: 'item',
-          url: '/dashboard/rentals',
-        },
+        // {
+        //   id: 'rentals',
+        //   title: 'Rentals',
+        //   type: 'item',
+        //   url: '/dashboard/rentals',
+        // },
       ],
     },
   ],

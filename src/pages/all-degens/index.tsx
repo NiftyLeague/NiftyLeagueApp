@@ -38,7 +38,7 @@ import DegensTopNav from 'components/extended/DegensTopNav';
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
 
-const AllRentalsPage = (): JSX.Element => {
+const AllDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -77,11 +77,7 @@ const AllRentalsPage = (): JSX.Element => {
     const originalDegens: Degen[] = Object.values(data);
     setDefaultValues(getDefaultFilterValueFromData(originalDegens));
     // Filter out rent disabled degens in Feed
-    setDegens(
-      originalDegens.filter(
-        (degen) => degen?.is_active || degen?.owner === address.toLowerCase(),
-      ),
-    );
+    setDegens(originalDegens);
     const params = Object.fromEntries(searchParams.entries());
     let newDegens = originalDegens;
     if (!isEmpty(params)) {
@@ -112,7 +108,16 @@ const AllRentalsPage = (): JSX.Element => {
 
   const handleFilter = useCallback(
     (filter: DegenFilter) => {
-      const newFilters = { ...filter, sort: filters.sort };
+      // TODO: Remove temp filter overrides if we want to enable filter functionailty
+      // temp hardcoded to empty to avoid all filtering
+      const newFilters = {
+        ...filter,
+        prices: [],
+        rentals: [],
+        wearable: [],
+        cosmetics: [],
+        sort: filters.sort,
+      };
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
       setFilteredData(result);
@@ -142,11 +147,11 @@ const AllRentalsPage = (): JSX.Element => {
     setIsDegenModalOpen(true);
   }, []);
 
-  const handleRentDegen = useCallback((degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsRentDialog(true);
-    setIsDegenModalOpen(true);
-  }, []);
+  // const handleRentDegen = useCallback((degen: Degen): void => {
+  //   setSelectedDegen(degen);
+  //   setIsRentDialog(true);
+  //   setIsDegenModalOpen(true);
+  // }, []);
 
   const isGridView = layoutMode === 'gridView';
 
@@ -196,13 +201,13 @@ const AllRentalsPage = (): JSX.Element => {
           size={isGridView ? 'normal' : 'small'}
           onClickEditName={() => handleClickEditName(degen)}
           onClickDetail={() => handleViewTraits(degen)}
-          onClickRent={() => handleRentDegen(degen)}
+          // onClickRent={() => handleRentDegen(degen)}
         />
       </Grid>
     ),
     [
       handleClickEditName,
-      handleRentDegen,
+      // handleRentDegen,
       handleViewTraits,
       isDrawerOpen,
       isGridView,
@@ -290,4 +295,4 @@ const AllRentalsPage = (): JSX.Element => {
   );
 };
 
-export default AllRentalsPage;
+export default AllDegensPage;
