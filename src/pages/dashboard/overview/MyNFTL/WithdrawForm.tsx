@@ -207,8 +207,10 @@ const WithdrawForm = ({
               <NumberFormat
                 {...field}
                 allowNegative={false}
-                isAllowed={({ value }) => Number(value) <= Number(balance)}
-                label="Amount of NFTL to withdraw"
+                isAllowed={({ value }) =>
+                  Number(value) <= Number(balance) && Number(value) <= 100000
+                }
+                label="Amount of NFTL to withdraw (100K Weekly Limit)"
                 thousandSeparator
                 customInput={TextField}
                 onValueChange={(e) => {
@@ -297,10 +299,11 @@ const WithdrawForm = ({
           disabled={
             !getValues('isCheckedTerm') ||
             balanceWithdraw === 0 ||
+            balanceWithdraw >= 100000 ||
             withdrawDisabled
           }
         >
-          Withdraw earnings
+          Withdraw NFTL
         </LoadingButton>
       </Stack>
     </form>
