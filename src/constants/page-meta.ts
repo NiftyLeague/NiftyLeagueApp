@@ -7,6 +7,18 @@ export const pageMeta = {
   },
   games: {
     title: 'Games | Nifty League',
+    smashers: {
+      title: 'Smashers | Nifty League',
+    },
+    wen: {
+      title: 'WEN Game | Nifty League',
+    },
+    cryptoWinter: {
+      title: 'Crypto Winter | Nifty League',
+    },
+    mt_gawx: {
+      title: 'Mt Gawx | Nifty League',
+    },
   },
   mint_o_matic: {
     title: 'Mint-O-Matic | Nifty League',
