@@ -1,12 +1,12 @@
 export const pageMeta = {
   main: {
-    title: 'Nifty League NFT Gaming App',
+    title: 'App | Nifty League',
   },
   allDegens: {
     title: 'All DEGENs | Nifty League',
   },
   games: {
-    title: 'NFT Games | Nifty League',
+    title: 'Games | Nifty League',
   },
   leaderboards: {
     title: 'Leaderboards | Nifty League',
@@ -19,8 +19,8 @@ export const pageMeta = {
     items: {
       title: 'My Comics & Items | Nifty League',
     },
-    rentals: {
-      title: 'My Rental Stats | Nifty League',
-    },
+    // rentals: {
+    //   title: 'My Rental Stats | Nifty League',
+    // },
   },
 };

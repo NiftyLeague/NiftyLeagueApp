@@ -1,4 +1,4 @@
-import { useContext, memo, useState, useEffect } from 'react';
+import { useContext, memo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Box,
@@ -11,13 +11,13 @@ import {
   Theme,
   Typography,
   useTheme,
-  Dialog,
+  // Dialog,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIconFilled from '@mui/icons-material/Favorite';
 import FavoriteIconOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 import { toast } from 'react-toastify';
-import Chip from 'components/extended/Chip';
+// import Chip from 'components/extended/Chip';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from 'hooks/useClaimableNFTL';
 import { formatNumberToDisplay } from 'utils/numbers';
@@ -25,24 +25,24 @@ import NetworkContext from 'contexts/NetworkContext';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from 'utils/file';
 import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
-import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
+// import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
 import { Degen } from 'types/degens';
-import { DISABLE_RENT_API_URL } from 'constants/url';
+// import { DISABLE_RENT_API_URL } from 'constants/url';
 import useAuth from 'hooks/useAuth';
 
-const chipStyles = (isSmall: boolean) => ({
-  color: 'white',
-  borderRadius: 1,
-  width: '100%',
-  fontSize: isSmall ? 9 : 11,
-  fontWeight: 'bold',
-  m: isSmall ? 0.25 : 0.5,
-  '&:hover': {
-    backgroundColor: 'transparent',
-    cursor: 'auto',
-    color: 'white',
-  },
-});
+// const chipStyles = (isSmall: boolean) => ({
+//   color: 'white',
+//   borderRadius: 1,
+//   width: '100%',
+//   fontSize: isSmall ? 9 : 11,
+//   fontWeight: 'bold',
+//   m: isSmall ? 0.25 : 0.5,
+//   '&:hover': {
+//     backgroundColor: 'transparent',
+//     cursor: 'auto',
+//     color: 'white',
+//   },
+// });
 
 export interface DegenCardProps {
   degen: Degen;
@@ -82,7 +82,7 @@ const DegenCard: React.FC<
 > = memo(
   ({
     degen,
-    degenEquipEnabled = false,
+    // degenEquipEnabled = false,
     favs = [],
     isDashboardDegen = false,
     size = 'normal',
@@ -90,33 +90,37 @@ const DegenCard: React.FC<
     onClickClaim,
     onClickDetail,
     onClickEditName,
-    onClickRent,
-    onClickEquip,
+    // onClickRent,
+    // onClickEquip,
     onClickFavorite,
   }) => {
     const { palette } = useTheme();
-    const { id, name, multiplier, price, rental_count, is_active } = degen;
+    const {
+      id,
+      name,
+      // multiplier, price, rental_count, is_active
+    } = degen;
     const fav = favs.some((f) => f === id);
     const { authToken } = useAuth();
-    const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
-      useState<boolean>(false);
-    const [isEnabled, setIsEnabled] = useState(is_active);
-    useEffect(() => {
-      const getIsEnabled = async () => {
-        if (authToken && id) {
-          const res = await fetch(
-            `${DISABLE_RENT_API_URL}activate?degen_id=${id}`,
-            {
-              method: 'GET',
-              headers: { authorizationToken: authToken },
-            },
-          );
-          const json = await res.json();
-          setIsEnabled(!json?.price);
-        }
-      };
-      if (isDashboardDegen) getIsEnabled();
-    }, [authToken, id, isDashboardDegen]);
+    // const [isEnableDisableDegenModalOpen, setIsEnableDisableDegenModalOpen] =
+    //   useState<boolean>(false);
+    // const [isEnabled, setIsEnabled] = useState(is_active);
+    // useEffect(() => {
+    //   const getIsEnabled = async () => {
+    //     if (authToken && id) {
+    //       const res = await fetch(
+    //         `${DISABLE_RENT_API_URL}activate?degen_id=${id}`,
+    //         {
+    //           method: 'GET',
+    //           headers: { authorizationToken: authToken },
+    //         },
+    //       );
+    //       const json = await res.json();
+    //       setIsEnabled(!json?.price);
+    //     }
+    //   };
+    //   if (isDashboardDegen) getIsEnabled();
+    // }, [authToken, id, isDashboardDegen]);
 
     const onClickDownload = async () => {
       if (authToken) {
@@ -148,7 +152,7 @@ const DegenCard: React.FC<
             sx={{ height: size === 'small' ? 200 : undefined }}
           />
         )}
-        <Stack
+        {/* <Stack
           direction="row"
           justifyContent="space-evenly"
           sx={{ m: size === 'small' ? 0.5 : 1, width: 'auto' }}
@@ -174,8 +178,8 @@ const DegenCard: React.FC<
             variant="outlined"
             size="small"
           />
-        </Stack>
-        <CardContent sx={{ py: 1, px: 2 }}>
+        </Stack> */}
+        <CardContent sx={{ py: 2, px: 2 }}>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -222,7 +226,7 @@ const DegenCard: React.FC<
             gap: size === 'small' ? 0.5 : 1,
           }}
         >
-          {false && (
+          {/* {false && (
             <Button
               variant="contained"
               fullWidth
@@ -234,8 +238,8 @@ const DegenCard: React.FC<
             >
               Rent
             </Button>
-          )}
-          {degenEquipEnabled && isDashboardDegen && onClickEquip ? (
+          )} */}
+          {/* {degenEquipEnabled && isDashboardDegen && onClickEquip ? (
             <Button
               variant="outlined"
               color="primary"
@@ -248,20 +252,20 @@ const DegenCard: React.FC<
             >
               Equip
             </Button>
-          ) : (
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{
-                minWidth: '32%',
-                fontSize: buttonFontSize,
-              }}
-              onClick={onClickDetail}
-            >
-              Traits
-            </Button>
-          )}
+          ) : ( */}
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            sx={{
+              minWidth: '32%',
+              fontSize: buttonFontSize,
+            }}
+            onClick={onClickDetail}
+          >
+            Details
+          </Button>
+          {/* )} */}
           {isDashboardDegen && (
             <Button
               onClick={onClickClaim}
@@ -283,7 +287,7 @@ const DegenCard: React.FC<
             alignItems="center"
             sx={{ pt: 2, px: 2, lineHeight: '1.5em' }}
           >
-            {false && (
+            {/* {false && (
               <Typography
                 color={palette.grey[700]}
                 sx={{
@@ -296,7 +300,7 @@ const DegenCard: React.FC<
               >
                 {isEnabled ? 'Disable' : 'Enable'} Rentals
               </Typography>
-            )}
+            )} */}
             <Box sx={{ display: 'flex' }}>
               <Box
                 sx={{ cursor: 'pointer', marginRight: 1 }}
@@ -336,7 +340,7 @@ const DegenCard: React.FC<
             <DegenClaimBal tokenId={id} fontSize={tinyFontSize} />
           </Stack>
         )}
-        {isDashboardDegen && (
+        {/* {isDashboardDegen && (
           <Dialog
             open={isEnableDisableDegenModalOpen}
             onClose={() => setIsEnableDisableDegenModalOpen(false)}
@@ -350,7 +354,7 @@ const DegenCard: React.FC<
               }}
             />
           </Dialog>
-        )}
+        )} */}
       </Card>
     );
   },

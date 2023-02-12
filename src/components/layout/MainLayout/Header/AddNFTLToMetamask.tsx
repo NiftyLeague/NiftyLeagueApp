@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import Button from '@mui/material/Button';
 import NetworkContext from 'contexts/NetworkContext';
-import NFTL from 'assets/images/logo.png';
+import NFTL from 'assets/images/NFTL.png';
 import useImportNFTLToWallet from 'hooks/useImportNFTLToWallet';
 
 const AddNFTLToMetamask = (): JSX.Element | null => {

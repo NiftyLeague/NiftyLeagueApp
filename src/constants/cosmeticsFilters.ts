@@ -57,7 +57,9 @@ export const TRIBES = {
   4: 'Frog',
   5: 'Cat',
   6: 'Alien',
-  7: '???',
+  7: 'Hydra',
+  8: 'Rugman',
+  9: 'Satoshi',
 };
 export const SKIN_COLORS = {
   // Ape
@@ -126,7 +128,7 @@ export const SKIN_COLORS = {
   67: 'Sparky Blue',
   68: 'Cherry Soda',
   69: 'Begonia',
-  // ???
+  // Hydra
   119: '???',
   120: '???',
   121: '???',
@@ -177,7 +179,7 @@ export const FUR_COLORS = {
   99: 'Primrose Path',
   100: 'Sparky Blue',
   // Alien
-  // ???
+  // Hydra
   130: '???',
 };
 export const EYE_COLORS = {
