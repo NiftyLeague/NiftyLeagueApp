@@ -19,8 +19,8 @@ export const pageMeta = {
     items: {
       title: 'My Comics & Items | Nifty League',
     },
-    rentals: {
-      title: 'My Rental Stats | Nifty League',
-    },
+    // rentals: {
+    //   title: 'My Rental Stats | Nifty League',
+    // },
   },
 };

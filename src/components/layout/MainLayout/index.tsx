@@ -164,8 +164,8 @@ const MainLayout = () => {
         return pageMeta.dashboard.degens.title;
       case '/dashboard/items':
         return pageMeta.dashboard.items.title;
-      case '/dashboard/rentals':
-        return pageMeta.dashboard.rentals.title;
+      // case '/dashboard/rentals':
+      //   return pageMeta.dashboard.rentals.title;
       default:
         return pageMeta.main.title;
     }
