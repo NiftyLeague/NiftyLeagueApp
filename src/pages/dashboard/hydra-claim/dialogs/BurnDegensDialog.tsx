@@ -17,7 +17,7 @@ import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
-import RenameStepper from './RenameStepper';
+import BurnTxStepper from './BurnTxStepper';
 import BalanceContext from 'contexts/BalanceContext';
 
 interface Props {
@@ -25,7 +25,7 @@ interface Props {
   onSuccess?: () => void;
 }
 
-const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
+const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
   const { address, tx, writeContracts } = useContext(NetworkContext);
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
@@ -150,7 +150,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             disabled={isLoadingRename}
             onChange={handleChange}
           />
-          <RenameStepper
+          <BurnTxStepper
             insufficientAllowance={insufficientAllowance}
             renameSuccess={renameSuccess}
             insufficientBalance={insufficientBalance}
@@ -175,4 +175,4 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   );
 };
 
-export default RenameDegenDialogContent;
+export default BurnDegensDialog;
