@@ -22,7 +22,7 @@ import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
 import {
   tranformDataByFilter,
   updateFilterValue,
-  getDefaultFilterValueFromData,
+  //   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
 import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
@@ -52,7 +52,7 @@ const handleBuyDegen = () => {
   window.open(DEGEN_OPENSEA_URL, '_blank');
 };
 
-const DashboardDegensPage = (): JSX.Element => {
+const DashboardHydraClaimPage = (): JSX.Element => {
   const { authToken } = useAuth();
   const { address } = useContext(NetworkContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -138,7 +138,17 @@ const DashboardDegensPage = (): JSX.Element => {
       return;
     }
 
-    setDefaultValues(getDefaultFilterValueFromData(populatedDegens));
+    // setDefaultValues(getDefaultFilterValueFromData(populatedDegens));
+    // const defaultState = {
+    //   ...DEFAULT_STATIC_FILTER,
+    //   backgrounds: ['Common'],
+    //   tribes: ['Ape', 'Alien', 'Frog', 'Doge', 'Cat', 'Human'],
+    // };
+    setDefaultValues((defaultState: DegenFilter) => ({
+      ...defaultState,
+      backgrounds: ['Common'],
+      tribes: ['Ape', 'Alien', 'Frog', 'Doge', 'Cat', 'Human'],
+    }));
     const params = Object.fromEntries(searchParams.entries());
     let newDegens = populatedDegens;
     if (!isEmpty(params)) {
@@ -411,4 +421,4 @@ const DashboardDegensPage = (): JSX.Element => {
   );
 };
 
-export default DashboardDegensPage;
+export default DashboardHydraClaimPage;
