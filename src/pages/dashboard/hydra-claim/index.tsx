@@ -2,10 +2,12 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
-import { Grid, IconButton, Stack, Box } from '@mui/material';
-import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
+import { Button, Grid, IconButton, Stack, Box } from '@mui/material';
+import { ArrowBackIosNew, ArrowForwardIos, Clear } from '@mui/icons-material';
+import xor from 'lodash/xor';
 
 import DegenCard from 'components/cards/DegenCard';
+import DegenImage from 'components/cards/DegenCard/DegenImage';
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import DegensFilter from 'components/extended/DegensFilter';
 import DEFAULT_STATIC_FILTER from 'components/extended/DegensFilter/constants';
@@ -25,6 +27,8 @@ import EmptyState from 'components/EmptyState';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
 
+const TEAM_ADDY = '0x217580dDDFD4e96CfD05A611378ba920FfcE3cb8';
+
 const handleBuyDegen = () => {
   window.open(DEGEN_OPENSEA_URL, '_blank');
 };
@@ -40,6 +44,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [layoutMode, setLayoutMode] = useState<string>('gridOn');
+  const [selectedDegens, setSelectedDegens] = useState<Degen[]>([]);
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -131,6 +136,15 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     [populatedDegens.length, filters],
   );
 
+  const handleSelectDegen = useCallback(
+    (degen: Degen) => {
+      // xor creates an array of unique values that is the symmetric difference of the given arrays
+      const newSelectedDegens = xor(selectedDegens, [degen]);
+      setSelectedDegens(newSelectedDegens);
+    },
+    [selectedDegens],
+  );
+
   const isGridView = layoutMode === 'gridView';
 
   const renderSkeletonItem = useCallback(
@@ -175,12 +189,44 @@ const DashboardHydraClaimPage = (): JSX.Element => {
       >
         <DegenCard
           degen={degen}
-          //   isDashboardDegen
+          isSelectableDegen
+          isSelected={selectedDegens.includes(degen)}
+          isSelectionDisabled={
+            address.toLowerCase() !== TEAM_ADDY.toLowerCase() &&
+            selectedDegens.length === 8
+          }
+          onClickSelect={() => handleSelectDegen(degen)}
           size={isGridView ? 'normal' : 'small'}
         />
       </Grid>
     ),
-    [isDrawerOpen, isGridView],
+    [address, isDrawerOpen, handleSelectDegen, isGridView, selectedDegens],
+  );
+
+  const renderDegenImage = useCallback(
+    (degen: Degen) => (
+      <Box
+        onClick={() => handleSelectDegen(degen)}
+        sx={{
+          cursor: 'pointer',
+          position: 'relative',
+          '&:hover .MuiSvgIcon-root': { display: 'block' },
+        }}
+      >
+        <DegenImage tokenId={degen.id} sx={{ height: 75, width: 75 }} />
+        <Clear
+          sx={{
+            display: 'none',
+            position: 'absolute',
+            margin: 'auto',
+            top: '20px',
+            left: '20px',
+            fontSize: '40px',
+          }}
+        />
+      </Box>
+    ),
+    [handleSelectDegen],
   );
 
   const renderMain = useCallback(
@@ -229,22 +275,39 @@ const DashboardHydraClaimPage = (): JSX.Element => {
             transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           }}
         >
-          {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
-            <MenuIcon />
-          </IconButton>
-          <Fab color="secondary" aria-label="add" className={classes.fabButton}>
-            <AddIcon />
-          </Fab>
-          <div className={classes.grow} />
-          <IconButton color="inherit">
-            <SearchIcon />
-          </IconButton>
-          <IconButton edge="end" color="inherit">
-            <MoreIcon />
-          </IconButton> */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            gap={1}
+            mx={2}
+            height="100%"
+          >
+            <Stack direction="row" spacing={1} my={'auto'}>
+              {selectedDegens.length
+                ? selectedDegens.map(renderDegenImage)
+                : null}
+            </Stack>
+            <Stack direction="column" gap={1} alignItems="center" width="25%">
+              {`${selectedDegens.length} DEGENs Selected`}
+              <Button
+                onClick={() => {}}
+                variant="contained"
+                fullWidth
+                disabled={
+                  selectedDegens.length !== 8 ||
+                  (address.toLowerCase() === TEAM_ADDY.toLowerCase() &&
+                    selectedDegens.length < 12)
+                }
+              >
+                Burn
+              </Button>
+            </Stack>
+          </Stack>
         </Box>
       </Stack>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       isDrawerOpen,
       filteredData.length,
