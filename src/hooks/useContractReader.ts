@@ -38,28 +38,9 @@ export default function useContractReader(
     if (contracts && contracts[contractName]) {
       try {
         let newValue;
-        // if (DEBUG)
-        //   console.log(
-        //     'CALLING ',
-        //     contractName,
-        //     functionName,
-        //     'with args',
-        //     args,
-        //   );
         if (args && args.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName](...args);
-          // if (DEBUG)
-          //   console.log(
-          //     'contractName',
-          //     contractName,
-          //     'functionName',
-          //     functionName,
-          //     'args',
-          //     args,
-          //     'RESULT:',
-          //     newValue,
-          //   );
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName]();
@@ -68,7 +49,7 @@ export default function useContractReader(
           newValue = formatter(newValue);
         if (!isEqual(newValue, value)) setValue(newValue);
       } catch (e) {
-        console.log('Read Contract Error:', e);
+        console.log('Read Contract Error:', contractName, e);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

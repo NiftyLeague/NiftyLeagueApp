@@ -5,8 +5,8 @@ import MERKLE_ABI from './abis/merkle-distributor.json';
 import {
   COMICS_MERKLE_DISTRIBUTOR_ADDRESS,
   MERKLE_DISTRIBUTOR_ADDRESS,
-} from './contracts';
-import { LOCAL_CHAIN_ID } from './networks';
+} from '../constants/contracts';
+import { LOCAL_CHAIN_ID } from '../constants/networks';
 
 const EXTERNAL_CONTRACTS: {
   [chainId: number]: {
