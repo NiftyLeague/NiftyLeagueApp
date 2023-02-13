@@ -34,7 +34,7 @@ import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
 
 // Needs to be divisible by 2, 3, or 4
-const DEGENS_PER_PAGE = 12;
+const DEGENS_PER_PAGE = 96;
 
 const handleBuyDegen = () => {
   window.open(DEGEN_OPENSEA_URL, '_blank');
@@ -50,7 +50,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
   const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-  const [layoutMode, setLayoutMode] = useState<string>('gridView');
+  const [layoutMode, setLayoutMode] = useState<string>('gridOn');
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -71,13 +71,13 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           id: character.id,
           name: character.name,
           traits_string: Object.values(character.traits).toString(),
-          background: 'common',
+          background: '???',
           earning_cap: 0,
           earning_cap_daily: 0,
           is_active: false,
           last_rented_at: 0,
-          multiplier: 2,
-          multipliers: { background: 2 },
+          multiplier: 0,
+          multipliers: { background: 0 },
           owner: '',
           owner_share: 0.1,
           price: 0,
@@ -102,10 +102,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!populatedDegens.length) {
-      return;
-    }
-
+    if (!populatedDegens.length) return;
     setDefaultValues((defaultState: DegenFilter) => ({
       ...defaultState,
       backgrounds: ['Common'],
