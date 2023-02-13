@@ -213,15 +213,15 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           '&:hover .MuiSvgIcon-root': { display: 'block' },
         }}
       >
-        <DegenImage tokenId={degen.id} sx={{ height: 75, width: 75 }} />
+        <DegenImage tokenId={degen.id} sx={{ height: 65, width: 65 }} />
         <Clear
           sx={{
             display: 'none',
             position: 'absolute',
             margin: 'auto',
-            top: '20px',
-            left: '20px',
-            fontSize: '40px',
+            top: '15px',
+            left: '15px',
+            fontSize: '42px',
           }}
         />
       </Box>
@@ -264,7 +264,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
             top: 'auto',
             bottom: 0,
             height: 100,
-            width: `calc(100% - ${isDrawerOpen ? 732 : 386}px)`,
+            minWidth: `calc(100% - ${isDrawerOpen ? 732 : 386}px)`,
             backgroundColor: '#1E2023',
             border: '1px solid #d5d9e9',
             borderRadius: '15px 15px 0 0',
