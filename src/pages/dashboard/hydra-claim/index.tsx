@@ -2,8 +2,13 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Grid, IconButton, Stack, Box } from '@mui/material';
-import { ArrowBackIosNew, ArrowForwardIos, Clear } from '@mui/icons-material';
+import { Box, Button, Dialog, Grid, IconButton, Stack } from '@mui/material';
+import {
+  ArrowBackIosNew,
+  ArrowForwardIos,
+  Clear,
+  Whatshot,
+} from '@mui/icons-material';
 import xor from 'lodash/xor';
 
 import DegenCard from 'components/cards/DegenCard';
@@ -26,8 +31,8 @@ import NetworkContext from 'contexts/NetworkContext';
 import EmptyState from 'components/EmptyState';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
-
-const TEAM_ADDY = '0x217580dDDFD4e96CfD05A611378ba920FfcE3cb8';
+import BurnDegensDialog from './dialogs/BurnDegensDialog';
+import { DAO_BURN_ADDY } from 'constants/addresses';
 
 const handleBuyDegen = () => {
   window.open(DEGEN_OPENSEA_URL, '_blank');
@@ -35,7 +40,8 @@ const handleBuyDegen = () => {
 
 const DashboardHydraClaimPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [burnDialogOpen, setBurnDialogOpen] = useState(false);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
   const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(
     DEFAULT_STATIC_FILTER,
@@ -45,6 +51,11 @@ const DashboardHydraClaimPage = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [layoutMode, setLayoutMode] = useState<string>('gridOn');
   const [selectedDegens, setSelectedDegens] = useState<Degen[]>([]);
+
+  const incorrectDegenSelection =
+    selectedDegens.length !== 8 ||
+    (address.toLowerCase() === DAO_BURN_ADDY.toLowerCase() &&
+      selectedDegens.length < 12);
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -192,7 +203,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           isSelectableDegen
           isSelected={selectedDegens.includes(degen)}
           isSelectionDisabled={
-            address.toLowerCase() !== TEAM_ADDY.toLowerCase() &&
+            address.toLowerCase() !== DAO_BURN_ADDY.toLowerCase() &&
             selectedDegens.length === 8
           }
           onClickSelect={() => handleSelectDegen(degen)}
@@ -291,16 +302,13 @@ const DashboardHydraClaimPage = (): JSX.Element => {
             <Stack direction="column" gap={1} alignItems="center" width="25%">
               {`${selectedDegens.length} DEGENs Selected`}
               <Button
-                onClick={() => {}}
+                onClick={() => setBurnDialogOpen(true)}
                 variant="contained"
                 fullWidth
-                disabled={
-                  selectedDegens.length !== 8 ||
-                  (address.toLowerCase() === TEAM_ADDY.toLowerCase() &&
-                    selectedDegens.length < 12)
-                }
+                endIcon={<Whatshot />}
+                disabled={incorrectDegenSelection}
               >
-                Burn
+                {incorrectDegenSelection ? 'Select 8 DEGENs' : 'Burn'}
               </Button>
             </Stack>
           </Stack>
@@ -339,6 +347,14 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           renderMain={renderMain}
         />
       </Stack>
+
+      <Dialog open={burnDialogOpen} onClose={() => setBurnDialogOpen(false)}>
+        <BurnDegensDialog
+          selectedDegens={selectedDegens}
+          incorrectDegenSelection={incorrectDegenSelection}
+          onSuccess={() => {}}
+        />
+      </Dialog>
     </>
   );
 };

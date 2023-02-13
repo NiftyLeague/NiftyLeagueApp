@@ -1,40 +1,37 @@
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { BigNumber, BigNumberish, utils } from 'ethers';
 import {
-  DialogTitle,
   DialogContent,
   Stack,
   CardMedia,
   Typography,
-  TextField,
   DialogActions,
   Button,
 } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+
 import { Degen } from 'types/degens';
 import NetworkContext from 'contexts/NetworkContext';
-import { BigNumber, BigNumberish, utils } from 'ethers';
-import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
-import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
-import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
+import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
+import BurnImg from 'assets/images/tribe/hydra-burn.png';
 import { DEBUG } from 'constants/index';
 import BurnTxStepper from './BurnTxStepper';
-import BalanceContext from 'contexts/BalanceContext';
 
 interface Props {
-  degen?: Degen;
+  selectedDegens: Degen[];
+  incorrectDegenSelection: boolean;
   onSuccess?: () => void;
 }
 
-const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
+const BurnDegensDialog = ({
+  selectedDegens,
+  incorrectDegenSelection,
+  onSuccess,
+}: Props): JSX.Element => {
   const { address, tx, writeContracts } = useContext(NetworkContext);
-  const { userNFTLBalance } = useContext(BalanceContext);
-  const [input, setInput] = useState('');
-  const [error, setError] = useState('');
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
-  const [isLoadingRename, setLoadingRename] = useState(false);
-  const [renameSuccess, setRenameSuccess] = useState(false);
-  const insufficientAllowance = allowance < 1000;
-  const insufficientBalance = userNFTLBalance < 1000;
+  const [claimSuccess, setClaimSuccess] = useState(false);
+  const missingAllowance = allowance < 1000;
 
   useEffect(() => {
     const getAllowance = async () => {
@@ -48,7 +45,7 @@ const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
       )) as BigNumberish;
       setAllowance(allowanceBN);
     };
-    setRenameSuccess(false);
+    setClaimSuccess(false);
     if (
       writeContracts &&
       writeContracts[NFTL_CONTRACT] &&
@@ -58,32 +55,16 @@ const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
       void getAllowance();
   }, [address, writeContracts]);
 
-  const validateName = (value: string) => {
-    setInput(value);
-    const errorMsg = getErrorForName(value);
-    setError(errorMsg);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    validateName(value);
-  };
-
   const handleRename = useCallback(async () => {
-    setLoadingRename(true);
-    if (insufficientBalance) {
-      setError('Failed to charge the rental rename fee');
-    } else if (
-      !error &&
+    if (
       writeContracts &&
       writeContracts[NFT_CONTRACT] &&
       writeContracts[NFTL_CONTRACT]
     ) {
       // eslint-disable-next-line no-console
-      if (DEBUG) console.log('Rename NFT to:', input);
       const degenContract = writeContracts[NFT_CONTRACT];
       const nftl = writeContracts[NFTL_CONTRACT];
-      if (insufficientAllowance) {
+      if (missingAllowance) {
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('Current allowance too low');
         const DEGENAddress = degenContract.address;
@@ -93,72 +74,46 @@ const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
         );
         setAllowance(BigNumber.from('1000'));
       }
-      const args = [parseInt(degen?.id || '', 10), input];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result = await submitTxWithGasEstimate(
-        tx,
-        degenContract,
-        'changeName',
-        args,
-      );
-      if (result) {
-        setRenameSuccess(true);
-        onSuccess?.();
-      }
+      // const args = [parseInt(degen?.id || '', 10), input];
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // const result = await submitTxWithGasEstimate(
+      //   tx,
+      //   degenContract,
+      //   'changeName',
+      //   args,
+      // );
+      // if (result) {
+      //   setClaimSuccess(true);
+      //   onSuccess?.();
+      // }
     }
-    setLoadingRename(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    error,
-    onSuccess,
-    input,
-    insufficientAllowance,
-    degen,
-    tx,
-    writeContracts,
-  ]);
+  }, [onSuccess, missingAllowance, tx, writeContracts]);
 
   return (
     <>
-      <DialogTitle sx={{ textAlign: 'center' }}>Rename DEGEN</DialogTitle>
-      <DialogContent dividers sx={{ maxWidth: '420px' }}>
+      <DialogContent dividers sx={{ maxWidth: '820px', borderTop: 'none' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
+              image={BurnImg}
               alt="degen"
-              sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
+              sx={{ width: '320px', margin: '0 auto' }}
             />
             <Typography
               variant="caption"
               component="p"
-              sx={{ textAlign: 'center' }}
+              sx={{ textAlign: 'center', color: 'red' }}
             >
-              Owned by {degen?.owner}
+              Once DEGENs pass through this portal there is no return...
             </Typography>
           </Stack>
-          <TextField
-            label="Enter new degen name"
-            name="new-degen-name"
-            variant="outlined"
-            size="small"
-            fullWidth
-            value={input}
-            error={!!error}
-            helperText={error}
-            disabled={isLoadingRename}
-            onChange={handleChange}
-          />
           <BurnTxStepper
-            insufficientAllowance={insufficientAllowance}
-            renameSuccess={renameSuccess}
-            insufficientBalance={insufficientBalance}
+            missingAllowance={missingAllowance}
+            claimSuccess={claimSuccess}
+            incorrectDegenSelection={incorrectDegenSelection}
           />
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">Renaming Fee</Typography>
-            <Typography>1,000 NFTL</Typography>
-          </Stack>
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -166,9 +121,11 @@ const BurnDegensDialog = ({ degen, onSuccess }: Props): JSX.Element => {
           variant="contained"
           fullWidth
           onClick={handleRename}
-          disabled={!input || Boolean(error)}
+          disabled={incorrectDegenSelection}
         >
-          Rename
+          {missingAllowance
+            ? 'Allow HydraDistributor contract to burn DEGENs'
+            : 'Burn 8 DEGENs & Claim 1 HYDRA'}
         </Button>
       </DialogActions>
     </>
