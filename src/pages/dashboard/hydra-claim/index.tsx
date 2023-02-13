@@ -2,14 +2,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
-import {
-  Grid,
-  IconButton,
-  Pagination,
-  Stack,
-  useMediaQuery,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Grid, IconButton, Stack, Box } from '@mui/material';
 import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
 
 import DegenCard from 'components/cards/DegenCard';
@@ -24,7 +17,6 @@ import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout
 import SectionTitle from 'components/sections/SectionTitle';
 import { DEGEN_BASE_API_URL, DEGEN_OPENSEA_URL } from 'constants/url';
 import useFetch from 'hooks/useFetch';
-import usePagination from 'hooks/usePagination';
 import { DegenFilter } from 'types/degenFilter';
 import { Degen } from 'types/degens';
 import { v4 as uuidv4 } from 'uuid';
@@ -32,9 +24,6 @@ import NetworkContext from 'contexts/NetworkContext';
 import EmptyState from 'components/EmptyState';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
-
-// Needs to be divisible by 2, 3, or 4
-const DEGENS_PER_PAGE = 96;
 
 const handleBuyDegen = () => {
   window.open(DEGEN_OPENSEA_URL, '_blank');
@@ -91,16 +80,6 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characters.length, !!data]);
 
-  const theme = useTheme();
-  const isScreenLg = useMediaQuery(theme.breakpoints.between('lg', 'xl'));
-
-  const { jump, dataForCurrentPage, maxPage, currentPage } = usePagination(
-    filteredData,
-    isScreenLg && layoutMode !== 'gridView' && !isDrawerOpen
-      ? 15
-      : DEGENS_PER_PAGE,
-  );
-
   useEffect(() => {
     if (!populatedDegens.length) return;
     setDefaultValues((defaultState: DegenFilter) => ({
@@ -141,11 +120,6 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [populatedDegens.length, filters.sort],
   );
-
-  useEffect(() => {
-    jump(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredData.length]);
 
   const handleSort = useCallback(
     (sort: string) => {
@@ -225,11 +199,11 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           </Stack>
         </SectionTitle>
         {/* Main grid content */}
-        <Grid container spacing={2} mt={-4.5}>
+        <Grid container spacing={2} mt={-4.5} mb={5}>
           {loading || !address ? (
-            [...Array(8)].map(renderSkeletonItem)
-          ) : dataForCurrentPage.length ? (
-            dataForCurrentPage.map(renderDegen)
+            [...Array(12)].map(renderSkeletonItem)
+          ) : filteredData.length ? (
+            filteredData.map(renderDegen)
           ) : !characters?.length ? (
             <EmptyState
               message="No DEGENs found. Please check your address or go purchase a degen if you have not done so already!"
@@ -238,15 +212,37 @@ const DashboardHydraClaimPage = (): JSX.Element => {
             />
           ) : null}
         </Grid>
-        {dataForCurrentPage.length > 0 && (
-          <Pagination
-            count={maxPage}
-            page={currentPage}
-            color="primary"
-            sx={{ margin: '0 auto' }}
-            onChange={(e: React.ChangeEvent<unknown>, p: number) => jump(p)}
-          />
-        )}
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 'auto',
+            bottom: 0,
+            height: 100,
+            width: `calc(100% - ${isDrawerOpen ? 732 : 386}px)`,
+            backgroundColor: '#1E2023',
+            border: '1px solid #d5d9e9',
+            borderRadius: '15px 15px 0 0',
+            zIndex: 1100,
+            color: '#d5d9e9',
+            boxShadow:
+              '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)',
+            transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          }}
+        >
+          {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
+            <MenuIcon />
+          </IconButton>
+          <Fab color="secondary" aria-label="add" className={classes.fabButton}>
+            <AddIcon />
+          </Fab>
+          <div className={classes.grow} />
+          <IconButton color="inherit">
+            <SearchIcon />
+          </IconButton>
+          <IconButton edge="end" color="inherit">
+            <MoreIcon />
+          </IconButton> */}
+        </Box>
       </Stack>
     ),
     [
@@ -255,12 +251,8 @@ const DashboardHydraClaimPage = (): JSX.Element => {
       loading,
       address,
       renderSkeletonItem,
-      dataForCurrentPage,
       renderDegen,
       characters?.length,
-      maxPage,
-      currentPage,
-      jump,
     ],
   );
 
