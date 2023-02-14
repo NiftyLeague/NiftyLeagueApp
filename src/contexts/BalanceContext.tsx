@@ -24,6 +24,7 @@ interface Context {
   tokenIndices: number[];
   userNFTLBalance: number;
   refreshNFTLBalance: () => void;
+  refreshDegenBalance: () => void;
 }
 
 const CONTEXT_INITIAL_STATE: Context = {
@@ -36,6 +37,7 @@ const CONTEXT_INITIAL_STATE: Context = {
   tokenIndices: [],
   userNFTLBalance: 0,
   refreshNFTLBalance: () => {},
+  refreshDegenBalance: () => {},
 };
 
 const BalanceContext = createContext(CONTEXT_INITIAL_STATE);
@@ -94,6 +96,10 @@ export const BalanceProvider = ({
     setRefreshBalKey(Math.random());
   };
 
+  const refreshDegenBalance = () => {
+    refetchDegens({ address: address.toLowerCase() });
+  };
+
   useEffect(() => {
     if (!active || !address) {
       return;
@@ -116,6 +122,7 @@ export const BalanceProvider = ({
         characterCount,
         userNFTLBalance,
         refreshNFTLBalance,
+        refreshDegenBalance,
       }}
     >
       {children}

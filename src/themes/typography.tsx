@@ -18,7 +18,7 @@ const Typography = (
     fontWeight: 500,
   },
   h4: {
-    fontSize: '1rem',
+    fontSize: '16px',
     color: theme.palette.grey[600],
     fontWeight: 600,
   },
@@ -118,7 +118,7 @@ const Typography = (
   smallAvatar: {
     width: '22px',
     height: '22px',
-    fontSize: '1rem',
+    fontSize: '16px',
   },
   mediumAvatar: {
     width: '34px',

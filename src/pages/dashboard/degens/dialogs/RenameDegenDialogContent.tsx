@@ -26,7 +26,8 @@ interface Props {
 }
 
 const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
-  const { address, tx, writeContracts } = useContext(NetworkContext);
+  const { address, tx, writeContracts, targetNetwork } =
+    useContext(NetworkContext);
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -121,12 +122,14 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   return (
     <>
       <DialogTitle sx={{ textAlign: 'center' }}>Rename DEGEN</DialogTitle>
-      <DialogContent dividers sx={{ maxWidth: '420px' }}>
+      <DialogContent dividers sx={{ maxWidth: '820px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
+              image={`${DEGEN_BASE_IMAGE_URL}/${targetNetwork.name}/images/${
+                degen?.id
+              }.${degen?.background === 'Legendary' ? 'mp4' : 'png'}`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
             />
