@@ -12,15 +12,13 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 
-import DoneAll from '@mui/icons-material/DoneAll';
-import HowToReg from '@mui/icons-material/HowToReg';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import NFTL from 'assets/images/NFTL.png';
+import { DoneAll, VerifiedUser, Whatshot } from '@mui/icons-material';
+import NFTL from 'assets/images/logo.png';
 
 const icons: { [index: string]: React.ReactElement } = {
   1: <img src={NFTL} alt="NFTL" width={30} />,
-  2: <VerifiedUserIcon />,
-  3: <HowToReg />,
+  2: <VerifiedUser />,
+  3: <Whatshot />,
   4: <DoneAll />,
 };
 
@@ -105,45 +103,44 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function getSteps() {
   return [
-    'Obtain 1000 NFTL',
-    'Approve contract as NFTL spender',
-    'Submit rename request',
-    'DEGEN Renamed!',
+    'Select 8 DEGENs',
+    'Approve contract as DEGEN spender',
+    'Send DEGENS to burn',
+    'HYDRA Claimed!',
   ];
 }
 
 function getStepContent(step: number) {
   switch (step) {
-    case 0: {
-      return '1000 NFTL required to rename. Please either claim NFTL from your degen or use Sushiswap to purchase.';
-    }
+    case 0:
+      return 'Please go back and select 8 DEGENs.';
     case 1:
-      return 'Note: renaming requires two transactions since the Nifty Degen contract is not already an approved spender.';
+      return 'Note: burning requires two transactions because the HydraDistributor contract is not approved to transfer your DEGENs.';
     case 2:
-      return 'Spender approved, submit rename request';
+      return 'HydraDistributor contract approved, please submit burn & claim request below.';
     default:
       return '';
   }
 }
 
 export default function RenameStepper({
-  insufficientAllowance,
-  renameSuccess,
-  insufficientBalance,
+  approvedForAll,
+  claimSuccess,
+  incorrectDegenSelection,
 }: {
-  insufficientAllowance: boolean;
-  renameSuccess: boolean;
-  insufficientBalance: boolean;
+  approvedForAll: boolean;
+  claimSuccess: boolean;
+  incorrectDegenSelection: boolean;
 }): JSX.Element {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
 
   useEffect(() => {
-    if (renameSuccess) setActiveStep(3);
-    else if (insufficientBalance) setActiveStep(0);
-    else setActiveStep(insufficientAllowance ? 1 : 2);
-  }, [insufficientAllowance, insufficientBalance, renameSuccess]);
+    if (claimSuccess) setActiveStep(3);
+    else if (incorrectDegenSelection) setActiveStep(0);
+    else setActiveStep(approvedForAll ? 2 : 1);
+  }, [approvedForAll, incorrectDegenSelection, claimSuccess]);
 
   return (
     <div className={classes.root}>
@@ -176,5 +173,3 @@ export default function RenameStepper({
     </div>
   );
 }
-
-RenameStepper.defaultProps = { redirectToWallet: false };

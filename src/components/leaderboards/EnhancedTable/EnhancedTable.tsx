@@ -210,7 +210,7 @@ export default function EnhancedTable({
                   lg: 'translate(0px, 50%)',
                 },
                 mb: {
-                  xs: '1rem',
+                  xs: '16px',
                   lg: '0px',
                 },
                 zIndex: 1000,

@@ -1,9 +1,11 @@
 import { ChainId } from '@sushiswap/sdk';
 import { LOCAL_CHAIN_ID } from './networks';
 
-export const NFT_CONTRACT = 'NiftyDegen';
+export const DEGEN_CONTRACT = 'NiftyDegen';
 
 export const NFTL_CONTRACT = 'NFTLToken';
+
+export const HYDRA_DISTRIBUTOR = 'HydraDistributor';
 
 export const GAME_ACCOUNT_CONTRACT = 'BalanceManager';
 
@@ -40,4 +42,9 @@ export const WETH_ADDRESS = {
 export const IMX_NL_ITEMS = {
   [ChainId.MAINNET]: '0xc21909b7E596000C01318668293A7DFB4B37A578',
   [ChainId.GÖRLI]: '0xbf1238C6aF46C19169c921e6058E330a97040CFD',
+};
+
+export const NFTL_TOKEN_ADDRESS = {
+  [ChainId.MAINNET]: '0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638',
+  [ChainId.GÖRLI]: '0x5803033a15F49dA0664ff8b0775a6E578422CAfD',
 };

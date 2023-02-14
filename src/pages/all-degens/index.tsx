@@ -21,7 +21,7 @@ import {
   updateFilterValue,
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
 import { DEGEN_BASE_API_URL } from 'constants/url';
