@@ -30,10 +30,8 @@ const DashboardHydraClaimPage = (): JSX.Element => {
   const [hydraID, setHydraID] = useState<number>();
   const [burnDialogOpen, setBurnDialogOpen] = useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
-  const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
-  const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(
-    DEFAULT_STATIC_FILTER,
-  );
+  const [filters, setFilters] = useState(DEFAULT_STATIC_FILTER);
+  const [defaultValues, setDefaultValues] = useState(DEFAULT_STATIC_FILTER);
   const [filteredData, setFilteredData] = useState<Degen[]>([]);
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
@@ -156,7 +154,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
 
   const handleOnCloseSuccessDialog = useCallback(() => {
     setSuccessDialogOpen(false);
-    setTimeout(() => refreshDegenBalance(), 500);
+    refreshDegenBalance();
   }, [refreshDegenBalance]);
 
   const renderDrawer = useCallback(

@@ -91,11 +91,10 @@ const CONTRACTS: {
       address: '0x20362c5B7Ea1beDc84d28deEcd47d6807beBB18a',
       abi: BALANCE_MANAGER_ABI,
     },
-    // TODO: Add mainnet HydraDistributors
-    // HydraDistributor: {
-    //   address: '',
-    //   abi: HYDRA_DISTRIBUTOR_ABI,
-    // },
+    HydraDistributor: {
+      address: '0x3410a1583fB26CDBF2a1439A2302B5Bc0464Fd39',
+      abi: HYDRA_DISTRIBUTOR_ABI,
+    },
     NFTLToken: {
       address: '0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638',
       abi: NFTL_TOKEN_ABI,
