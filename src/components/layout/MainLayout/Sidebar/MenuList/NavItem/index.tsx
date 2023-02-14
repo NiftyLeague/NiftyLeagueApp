@@ -47,7 +47,7 @@ const NavItem = ({ item, level }: NavItemProps) => {
 
   const Icon = item?.icon!;
   const itemIcon = item?.icon ? (
-    <Icon stroke={1.5} size="1.3rem" />
+    <Icon stroke={1.5} size="20px" />
   ) : (
     <FiberManualRecordIcon
       sx={{

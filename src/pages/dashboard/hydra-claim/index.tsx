@@ -45,7 +45,11 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
-  const { loading: loadingUserDegens, characters } = useContext(BalanceContext);
+  const {
+    loading: loadingUserDegens,
+    characters,
+    refreshDegenBalance,
+  } = useContext(BalanceContext);
 
   const loading = loadingAllRentals || loadingUserDegens;
 
@@ -131,6 +135,12 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     [populatedDegens.length, filters],
   );
 
+  const handleOnSuccess = useCallback(() => {
+    refreshDegenBalance();
+    setSelectedDegens([]);
+    setBurnDialogOpen(false);
+  }, [refreshDegenBalance]);
+
   const renderDrawer = useCallback(
     () => (
       <DegensFilter
@@ -196,7 +206,7 @@ const DashboardHydraClaimPage = (): JSX.Element => {
         <BurnDegensDialog
           selectedDegens={selectedDegens}
           incorrectDegenSelection={incorrectDegenSelection}
-          onSuccess={() => {}}
+          onSuccess={handleOnSuccess}
         />
       </Dialog>
     </>

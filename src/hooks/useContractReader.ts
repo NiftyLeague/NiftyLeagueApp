@@ -29,13 +29,14 @@ export default function useContractReader(
   pollTime?: number,
   formatter?: (unknown) => void,
   refreshKey?: string | number,
+  skip: boolean = false,
 ): unknown {
   const [value, setValue] = useState();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const argsMemoized = useMemo(() => args, [JSON.stringify(args)]);
 
   const readContract = useCallback(async () => {
-    if (contracts && contracts[contractName]) {
+    if (!skip && contracts && contracts[contractName]) {
       try {
         let newValue;
         if (args && args.length > 0) {
@@ -48,19 +49,22 @@ export default function useContractReader(
         if (formatter && typeof formatter === 'function')
           newValue = formatter(newValue);
         if (!isEqual(newValue, value)) setValue(newValue);
+        return;
       } catch (e) {
         console.log('Read Contract Error:', contractName, e);
       }
     }
+    return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    contracts,
-    contractName,
-    functionName,
-    formatter,
-    value,
     argsMemoized,
+    contractName,
+    contracts,
+    formatter,
+    functionName,
     refreshKey,
+    skip,
+    value,
   ]);
 
   useAsyncInterval(readContract, pollTime, true, JSON.stringify(args));

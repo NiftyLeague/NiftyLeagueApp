@@ -15,7 +15,7 @@ import {
 import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
 import EmptyState from 'components/EmptyState';
 import DegenDialog from 'components/dialog/DegenDialog';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import BalanceContext from 'contexts/BalanceContext';
 import useFetch from 'hooks/useFetch';
 import { useProfileFavDegens } from 'hooks/useGamerProfile';
