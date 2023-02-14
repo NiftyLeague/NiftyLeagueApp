@@ -5,6 +5,7 @@ import useNFTLBalance from 'hooks/useNFTLBalance';
 import { OWNER_QUERY } from 'queries/OWNER_QUERY';
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -96,19 +97,16 @@ export const BalanceProvider = ({
     setRefreshBalKey(Math.random());
   };
 
-  const refreshDegenBalance = () => {
+  const refreshDegenBalance = useCallback(() => {
     refetchDegens({ address: address.toLowerCase() });
-  };
+  }, [address, refetchDegens]);
 
   useEffect(() => {
-    if (!active || !address) {
-      return;
-    }
-
-    refetchDegens({ address: address.toLowerCase() });
+    if (!active || !address) return;
+    refreshDegenBalance();
     refreshClaimableNFTL();
     refreshNFTLBalance();
-  }, [active, address, refetchDegens]);
+  }, [active, address, refreshDegenBalance]);
 
   return (
     <BalanceContext.Provider
