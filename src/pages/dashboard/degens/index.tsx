@@ -24,7 +24,7 @@ import {
   updateFilterValue,
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
 import {
@@ -103,13 +103,13 @@ const DashboardDegensPage = (): JSX.Element => {
           id: character.id,
           name: character.name,
           traits_string: Object.values(character.traits).toString(),
-          background: 'meta',
+          background: '???',
           earning_cap: 0,
           earning_cap_daily: 0,
           is_active: false,
           last_rented_at: 0,
-          multiplier: 2,
-          multipliers: { background: 2 },
+          multiplier: 0,
+          multipliers: { background: 0 },
           owner: '',
           owner_share: 0.1,
           price: 0,

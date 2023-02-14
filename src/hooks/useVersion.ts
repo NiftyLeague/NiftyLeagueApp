@@ -31,9 +31,9 @@ const useVersion = () => {
       const v: string = await fetch(
         `${DEGEN_BASE_API_URL}/launcher/${env}/${os}/version.bin?t=${Date.now()}`,
       )
-        .then((res) => {
+        .then(async (res) => {
           if (res.status >= 400) {
-            console.error(res.text());
+            console.error(await res.text());
             return '';
           }
           return res.text();

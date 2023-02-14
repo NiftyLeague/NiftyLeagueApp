@@ -3,7 +3,7 @@ import { Contract } from 'ethers';
 import NetworkContext from 'contexts/NetworkContext';
 import { getContract } from 'helpers';
 import { COMICS_MERKLE_DISTRIBUTOR_ADDRESS } from 'constants/contracts';
-import COMICS_MERKLE_DISTRIBUTOR_ABI from 'constants/abis/comics-merkle-distributor.json';
+import COMICS_MERKLE_DISTRIBUTOR_ABI from 'contracts/abis/comics-merkle-distributor.json';
 
 function useContract(address: string, ABI, withSignerIfPossible = true) {
   const { userProvider, address: account } = useContext(NetworkContext);

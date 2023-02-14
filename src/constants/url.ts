@@ -1,6 +1,5 @@
 import { ChainId } from '@sushiswap/sdk';
-import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
-import { IMX_NL_ITEMS } from './contracts';
+import { IMX_NL_ITEMS, NFTL_TOKEN_ADDRESS } from './contracts';
 
 export const BASE_API_URL =
   'https://odgwhiwhzb.execute-api.us-east-1.amazonaws.com/prod';
@@ -67,7 +66,9 @@ export const LEADERBOARD_USERNAMES_API_URL = `${BASE_API_URL}/profiles/public/pr
 export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
 
 // SUSHISWAP URL FOR NFTL PURCHASE
-export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${NFTLTokenAddress}`;
+export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${
+  NFTL_TOKEN_ADDRESS[ChainId.MAINNET]
+}`;
 
 // DEGEN Purchase URL
 export const DEGEN_OPENSEA_URL = 'https://opensea.io/collection/niftydegen';

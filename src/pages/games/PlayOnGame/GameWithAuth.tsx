@@ -5,17 +5,17 @@ import Unity, { UnityContext } from 'react-unity-webgl';
 import { Box, Button, Stack } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
 import useArcadeBalance from 'hooks/useArcadeBalance';
-import useFetch from 'hooks/useFetch';
+// import useFetch from 'hooks/useFetch';
 import { NETWORK_NAME } from 'constants/networks';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import { getGameViewedAnalyticsEventName } from 'constants/games';
-import { ALL_RENTAL_API_URL } from 'constants/url';
+// import { ALL_RENTAL_API_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { sendEvent } from 'utils/google-analytics';
 import withVerification from 'components/Authentication';
 import Preloader from 'components/Preloader';
-import { Rentals } from 'types/rentals';
-import EarningCap from 'pages/dashboard/overview/EarningCap';
+// import { Rentals } from 'types/rentals';
+// import EarningCap from 'pages/dashboard/overview/EarningCap';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
 import useAuth from 'hooks/useAuth';
 
@@ -38,12 +38,12 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const headers = { authorizationToken: authToken || '' };
-  const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
-    headers,
-    enabled:
-      !!authToken && unityContext.unityConfig.productName === 'NiftySmashers',
-  });
+  // const headers = { authorizationToken: authToken || '' };
+  // const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
+  //   headers,
+  //   enabled:
+  //     !!authToken && unityContext.unityConfig.productName === 'NiftySmashers',
+  // });
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -156,11 +156,11 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
             Fullscreen
           </Button>
         </Stack>
-        {unityContext.unityConfig.productName === 'NiftySmashers' && (
+        {/* {unityContext.unityConfig.productName === 'NiftySmashers' && (
           <Box ml={2} minWidth={350}>
             <EarningCap rentals={rentals ?? []} hideTitle={true} />
           </Box>
-        )}
+        )} */}
       </Stack>
     </>
   );

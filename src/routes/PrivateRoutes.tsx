@@ -23,6 +23,9 @@ const DashboardDegensPage = Loadable(
 const DashboardGamerProfilePage = Loadable(
   lazy(() => import('pages/dashboard/gamer-profile')),
 );
+const DashboardHydraClaimPage = Loadable(
+  lazy(() => import('pages/dashboard/hydra-claim')),
+);
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -57,6 +60,10 @@ const PrivateRoutes = {
     {
       path: 'gamer-profile',
       element: <DashboardGamerProfilePage />,
+    },
+    {
+      path: 'hydra-claim',
+      element: <DashboardHydraClaimPage />,
     },
   ],
 };

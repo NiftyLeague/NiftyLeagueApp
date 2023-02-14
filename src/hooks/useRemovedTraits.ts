@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Contracts } from 'types/web3';
 import useContractReader from './useContractReader';
-import { NFT_CONTRACT } from 'constants/contracts';
+import { DEGEN_CONTRACT } from 'constants/contracts';
 import { REMOVED_TRAITS_INTERVAL } from 'constants/index';
 
 export default function useRemovedTraits(readContracts: Contracts): number[] {
   const [removedTraits, setRemovedTraits] = useState<number[]>([]);
   const result = useContractReader(
     readContracts,
-    NFT_CONTRACT,
+    DEGEN_CONTRACT,
     'getRemovedTraits',
     undefined,
     REMOVED_TRAITS_INTERVAL,
