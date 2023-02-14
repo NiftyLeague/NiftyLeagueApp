@@ -68,7 +68,7 @@ export const submitTxWithGasEstimate = (
   config = {},
   minimumGas?: BigNumber,
   callback?: NotifyCallback,
-): Promise<BigNumber | any> =>
+): Promise<void | providers.TransactionResponse | null> =>
   contract.estimateGas[fn](...args, config)
     .then(async (estimatedGasLimit) =>
       tx(

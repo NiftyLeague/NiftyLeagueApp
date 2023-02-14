@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { providers } from 'ethers';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
 import { Dialog, Stack } from '@mui/material';
@@ -20,12 +21,15 @@ import NetworkContext from 'contexts/NetworkContext';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
 import BurnDegensDialog from './dialogs/BurnDegensDialog';
+import ClaimSuccessDialog from './dialogs/ClaimSuccessDialog';
 import MainSection from './MainSection';
 
 const DashboardHydraClaimPage = (): JSX.Element => {
-  const { address } = useContext(NetworkContext);
+  const { address, userProvider } = useContext(NetworkContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [hydraID, setHydraID] = useState<number>();
   const [burnDialogOpen, setBurnDialogOpen] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
   const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(
     DEFAULT_STATIC_FILTER,
@@ -135,10 +139,24 @@ const DashboardHydraClaimPage = (): JSX.Element => {
     [populatedDegens.length, filters],
   );
 
-  const handleOnSuccess = useCallback(() => {
-    refreshDegenBalance();
-    setSelectedDegens([]);
-    setBurnDialogOpen(false);
+  const handleOnSuccess = useCallback(
+    async (claimResult: providers.TransactionResponse) => {
+      setSelectedDegens([]);
+      setBurnDialogOpen(false);
+      const txReceipt = await userProvider?.getTransactionReceipt(
+        claimResult.hash,
+      );
+      const finalLog = txReceipt?.logs?.pop();
+      const hydraHex = finalLog?.topics?.pop();
+      setHydraID(hydraHex ? parseInt(hydraHex) : undefined);
+      setSuccessDialogOpen(true);
+    },
+    [userProvider],
+  );
+
+  const handleOnCloseSuccessDialog = useCallback(() => {
+    setSuccessDialogOpen(false);
+    setTimeout(() => refreshDegenBalance(), 500);
   }, [refreshDegenBalance]);
 
   const renderDrawer = useCallback(
@@ -207,6 +225,12 @@ const DashboardHydraClaimPage = (): JSX.Element => {
           selectedDegens={selectedDegens}
           incorrectDegenSelection={incorrectDegenSelection}
           onSuccess={handleOnSuccess}
+        />
+      </Dialog>
+      <Dialog open={successDialogOpen} onClose={handleOnCloseSuccessDialog}>
+        <ClaimSuccessDialog
+          hydraID={hydraID}
+          onClose={handleOnCloseSuccessDialog}
         />
       </Dialog>
     </>

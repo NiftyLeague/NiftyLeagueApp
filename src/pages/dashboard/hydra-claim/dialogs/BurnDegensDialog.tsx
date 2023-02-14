@@ -7,7 +7,7 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
-import { BigNumber } from 'ethers';
+import { BigNumber, providers } from 'ethers';
 
 import { Degen } from 'types/degens';
 import NetworkContext from 'contexts/NetworkContext';
@@ -20,7 +20,7 @@ import BurnTxStepper from './BurnTxStepper';
 interface Props {
   selectedDegens: Degen[];
   incorrectDegenSelection: boolean;
-  onSuccess?: () => void;
+  onSuccess: (claimResult: providers.TransactionResponse) => Promise<void>;
 }
 
 const BurnDegensDialog = ({
@@ -79,7 +79,7 @@ const BurnDegensDialog = ({
       );
       if (result) {
         setClaimSuccess(true);
-        onSuccess?.();
+        await onSuccess(result);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
