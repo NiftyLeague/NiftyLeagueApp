@@ -1,9 +1,11 @@
 import { ChainId } from '@sushiswap/sdk';
 import { LOCAL_CHAIN_ID } from './networks';
 
-export const NFT_CONTRACT = 'NiftyDegen';
+export const DEGEN_CONTRACT = 'NiftyDegen';
 
 export const NFTL_CONTRACT = 'NFTLToken';
+
+export const HYDRA_DISTRIBUTOR = 'HydraDistributor';
 
 export const GAME_ACCOUNT_CONTRACT = 'BalanceManager';
 

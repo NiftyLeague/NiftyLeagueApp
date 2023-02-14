@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { BigNumber, BigNumberish, utils } from 'ethers';
 import {
   DialogContent,
   Stack,
@@ -8,11 +7,12 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
+import { BigNumber } from 'ethers';
 
 import { Degen } from 'types/degens';
 import NetworkContext from 'contexts/NetworkContext';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
-import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
+import { HYDRA_DISTRIBUTOR, DEGEN_CONTRACT } from 'constants/contracts';
 import BurnImg from 'assets/images/tribe/hydra-burn.png';
 import { DEBUG } from 'constants/index';
 import BurnTxStepper from './BurnTxStepper';
@@ -29,66 +29,61 @@ const BurnDegensDialog = ({
   onSuccess,
 }: Props): JSX.Element => {
   const { address, tx, writeContracts } = useContext(NetworkContext);
-  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [approvedForAll, setApprovedForAll] = useState<boolean>(false);
   const [claimSuccess, setClaimSuccess] = useState(false);
-  const missingAllowance = allowance < 1000;
 
   useEffect(() => {
-    const getAllowance = async () => {
-      const degenContract = writeContracts[NFT_CONTRACT];
-      const DEGENAddress = degenContract.address;
-      const nftl = writeContracts[NFTL_CONTRACT];
+    const getApprovals = async () => {
+      const DegenContract = writeContracts[DEGEN_CONTRACT];
+      const HydraDistributor = writeContracts[HYDRA_DISTRIBUTOR];
+      const contractAddress = HydraDistributor.address;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const allowanceBN = (await nftl.allowance(
+      const approved = (await DegenContract.isApprovedForAll(
         address,
-        DEGENAddress,
-      )) as BigNumberish;
-      setAllowance(allowanceBN);
+        contractAddress,
+      )) as boolean;
+      setApprovedForAll(approved);
     };
     setClaimSuccess(false);
     if (
       writeContracts &&
-      writeContracts[NFTL_CONTRACT] &&
-      writeContracts[NFT_CONTRACT]
+      writeContracts[HYDRA_DISTRIBUTOR] &&
+      writeContracts[DEGEN_CONTRACT]
     )
-      // eslint-disable-next-line no-void
-      void getAllowance();
+      void getApprovals();
   }, [address, writeContracts]);
 
-  const handleRename = useCallback(async () => {
+  const handleClaim = useCallback(async () => {
     if (
       writeContracts &&
-      writeContracts[NFT_CONTRACT] &&
-      writeContracts[NFTL_CONTRACT]
+      writeContracts[DEGEN_CONTRACT] &&
+      writeContracts[HYDRA_DISTRIBUTOR]
     ) {
       // eslint-disable-next-line no-console
-      const degenContract = writeContracts[NFT_CONTRACT];
-      const nftl = writeContracts[NFTL_CONTRACT];
-      if (missingAllowance) {
+      const DegenContract = writeContracts[DEGEN_CONTRACT];
+      const HydraDistributor = writeContracts[HYDRA_DISTRIBUTOR];
+      const contractAddress = HydraDistributor.address;
+      if (!approvedForAll) {
         // eslint-disable-next-line no-console
-        if (DEBUG) console.log('Current allowance too low');
-        const DEGENAddress = degenContract.address;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        await tx(
-          nftl.increaseAllowance(DEGENAddress, utils.parseEther('100000')),
-        );
-        setAllowance(BigNumber.from('1000'));
+        if (DEBUG) console.log('Contract not approved yet');
+        await tx(DegenContract.setApprovalForAll(contractAddress, true));
+        setApprovedForAll(true);
       }
-      // const args = [parseInt(degen?.id || '', 10), input];
-      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      // const result = await submitTxWithGasEstimate(
-      //   tx,
-      //   degenContract,
-      //   'changeName',
-      //   args,
-      // );
-      // if (result) {
-      //   setClaimSuccess(true);
-      //   onSuccess?.();
-      // }
+      const args = [selectedDegens.map((degen) => BigNumber.from(degen.id))];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result = await submitTxWithGasEstimate(
+        tx,
+        HydraDistributor,
+        'claimRandomHydra',
+        args,
+      );
+      if (result) {
+        setClaimSuccess(true);
+        onSuccess?.();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSuccess, missingAllowance, tx, writeContracts]);
+  }, [onSuccess, approvedForAll, tx, writeContracts]);
 
   return (
     <>
@@ -110,7 +105,7 @@ const BurnDegensDialog = ({
             </Typography>
           </Stack>
           <BurnTxStepper
-            missingAllowance={missingAllowance}
+            approvedForAll={approvedForAll}
             claimSuccess={claimSuccess}
             incorrectDegenSelection={incorrectDegenSelection}
           />
@@ -120,10 +115,10 @@ const BurnDegensDialog = ({
         <Button
           variant="contained"
           fullWidth
-          onClick={handleRename}
+          onClick={handleClaim}
           disabled={incorrectDegenSelection}
         >
-          {missingAllowance
+          {!approvedForAll
             ? 'Allow HydraDistributor contract to burn DEGENs'
             : 'Burn 8 DEGENs & Claim 1 HYDRA'}
         </Button>

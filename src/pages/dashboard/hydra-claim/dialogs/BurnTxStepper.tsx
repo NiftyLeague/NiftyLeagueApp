@@ -124,11 +124,11 @@ function getStepContent(step: number) {
 }
 
 export default function RenameStepper({
-  missingAllowance,
+  approvedForAll,
   claimSuccess,
   incorrectDegenSelection,
 }: {
-  missingAllowance: boolean;
+  approvedForAll: boolean;
   claimSuccess: boolean;
   incorrectDegenSelection: boolean;
 }): JSX.Element {
@@ -139,8 +139,8 @@ export default function RenameStepper({
   useEffect(() => {
     if (claimSuccess) setActiveStep(3);
     else if (incorrectDegenSelection) setActiveStep(0);
-    else setActiveStep(missingAllowance ? 1 : 2);
-  }, [missingAllowance, incorrectDegenSelection, claimSuccess]);
+    else setActiveStep(approvedForAll ? 2 : 1);
+  }, [approvedForAll, incorrectDegenSelection, claimSuccess]);
 
   return (
     <div className={classes.root}>
