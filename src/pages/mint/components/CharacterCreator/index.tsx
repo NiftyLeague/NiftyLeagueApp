@@ -16,7 +16,7 @@ import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { NotifyCallback } from 'types/notify';
 import NetworkContext from 'contexts/NetworkContext';
 import CharacterBGImg from 'assets/images/backgrounds/character-creator-repeat.png';
-import { NFT_CONTRACT } from 'constants/contracts';
+import { DEGEN_CONTRACT } from 'constants/contracts';
 import { NETWORK_NAME } from 'constants/networks';
 import { DEBUG } from 'constants/index';
 import { getMintableTraits, TraitArray } from './helpers';
@@ -327,7 +327,7 @@ const CharacterCreatorContainer = memo(
       async (e: MintEvent) => {
         const { character, head, clothing, accessories, items } =
           getMintableTraits(e.detail);
-        const nftContract = writeContracts[NFT_CONTRACT];
+        const nftContract = writeContracts[DEGEN_CONTRACT];
         const args = [character, head, clothing, accessories, items];
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const value = (await nftContract.getNFTPrice()) as BigNumber;
@@ -357,7 +357,7 @@ const CharacterCreatorContainer = memo(
             isLoaded={isLoaded}
             isPortrait={isPortrait}
             onMintCharacter={
-              writeContracts[NFT_CONTRACT] && !saleLocked
+              writeContracts[DEGEN_CONTRACT] && !saleLocked
                 ? mintCharacter
                 : stashMintState
             }

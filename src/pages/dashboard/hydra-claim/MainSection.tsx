@@ -79,6 +79,7 @@ const DegensGrid = ({
     ),
     [address, isDrawerOpen, handleSelectDegen, isGridView, selectedDegens],
   );
+
   return (
     <Grid container spacing={2} mt={-4.5} mb={5}>
       {loading || !address ? (
@@ -108,6 +109,7 @@ const DegenSelectionsBar = ({
   const renderDegenImage = useCallback(
     (degen: Degen) => (
       <Box
+        key={degen.id}
         onClick={() => handleSelectDegen(degen)}
         sx={{
           cursor: 'pointer',
