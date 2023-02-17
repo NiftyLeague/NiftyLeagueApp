@@ -48,14 +48,18 @@ export interface DegenCardProps {
   degen: Degen;
   size?: 'small' | 'normal';
   isDashboardDegen?: boolean;
+  isSelectableDegen?: boolean;
+  isSelected?: boolean;
+  isSelectionDisabled?: boolean;
   degenEquipEnabled?: boolean;
   favs?: string[];
   onClickClaim?: React.MouseEventHandler<HTMLButtonElement>;
   onClickDetail?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEditName?: React.MouseEventHandler<SVGSVGElement>;
-  onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
   onClickEquip?: React.MouseEventHandler<HTMLButtonElement>;
   onClickFavorite?: React.MouseEventHandler<HTMLDivElement>;
+  onClickRent?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickSelect?: React.MouseEventHandler<HTMLButtonElement>;
   sx?: SxProps<Theme>;
 }
 
@@ -85,6 +89,9 @@ const DegenCard: React.FC<
     // degenEquipEnabled = false,
     favs = [],
     isDashboardDegen = false,
+    isSelectableDegen = false,
+    isSelected = false,
+    isSelectionDisabled = false,
     size = 'normal',
     sx,
     onClickClaim,
@@ -93,6 +100,7 @@ const DegenCard: React.FC<
     // onClickRent,
     // onClickEquip,
     onClickFavorite,
+    onClickSelect,
   }) => {
     const { palette } = useTheme();
     const {
@@ -253,18 +261,35 @@ const DegenCard: React.FC<
               Equip
             </Button>
           ) : ( */}
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            sx={{
-              minWidth: '32%',
-              fontSize: buttonFontSize,
-            }}
-            onClick={onClickDetail}
-          >
-            Details
-          </Button>
+
+          {isSelectableDegen ? (
+            <Button
+              variant={isSelected ? 'contained' : 'outlined'}
+              color="primary"
+              fullWidth
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
+              onClick={onClickSelect}
+              disabled={isSelectionDisabled && !isSelected}
+            >
+              {isSelected ? 'Selected' : 'Select'}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{
+                minWidth: '32%',
+                fontSize: buttonFontSize,
+              }}
+              onClick={onClickDetail}
+            >
+              Details
+            </Button>
+          )}
           {/* )} */}
           {isDashboardDegen && (
             <Button

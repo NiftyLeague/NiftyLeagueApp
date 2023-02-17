@@ -77,7 +77,7 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
   const menuIcon = menu.icon ? (
     <Icon
       strokeWidth={1.5}
-      size="1.3rem"
+      size="20px"
       style={{ marginTop: 'auto', marginBottom: 'auto' }}
     />
   ) : (
@@ -133,13 +133,13 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
         {open ? (
           <IconChevronUp
             stroke={1.5}
-            size="1rem"
+            size="16px"
             style={{ marginTop: 'auto', marginBottom: 'auto' }}
           />
         ) : (
           <IconChevronDown
             stroke={1.5}
-            size="1rem"
+            size="16px"
             style={{ marginTop: 'auto', marginBottom: 'auto' }}
           />
         )}

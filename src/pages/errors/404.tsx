@@ -116,7 +116,7 @@ const NotFoundPage = () => {
                       component={Link}
                       to={DASHBOARD_PATH}
                     >
-                      <HomeTwoToneIcon sx={{ fontSize: '1.3rem', mr: 0.75 }} />{' '}
+                      <HomeTwoToneIcon sx={{ fontSize: '20px', mr: 0.75 }} />{' '}
                       Home
                     </Button>
                   </AnimateButton>

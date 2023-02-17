@@ -8,10 +8,10 @@ import BuyArcadeTokensDialog from 'components/dialog/BuyArcadeTokensDialog';
 import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 import GameCard from 'components/cards/GameCard';
 import NiftySmashers from 'assets/images/games/nifty-smashers.gif';
-import NiftyTennis from 'assets/images/games/nifty-tennis.jpeg';
+// import NiftyTennis from 'assets/images/games/nifty-tennis.jpeg';
 import { Dialog, DialogTrigger, DialogContent } from 'components/dialog';
 import Downloader from './Downloader';
-import WhitelistModal from './WhitelistModal';
+// import WhitelistModal from './WhitelistModal';
 import WenThumbnail from 'assets/images/games/wen.gif';
 import MtGawxThumbnail from 'assets/images/games/mt-gawx.gif';
 import CryptoWinterThumbnail from 'assets/images/games/crypto-winter.png';
@@ -204,7 +204,7 @@ const GameList = () => {
           }
         />
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
+      {/* <Grid item xs={12} sm={6} md={4} lg={4} xl={3} className={gridItem}>
         <GameCard
           title="Nifty Tennis"
           description={
@@ -247,7 +247,7 @@ const GameList = () => {
             </>
           }
         />
-      </Grid>
+      </Grid> */}
       <BuyArcadeTokensDialog
         open={openBuyAT}
         onSuccess={() => {
