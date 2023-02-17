@@ -30,12 +30,16 @@ const ClaimSuccessDialog = ({ hydraID, onClose }: Props): JSX.Element => {
           <Stack rowGap={2} alignItems="center">
             <CardMedia
               component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/${targetNetwork.name}/images/${hydraID}.mp4`}
+              image={`${DEGEN_BASE_IMAGE_URL}/${
+                targetNetwork.name
+              }/images/${hydraID}.${hydraID === 9924 ? 'mp4' : 'png'}`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '320px', margin: '0 auto' }}
             />
             <Typography color="gray">
-              Please wait a few minutes for your HYDRA to hatch!
+              Please wait a few minutes for your HYDRA to hatch! You can
+              manually refresh metadata on OpenSea if your image is not
+              immediately revealed.
             </Typography>
             <a
               href={`https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${hydraID}`}
