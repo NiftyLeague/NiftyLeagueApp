@@ -178,8 +178,6 @@ const MainLayout = () => {
         return pageMeta.dashboard.items.title;
       case '/dashboard/items/burner':
         return pageMeta.dashboard.items.title;
-      case '/dashboard/hydra-claim':
-        return pageMeta.dashboard.hydraClaim.title;
       // case '/dashboard/rentals':
       //   return pageMeta.dashboard.rentals.title;
       default:
