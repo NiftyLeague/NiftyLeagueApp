@@ -28,6 +28,7 @@ export default function useNFTLBalance(
     undefined,
     undefined,
     refreshKey,
+    !address,
   ) as BigNumber;
   useEffect(() => {
     if (result && result !== balance) setBalance(result);

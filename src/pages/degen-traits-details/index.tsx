@@ -1,4 +1,4 @@
-import { NFT_CONTRACT } from 'constants/contracts';
+import { DEGEN_CONTRACT } from 'constants/contracts';
 import { GET_DEGEN_DETAIL_URL } from 'constants/url';
 import NetworkContext from 'contexts/NetworkContext';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -92,17 +92,24 @@ const DegenTraitsDetailsPage = (): JSX.Element => {
   const getCharacter = useCallback(async () => {
     const characterData = {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      name: await readContracts[NFT_CONTRACT].getName(tokenId),
+      name: await readContracts[DEGEN_CONTRACT].getName(tokenId),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      owner: await readContracts[NFT_CONTRACT].ownerOf(tokenId),
+      owner: await readContracts[DEGEN_CONTRACT].ownerOf(tokenId),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      traitList: await readContracts[NFT_CONTRACT].getCharacterTraits(tokenId),
+      traitList: await readContracts[DEGEN_CONTRACT].getCharacterTraits(
+        tokenId,
+      ),
     };
     setCharacter(characterData);
   }, [readContracts, tokenId]);
 
   useEffect(() => {
-    if (tokenId && readContracts && readContracts[NFT_CONTRACT] && authToken) {
+    if (
+      tokenId &&
+      readContracts &&
+      readContracts[DEGEN_CONTRACT] &&
+      authToken
+    ) {
       // eslint-disable-next-line no-void
       void getCharacter();
       // eslint-disable-next-line no-void
