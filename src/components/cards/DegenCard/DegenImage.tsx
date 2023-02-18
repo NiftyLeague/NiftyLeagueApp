@@ -35,7 +35,7 @@ const DegenImage = memo(
       );
     }
 
-    if (background === 'Legendary' || tokenId > 9900) {
+    if (background === 'Legendary') {
       setting = {
         ...setting,
         component: 'video',
