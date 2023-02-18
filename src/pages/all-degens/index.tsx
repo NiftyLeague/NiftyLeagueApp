@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -34,6 +34,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialog';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
+import { HYDRAS } from 'constants/hydras';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
@@ -58,6 +59,28 @@ const AllDegensPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
+  const originalDegens: Degen[] = useMemo(() => {
+    if (!data || !Object.values(data).length) return [];
+
+    // TODO: remove temp fix for 7th tribes
+    // return Object.values(data);
+    return Object.values(data).map((degen) =>
+      Number(degen.id) <= 9900
+        ? degen
+        : {
+            ...degen,
+            background: HYDRAS[degen.id].rarity,
+            tribe:
+              Number(degen.id) >= 9999
+                ? Number(degen.id) === 9999
+                  ? 'rugman'
+                  : 'satoshi'
+                : 'hydra',
+          },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!data]);
+
   const { isDegenOwner } = useContext(BalanceContext);
 
   const theme = useTheme();
@@ -70,11 +93,7 @@ const AllDegensPage = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!data || !Object.values(data).length) {
-      return;
-    }
-
-    const originalDegens: Degen[] = Object.values(data);
+    if (!originalDegens?.length) return;
     setDefaultValues(getDefaultFilterValueFromData(originalDegens));
     // Filter out rent disabled degens in Feed
     setDegens(originalDegens);
@@ -93,7 +112,7 @@ const AllDegensPage = (): JSX.Element => {
       setDegens([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmpty(data), address]);
+  }, [originalDegens, address]);
 
   const handleChangeSearchTerm = (e) => {
     setSearchTerm(e.target.value);
@@ -118,6 +137,7 @@ const AllDegensPage = (): JSX.Element => {
         cosmetics: [],
         sort: filters.sort,
       };
+      console.log('degens', degens);
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
       setFilteredData(result);

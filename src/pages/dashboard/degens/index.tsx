@@ -94,33 +94,37 @@ const DashboardDegensPage = (): JSX.Element => {
   const loading = loadingAllRentals || loadingUserDegens;
 
   const populatedDegens: Degen[] = useMemo(() => {
-    if (!characters.length || !data) {
-      return [];
-    }
+    if (!characters.length || !data) return [];
     // TODO: remove temp fix for 7th tribes
-    return characters.map(
-      (character) =>
-        data[character.id] || {
-          id: character.id,
-          name: character.name,
-          traits_string: Object.values(character.traits).toString(),
-          background: HYDRAS[character.id].rarity,
-          earning_cap: 0,
-          earning_cap_daily: 0,
-          is_active: false,
-          last_rented_at: 0,
-          multiplier: 0,
-          multipliers: { background: 0 },
-          owner: '',
-          owner_share: 0.1,
-          price: 0,
-          price_daily: 0,
-          rental_count: 0,
-          total_rented: 0,
-          tribe: 'hydra',
-        },
+    // return characters.map((character) => data[character.id]);
+    return characters.map((character) =>
+      Number(character.id) <= 9900
+        ? data[character.id]
+        : {
+            id: character.id,
+            name: character.name,
+            traits_string: Object.values(character.traits).toString(),
+            background: HYDRAS[character.id].rarity,
+            earning_cap: 0,
+            earning_cap_daily: 0,
+            is_active: false,
+            last_rented_at: 0,
+            multiplier: 0,
+            multipliers: { background: 0 },
+            owner: '',
+            owner_share: 0.1,
+            price: 0,
+            price_daily: 0,
+            rental_count: 0,
+            total_rented: 0,
+            tribe:
+              Number(character.id) >= 9999
+                ? Number(character.id) === 9999
+                  ? 'rugman'
+                  : 'satoshi'
+                : 'hydra',
+          },
     );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characters.length, !!data]);
 
