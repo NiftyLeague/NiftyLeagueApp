@@ -32,6 +32,7 @@ import {
   DEGEN_OPENSEA_URL,
   PROFILE_FAV_DEGENS_API,
 } from 'constants/url';
+import { HYDRAS } from 'constants/hydras';
 import { useProfileFavDegens } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useAuth from 'hooks/useAuth';
@@ -103,7 +104,7 @@ const DashboardDegensPage = (): JSX.Element => {
           id: character.id,
           name: character.name,
           traits_string: Object.values(character.traits).toString(),
-          background: '???',
+          background: HYDRAS[character.id].rarity,
           earning_cap: 0,
           earning_cap_daily: 0,
           is_active: false,
@@ -116,7 +117,7 @@ const DashboardDegensPage = (): JSX.Element => {
           price_daily: 0,
           rental_count: 0,
           total_rented: 0,
-          tribe: 'Hydra',
+          tribe: 'hydra',
         },
     );
 
@@ -405,7 +406,10 @@ const DashboardDegensPage = (): JSX.Element => {
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
-        <RenameDegenDialogContent degen={selectedDegen} />
+        <RenameDegenDialogContent
+          degen={selectedDegen}
+          onSuccess={() => setIsRenameDegenModalOpen(false)}
+        />
       </Dialog>
     </>
   );

@@ -36,12 +36,6 @@ const PrivateItems = {
           type: 'item',
           url: '/dashboard/items',
         },
-        {
-          id: 'hydra-claim',
-          title: 'Hydra Claim',
-          type: 'item',
-          url: '/dashboard/hydra-claim',
-        },
         // {
         //   id: 'rentals',
         //   title: 'Rentals',
