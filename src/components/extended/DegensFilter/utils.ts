@@ -22,12 +22,12 @@ export const tranformDataByFilter = (
       // price,
       // multiplier,
       // rental_count,
-      tribe,
-      background,
-      traits_string,
-      name,
-      id,
-      owner,
+      tribe = '',
+      background = '',
+      traits_string = '',
+      name = '',
+      id = '',
+      owner = '',
     }: Degen) => {
       // Filter all burn addys
       if (BURN_ADDYS.includes(owner)) return false;
@@ -82,7 +82,7 @@ export const tranformDataByFilter = (
         backgrounds.length > 0 &&
         !backgrounds.find(
           (bg: string) =>
-            background.toLocaleLowerCase() === bg.toLocaleLowerCase(),
+            background?.toLocaleLowerCase() === bg.toLocaleLowerCase(),
         )
       ) {
         return false;
