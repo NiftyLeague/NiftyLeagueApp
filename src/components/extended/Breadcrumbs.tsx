@@ -64,8 +64,8 @@ const Breadcrumbs = ({
   const iconStyle = {
     marginRight: theme.spacing(0.75),
     marginTop: `-${theme.spacing(0.25)}`,
-    width: '1rem',
-    height: '1rem',
+    width: '16px',
+    height: '16px',
     color: theme.palette.secondary.main,
   };
 
@@ -104,9 +104,9 @@ const Breadcrumbs = ({
   // item separator
   const SeparatorIcon = separator!;
   const separatorIcon = separator ? (
-    <SeparatorIcon stroke={1.5} size="1rem" />
+    <SeparatorIcon stroke={1.5} size="16px" />
   ) : (
-    <IconTallymark1 stroke={1.5} size="1rem" />
+    <IconTallymark1 stroke={1.5} size="16px" />
   );
 
   let mainContent;

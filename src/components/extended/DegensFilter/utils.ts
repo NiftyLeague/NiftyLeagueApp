@@ -2,13 +2,14 @@ import { SetStateAction } from 'react';
 import { Degen } from 'types/degens';
 import { DegenFilter } from 'types/degenFilter';
 import DEFAULT_STATIC_FILTER from './constants';
+import { BURN_ADDYS } from 'constants/addresses';
 
 export const tranformDataByFilter = (
   degens: Degen[],
   {
-    prices = [],
-    multipliers = [],
-    rentals = [],
+    // prices = [],
+    // multipliers = [],
+    // rentals = [],
     tribes = [],
     backgrounds = [],
     cosmetics = [],
@@ -16,90 +17,99 @@ export const tranformDataByFilter = (
     searchTerm = [],
   }: DegenFilter,
 ): Degen[] => {
-  const walletAddress = window.location.pathname.replace(
-    /(\/(degens)|\/)/g,
-    '',
+  let result = degens.filter(
+    ({
+      // price,
+      // multiplier,
+      // rental_count,
+      tribe = '',
+      background = '',
+      traits_string = '',
+      name = '',
+      id = '',
+      owner = '',
+    }: Degen) => {
+      // Filter all burn addys
+      if (BURN_ADDYS.includes(owner)) return false;
+
+      // Filter for custom URL with addy
+      const walletAddress = window.location.pathname.replace(
+        /(\/(degens)|\/)/g,
+        '',
+      );
+      if (
+        walletAddress?.length > 26 &&
+        !(owner.toLowerCase() === walletAddress.toLowerCase())
+      ) {
+        return false;
+      }
+
+      // if (prices.length === 2 && !(price >= prices[0] && price <= prices[1])) {
+      //   return false;
+      // }
+
+      // if (
+      //   multipliers.length > 0 &&
+      //   !multipliers.find((value: string) =>
+      //     value === '3+' ? multiplier >= 3 : multiplier === Number(value),
+      //   )
+      // ) {
+      //   return false;
+      // }
+
+      // if (
+      //   rentals.length > 0 &&
+      //   !rentals.find((value: string) =>
+      //     value === '3+' ? rental_count >= 3 : rental_count === Number(value),
+      //   )
+      // ) {
+      //   return false;
+      // }
+
+      if (
+        tribes.length > 0 &&
+        !tribes.find(
+          (trb: string) =>
+            tribe?.toLocaleLowerCase() === trb.toLocaleLowerCase() ||
+            // TODO: remove unnecessary check once fetch data is updated
+            (!tribe && trb.toLocaleLowerCase() === 'hydra'),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        backgrounds.length > 0 &&
+        !backgrounds.find(
+          (bg: string) =>
+            background?.toLocaleLowerCase() === bg.toLocaleLowerCase(),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        cosmetics.length > 0 &&
+        !cosmetics.some((cosmetic) =>
+          traits_string.split(',').includes(cosmetic),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        searchTerm.length === 1 &&
+        !(
+          name.toLowerCase().includes(searchTerm[0].toLowerCase()) ||
+          id.toLocaleLowerCase().includes(searchTerm[0].toLowerCase())
+        )
+      ) {
+        return false;
+      }
+
+      return true;
+    },
   );
-  let result = degens.filter((degen: Degen) => {
-    const {
-      price,
-      multiplier,
-      rental_count,
-      tribe,
-      background,
-      traits_string,
-      name,
-      id,
-      owner,
-    } = degen;
-
-    if (
-      walletAddress?.length > 26 &&
-      !(owner.toLowerCase() === walletAddress.toLowerCase())
-    ) {
-      return false;
-    }
-
-    if (prices.length === 2 && !(price >= prices[0] && price <= prices[1])) {
-      return false;
-    }
-
-    if (
-      multipliers.length > 0 &&
-      !multipliers.find((value: string) =>
-        value === '3+' ? multiplier >= 3 : multiplier === Number(value),
-      )
-    ) {
-      return false;
-    }
-
-    if (
-      rentals.length > 0 &&
-      !rentals.find((value: string) =>
-        value === '3+' ? rental_count >= 3 : rental_count === Number(value),
-      )
-    ) {
-      return false;
-    }
-
-    if (
-      tribes.length > 0 &&
-      !tribes.find(
-        (trb: string) =>
-          tribe === trb.toLocaleLowerCase() ||
-          // TODO: remove unnecessary check once fetch data is updated
-          (!tribe && trb.toLocaleLowerCase() === 'hydra'),
-      )
-    ) {
-      return false;
-    }
-
-    if (
-      backgrounds.length > 0 &&
-      !backgrounds.find((bg: string) => background === bg.toLocaleLowerCase())
-    ) {
-      return false;
-    }
-
-    if (
-      cosmetics.length > 0 &&
-      !cosmetics.some((cosmetic) => traits_string.split(',').includes(cosmetic))
-    ) {
-      return false;
-    }
-
-    if (
-      searchTerm.length === 1 &&
-      !(
-        name.toLowerCase().includes(searchTerm[0].toLowerCase()) ||
-        id.toLocaleLowerCase().includes(searchTerm[0].toLowerCase())
-      )
-    ) {
-      return false;
-    }
-
-    return true;
-  });
 
   if (sort === 'idUp') {
     result.sort((a, b) => Number(a.id) - Number(b.id));
