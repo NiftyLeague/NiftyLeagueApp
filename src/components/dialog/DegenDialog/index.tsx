@@ -1,7 +1,7 @@
 import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import { NFT_CONTRACT } from 'constants/contracts';
+import { DEGEN_CONTRACT } from 'constants/contracts';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
 import NetworkContext from 'contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
@@ -84,11 +84,11 @@ const DegenDialog = ({
     async function getCharacter() {
       const characterData = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        name: await readContracts[NFT_CONTRACT].getName(tokenId),
+        name: await readContracts[DEGEN_CONTRACT].getName(tokenId),
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        owner: await readContracts[NFT_CONTRACT].ownerOf(tokenId),
+        owner: await readContracts[DEGEN_CONTRACT].ownerOf(tokenId),
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        traitList: await readContracts[NFT_CONTRACT].getCharacterTraits(
+        traitList: await readContracts[DEGEN_CONTRACT].getCharacterTraits(
           tokenId,
         ),
       };
@@ -121,7 +121,7 @@ const DegenDialog = ({
       open &&
       tokenId &&
       readContracts &&
-      readContracts[NFT_CONTRACT] &&
+      readContracts[DEGEN_CONTRACT] &&
       authToken
     ) {
       // eslint-disable-next-line no-void

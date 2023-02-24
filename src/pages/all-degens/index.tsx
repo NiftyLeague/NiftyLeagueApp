@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -21,7 +21,7 @@ import {
   updateFilterValue,
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
 import { DEGEN_BASE_API_URL } from 'constants/url';
@@ -34,11 +34,12 @@ import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from 'components/dialog/DegenDialog';
 import BalanceContext from 'contexts/BalanceContext';
 import DegensTopNav from 'components/extended/DegensTopNav';
+import { HYDRAS } from 'constants/hydras';
 
 // Needs to be divisible by 2, 3, or 4
 const DEGENS_PER_PAGE = 12;
 
-const AllRentalsPage = (): JSX.Element => {
+const AllDegensPage = (): JSX.Element => {
   const { address } = useContext(NetworkContext);
   const [degens, setDegens] = useState<Degen[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
@@ -58,6 +59,28 @@ const AllRentalsPage = (): JSX.Element => {
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
   );
 
+  const originalDegens: Degen[] = useMemo(() => {
+    if (!data || !Object.values(data).length) return [];
+
+    // TODO: remove temp fix for 7th tribes
+    // return Object.values(data);
+    return Object.values(data).map((degen) =>
+      Number(degen.id) <= 9900
+        ? degen
+        : {
+            ...degen,
+            background: HYDRAS[degen.id].rarity,
+            tribe:
+              Number(degen.id) >= 9999
+                ? Number(degen.id) === 9999
+                  ? 'rugman'
+                  : 'satoshi'
+                : 'hydra',
+          },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!data]);
+
   const { isDegenOwner } = useContext(BalanceContext);
 
   const theme = useTheme();
@@ -70,18 +93,10 @@ const AllRentalsPage = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!data || !Object.values(data).length) {
-      return;
-    }
-
-    const originalDegens: Degen[] = Object.values(data);
+    if (!originalDegens?.length) return;
     setDefaultValues(getDefaultFilterValueFromData(originalDegens));
     // Filter out rent disabled degens in Feed
-    setDegens(
-      originalDegens.filter(
-        (degen) => degen?.is_active || degen?.owner === address.toLowerCase(),
-      ),
-    );
+    setDegens(originalDegens);
     const params = Object.fromEntries(searchParams.entries());
     let newDegens = originalDegens;
     if (!isEmpty(params)) {
@@ -97,7 +112,7 @@ const AllRentalsPage = (): JSX.Element => {
       setDegens([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmpty(data), address]);
+  }, [originalDegens, address]);
 
   const handleChangeSearchTerm = (e) => {
     setSearchTerm(e.target.value);
@@ -112,7 +127,17 @@ const AllRentalsPage = (): JSX.Element => {
 
   const handleFilter = useCallback(
     (filter: DegenFilter) => {
-      const newFilters = { ...filter, sort: filters.sort };
+      // TODO: Remove temp filter overrides if we want to enable filter functionailty
+      // temp hardcoded to empty to avoid all filtering
+      const newFilters = {
+        ...filter,
+        prices: [],
+        rentals: [],
+        wearable: [],
+        cosmetics: [],
+        sort: filters.sort,
+      };
+      console.log('degens', degens);
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
       setFilteredData(result);
@@ -142,11 +167,11 @@ const AllRentalsPage = (): JSX.Element => {
     setIsDegenModalOpen(true);
   }, []);
 
-  const handleRentDegen = useCallback((degen: Degen): void => {
-    setSelectedDegen(degen);
-    setIsRentDialog(true);
-    setIsDegenModalOpen(true);
-  }, []);
+  // const handleRentDegen = useCallback((degen: Degen): void => {
+  //   setSelectedDegen(degen);
+  //   setIsRentDialog(true);
+  //   setIsDegenModalOpen(true);
+  // }, []);
 
   const isGridView = layoutMode === 'gridView';
 
@@ -196,13 +221,13 @@ const AllRentalsPage = (): JSX.Element => {
           size={isGridView ? 'normal' : 'small'}
           onClickEditName={() => handleClickEditName(degen)}
           onClickDetail={() => handleViewTraits(degen)}
-          onClickRent={() => handleRentDegen(degen)}
+          // onClickRent={() => handleRentDegen(degen)}
         />
       </Grid>
     ),
     [
       handleClickEditName,
-      handleRentDegen,
+      // handleRentDegen,
       handleViewTraits,
       isDrawerOpen,
       isGridView,
@@ -290,4 +315,4 @@ const AllRentalsPage = (): JSX.Element => {
   );
 };
 
-export default AllRentalsPage;
+export default AllDegensPage;

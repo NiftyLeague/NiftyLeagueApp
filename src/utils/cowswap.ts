@@ -1,12 +1,12 @@
 import { CowSdk, OrderKind } from '@cowprotocol/cow-sdk';
 import { Contract, ethers } from 'ethers';
 import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
-import wethAbi from 'constants/abis/weth.json';
+import wethAbi from 'contracts/abis/weth.json';
 import {
   COWSWAP_VAULT_RELAYER_ADDRESS,
   WETH_ADDRESS,
+  NFTL_TOKEN_ADDRESS,
 } from 'constants/contracts';
-import NFTLTokenAddress from 'contracts/mainnet/NFTLToken.address';
 import { formatNumberToDisplay2 } from './numbers';
 
 export const getCowMarketPrice = async ({
@@ -19,7 +19,7 @@ export const getCowMarketPrice = async ({
   const quoteResponse = await cowSdk.cowApi.getQuote({
     kind,
     sellToken: WETH_ADDRESS[chainId],
-    buyToken: NFTLTokenAddress,
+    buyToken: NFTL_TOKEN_ADDRESS[chainId],
     amount: ethers.utils.parseEther(amount).toString(),
     userAddress,
     validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr
@@ -60,7 +60,7 @@ export const createOrderSwapEtherToNFTL = async ({
     const quoteResponse = await cowSdk.cowApi.getQuote({
       kind: OrderKind.SELL,
       sellToken: WETH_ADDRESS[chainId],
-      buyToken: NFTLTokenAddress,
+      buyToken: NFTL_TOKEN_ADDRESS[chainId],
       amount: ethers.utils.parseEther(etherVal).toString(),
       userAddress,
       validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr

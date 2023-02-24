@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useFlags } from 'launchdarkly-react-client-sdk';
+// import { useFlags } from 'launchdarkly-react-client-sdk';
 import isEmpty from 'lodash/isEmpty';
 import {
   Button,
@@ -23,16 +23,16 @@ import { useTheme } from '@mui/system';
 import {
   FilterSource,
   backgrounds,
-  multipliers,
-  rentals,
+  // multipliers,
+  // rentals,
   tribes,
-  wearables,
+  // wearables,
 } from 'constants/filters';
 import * as CosmeticsFilter from 'constants/cosmeticsFilters';
 import { DegenFilter } from 'types/degenFilter';
 import { updateFilterValue } from './utils';
 import FilterAccordion from './FilterAccordion';
-import FilterRangeSlider from './FilterRangeSlider';
+// import FilterRangeSlider from './FilterRangeSlider';
 import FilterAllTraitCheckboxes from '../FilterAllTraitCheckboxes';
 
 interface DegensFilterProps {
@@ -89,31 +89,31 @@ const DegensFilter = ({
   );
 
   const isParamsEmpty = isEmpty(params);
-  const { displayMyItems } = useFlags();
+  // const { displayMyItems } = useFlags();
 
   // Filter states
   const [showMore, setShowMore] = useState(false);
   const [pricesRangeValue, setPricesRangeValue] = useState<number[]>(
     defaultFilterValues.prices,
   );
-  const [multipliersValue, setMultipliersValue] = useState<string[]>(
-    defaultFilterValues.multipliers,
-  );
-  const [rentalsValue, setRentalsValue] = useState<string[]>(
-    defaultFilterValues.rentals,
-  );
+  // const [multipliersValue, setMultipliersValue] = useState<string[]>(
+  //   defaultFilterValues.multipliers,
+  // );
+  // const [rentalsValue, setRentalsValue] = useState<string[]>(
+  //   defaultFilterValues.rentals,
+  // );
   const [tribesValue, setTribesValue] = useState<string[]>(
     defaultFilterValues.tribes,
   );
   const [backgroundsValue, setBackgroundsValue] = useState<string[]>(
-    isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
+    defaultFilterValues.backgrounds,
   );
   const [cosmeticsValue, setCosmeticsValue] = useState<string[]>(
     defaultFilterValues.cosmetics,
   );
-  const [wearablesValue, setWearablesValue] = useState<string[]>(
-    defaultFilterValues.wearables,
-  );
+  // const [wearablesValue, setWearablesValue] = useState<string[]>(
+  //   defaultFilterValues.wearables,
+  // );
 
   // Set search params from filter values
   // Use value to manually set the source's value
@@ -188,15 +188,13 @@ const DegensFilter = ({
 
   const setAllFilterValues = useCallback(() => {
     setPricesRangeValue(defaultFilterValues.prices);
-    setMultipliersValue(defaultFilterValues.multipliers);
-    setRentalsValue(defaultFilterValues.rentals);
+    // setMultipliersValue(defaultFilterValues.multipliers);
+    // setRentalsValue(defaultFilterValues.rentals);
     setTribesValue(defaultFilterValues.tribes);
-    setBackgroundsValue(
-      isDegenOwner ? defaultFilterValues.backgrounds : ['Common'],
-    );
+    setBackgroundsValue(defaultFilterValues.backgrounds);
     setCosmeticsValue(defaultFilterValues.cosmetics);
-    setWearablesValue(defaultFilterValues.wearables);
-  }, [defaultFilterValues, isDegenOwner]);
+    // setWearablesValue(defaultFilterValues.wearables);
+  }, [defaultFilterValues]);
 
   const handleReset = () => {
     if (isParamsEmpty) return;
@@ -221,28 +219,20 @@ const DegensFilter = ({
       !params.backgrounds && !mountedRef.current
         ? {
             ...defaultFilterValues,
-            backgrounds: isDegenOwner
-              ? defaultFilterValues.backgrounds
-              : ['Common'],
+            backgrounds: defaultFilterValues.backgrounds,
           }
         : defaultFilterValues,
       params,
       {
         prices: setPricesRangeValue,
-        multipliers: setMultipliersValue,
-        rentals: setRentalsValue,
+        // multipliers: setMultipliersValue,
+        // rentals: setRentalsValue,
         tribes: setTribesValue,
         backgrounds: setBackgroundsValue,
         cosmetics: setCosmeticsValue,
-        wearables: setWearablesValue,
+        // wearables: setWearablesValue,
       },
     );
-    if (!params.backgrounds && !mountedRef.current && !isDegenOwner) {
-      setSearchParams({
-        ...params,
-        backgrounds: ['Common'],
-      });
-    }
     mountedRef.current = true;
     onFilter({
       prices: newFilters.prices,
@@ -267,7 +257,7 @@ const DegensFilter = ({
       }}
     >
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h3">Filter Rentals</Typography>
+        <Typography variant="h3">Filter Degens</Typography>
         <Stack direction="row" gap={2}>
           <Button
             variant="outlined"
@@ -282,7 +272,7 @@ const DegensFilter = ({
       <Stack py={1.5} borderRadius="10px" sx={{ background: '#1E2023' }}>
         <FilterAccordion
           summary={<Typography variant="h4">Tribe</Typography>}
-          expanded={false}
+          expanded={true}
           length={tribes.length}
         >
           <FormGroup sx={{ flexDirection: 'row' }}>
@@ -319,6 +309,7 @@ const DegensFilter = ({
             ))}
           </FormGroup>
         </FilterAccordion>
+        {/* 
         <FilterAccordion
           summary={<Typography variant="h4">Price</Typography>}
           expanded={false}
@@ -334,8 +325,8 @@ const DegensFilter = ({
               onChangeCommitted={() => handleChangeCommitted('prices')}
             />
           </Stack>
-        </FilterAccordion>
-        <FilterAccordion
+        </FilterAccordion> */}
+        {/* <FilterAccordion
           summary={<Typography variant="h4">Queue</Typography>}
           expanded={false}
           length={rentals.length}
@@ -365,8 +356,8 @@ const DegensFilter = ({
               />
             ))}
           </FormGroup>
-        </FilterAccordion>
-        <FilterAccordion
+        </FilterAccordion> */}
+        {/* <FilterAccordion
           summary={<Typography variant="h4">Multiplier</Typography>}
           expanded={false}
           length={multipliers.length}
@@ -396,8 +387,8 @@ const DegensFilter = ({
               />
             ))}
           </FormGroup>
-        </FilterAccordion>
-        {displayMyItems && (
+        </FilterAccordion> */}
+        {/* {displayMyItems && (
           <FilterAccordion
             summary={<Typography variant="h4">Wearable</Typography>}
             expanded={false}
@@ -430,7 +421,39 @@ const DegensFilter = ({
               ))}
             </FormGroup>
           </FilterAccordion>
-        )}
+        )} */}
+        <FilterAccordion
+          summary={<Typography variant="h4">Background</Typography>}
+          length={backgrounds.length}
+          expanded={true}
+        >
+          <FormGroup sx={{ flexDirection: 'row' }}>
+            {backgrounds.map((background) => (
+              <FormControlLabel
+                key={background}
+                control={
+                  <Checkbox
+                    name={background}
+                    value={background}
+                    checked={backgroundsValue.includes(background)}
+                    className={classes.inputCheck}
+                    onChange={(e) =>
+                      handleCheckboxChange(
+                        e,
+                        'backgrounds',
+                        backgroundsValue,
+                        setBackgroundsValue,
+                      )
+                    }
+                  />
+                }
+                label={<Typography variant="body1">{background}</Typography>}
+                className={classes.inputCheckFormControl}
+                sx={{ flex: '0 0 50%' }}
+              />
+            ))}
+          </FormGroup>
+        </FilterAccordion>
         {!showMore ? (
           <Typography
             variant="body1"
@@ -446,40 +469,6 @@ const DegensFilter = ({
           </Typography>
         ) : (
           <>
-            <FilterAccordion
-              summary={<Typography variant="h4">Background</Typography>}
-              length={backgrounds.length}
-              expanded={false}
-            >
-              <FormGroup sx={{ flexDirection: 'row' }}>
-                {backgrounds.map((background) => (
-                  <FormControlLabel
-                    key={background}
-                    control={
-                      <Checkbox
-                        name={background}
-                        value={background}
-                        checked={backgroundsValue.includes(background)}
-                        className={classes.inputCheck}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            e,
-                            'backgrounds',
-                            backgroundsValue,
-                            setBackgroundsValue,
-                          )
-                        }
-                      />
-                    }
-                    label={
-                      <Typography variant="body1">{background}</Typography>
-                    }
-                    className={classes.inputCheckFormControl}
-                    sx={{ flex: '0 0 50%' }}
-                  />
-                ))}
-              </FormGroup>
-            </FilterAccordion>
             {Object.keys(CosmeticsFilter.TRAIT_VALUE_MAP)
               .sort()
               .map((categoryKey) => {
