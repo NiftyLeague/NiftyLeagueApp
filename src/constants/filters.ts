@@ -4,7 +4,9 @@ import { ReactComponent as CatIcon } from 'assets/images/tribe/cat.svg';
 import { ReactComponent as DegoIcon } from 'assets/images/tribe/doge.svg';
 import { ReactComponent as FrogIcon } from 'assets/images/tribe/frog.svg';
 import { ReactComponent as HumanIcon } from 'assets/images/tribe/human.svg';
-// import { ReactComponent as EggIcon } from 'assets/images/tribe/egg.svg';
+import { ReactComponent as HydraIcon } from 'assets/images/tribe/hydra.svg';
+import { ReactComponent as RugmanIcon } from 'assets/images/tribe/rugman.svg';
+import { ReactComponent as SatoshiIcon } from 'assets/images/tribe/satoshi.svg';
 
 const tribes = [
   {
@@ -31,10 +33,18 @@ const tribes = [
     name: 'Human',
     icon: HumanIcon,
   },
-  // {
-  //   name: 'Egg',
-  //   icon: EggIcon,
-  // },
+  {
+    name: 'Hydra',
+    icon: HydraIcon,
+  },
+  {
+    name: 'Rugman',
+    icon: RugmanIcon,
+  },
+  {
+    name: 'Satoshi',
+    icon: SatoshiIcon,
+  },
 ];
 
 const backgrounds = ['Common', 'Rare', 'Meta', 'Legendary'];

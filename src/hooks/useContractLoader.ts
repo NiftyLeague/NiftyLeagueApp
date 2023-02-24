@@ -2,10 +2,11 @@
 /* eslint-disable global-require */
 import { useState, useEffect } from 'react';
 import { Contract, Signer } from 'ethers';
-import { Contracts, NetworkName, Provider } from 'types/web3';
+import { Contracts, Provider } from 'types/web3';
 import { getProviderAndSigner } from 'helpers';
-import { NETWORK_NAME, SUPPORTED_CHAIN_IDS } from 'constants/networks';
-import EXTERNAL_CONTRACTS from 'constants/externalContracts';
+import { SUPPORTED_CHAIN_IDS } from 'constants/networks';
+import CONTRACTS from 'contracts/deployments';
+import EXTERNAL_CONTRACTS from 'contracts/externalContracts';
 
 /*
   ~ What it does? ~
@@ -28,18 +29,6 @@ import EXTERNAL_CONTRACTS from 'constants/externalContracts';
   config can include:
   - chainId - to hardcode the chainId, irrespective of the providerOrSigner chainId
 */
-
-const loadHardhatContract = (
-  networkName: NetworkName,
-  contractName: string,
-  signer: Signer | Provider,
-) => {
-  return new Contract(
-    require(`../contracts/${networkName}/${contractName}.address.js`),
-    require(`../contracts/${networkName}/${contractName}.abi.json`),
-    signer,
-  );
-};
 
 interface Config {
   chainId?: number;
@@ -67,14 +56,12 @@ export default function useContractLoader(
           const _chainId = config.chainId || chainId;
           if (!SUPPORTED_CHAIN_IDS.includes(_chainId)) return;
           // eslint-disable-next-line no-underscore-dangle
-          const networkName = NETWORK_NAME[_chainId];
-          const contractList =
-            require(`../contracts/${networkName}/contracts.js`) as string[];
-          const hardhatContracts = contractList.reduce(
+          const deployedContractList = CONTRACTS[_chainId];
+          const hardhatContracts = Object.keys(deployedContractList).reduce(
             (accumulator, contractName) => {
-              accumulator[contractName] = loadHardhatContract(
-                networkName,
-                contractName,
+              accumulator[contractName] = new Contract(
+                deployedContractList[contractName].address,
+                deployedContractList[contractName].abi,
                 signerOrProvider,
               );
               return accumulator;

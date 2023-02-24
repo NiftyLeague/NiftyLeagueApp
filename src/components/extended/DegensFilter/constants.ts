@@ -6,7 +6,7 @@ const DEFAULT_STATIC_FILTER: DegenFilter = {
   rentals: [],
   tribes: [],
   backgrounds: [],
-  sort: 'priceUp',
+  sort: 'idUp',
   cosmetics: [],
   wearables: [],
   searchTerm: [''],

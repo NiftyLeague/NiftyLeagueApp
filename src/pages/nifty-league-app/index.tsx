@@ -10,7 +10,7 @@ import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder
 import { v4 as uuidv4 } from 'uuid';
 import GameList from 'pages/games/GameList';
 import DegenDialog from 'components/dialog/DegenDialog';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import { sendEvent } from 'utils/google-analytics';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 
@@ -127,7 +127,7 @@ const NiftyLeagueAppPage = () => {
               },
             }}
           >
-            <Link to="/all-degens" onClick={handleViewAllTraits}>
+            <Link to="/degens" onClick={handleViewAllTraits}>
               <Button variant="outlined">View All Rentals</Button>
             </Link>
           </Box>

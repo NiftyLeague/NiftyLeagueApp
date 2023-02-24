@@ -12,7 +12,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Degen } from 'types/degens';
 import NetworkContext from 'contexts/NetworkContext';
 import { BigNumber, BigNumberish, utils } from 'ethers';
-import { NFTL_CONTRACT, NFT_CONTRACT } from 'constants/contracts';
+import { NFTL_CONTRACT, DEGEN_CONTRACT } from 'constants/contracts';
 import { getErrorForName } from 'utils/name';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEGEN_BASE_IMAGE_URL } from 'constants/url';
@@ -26,7 +26,8 @@ interface Props {
 }
 
 const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
-  const { address, tx, writeContracts } = useContext(NetworkContext);
+  const { address, tx, writeContracts, targetNetwork } =
+    useContext(NetworkContext);
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -38,7 +39,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
 
   useEffect(() => {
     const getAllowance = async () => {
-      const degenContract = writeContracts[NFT_CONTRACT];
+      const degenContract = writeContracts[DEGEN_CONTRACT];
       const DEGENAddress = degenContract.address;
       const nftl = writeContracts[NFTL_CONTRACT];
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -52,7 +53,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
     if (
       writeContracts &&
       writeContracts[NFTL_CONTRACT] &&
-      writeContracts[NFT_CONTRACT]
+      writeContracts[DEGEN_CONTRACT]
     )
       // eslint-disable-next-line no-void
       void getAllowance();
@@ -76,12 +77,12 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
     } else if (
       !error &&
       writeContracts &&
-      writeContracts[NFT_CONTRACT] &&
+      writeContracts[DEGEN_CONTRACT] &&
       writeContracts[NFTL_CONTRACT]
     ) {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('Rename NFT to:', input);
-      const degenContract = writeContracts[NFT_CONTRACT];
+      const degenContract = writeContracts[DEGEN_CONTRACT];
       const nftl = writeContracts[NFTL_CONTRACT];
       if (insufficientAllowance) {
         // eslint-disable-next-line no-console
@@ -121,12 +122,14 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   return (
     <>
       <DialogTitle sx={{ textAlign: 'center' }}>Rename DEGEN</DialogTitle>
-      <DialogContent dividers sx={{ maxWidth: '420px' }}>
+      <DialogContent dividers sx={{ maxWidth: '820px' }}>
         <Stack rowGap={2}>
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/mainnet/images/${degen?.id}.png`}
+              image={`${DEGEN_BASE_IMAGE_URL}/${targetNetwork.name}/images/${
+                degen?.id
+              }.${degen?.background === 'Legendary' ? 'mp4' : 'png'}`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
             />

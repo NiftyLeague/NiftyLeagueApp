@@ -24,7 +24,7 @@ import {
   updateFilterValue,
   getDefaultFilterValueFromData,
 } from 'components/extended/DegensFilter/utils';
-import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenamDegenDialogContent';
+import RenameDegenDialogContent from 'pages/dashboard/degens/dialogs/RenameDegenDialogContent';
 import CollapsibleSidebarLayout from 'components/layout/CollapsibleSidebarLayout';
 import SectionTitle from 'components/sections/SectionTitle';
 import {
@@ -32,6 +32,7 @@ import {
   DEGEN_OPENSEA_URL,
   PROFILE_FAV_DEGENS_API,
 } from 'constants/url';
+import { HYDRAS } from 'constants/hydras';
 import { useProfileFavDegens } from 'hooks/useGamerProfile';
 import useFetch from 'hooks/useFetch';
 import useAuth from 'hooks/useAuth';
@@ -93,33 +94,37 @@ const DashboardDegensPage = (): JSX.Element => {
   const loading = loadingAllRentals || loadingUserDegens;
 
   const populatedDegens: Degen[] = useMemo(() => {
-    if (!characters.length || !data) {
-      return [];
-    }
+    if (!characters.length || !data) return [];
     // TODO: remove temp fix for 7th tribes
-    return characters.map(
-      (character) =>
-        data[character.id] || {
-          id: character.id,
-          name: character.name,
-          traits_string: Object.values(character.traits).toString(),
-          background: 'meta',
-          earning_cap: 0,
-          earning_cap_daily: 0,
-          is_active: false,
-          last_rented_at: 0,
-          multiplier: 2,
-          multipliers: { background: 2 },
-          owner: '',
-          owner_share: 0.1,
-          price: 0,
-          price_daily: 0,
-          rental_count: 0,
-          total_rented: 0,
-          tribe: 'egg',
-        },
+    // return characters.map((character) => data[character.id]);
+    return characters.map((character) =>
+      Number(character.id) <= 9900
+        ? data[character.id]
+        : {
+            id: character.id,
+            name: character.name,
+            traits_string: Object.values(character.traits).toString(),
+            background: HYDRAS[character.id].rarity,
+            earning_cap: 0,
+            earning_cap_daily: 0,
+            is_active: false,
+            last_rented_at: 0,
+            multiplier: 0,
+            multipliers: { background: 0 },
+            owner: '',
+            owner_share: 0.1,
+            price: 0,
+            price_daily: 0,
+            rental_count: 0,
+            total_rented: 0,
+            tribe:
+              Number(character.id) >= 9999
+                ? Number(character.id) === 9999
+                  ? 'rugman'
+                  : 'satoshi'
+                : 'hydra',
+          },
     );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characters.length, !!data]);
 
@@ -405,7 +410,10 @@ const DashboardDegensPage = (): JSX.Element => {
         open={isRenameDegenModalOpen}
         onClose={() => setIsRenameDegenModalOpen(false)}
       >
-        <RenameDegenDialogContent degen={selectedDegen} />
+        <RenameDegenDialogContent
+          degen={selectedDegen}
+          onSuccess={() => setIsRenameDegenModalOpen(false)}
+        />
       </Dialog>
     </>
   );
