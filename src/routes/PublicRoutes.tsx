@@ -26,6 +26,7 @@ const CryptoWinterGamePage = Loadable(
 const AllDegensPage = Loadable(lazy(() => import('pages/all-degens')));
 const GameVerification = Loadable(lazy(() => import('pages/GameVerification')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
+const DashboardRafflePage = Loadable(lazy(() => import('pages/raffle')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -86,6 +87,10 @@ const PublicRoutes = {
     {
       path: '/mint-o-matic',
       element: <Mint />,
+    },
+    {
+      path: '/raffle',
+      element: <DashboardRafflePage />,
     },
   ],
 };
