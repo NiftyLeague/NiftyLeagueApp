@@ -137,7 +137,6 @@ const AllDegensPage = (): JSX.Element => {
         cosmetics: [],
         sort: filters.sort,
       };
-      console.log('degens', degens);
       let result = tranformDataByFilter(degens, newFilters);
       setFilters(newFilters);
       setFilteredData(result);
