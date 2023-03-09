@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -11,13 +11,13 @@ import useContractReader from 'hooks/useContractReader';
 import { NFTL_RAFFLE_CONTRACT } from 'constants/contracts';
 import TicketDialog from './TicketDialog';
 
-function useTicketBalance(refreshKey?: string | number): number {
+function useDepositBalance(refreshKey = 0): number {
   const { address, readContracts } = useContext(NetworkContext);
   const [balance, setBalance] = useState(BigNumber.from(0));
   const result = useContractReader(
     readContracts,
     NFTL_RAFFLE_CONTRACT,
-    'getTicketCountByUser',
+    'userDeposits',
     [address],
     undefined,
     undefined,
@@ -30,17 +30,41 @@ function useTicketBalance(refreshKey?: string | number): number {
   return parseFloat(utils.formatEther(balance));
 }
 
+function useTicketBalance(): {
+  ticketCount: number;
+  refetchBalance: () => void;
+} {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const userDeposits = useDepositBalance(refreshKey);
+  const refetchBalance = useCallback(() => setRefreshKey(Math.random), []);
+  return {
+    ticketCount: Math.floor(
+      userDeposits && userDeposits >= 1000 ? userDeposits / 1000 : 0,
+    ),
+    refetchBalance,
+  };
+}
+
 const Raffle = (): JSX.Element => {
   const theme = useTheme();
-  const [refreshBalKey, setRefreshBalKey] = useState(0);
   const { loading } = useContext(BalanceContext);
-  const userTicketBalance = useTicketBalance(refreshBalKey);
+  const { ticketCount } = useTicketBalance();
+  const [mockTickets, setMockTickets] = useState(0);
+  useEffect(() => setMockTickets(ticketCount), [ticketCount]);
+
+  const handleRefreshTicketBalance = useCallback(
+    (depositAmount: number) => {
+      setMockTickets(ticketCount + Math.floor(depositAmount / 1000));
+    },
+    [ticketCount],
+  );
+
   return (
     <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
         <HoverDataCard
           title="Ticket Balance"
-          primary={`${formatNumberToDisplay(userTicketBalance)} Tickets`}
+          primary={`${formatNumberToDisplay(mockTickets, 0)} Tickets`}
           customStyle={{
             backgroundColor: theme.palette.background.default,
             border: '1px solid',
@@ -49,9 +73,7 @@ const Raffle = (): JSX.Element => {
           secondary="1000 NFTL Buys 1 Ticket"
           isLoading={loading}
           actions={
-            <TicketDialog
-              refreshTicketBalance={() => setRefreshBalKey(Math.random)}
-            />
+            <TicketDialog refreshTicketBalance={handleRefreshTicketBalance} />
           }
         />
       </Grid>

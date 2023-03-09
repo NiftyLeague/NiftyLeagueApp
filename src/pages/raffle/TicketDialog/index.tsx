@@ -20,7 +20,7 @@ import TicketStepper from './TicketStepper';
 import BalanceContext from 'contexts/BalanceContext';
 
 interface Props {
-  onSuccess?: () => void;
+  onSuccess: (amount: number) => void;
 }
 
 const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
@@ -99,7 +99,7 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
       if (result) {
         setPurchaseSuccess(true);
         setProcessingPurchase(false);
-        onSuccess?.();
+        onSuccess(Number(input));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,11 +166,14 @@ const TicketDialog = ({ refreshTicketBalance }): JSX.Element => {
   const { writeContracts } = useContext(NetworkContext);
   const { userNFTLBalance, refreshNFTLBalance } = useContext(BalanceContext);
 
-  const handleSuccess = useCallback(async () => {
-    setOpen(false);
-    refreshNFTLBalance();
-    refreshTicketBalance();
-  }, [refreshNFTLBalance, refreshTicketBalance]);
+  const handleSuccess = useCallback(
+    async (amount) => {
+      setOpen(false);
+      refreshNFTLBalance();
+      refreshTicketBalance(amount);
+    },
+    [refreshNFTLBalance, refreshTicketBalance],
+  );
 
   return (
     <>
