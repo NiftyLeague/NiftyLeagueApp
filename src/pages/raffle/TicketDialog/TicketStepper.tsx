@@ -142,7 +142,7 @@ export default function TicketStepper({
   useEffect(() => {
     if (purchaseSuccess) setActiveStep(3);
     else if (insufficientBalance) setActiveStep(0);
-    else setActiveStep(insufficientAllowance ? 0 : 1);
+    else setActiveStep(insufficientAllowance ? 1 : 2);
   }, [insufficientAllowance, insufficientBalance, purchaseSuccess]);
 
   return (

@@ -154,6 +154,8 @@ const MainLayout = () => {
         return pageMeta.main.title;
       case '/degens':
         return pageMeta.allDegens.title;
+      case '/raffle':
+        return pageMeta.raffle.title;
       case '/games':
         return pageMeta.games.title;
       case '/games/smashers':
@@ -178,8 +180,6 @@ const MainLayout = () => {
         return pageMeta.dashboard.items.title;
       case '/dashboard/items/burner':
         return pageMeta.dashboard.items.title;
-      // case '/dashboard/rentals':
-      //   return pageMeta.dashboard.rentals.title;
       default:
         return pageMeta.main.title;
     }
