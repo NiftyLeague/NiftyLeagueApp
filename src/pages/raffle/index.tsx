@@ -12,7 +12,7 @@ const RaffleOverview = (): JSX.Element => {
       sx={{ maxHeight: 'cacl(100vh - 100px)' }}
     >
       <Grid item xs={12} md={12} lg={6}>
-        <Grid container flexDirection="column" spacing={6}>
+        <Grid container flexDirection="column" spacing={4}>
           <Grid item xs={12}>
             <Raffle />
           </Grid>
@@ -22,9 +22,23 @@ const RaffleOverview = (): JSX.Element => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={6}>
-        <Grid container flexDirection="column" spacing={6}>
+        <Grid container flexDirection="column" spacing={1}>
           <Grid item xs={12} textAlign="center">
-            <img src={RafflePic} alt="Nifty Raffle" width="100%" />
+            <iframe
+              src="https://dune.com/embeds/2181657/3574299"
+              height="150"
+              width="500"
+              title="Total NFTL Burnt"
+              style={{ backgroundColor: 'cornsilk', maxWidth: '100%' }}
+            />
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <img
+              src={RafflePic}
+              alt="Nifty Raffle"
+              width="100%"
+              style={{ maxWidth: 500 }}
+            />
           </Grid>
         </Grid>
       </Grid>
