@@ -2,6 +2,7 @@ import { ChainId } from '@sushiswap/sdk';
 import ALLOWED_COLORS_STORAGE_ABI from './abis/AllowedColorsStorage.json';
 import BALANCE_MANAGER_ABI from './abis/BalanceManager.json';
 import HYDRA_DISTRIBUTOR_ABI from './abis/HydraDistributor.json';
+import NFTL_RAFFLE_ABI from './abis/NFTLRaffle.json';
 import NFTL_TOKEN_ABI from './abis/NFTLToken.json';
 import NIFTY_BURNING_COMICS_L2_ABI from './abis/NiftyBurningComicsL2.json';
 import NIFTY_DEGEN_ABI from './abis/NiftyDegen.json';
@@ -61,6 +62,10 @@ const CONTRACTS: {
       address: '0x600cE05982738A0a899547Eb2C60410830e58aDA',
       abi: HYDRA_DISTRIBUTOR_ABI,
     },
+    NFTLRaffle: {
+      address: '0xE369B3D6CEE75De8C43aF0760D1FF06C95712a0c',
+      abi: NFTL_RAFFLE_ABI,
+    },
     NFTLToken: {
       address: '0x5803033a15F49dA0664ff8b0775a6E578422CAfD',
       abi: NFTL_TOKEN_ABI,
@@ -94,6 +99,10 @@ const CONTRACTS: {
     HydraDistributor: {
       address: '0x3410a1583fB26CDBF2a1439A2302B5Bc0464Fd39',
       abi: HYDRA_DISTRIBUTOR_ABI,
+    },
+    NFTLRaffle: {
+      address: '0x33c84c36e79dd50F031dbDD103268cD6e895bAD9',
+      abi: NFTL_RAFFLE_ABI,
     },
     NFTLToken: {
       address: '0x3c8D2FCE49906e11e71cB16Fa0fFeB2B16C29638',

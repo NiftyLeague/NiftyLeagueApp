@@ -153,7 +153,7 @@ const WithdrawForm = ({
         <Typography variant="h4">Game &amp; Rental Balance</Typography>
         <Typography variant="h2" sx={{ opacity: 0.7 }}>
           {formatNumberToDisplay(balance)}
-          <Typography variant="body1">Available to Claim</Typography>
+          <Typography variant="body1">Available to Withdraw</Typography>
         </Typography>
         <Typography variant="h4">
           How much would you like to widthdraw?
