@@ -3,9 +3,10 @@ import {
   IconDeviceGamepad,
   IconLayoutGrid,
   IconListNumbers,
+  IconMoodCrazyHappy,
   IconSquarePlus,
   IconTag,
-  IconMoodCrazyHappy,
+  IconTicket,
 } from '@tabler/icons';
 
 // constant
@@ -13,9 +14,10 @@ const icons = {
   IconDeviceGamepad,
   IconLayoutGrid,
   IconListNumbers,
+  IconMoodCrazyHappy,
   IconSquarePlus,
   IconTag,
-  IconMoodCrazyHappy,
+  IconTicket,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -64,6 +66,14 @@ const PublicItems = {
       type: 'item',
       url: '/leaderboards',
       icon: icons.IconListNumbers,
+      breadcrumbs: false,
+    },
+    {
+      id: 'raffle',
+      title: 'Raffle',
+      type: 'item',
+      url: '/raffle',
+      icon: icons.IconTicket,
       breadcrumbs: false,
     },
   ],

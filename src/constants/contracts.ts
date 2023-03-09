@@ -9,6 +9,8 @@ export const HYDRA_DISTRIBUTOR = 'HydraDistributor';
 
 export const GAME_ACCOUNT_CONTRACT = 'BalanceManager';
 
+export const NFTL_RAFFLE_CONTRACT = 'NFTLRaffle';
+
 export const COMICS_CONTRACT = 'NiftyLaunchComics';
 
 export const COMICS_BURNER_CONTRACT = 'NiftyBurningComicsL2';

@@ -42,7 +42,7 @@ const HoverDataCard = ({
           direction="row"
           alignItems="center"
           spacing={0.5}
-          sx={{ mt: 1.75, mx: 'auto' }}
+          sx={{ mt: 1.75, mb: 0.5, mx: 'auto' }}
         >
           {isLoading ? (
             <Skeleton variant="text" animation="wave" width={80} />
