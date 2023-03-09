@@ -5,6 +5,9 @@ export const pageMeta = {
   allDegens: {
     title: 'All DEGENs | Nifty League',
   },
+  raffle: {
+    title: 'Raffle | Nifty League',
+  },
   games: {
     title: 'Games | Nifty League',
     smashers: {
