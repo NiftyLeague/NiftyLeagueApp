@@ -9,7 +9,6 @@ import BalanceContext from 'contexts/BalanceContext';
 import NetworkContext from 'contexts/NetworkContext';
 import useContractReader from 'hooks/useContractReader';
 import { NFTL_RAFFLE_CONTRACT } from 'constants/contracts';
-import TicketDialog from './TicketDialog';
 
 function useDepositBalance(refreshKey = 0): number {
   const { address, readContracts } = useContext(NetworkContext);
@@ -52,13 +51,6 @@ const Raffle = (): JSX.Element => {
   const [mockTickets, setMockTickets] = useState(0);
   useEffect(() => setMockTickets(ticketCount), [ticketCount]);
 
-  const handleRefreshTicketBalance = useCallback(
-    (depositAmount: number) => {
-      setMockTickets(ticketCount + Math.floor(depositAmount / 1000));
-    },
-    [ticketCount],
-  );
-
   return (
     <Grid container spacing={sectionSpacing}>
       <Grid item xs={12}>
@@ -70,11 +62,7 @@ const Raffle = (): JSX.Element => {
             border: '1px solid',
             borderColor: theme.palette.grey[800],
           }}
-          secondary="1000 NFTL Buys 1 Ticket"
           isLoading={loading}
-          actions={
-            <TicketDialog refreshTicketBalance={handleRefreshTicketBalance} />
-          }
         />
       </Grid>
     </Grid>
