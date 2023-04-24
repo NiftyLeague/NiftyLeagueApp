@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import useFlags from 'hooks/useFlags';
 import { Item } from 'types/comic';
 import ImageCard from 'components/cards/ImageCard';
 

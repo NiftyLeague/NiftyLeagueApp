@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
-// import { useFlags } from 'launchdarkly-react-client-sdk';
+// import useFlags from 'hooks/useFlags';
 import isEmpty from 'lodash/isEmpty';
 import {
   Button,
