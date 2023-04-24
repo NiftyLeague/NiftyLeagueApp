@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { useSearchParams } from 'react-router-dom';
-import { useFlags } from 'launchdarkly-react-client-sdk';
+import useFlags from 'hooks/useFlags';
 import {
   Grid,
   IconButton,

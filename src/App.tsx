@@ -1,6 +1,5 @@
 // routing
 import Routes from 'routes';
-import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
 // project imports
 import Locales from 'components/Locales';
@@ -10,23 +9,13 @@ import ThemeCustomization from 'themes';
 
 // auth provider
 import { TokenProvider as AuthProvider } from 'contexts/TokenContext';
-import { useEffect } from 'react';
 import { WindowProvider } from 'contexts/WindowContext';
 import { BalanceProvider } from 'contexts/BalanceContext';
+import { FeatureFlagProvider } from 'contexts/FeatureFlagsContext';
 
 // ==============================|| APP ||============================== //
 
 const App = () => {
-  useEffect(() => {
-    window.addEventListener(
-      'beforeunload',
-      () => {
-        localStorage.removeItem('active_rental');
-      },
-      false,
-    );
-  }, []);
-
   return (
     <ThemeCustomization>
       <Locales>
@@ -34,8 +23,10 @@ const App = () => {
           <AuthProvider>
             <WindowProvider>
               <BalanceProvider>
-                <Routes />
-                <Snackbar />
+                <FeatureFlagProvider>
+                  <Routes />
+                  <Snackbar />
+                </FeatureFlagProvider>
               </BalanceProvider>
             </WindowProvider>
           </AuthProvider>
@@ -45,6 +36,4 @@ const App = () => {
   );
 };
 
-export default withLDProvider({
-  clientSideID: process.env.REACT_APP_LAUNCHDARKLY_SDK_CLIENT!,
-})(App);
+export default App;
