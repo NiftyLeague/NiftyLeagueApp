@@ -1,26 +1,23 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { isOpera, browserName } from 'react-device-detect';
-import Unity, { UnityContext } from 'react-unity-webgl';
+import { Unity } from 'react-unity-webgl';
+import { UnityContextHook } from 'react-unity-webgl/distribution/types/unity-context-hook';
 import { Box, Button, Stack } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
 import useArcadeBalance from 'hooks/useArcadeBalance';
-// import useFetch from 'hooks/useFetch';
 import { NETWORK_NAME } from 'constants/networks';
 import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import { getGameViewedAnalyticsEventName } from 'constants/games';
-// import { ALL_RENTAL_API_URL } from 'constants/url';
 import { DEBUG } from 'constants/index';
 import { sendEvent } from 'utils/google-analytics';
 import withVerification from 'components/Authentication';
 import Preloader from 'components/Preloader';
-// import { Rentals } from 'types/rentals';
-// import EarningCap from 'pages/dashboard/overview/EarningCap';
 import ArcadeTokensRequired from './ArcadeTokensRequired';
 import useAuth from 'hooks/useAuth';
 
 interface GameProps {
-  unityContext: UnityContext;
+  unityContext: UnityContextHook;
   arcadeTokenRequired?: boolean;
 }
 
@@ -35,15 +32,6 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   } = useArcadeBalance();
   const authMsg = `true,${address || '0x0'},Vitalik,${authToken}`;
   const authCallback = useRef<null | ((authMsg: string) => void)>();
-  const [isLoaded, setLoaded] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  // const headers = { authorizationToken: authToken || '' };
-  // const { data: rentals } = useFetch<Rentals[]>(ALL_RENTAL_API_URL, {
-  //   headers,
-  //   enabled:
-  //     !!authToken && unityContext.unityConfig.productName === 'NiftySmashers',
-  // });
 
   useEffect(() => {
     if (address.length && authCallback.current) {
@@ -59,9 +47,10 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   }, [location?.pathname]);
 
   const startAuthentication = useCallback(
-    (e: CustomEvent<{ callback: (auth: string) => void }>) => {
+    (e) => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('Authenticating:', authMsg);
+      console.log('======== startAuthentication ========', e);
       e.detail.callback(authMsg);
       authCallback.current = e.detail.callback;
     },
@@ -69,7 +58,8 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   );
 
   const getConfiguration = useCallback(
-    (e: CustomEvent<{ callback: (network: string) => void }>) => {
+    (e) => {
+      console.log('======== getConfiguration ========', e);
       const networkName = NETWORK_NAME[targetNetwork.chainId];
       const version = process.env.REACT_APP_SUBGRAPH_VERSION;
       // eslint-disable-next-line no-console
@@ -96,26 +86,21 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
 
   useEffect(() => {
     if (unityContext) {
-      (window as any).unityInstance = unityContext;
-      (window as any).unityInstance.SendMessage = unityContext.send;
-      unityContext.on('loaded', () => setLoaded(true));
-      unityContext.on('error', console.error);
-      unityContext.on('progress', (p) => setProgress(p * 100));
-      (window as any).addEventListener(
-        'StartAuthentication',
-        startAuthentication,
-      );
-      (window as any).addEventListener('GetConfiguration', getConfiguration);
+      (window as any).unityInstance = unityContext.UNSAFE__unityInstance;
+      if (window.unityInstance)
+        (window as any).unityInstance.SendMessage = unityContext.sendMessage;
+      // unityContext.addEventListener('error', console.error);
+      unityContext.addEventListener('StartAuthentication', startAuthentication);
+      unityContext.addEventListener('GetConfiguration', getConfiguration);
       document.addEventListener('mousemove', onMouse, false);
     }
     return () => {
-      if ((window as any).unityInstance)
-        (window as any).unityInstance.removeAllEventListeners();
-      (window as any).removeEventListener(
+      // unityContext.removeEventListener('error', console.error);
+      unityContext.removeEventListener(
         'StartAuthentication',
         startAuthentication,
       );
-      (window as any).removeEventListener('GetConfiguration', getConfiguration);
+      unityContext.removeEventListener('GetConfiguration', getConfiguration);
       document.removeEventListener('mousemove', onMouse, false);
     };
   }, [unityContext, onMouse, startAuthentication, getConfiguration]);
@@ -134,17 +119,20 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
 
   return (
     <>
-      <Preloader ready={isLoaded} progress={progress} />
+      <Preloader
+        ready={unityContext.isLoaded}
+        progress={unityContext.loadingProgression * 100}
+      />
       <Stack direction="row" alignItems="flex-start">
         <Stack alignItems="flex-start">
           <Unity
             key={authToken}
             className="game-canvas"
-            unityContext={unityContext}
+            unityProvider={unityContext.unityProvider}
             style={{
               width: 'calc(77vh * 1.33)',
               height: '77vh',
-              visibility: isLoaded ? 'visible' : 'hidden',
+              visibility: unityContext.isLoaded ? 'visible' : 'hidden',
             }}
           />
           <Button
@@ -156,11 +144,6 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
             Fullscreen
           </Button>
         </Stack>
-        {/* {unityContext.unityConfig.productName === 'NiftySmashers' && (
-          <Box ml={2} minWidth={350}>
-            <EarningCap rentals={rentals ?? []} hideTitle={true} />
-          </Box>
-        )} */}
       </Stack>
     </>
   );
