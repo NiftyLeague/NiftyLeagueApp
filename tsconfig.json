@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "jsx": "react-jsx",
     "strict": false,
     "esModuleInterop": true,
@@ -19,13 +19,12 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-    "types": ["node", "webpack-env", "@types/jest"],
-    "typeRoots": ["./types"],
-    "baseUrl": "src",
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "baseUrl": "./src",
     "allowJs": true,
     "checkJs": true,
     "downlevelIteration": true
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "./src/contracts/**/*"]
 }

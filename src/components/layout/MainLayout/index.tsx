@@ -30,7 +30,7 @@ import { openDrawer } from 'store/slices/menu';
 import { useDispatch, useSelector } from 'store';
 
 // assets
-import { IconChevronRight } from '@tabler/icons';
+import { IconChevronRight } from '@tabler/icons-react';
 import { pageMeta } from 'constants/page-meta';
 import NetworkContext from 'contexts/NetworkContext';
 import { capitalize } from 'utils/string';

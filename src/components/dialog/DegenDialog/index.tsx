@@ -88,9 +88,8 @@ const DegenDialog = ({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         owner: await readContracts[DEGEN_CONTRACT].ownerOf(tokenId),
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        traitList: await readContracts[DEGEN_CONTRACT].getCharacterTraits(
-          tokenId,
-        ),
+        traitList:
+          await readContracts[DEGEN_CONTRACT].getCharacterTraits(tokenId),
       };
       setCharacter(characterData);
     }

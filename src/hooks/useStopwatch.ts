@@ -74,6 +74,7 @@ function useStopwatch({
     if (status === STATUS.RUNNING) {
       setStopwatch();
     } else if (status === STATUS.STOPPED || status === STATUS.PAUSED) {
+      // @ts-expect-error
       clearInterval(stopwatchRef.current as NodeJS.Timer);
     }
   }, [status, setStopwatch]);

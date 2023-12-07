@@ -62,9 +62,9 @@ const BottomInfo = ({
                       height="19.76px"
                     />
                   ) : (
-                    `${Math.round(nifty_smashers?.xp || 0)}/${
-                      nifty_smashers?.rank_xp_next
-                    }`
+                    `${Math.round(
+                      nifty_smashers?.xp || 0,
+                    )}/${nifty_smashers?.rank_xp_next}`
                   )}
                   <Typography
                     variant="h4"
@@ -171,9 +171,9 @@ const BottomInfo = ({
                         height="19.76px"
                       />
                     ) : (
-                      `${Math.round(crypto_winter?.xp || 0)}/${
-                        crypto_winter?.rank_xp_next
-                      }`
+                      `${Math.round(
+                        crypto_winter?.xp || 0,
+                      )}/${crypto_winter?.rank_xp_next}`
                     )}
                     <Typography
                       variant="h4"

@@ -320,8 +320,8 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                 {!agreement
                   ? 'Accept Terms to Continue'
                   : accountBalance < tokenCount * details.price
-                  ? 'Insufficient Balance'
-                  : 'Buy'}
+                    ? 'Insufficient Balance'
+                    : 'Buy'}
               </LoadingButton>
             </>
           )}

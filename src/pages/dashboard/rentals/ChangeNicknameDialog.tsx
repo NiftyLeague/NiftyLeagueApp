@@ -44,6 +44,7 @@ const ChangeNicknameDialog = ({
     reset,
     formState: { errors },
   } = useForm<IFormInput>({
+    // @ts-expect-error
     resolver: yupResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {

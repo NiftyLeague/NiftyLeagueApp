@@ -7,6 +7,7 @@ import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
 import { toast } from 'react-toastify';
 import ViewTraitsContentDialog from 'components/dialog/DegenDialog/ViewTraitsContentDialog';
 import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
+import { DEBUG } from 'constants/index';
 import DegenDialog from 'components/dialog/DegenDialog';
 import useAuth from 'hooks/useAuth';
 
@@ -96,9 +97,8 @@ const DegenTraitsDetailsPage = (): JSX.Element => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       owner: await readContracts[DEGEN_CONTRACT].ownerOf(tokenId),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      traitList: await readContracts[DEGEN_CONTRACT].getCharacterTraits(
-        tokenId,
-      ),
+      traitList:
+        await readContracts[DEGEN_CONTRACT].getCharacterTraits(tokenId),
     };
     setCharacter(characterData);
   }, [readContracts, tokenId]);
