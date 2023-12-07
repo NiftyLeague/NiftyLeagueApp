@@ -18,7 +18,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { providers } from 'ethers';
 import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import { DialogContext } from 'components/dialog';
 import { formatNumberToDisplay } from 'utils/numbers';
 import useWithdrawalHistory from 'hooks/useWithdrawalHistory';
@@ -204,7 +204,7 @@ const WithdrawForm = ({
             name="amountInput"
             control={control}
             render={({ field }) => (
-              <NumberFormat
+              <NumericFormat
                 {...field}
                 allowNegative={false}
                 isAllowed={({ value }) =>

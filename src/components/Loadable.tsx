@@ -11,11 +11,11 @@ import Loader from './Loader';
 interface LoaderProps extends LinearProgressProps {}
 
 const Loadable =
-  (Component: LazyExoticComponent<() => JSX.Element>) => (props: LoaderProps) =>
-    (
-      <Suspense fallback={<Loader />}>
-        <Component {...props} />
-      </Suspense>
-    );
+  (Component: LazyExoticComponent<() => JSX.Element>) =>
+  (props: LoaderProps) => (
+    <Suspense fallback={<Loader />}>
+      <Component {...props} />
+    </Suspense>
+  );
 
 export default Loadable;

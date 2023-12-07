@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import NetworkContext from 'contexts/NetworkContext';
-import { BigNumber, BigNumberish, utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { NFTL_CONTRACT, NFTL_RAFFLE_CONTRACT } from 'constants/contracts';
 import { submitTxWithGasEstimate } from 'helpers/Notifier';
 import { DEBUG } from 'constants/index';
@@ -28,10 +28,10 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
-  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [allowance, setAllowance] = useState<BigNumber>(BigNumber.from('0'));
   const [isProcessingPurchase, setProcessingPurchase] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const insufficientAllowance = allowance < 1000;
+  const insufficientAllowance = allowance.lt(BigNumber.from(1000));
   const insufficientBalance = userNFTLBalance < 1000;
 
   useEffect(() => {
@@ -47,12 +47,8 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
     const getAllowance = async () => {
       const raffleContract = writeContracts[NFTL_RAFFLE_CONTRACT];
       const nftl = writeContracts[NFTL_CONTRACT];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const allowanceBN = (await nftl.allowance(
-        address,
-        raffleContract.address,
-      )) as BigNumberish;
-      setAllowance(allowanceBN);
+      const allowanceBN = await nftl.allowance(address, raffleContract.address);
+      setAllowance(BigNumber.from(allowanceBN.toString()));
     };
     if (
       writeContracts &&

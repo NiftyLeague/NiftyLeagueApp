@@ -379,10 +379,10 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
               {!ethAmount || !Number(ethAmount)
                 ? 'Enter an amount'
                 : !sufficientBalance
-                ? 'Insufficient ETH Balance'
-                : !feeExceedAmount
-                ? txnState
-                : 'Fees exceed from amount'}
+                  ? 'Insufficient ETH Balance'
+                  : !feeExceedAmount
+                    ? txnState
+                    : 'Fees exceed from amount'}
             </LoadingButton>
           </Stack>
         ) : (

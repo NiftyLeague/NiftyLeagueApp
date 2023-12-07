@@ -6,7 +6,6 @@ import { SvgIconTypeMap, ChipProps, TableCellProps } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 // project imports
-import { TablerIcon } from '@tabler/icons';
 import { CartStateProps } from './cart';
 import { KanbanStateProps } from './kanban';
 import { CustomerStateProps } from './customer';
@@ -17,6 +16,7 @@ import { MailStateProps } from './mail';
 import { UserStateProps } from './user';
 
 import { SnackbarProps } from './snackbar';
+import { TablerIconsProps } from '@tabler/icons-react';
 
 export type ArrangementOrder = 'asc' | 'desc' | undefined;
 
@@ -55,7 +55,7 @@ export type OverrideIcon =
   | React.ComponentClass<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | FunctionComponent<React.PropsWithChildren<React.PropsWithChildren<any>>>
-  | TablerIcon;
+  | ((props: TablerIconsProps) => JSX.Element);
 
 export interface EnhancedTableHeadProps extends TableCellProps {
   onSelectAllClick: (e: React.ChangeEvent<HTMLInputElement>) => void;

@@ -34,7 +34,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
   const [isLoadingRename, setLoadingRename] = useState(false);
   const [renameSuccess, setRenameSuccess] = useState(false);
-  const insufficientAllowance = allowance < 1000;
+  const insufficientAllowance = allowance < BigNumber.from(1000);
   const insufficientBalance = userNFTLBalance < 1000;
 
   useEffect(() => {
@@ -127,9 +127,11 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
           <Stack rowGap={1}>
             <CardMedia
               component="img"
-              image={`${DEGEN_BASE_IMAGE_URL}/${targetNetwork.name}/images/${
-                degen?.id
-              }.${degen?.background === 'Legendary' ? 'mp4' : 'png'}`}
+              image={`${DEGEN_BASE_IMAGE_URL}/${
+                targetNetwork.name
+              }/images/${degen?.id}.${
+                degen?.background === 'Legendary' ? 'mp4' : 'png'
+              }`}
               alt="degen"
               sx={{ aspectRatio: '1/1', width: '240px', margin: '0 auto' }}
             />

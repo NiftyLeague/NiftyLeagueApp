@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { RentalDataGrid } from 'types/rentalDataGrid';
 import DegenImage from 'components/cards/DegenCard/DegenImage';
 import { RENAME_RENTAL_API_URL } from 'constants/url';
@@ -33,10 +33,12 @@ interface IFormInput {
   isCheckedTerm: boolean;
 }
 
-const validationSchema = yup.object({
-  name: yup.string().required(),
-  // isCheckedTerm: yup.bool().oneOf([true]),
-});
+const validationSchema = yup
+  .object({
+    name: yup.string().required(),
+    // isCheckedTerm: yup.bool().oneOf([true]),
+  })
+  .required();
 
 const RenameRentalDialogContent = ({
   rental,
@@ -54,6 +56,7 @@ const RenameRentalDialogContent = ({
     reset,
     formState: { errors },
   } = useForm<IFormInput>({
+    // @ts-expect-error
     resolver: yupResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {

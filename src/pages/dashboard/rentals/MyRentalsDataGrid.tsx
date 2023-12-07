@@ -45,7 +45,7 @@ const MyRentalsDataGrid = ({
   updateRentalName,
 }: Props): JSX.Element => {
   const { palette } = useTheme();
-  const [pageSize, setPageSize] = useState(10);
+  // const [pageSize, setPageSize] = useState(10);
   const [selectedRowForEditing, setSelectedRowForEditing] = useState<any>();
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
   const [isTerminateRentalModalOpen, setIsTerminateRentalModalOpen] =
@@ -384,12 +384,10 @@ const MyRentalsDataGrid = ({
         rows={sortedRows}
         columns={columns}
         checkboxSelection={false}
-        disableSelectionOnClick={true}
-        rowsPerPageOptions={[10, 25, 100]}
-        // Page size and handler required to set default to 10
-        pageSize={pageSize}
+        disableRowSelectionOnClick={true}
+        pageSizeOptions={[10, 25, 100]}
+        autoPageSize
         columnVisibilityModel={columnVisibilityModel}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         onColumnVisibilityModelChange={handleColumnVisibilityChange}
         onSortModelChange={handleSortColumn}
         sx={{

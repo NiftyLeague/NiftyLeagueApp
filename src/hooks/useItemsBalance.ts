@@ -23,7 +23,7 @@ export default function useItemsBalance(
     if (inventory?.result) {
       const groupBalances = Object.values(
         groupBy(inventory.result, 'metadata.item_id'),
-      ).map((group) => ({
+      ).map((group: { metadata: {}; length: number }) => ({
         ...(group[0].metadata as Object),
         balance: group.length,
       }));

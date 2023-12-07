@@ -30,7 +30,7 @@ import {
   IconCreditCard,
   IconDashboard,
   IconHome2,
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 import MenuIcon from '@mui/icons-material/Menu';
 
 // elevation scroll

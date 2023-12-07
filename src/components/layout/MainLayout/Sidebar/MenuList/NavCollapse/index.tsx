@@ -19,7 +19,7 @@ import { NavGroupProps } from '../NavGroup';
 import useConfig from 'hooks/useConfig';
 
 // assets
-import { IconChevronDown, IconChevronUp } from '@tabler/icons';
+import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 
 // ==============================|| SIDEBAR MENU LIST COLLAPSE ITEMS ||============================== //
 

@@ -11,7 +11,7 @@ import {
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useEffect, useState, useContext } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import { BigNumber, BigNumberish, providers, utils } from 'ethers';
 import NetworkContext from 'contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
@@ -166,7 +166,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
             name="amountInput"
             control={control}
             render={({ field }) => (
-              <NumberFormat
+              <NumericFormat
                 {...field}
                 isAllowed={({ value }) => Number(value) <= Number(balance)}
                 label="Amount of NFTL to deposit"
