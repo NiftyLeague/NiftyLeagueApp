@@ -1,12 +1,12 @@
 import { OrderSigningUtils, OrderBookApi } from '@cowprotocol/cow-sdk';
 import { Contract, ethers } from 'ethers';
 import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
-import wethAbi from 'contracts/abis/weth.json';
+import wethAbi from '@/contracts/abis/weth.json';
 import {
   COWSWAP_VAULT_RELAYER_ADDRESS,
   WETH_ADDRESS,
   NFTL_TOKEN_ADDRESS,
-} from 'constants/contracts';
+} from '@/constants/contracts';
 import { formatNumberToDisplay2 } from './numbers';
 
 export const getCowMarketPrice = async ({

@@ -1,7 +1,6 @@
-import React from 'react';
 import { Box, Theme, Stack, SxProps, Typography } from '@mui/material';
-import { Item } from 'types/comic';
-import ImageCard from 'components/cards/ImageCard';
+import { Item } from '@/types/comic';
+import ImageCard from '@/components/cards/ImageCard';
 
 export interface WearableSubItemCardProps {
   data: Item;

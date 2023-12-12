@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/sdk';
+import { mainnet, goerli } from 'viem/chains';
 import { IMX_NL_ITEMS, NFTL_TOKEN_ADDRESS } from './contracts';
 
 export const BASE_API_URL =
@@ -7,8 +7,10 @@ export const BASE_API_URL =
 export const CONTRACTS_API_BASE_URL = 'https://api.niftyleague.com';
 
 export const SUBGRAPH_CACHE_URL = `${BASE_API_URL}/info?network=${
-  process.env.REACT_APP_NETWORK as string
-}&version=${process.env.REACT_APP_SUBGRAPH_VERSION as string}&characters=false`;
+  process.env.NEXT_PUBLIC_NETWORK as string
+}&version=${
+  process.env.NEXT_PUBLIC_SUBGRAPH_VERSION as string
+}&characters=false`;
 
 // Authentication
 export const WALLET_VERIFICATION = `${BASE_API_URL}/verification`;
@@ -67,7 +69,7 @@ export const LEADERBOARD_SCORE_API_URL = `${BASE_API_URL}/scores`;
 
 // SUSHISWAP URL FOR NFTL PURCHASE
 export const NFTL_PURCHASE_URL = `https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=${
-  NFTL_TOKEN_ADDRESS[ChainId.MAINNET]
+  NFTL_TOKEN_ADDRESS[mainnet.id]
 }`;
 
 // DEGEN Purchase URL
@@ -78,11 +80,11 @@ export const COMICS_OPENSEA_URL =
   'https://opensea.io/collection/nifty-league-comics';
 
 export const ITEM_PURCHASE_URL = {
-  [ChainId.MAINNET]: `https://market.immutable.com/collections/${
-    IMX_NL_ITEMS[ChainId.MAINNET]
+  [mainnet.id]: `https://market.immutable.com/collections/${
+    IMX_NL_ITEMS[mainnet.id]
   }`,
-  [ChainId.GÖRLI]: `https://market.sandbox.immutable.com/collections/${
-    IMX_NL_ITEMS[ChainId.GÖRLI]
+  [goerli.id]: `https://market.sandbox.immutable.com/collections/${
+    IMX_NL_ITEMS[goerli.id]
   }`,
 };
 

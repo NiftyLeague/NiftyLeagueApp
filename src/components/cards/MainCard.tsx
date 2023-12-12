@@ -1,4 +1,4 @@
-import React, { Ref } from 'react';
+import { Ref, forwardRef } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 // project imports
-import { KeyedObject } from 'types';
+import { KeyedObject } from '@/types';
 
 // constant
 const headerSX = {
@@ -40,7 +40,7 @@ export interface MainCardProps extends KeyedObject {
   title?: React.ReactNode | string;
 }
 
-const MainCard = React.forwardRef(
+const MainCard = forwardRef(
   (
     {
       border = true,
@@ -108,4 +108,5 @@ const MainCard = React.forwardRef(
   },
 );
 
+MainCard.displayName = 'MainCard';
 export default MainCard;

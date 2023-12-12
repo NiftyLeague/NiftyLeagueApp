@@ -1,9 +1,11 @@
+'use client';
+
 /* eslint-disable no-console */
 import { useQuery } from '@apollo/client';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import useNFTLBalance from 'hooks/useNFTLBalance';
-import { OWNER_QUERY } from 'queries/OWNER_QUERY';
-import React, {
+import useClaimableNFTL from '@/hooks/useClaimableNFTL';
+import useNFTLBalance from '@/hooks/useNFTLBalance';
+import OWNER_QUERY from '@/queries/OWNER_QUERY';
+import {
   createContext,
   useCallback,
   useContext,
@@ -11,9 +13,8 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Character, Owner } from 'types/graph';
+import { Character, Owner } from '@/types/graph';
 import NetworkContext from './NetworkContext';
-import WindowContext from './WindowContext';
 
 interface Context {
   isDegenOwner: boolean;
@@ -49,7 +50,6 @@ export const BalanceProvider = ({
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
   const { address, readContracts } = useContext(NetworkContext);
-  const { active } = useContext(WindowContext);
   const [refreshClaimKey, setRefreshClaimKey] = useState(0);
   const [refreshBalKey, setRefreshBalKey] = useState(0);
   const {
@@ -62,7 +62,7 @@ export const BalanceProvider = ({
     data?: { owner: Owner };
   } = useQuery(OWNER_QUERY, {
     variables: { address: address?.toLowerCase() },
-    skip: !address,
+    skip: !address?.length,
   });
   const { characterCount = 0 } = data?.owner || {};
   const isDegenOwner = characterCount > 0;
@@ -93,20 +93,20 @@ export const BalanceProvider = ({
     setRefreshClaimKey(Math.random());
   };
 
-  const refreshNFTLBalance = () => {
+  const refreshNFTLBalance = useCallback(() => {
     setRefreshBalKey(Math.random());
-  };
+  }, []);
 
   const refreshDegenBalance = useCallback(() => {
-    refetchDegens({ address: address.toLowerCase() });
+    if (address?.length) refetchDegens({ address: address.toLowerCase() });
   }, [address, refetchDegens]);
 
   useEffect(() => {
-    if (!active || !address) return;
+    if (!address?.length) return;
     refreshDegenBalance();
     refreshClaimableNFTL();
     refreshNFTLBalance();
-  }, [active, address, refreshDegenBalance]);
+  }, [address, refreshDegenBalance, refreshNFTLBalance]);
 
   return (
     <BalanceContext.Provider

@@ -1,4 +1,4 @@
-import React, { Ref, ExoticComponent, ReactElement } from 'react';
+import { Ref, ExoticComponent, ReactElement, forwardRef } from 'react';
 
 // material-ui
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
@@ -12,11 +12,10 @@ interface TSProps {
   in?: boolean;
   type?: string;
   direction?: 'up' | 'right' | 'left' | 'down';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [others: string]: any;
 }
 
-const Transitions = React.forwardRef(
+const Transitions = forwardRef(
   (
     { children, position, sx, type, direction, ...others }: TSProps,
     ref: Ref<ExoticComponent>,
@@ -112,4 +111,5 @@ Transitions.defaultProps = {
   direction: 'up',
 };
 
+Transitions.displayName = 'Transitions';
 export default Transitions;

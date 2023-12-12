@@ -1,10 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import { styled, Box, useTheme } from '@mui/system';
 import { Modal } from '@mui/base/Modal';
-
-import NiftySmashersLeaderBoardBg from 'assets/images/leaderboards/nifty_smashers.jpg';
-import WenLeaderBoardBG from 'assets/images/leaderboards/wen_game.png';
-import MtGawxLeaderBoardBG from 'assets/images/leaderboards/mt_gawx.png';
 
 const StyledModal = styled(Modal)`
   position: fixed;
@@ -85,10 +83,10 @@ const CustomModal = (props: ModalProps): JSX.Element | null => {
               ...style(theme),
               backgroundImage: `url(${
                 flag === 'score'
-                  ? WenLeaderBoardBG
+                  ? '/images/leaderboards/wen_game.png'
                   : flag === 'burnings'
-                    ? MtGawxLeaderBoardBG
-                    : NiftySmashersLeaderBoardBg
+                    ? '/images/leaderboards/mt_gawx.png'
+                    : '/images/leaderboards/nifty_smashers.jpg'
               })`,
             }}
           >

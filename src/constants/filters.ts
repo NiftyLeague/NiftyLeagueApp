@@ -1,49 +1,39 @@
-import { ReactComponent as ApeIcon } from 'assets/images/tribe/ape.svg';
-import { ReactComponent as AlienIcon } from 'assets/images/tribe/alien.svg';
-import { ReactComponent as CatIcon } from 'assets/images/tribe/cat.svg';
-import { ReactComponent as DegoIcon } from 'assets/images/tribe/doge.svg';
-import { ReactComponent as FrogIcon } from 'assets/images/tribe/frog.svg';
-import { ReactComponent as HumanIcon } from 'assets/images/tribe/human.svg';
-import { ReactComponent as HydraIcon } from 'assets/images/tribe/hydra.svg';
-import { ReactComponent as RugmanIcon } from 'assets/images/tribe/rugman.svg';
-import { ReactComponent as SatoshiIcon } from 'assets/images/tribe/satoshi.svg';
-
 const tribes = [
   {
     name: 'Ape',
-    icon: ApeIcon,
+    icon: '/images/tribe/ape.svg',
   },
   {
     name: 'Alien',
-    icon: AlienIcon,
+    icon: '/images/tribe/alien.svg',
   },
   {
     name: 'Cat',
-    icon: CatIcon,
+    icon: '/images/tribe/cat.svg',
   },
   {
     name: 'Doge',
-    icon: DegoIcon,
+    icon: '/images/tribe/doge.svg',
   },
   {
     name: 'Frog',
-    icon: FrogIcon,
+    icon: '/images/tribe/frog.svg',
   },
   {
     name: 'Human',
-    icon: HumanIcon,
+    icon: '/images/tribe/human.svg',
   },
   {
     name: 'Hydra',
-    icon: HydraIcon,
+    icon: '/images/tribe/hydra.svg',
   },
   {
     name: 'Rugman',
-    icon: RugmanIcon,
+    icon: '/images/tribe/rugman.svg',
   },
   {
     name: 'Satoshi',
-    icon: SatoshiIcon,
+    icon: '/images/tribe/satoshi.svg',
   },
 ];
 
@@ -63,6 +53,7 @@ export type FilterSource =
   | 'backgrounds'
   | 'cosmetics'
   | 'wearables'
-  | 'searchTerm';
+  | 'searchTerm'
+  | 'walletAddress';
 
 export { tribes, backgrounds, rentals, multipliers, wearables };

@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -7,15 +9,15 @@ import { Box, Card, Divider, Grid, Typography } from '@mui/material';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
 
 // project imports
-import { BASE_PATH } from 'config';
-import { gridSpacing } from 'store/constant';
+import { BASE_PATH } from '@/config';
+import { gridSpacing } from '@/themes/constant';
 
 // assets
 import { IconTallymark1 } from '@tabler/icons-react';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import { NavItemType, NavItemTypeObject, OverrideIcon } from 'types';
+import { NavItemType, NavItemTypeObject, OverrideIcon } from '@/types';
 
 const linkSX = {
   display: 'flex',
@@ -120,7 +122,7 @@ const Breadcrumbs = ({
   if (main && main.type === 'collapse') {
     CollapseIcon = main.icon ? main.icon : AccountTreeTwoToneIcon;
     mainContent = (
-      <Typography component={Link} to="#" variant="subtitle1" sx={linkSX}>
+      <Typography component={Link} href="#" variant="subtitle1" sx={linkSX}>
         {icons && <CollapseIcon style={iconStyle} />}
         {main.title}
       </Typography>
@@ -194,7 +196,7 @@ const Breadcrumbs = ({
                 >
                   <Typography
                     component={Link}
-                    to="/"
+                    href="/"
                     color="inherit"
                     variant="subtitle1"
                     sx={linkSX}

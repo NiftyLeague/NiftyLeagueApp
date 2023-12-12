@@ -1,13 +1,16 @@
-import { RENTAL_PASS_INVENTORY_URL } from 'constants/url';
+'use client';
+
+import { RENTAL_PASS_INVENTORY_URL } from '@/constants/url';
 import { useEffect, useState } from 'react';
+import { errorMsgHandler } from '@/utils/errorHandlers';
 import useAuth from './useAuth';
 
 const useRentalPassCount = (
   degenId: string | undefined,
-): [boolean, boolean, number] => {
+): [boolean, string | null, number] => {
   const [loading, setLoading] = useState(true);
   const [rentalPassCount, setRentalPassCount] = useState<number>(0);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -28,7 +31,7 @@ const useRentalPassCount = (
         const json = await res.json();
         setRentalPassCount(json.balance || 0);
       } catch (err) {
-        setError(err.message);
+        setError(errorMsgHandler(err));
       } finally {
         setLoading(false);
       }

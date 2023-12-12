@@ -1,8 +1,10 @@
+'use client';
+
 import { useCallback } from 'react';
 import { utils } from 'ethers';
-import { Contracts } from 'types/web3';
+import { Contracts } from '@/types/web3';
 import useContractReader from './useContractReader';
-import { NFTL_CONTRACT } from 'constants/contracts';
+import { NFTL_CONTRACT } from '@/constants/contracts';
 
 export default function useClaimableNFTL(
   contracts: Contracts,
@@ -21,6 +23,7 @@ export default function useClaimableNFTL(
     undefined,
     formatter,
     refreshKey,
+    !tokenIndices.length,
   ) as string;
   return parseFloat(totalAccumulated);
 }

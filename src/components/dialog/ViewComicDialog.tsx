@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   Button,
   Dialog,
@@ -5,7 +6,7 @@ import {
   DialogContent,
   useMediaQuery,
 } from '@mui/material';
-import { Comic } from 'types/comic';
+import { Comic } from '@/types/comic';
 import { useTheme } from '@mui/material/styles';
 
 export interface ViewComicDialogProps {
@@ -25,14 +26,18 @@ const ViewComicDialog = ({
   return (
     <Dialog maxWidth="lg" open={open} onClose={onClose} fullScreen={fullScreen}>
       <DialogContent>
-        <img
-          src={comic?.image}
-          alt={comic?.title}
-          style={{
-            width: fullScreen ? '100%' : 500,
-            height: 'auto',
-          }}
-        />
+        {comic?.image ? (
+          <Image
+            src={comic.image}
+            alt={`Comic: ${comic?.title}`}
+            width={500}
+            height={500}
+            style={{
+              width: fullScreen ? '100%' : 500,
+              height: 'auto',
+            }}
+          />
+        ) : null}
       </DialogContent>
       <DialogActions>
         <Button fullWidth onClick={onClose}>

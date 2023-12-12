@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+'use client';
+
+import { useEffect, useMemo, useRef } from 'react';
 import { Box, InputBase, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import debounce from 'lodash/debounce';
-import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
-import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
+import { formatNumberToDisplay, formatNumberToDisplay2 } from '@/utils/numbers';
+import useTokenUSDPrice from '@/hooks/useTokenUSDPrice';
 import { OrderKind } from '@cowprotocol/cow-sdk';
 
 export interface TokenInfoBoxProps {

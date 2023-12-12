@@ -5,9 +5,9 @@ import {
   DialogContent,
   useMediaQuery,
 } from '@mui/material';
-import { Item } from 'types/comic';
+import { Item } from '@/types/comic';
 import { useTheme } from '@mui/material/styles';
-import ItemDetail from 'components/cards/ItemDetail';
+import ItemDetail from '@/components/cards/ItemDetail';
 
 export interface ViewItemDialogProps {
   item?: Item | null;

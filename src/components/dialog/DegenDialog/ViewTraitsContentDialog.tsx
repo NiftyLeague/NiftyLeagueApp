@@ -1,3 +1,7 @@
+import { useEffect } from 'react';
+import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
+import isEmpty from 'lodash/isEmpty';
 import {
   Box,
   Button,
@@ -7,22 +11,19 @@ import {
   Typography,
   SxProps,
 } from '@mui/material';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+
+import DegenImage from '@/components/cards/DegenCard/DegenImage';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
-} from 'constants/cosmeticsFilters';
-import { useEffect } from 'react';
-import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
-import { sendEvent } from 'utils/google-analytics';
-import { v4 as uuidv4 } from 'uuid';
-import OpenSea from 'assets/images/icons/OpenSea.png';
+} from '@/constants/cosmeticsFilters';
+import { Degen, GetDegenResponse } from '@/types/degens';
+import { sendEvent } from '@/utils/google-analytics';
 
 export interface ViewTraitsContentDialogProps {
   degen?: Degen;
   degenDetail?: GetDegenResponse;
-  character: CharacterType;
   traits: { [traitType: string]: number };
   displayName?: string;
   onRent?: () => void;
@@ -34,7 +35,6 @@ export interface ViewTraitsContentDialogProps {
 const ViewTraitsContentDialog = ({
   degen,
   degenDetail,
-  character,
   traits,
   displayName,
   onRent,
@@ -42,8 +42,6 @@ const ViewTraitsContentDialog = ({
   onClose,
   degenImageSx,
 }: ViewTraitsContentDialogProps) => {
-  const { traitList } = character;
-
   useEffect(() => {
     sendEvent(
       GOOGLE_ANALYTICS.EVENTS.VIEW_ITEM,
@@ -60,13 +58,9 @@ const ViewTraitsContentDialog = ({
           )}
         </Stack>
         <Stack direction="column" alignItems="center" sx={{ my: 2 }}>
-          {!traitList.length ? (
-            <Skeleton width={120} animation="wave" />
-          ) : (
-            <Typography gutterBottom variant="h3">
-              {displayName}
-            </Typography>
-          )}
+          <Typography gutterBottom variant="h3">
+            {displayName}
+          </Typography>
           <a
             href={`https://opensea.io/assets/0x986aea67c7d6a15036e18678065eb663fc5be883/${degen?.id}`}
             target="_blank"
@@ -74,7 +68,12 @@ const ViewTraitsContentDialog = ({
           >
             <Typography color="gray" sx={{ textDecoration: 'none' }}>
               DEGEN ID #{degen?.id}{' '}
-              <img src={OpenSea} alt="NiftyLogo" width="16" />
+              <Image
+                src="/images/icons/OpenSea.png"
+                alt="Nifty Logo"
+                width={16}
+                height={16}
+              />
             </Typography>
           </a>
         </Stack>
@@ -123,7 +122,7 @@ const ViewTraitsContentDialog = ({
               rowGap={3}
               columnGap={2}
             >
-              {!traitList.length
+              {isEmpty(traits)
                 ? [...Array(9)].map(() => (
                     <Grid item xs={3} key={uuidv4()}>
                       <Stack direction="column" alignItems="center">

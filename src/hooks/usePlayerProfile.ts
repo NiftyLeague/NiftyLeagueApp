@@ -1,5 +1,5 @@
-import { MY_PROFILE_API_URL } from 'constants/url';
-import { Profile } from 'types/account';
+import { MY_PROFILE_API_URL } from '@/constants/url';
+import { Profile } from '@/types/account';
 import useAuth from './useAuth';
 import useFetch from './useFetch';
 

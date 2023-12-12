@@ -1,19 +1,21 @@
+'use client';
+
 import { Dialog, DialogProps, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import { DEGEN_CONTRACT } from 'constants/contracts';
-import { TRAIT_INDEXES } from 'constants/cosmeticsFilters';
-import NetworkContext from 'contexts/NetworkContext';
+import { DEGEN_CONTRACT } from '@/constants/contracts';
+import { TRAIT_INDEXES } from '@/constants/cosmeticsFilters';
+import NetworkContext from '@/contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
-import { CharacterType, Degen, GetDegenResponse } from 'types/degens';
+import { CharacterType, Degen, GetDegenResponse } from '@/types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
 import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';
-import { GET_DEGEN_DETAIL_URL } from 'constants/url';
-import { DEBUG } from 'constants/index';
+import { GET_DEGEN_DETAIL_URL } from '@/constants/url';
+import { errorMsgHandler } from '@/utils/errorHandlers';
 import { toast } from 'react-toastify';
 import EquipDegenContentDialog from './EquipDegenContentDialog';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 
 export interface DegenDialogProps extends DialogProps {
   degen?: Degen;
@@ -83,11 +85,8 @@ const DegenDialog = ({
   useEffect(() => {
     async function getCharacter() {
       const characterData = {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         name: await readContracts[DEGEN_CONTRACT].getName(tokenId),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         owner: await readContracts[DEGEN_CONTRACT].ownerOf(tokenId),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         traitList:
           await readContracts[DEGEN_CONTRACT].getCharacterTraits(tokenId),
       };
@@ -95,10 +94,7 @@ const DegenDialog = ({
     }
 
     async function getDegenDetail() {
-      if (!tokenId || !authToken) {
-        return;
-      }
-
+      if (!tokenId || !authToken) return;
       try {
         const res = await fetch(GET_DEGEN_DETAIL_URL(tokenId), {
           method: 'GET',
@@ -111,18 +107,11 @@ const DegenDialog = ({
         const json = await res.json();
         setDegenDetail(json);
       } catch (err) {
-        if (DEBUG) console.error(err.message);
-        toast.error(err.message, { theme: 'dark' });
+        toast.error(errorMsgHandler(err), { theme: 'dark' });
       }
     }
 
-    if (
-      open &&
-      tokenId &&
-      readContracts &&
-      readContracts[DEGEN_CONTRACT] &&
-      authToken
-    ) {
+    if (open && tokenId && readContracts && readContracts[DEGEN_CONTRACT]) {
       // eslint-disable-next-line no-void
       void getCharacter();
       // eslint-disable-next-line no-void
@@ -163,7 +152,6 @@ const DegenDialog = ({
         <ViewTraitsContentDialog
           degen={degen}
           degenDetail={degenDetail}
-          character={character}
           traits={traits}
           displayName={displayName}
           onRent={() => setIsRent(true)}
@@ -174,7 +162,6 @@ const DegenDialog = ({
         <ViewTraitsContentDialog
           degen={degen}
           degenDetail={degenDetail}
-          character={character}
           traits={traits}
           displayName={displayName}
           onClaim={() => setIsClaim(true)}

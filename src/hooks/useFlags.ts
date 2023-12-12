@@ -3,7 +3,7 @@ import {
   FlagSet,
   ProviderConfig,
   FeatureFlagContext,
-} from 'contexts/FeatureFlagsContext';
+} from '@/contexts/FeatureFlagsContext';
 
 /**
  * `useFlags` is a custom hook which returns all feature flags. It uses the `useContext` primitive

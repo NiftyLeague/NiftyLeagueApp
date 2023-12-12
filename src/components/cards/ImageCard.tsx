@@ -1,5 +1,5 @@
 import { CardMedia, Box } from '@mui/material';
-import useImageOnLoad from 'hooks/useImageOnLoad';
+import useImageOnLoad from '@/hooks/useImageOnLoad';
 
 interface ImageCardProps {
   thumbnail?: string;

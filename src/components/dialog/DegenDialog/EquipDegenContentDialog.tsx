@@ -1,4 +1,7 @@
+'use client';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import {
   Box,
   Button,
@@ -10,21 +13,21 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import makeStyles from '@mui/styles/makeStyles';
 import isEqual from 'lodash/isEqual';
-import useComicsBalance from 'hooks/useComicsBalance';
-import { useDispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
-import { sendEvent } from 'utils/google-analytics';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
-import { COMICS_OPENSEA_URL } from 'constants/url';
-import { Degen } from 'types/degens';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
-import EmptyState from 'components/EmptyState';
+import useComicsBalance from '@/hooks/useComicsBalance';
+import { useDispatch } from '@/store';
+import { openSnackbar } from '@/store/slices/snackbar';
+import { sendEvent } from '@/utils/google-analytics';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
+import { COMICS_OPENSEA_URL } from '@/constants/url';
+import { Degen } from '@/types/degens';
+import DegenImage from '@/components/cards/DegenCard/DegenImage';
+import EmptyState from '@/components/EmptyState';
 import {
   getInventoryAnalyticsEventName,
   getSlotAnalyticsEventName,
   INVENTORIES,
   SLOTS,
-} from 'constants/equips';
+} from '@/constants/equips';
 
 export interface EquipDegenContentDialogProps {
   degen?: Degen;
@@ -226,10 +229,6 @@ const EquipDegenContentDialog = ({
     setAnimationType('rotate');
   };
 
-  const handleBuyComic = () => {
-    window.open(COMICS_OPENSEA_URL, '_blank');
-  };
-
   if (filteredComics.length === 0) {
     if (loadingComics) {
       return (
@@ -252,12 +251,13 @@ const EquipDegenContentDialog = ({
         display="flex"
         height={200}
       >
-        <EmptyState
-          message="You don't own any Comics yet."
-          buttonText="Buy a Comic"
-          onClick={handleBuyComic}
-          noBorder
-        />
+        <Link href={COMICS_OPENSEA_URL} target="_blank" rel="noreferrer">
+          <EmptyState
+            message="You don't own any Comics yet."
+            buttonText="Buy a Comic"
+            noBorder
+          />
+        </Link>
       </Grid>
     );
   }

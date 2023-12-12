@@ -1,4 +1,4 @@
-import { RENTAL_RENAME_URL } from 'constants/url';
+import { RENTAL_RENAME_URL } from '@/constants/url';
 import useAuth from './useAuth';
 
 const useRentalRename = (

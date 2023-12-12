@@ -1,7 +1,9 @@
+'use client';
+
 /* eslint-disable no-console */
 import { useCallback, useState, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
-import { Contracts } from 'types/web3';
+import { Contracts } from '@/types/web3';
 import useAsyncInterval from './useAsyncInterval';
 
 /*
@@ -40,10 +42,8 @@ export default function useContractReader(
       try {
         let newValue;
         if (args && args.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName](...args);
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,  @typescript-eslint/no-unsafe-call
           newValue = await contracts[contractName][functionName]();
         }
         if (formatter && typeof formatter === 'function')

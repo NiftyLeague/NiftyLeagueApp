@@ -1,7 +1,7 @@
-import { ProfileAvatar } from 'types/account';
-import { GET_PROFILE_AVATARS_AND_COST_API } from 'constants/url';
-import useFetch from '../useFetch';
-import useAuth from 'hooks/useAuth';
+import { ProfileAvatar } from '@/types/account';
+import { GET_PROFILE_AVATARS_AND_COST_API } from '@/constants/url';
+import useFetch from '@/hooks/useFetch';
+import useAuth from '@/hooks/useAuth';
 
 interface ProfileAvatarsRes {
   id: string;

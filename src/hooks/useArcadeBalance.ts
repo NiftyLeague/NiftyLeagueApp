@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
-import { GET_ARCADE_TOKEN_BALANCE_API } from 'constants/url';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import { GET_ARCADE_TOKEN_BALANCE_API } from '@/constants/url';
 import useAuth from './useAuth';
 
 /*
@@ -31,7 +33,7 @@ export default function useArcadeBalance(): ArcadeBalanceState {
   const [loading, setLoading] = useState<boolean>(true);
   const { authToken } = useAuth();
 
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     try {
       if (!authToken) return;
       setLoading(true);
@@ -46,11 +48,11 @@ export default function useArcadeBalance(): ArcadeBalanceState {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authToken]);
 
   useEffect(() => {
     fetchBalance();
-  }, [authToken]);
+  }, [fetchBalance]);
 
   return {
     arcadeBalance: balanceRes?.balance ?? 0,

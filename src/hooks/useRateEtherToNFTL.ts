@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { CONVERT_TOKEN_TO_USD_URL } from 'constants/url';
+import { CONVERT_TOKEN_TO_USD_URL } from '@/constants/url';
 
 /*
   ~ What it does? ~

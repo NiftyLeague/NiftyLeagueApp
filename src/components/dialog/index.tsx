@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, createContext } from 'react';
-import { DialogProps } from 'types/dialog';
+import { DialogProps } from '@/types/dialog';
 import {
   DialogDismissButton,
   DialogTrigger,

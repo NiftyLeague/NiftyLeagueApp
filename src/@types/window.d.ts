@@ -1,6 +1,6 @@
 import { providers, Web3Provider } from 'ethers';
 import { UnityContext } from 'react-unity-webgl';
-import { Ethereumish } from 'types/web3';
+import { Ethereumish } from '@/types/web3';
 
 interface BSC {
   bbcSignTx?: (e) => void;
@@ -31,6 +31,7 @@ interface UnityInstance extends UnityContext {
 
 declare global {
   interface Window {
+    gtag: Gtag.Gtag;
     BinanceChain?: BSC;
     createUnityInstance: (
       canvasHtmlElement: HTMLCanvasElement,

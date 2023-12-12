@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import groupBy from 'lodash/groupBy';
-import { ITEMS } from 'constants/comics';
+import { ITEMS } from '@/constants/comics';
 import { ImmutableMethodResults } from '@imtbl/imx-sdk';
-import { Item } from 'types/comic';
+import { Item } from '@/types/comic';
 
 /*
   ~ What it does? ~
@@ -23,6 +23,7 @@ export default function useItemsBalance(
     if (inventory?.result) {
       const groupBalances = Object.values(
         groupBy(inventory.result, 'metadata.item_id'),
+        // @ts-ignore
       ).map((group: { metadata: {}; length: number }) => ({
         ...(group[0].metadata as Object),
         balance: group.length,

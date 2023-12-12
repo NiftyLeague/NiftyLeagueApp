@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Button,
@@ -8,12 +10,13 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
-import ProgressBar from 'components/ProgressBar';
-import { useEffect, useState } from 'react';
+import DegenImage from '@/components/cards/DegenCard/DegenImage';
+import ProgressBar from '@/components/wrapper/ProgressBar';
+import { useState } from 'react';
 import Countdown from 'react-countdown';
-import { useNavigate } from 'react-router-dom';
-import { Rentals } from 'types/rentals';
+import { useRouter } from 'next/navigation';
+import { Rentals } from '@/types/rentals';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 interface ActiveRentalDialogProps {
   degenId: string | number;
@@ -22,24 +25,17 @@ interface ActiveRentalDialogProps {
 
 const ActiveRentalDialog = ({ degenId, rental }: ActiveRentalDialogProps) => {
   const { palette } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
   const progressValue = (100 / rental.earning_cap) * rental.earning_cap_daily;
-  const activeRental = localStorage.getItem('active_rental');
+  const [activeRental] = useLocalStorage<boolean>('active_rental', false);
   const [isOpen, setIsOpen] = useState<boolean>(activeRental ? false : true);
 
-  useEffect(() => {
-    if (!activeRental) {
-      localStorage.setItem('active_rental', JSON.stringify(true));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeRental]);
-
   const handleClickRental = () => {
-    navigate('/dashboard/rentals');
+    router.push('/dashboard/rentals');
   };
 
   const handleClickPlay = () => {
-    navigate('/games/smashers');
+    router.push('/games/smashers');
   };
 
   return (

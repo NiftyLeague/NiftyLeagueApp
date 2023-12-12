@@ -1,8 +1,10 @@
+'use client';
+
 import { Grid, Stack } from '@mui/material';
-import PaginationIconOnly from 'components/pagination/PaginationIconOnly';
+import PaginationIconOnly from '@/components/pagination/PaginationIconOnly';
 import { PropsWithChildren, ReactNode, useRef } from 'react';
 import Slider, { Settings } from 'react-slick';
-import { sectionSpacing } from 'store/constant';
+import { sectionSpacing } from '@/themes/constant';
 import SectionTitle from './SectionTitle';
 
 interface Props {

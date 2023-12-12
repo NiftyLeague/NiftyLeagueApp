@@ -1,4 +1,7 @@
+'use client';
+
 import { useCallback, useContext, useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
   Box,
   Button,
@@ -14,25 +17,23 @@ import makeStyles from '@mui/styles/makeStyles';
 import CircleIcon from '@mui/icons-material/Circle';
 import { BigNumber, BigNumberish, utils } from 'ethers';
 import { OrderKind } from '@cowprotocol/cow-sdk';
-import useAccount from 'hooks/useAccount';
-import useEtherBalance from 'hooks/useEtherBalance';
-import useRateEtherToNFTL from 'hooks/useRateEtherToNFTL';
-import NetworkContext from 'contexts/NetworkContext';
-import { formatNumberToDisplay, formatNumberToDisplay2 } from 'utils/numbers';
-import useImportNFTLToWallet from 'hooks/useImportNFTLToWallet';
-import useTokenUSDPrice from 'hooks/useTokenUSDPrice';
-import { COW_PROTOCOL_URL } from 'constants/url';
-import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from 'constants/contracts';
+import useAccount from '@/hooks/useAccount';
+import useEtherBalance from '@/hooks/useEtherBalance';
+import useRateEtherToNFTL from '@/hooks/useRateEtherToNFTL';
+import NetworkContext from '@/contexts/NetworkContext';
+import { formatNumberToDisplay, formatNumberToDisplay2 } from '@/utils/numbers';
+import useImportNFTLToWallet from '@/hooks/useImportNFTLToWallet';
+import useTokenUSDPrice from '@/hooks/useTokenUSDPrice';
+import { COW_PROTOCOL_URL } from '@/constants/url';
+import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from '@/constants/contracts';
 import {
   createOrderSwapEtherToNFTL,
   getCowMarketPrice,
   getOrderDetail,
-} from 'utils/cowswap';
-import { DEBUG } from 'constants/index';
+} from '@/utils/cowswap';
+import { DEBUG } from '@/constants/index';
 import TokenInfoBox from './TokenInfoBox';
-import { ReactComponent as EthIcon } from 'assets/images/tokenIcons/eth.svg';
-import NFTL from 'assets/images/NFTL.png';
-import BalanceContext from 'contexts/BalanceContext';
+import BalanceContext from '@/contexts/BalanceContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   purchaseNFTLBtn: {
@@ -101,7 +102,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
       setRefreshAccKey(Math.random());
     }, 10000);
     return () => clearInterval(timer);
-  }, []);
+  }, [refetchRateEtherToNftl, refetchEthBalance]);
 
   useEffect(() => {
     const getAllowance = async () => {
@@ -124,7 +125,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     }
   }, [address, writeContracts]);
 
-  const checkOrderStatus = async () => {
+  const checkOrderStatus = useCallback(async () => {
     const orderDetail = await getOrderDetail(targetNetwork.chainId, orderId);
     if (orderDetail?.status === 'fulfilled') {
       setOrderFulfilled(true);
@@ -135,13 +136,13 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
         checkOrderStatus();
       }, 3000);
     }
-  };
+  }, [orderId, refreshNFTLBalance, targetNetwork.chainId]);
 
   useEffect(() => {
     if (orderId && targetNetwork.chainId) {
       checkOrderStatus();
     }
-  }, [orderId, targetNetwork.chainId]);
+  }, [orderId, targetNetwork.chainId, checkOrderStatus]);
 
   const getMarketPrice = async (kind: OrderKind, amount: string) => {
     try {
@@ -168,8 +169,8 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
           ),
         );
       }
-    } catch (err) {
-      if (err.error_code === 'FeeExceedsFrom') {
+    } catch (err: any) {
+      if (err?.error_code === 'FeeExceedsFrom') {
         setFeeExceedAmount(true);
         setFeeAmount(utils.formatEther(err.data.fee_amount));
       }
@@ -190,7 +191,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     setNftlAmount(
       Math.floor(Number(inputEthAmount) / rateEtherToNftl).toString(),
     );
-  }, [inputEthAmount]);
+  }, [inputEthAmount, rateEtherToNftl]);
 
   useEffect(() => {
     if (!rateEtherToNftl) return;
@@ -204,7 +205,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     setEthAmount(
       formatNumberToDisplay2(Number(inputNftlAmount) * rateEtherToNftl, 8),
     );
-  }, [inputNftlAmount]);
+  }, [inputNftlAmount, rateEtherToNftl]);
 
   const sufficientBalance: boolean = Number(ethAmount) <= etherBalance;
 
@@ -317,7 +318,14 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
           <Stack direction="column" spacing={0.75} position="relative">
             <TokenInfoBox
               balance={etherBalance}
-              icon={<EthIcon width={12} height={12} />}
+              icon={
+                <Image
+                  src="/images/tokenIcons/eth.svg"
+                  alt="ETH Icon"
+                  width={12}
+                  height={12}
+                />
+              }
               name="ETH"
               slug="ethereum"
               value={ethAmount}
@@ -337,7 +345,14 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
             </Box>
             <TokenInfoBox
               balance={accountBalance}
-              icon={<img src={NFTL} alt="NFTL Token" width={12} height={12} />}
+              icon={
+                <Image
+                  src="/images/NFTL.png"
+                  alt="NFTL Token"
+                  width={12}
+                  height={12}
+                />
+              }
               name="NFTL"
               slug="nifty-league"
               value={nftlAmount}

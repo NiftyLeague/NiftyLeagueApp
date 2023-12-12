@@ -2,7 +2,7 @@ export interface InitialLoginContextProps {
   isLoggedIn: boolean;
 }
 
-export type TokenContextType = InitialLoginContextProps & {
+export type AuthTokenContextType = InitialLoginContextProps & {
   signMsg: () => Promise<string | null>;
   authToken: string | undefined;
 };

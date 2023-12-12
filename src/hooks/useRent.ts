@@ -1,5 +1,5 @@
-import { RENT_URL } from 'constants/url';
-import { MyRental } from 'types/rental';
+import { RENT_URL } from '@/constants/url';
+import { MyRental } from '@/types/rental';
 import useAuth from './useAuth';
 
 const useRent = (

@@ -1,6 +1,6 @@
 // material-ui
 import { Box, Grid, Skeleton, Typography } from '@mui/material';
-import { GenericCardProps } from 'types';
+import { GenericCardProps } from '@/types';
 
 interface TokenInfoCardProps extends GenericCardProps {
   customStyle?: React.CSSProperties;

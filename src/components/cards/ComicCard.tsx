@@ -1,8 +1,7 @@
-import React from 'react';
 import { Box, Theme, SxProps, Typography } from '@mui/material';
-import { Comic } from 'types/comic';
-import ImageCard from 'components/cards/ImageCard';
-import useComicDimension from 'hooks/useComicDimension';
+import { Comic } from '@/types/comic';
+import ImageCard from '@/components/cards/ImageCard';
+import useComicDimension from '@/hooks/useComicDimension';
 
 export interface ComicCardProps {
   data: Comic;

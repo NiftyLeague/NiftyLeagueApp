@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import Link from 'next/link';
 import { useTheme } from '@mui/material/styles';
 import {
   Button,
@@ -11,16 +14,18 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
+import ExternalIcon from '@/components/ExternalIcon';
 
 const CardGameContent = ({
-  title,
-  isComingSoon,
-  required,
-  description,
   actions,
+  description,
+  externalLink,
+  isComingSoon,
   onPlayOnDesktopClick,
   onPlayOnWebClick,
+  required,
   showMore,
+  title,
 }) => {
   const theme = useTheme();
   const [moreStatus, setMoreStatus] = useState(false);
@@ -39,6 +44,23 @@ const CardGameContent = ({
           <Typography gutterBottom variant="h3" component="div">
             {title}
           </Typography>
+          {externalLink ? (
+            <Link href={externalLink.src} target="_blank" rel="noreferrer">
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{
+                  minWidth: 165,
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  marginTop: -1,
+                }}
+              >
+                {externalLink.title} <ExternalIcon />
+              </Button>
+            </Link>
+          ) : null}
         </Stack>
         {isComingSoon && (
           <Typography
@@ -125,37 +147,39 @@ const CardGameContent = ({
 };
 
 export interface GameCardProps {
-  title?: string;
-  required?: string;
+  actions?: React.ReactNode;
+  autoHeight?: boolean;
+  contents?: React.ReactNode;
   description?: string;
-  onlineCounter?: number;
+  externalLink?: { title: string; src: string };
   image?: string;
   isComingSoon?: boolean;
-  sx?: SxProps<Theme>;
+  onlineCounter?: number;
   onPlayOnDesktopClick?: React.MouseEventHandler<HTMLButtonElement>;
   onPlayOnWebClick?: React.MouseEventHandler<HTMLButtonElement>;
-  actions?: React.ReactNode;
-  contents?: React.ReactNode;
+  required?: string;
   showMore?: boolean;
-  autoHeight?: boolean;
+  sx?: SxProps<Theme>;
+  title?: string;
 }
 
 const GameCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<GameCardProps>>
 > = ({
-  title,
-  required,
+  actions,
+  autoHeight = false,
+  contents,
   description,
-  onlineCounter,
+  externalLink,
   image,
   isComingSoon,
-  sx,
+  onlineCounter,
   onPlayOnDesktopClick,
   onPlayOnWebClick,
-  actions,
-  contents,
+  required,
   showMore = false,
-  autoHeight = false,
+  sx,
+  title,
 }) => {
   const theme = useTheme();
 
@@ -174,14 +198,15 @@ const GameCard: React.FC<
       <CardMedia component="img" height="auto" image={image} alt={title} />
       {contents || (
         <CardGameContent
-          title={title}
-          required={required}
-          isComingSoon={isComingSoon}
-          description={description}
           actions={actions}
+          description={description}
+          externalLink={externalLink}
+          isComingSoon={isComingSoon}
           onPlayOnDesktopClick={onPlayOnDesktopClick}
           onPlayOnWebClick={onPlayOnWebClick}
+          required={required}
           showMore={showMore}
+          title={title}
         />
       )}
     </Card>
