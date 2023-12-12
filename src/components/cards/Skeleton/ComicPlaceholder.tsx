@@ -1,5 +1,5 @@
 import { Skeleton } from '@mui/material';
-import useComicDimension from 'hooks/useComicDimension';
+import useComicDimension from '@/hooks/useComicDimension';
 
 const ComicPlaceholder = () => {
   const { width, height } = useComicDimension();

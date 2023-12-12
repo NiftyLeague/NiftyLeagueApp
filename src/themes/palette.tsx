@@ -3,16 +3,16 @@ import { createTheme } from '@mui/material/styles';
 import { PaletteMode } from '@mui/material';
 
 // assets
-import defaultColor from 'assets/scss/_themes-vars.module.scss';
-import theme1 from 'assets/scss/_theme1.module.scss';
-import theme2 from 'assets/scss/_theme2.module.scss';
-import theme3 from 'assets/scss/_theme3.module.scss';
-import theme4 from 'assets/scss/_theme4.module.scss';
-import theme5 from 'assets/scss/_theme5.module.scss';
-import theme6 from 'assets/scss/_theme6.module.scss';
+import defaultColor from '@/styles/_themes-vars.module.scss';
+import theme1 from '@/styles/_theme1.module.scss';
+import theme2 from '@/styles/_theme2.module.scss';
+import theme3 from '@/styles/_theme3.module.scss';
+import theme4 from '@/styles/_theme4.module.scss';
+import theme5 from '@/styles/_theme5.module.scss';
+import theme6 from '@/styles/_theme6.module.scss';
 
 // types
-import { ColorProps } from 'types';
+import { ColorProps } from '@/types';
 
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
 

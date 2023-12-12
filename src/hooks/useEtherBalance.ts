@@ -1,5 +1,7 @@
+'use client';
+
 import { useCallback, useContext, useEffect, useState } from 'react';
-import NetworkContext from 'contexts/NetworkContext';
+import NetworkContext from '@/contexts/NetworkContext';
 import { ethers } from 'ethers';
 
 /*
@@ -24,7 +26,7 @@ export default function useEtherBalance(): EtherBalanceState {
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchEtherBalance = useCallback(async () => {
-    if (!address || !userProvider) return;
+    if (!address?.length || !userProvider) return;
     try {
       setLoading(true);
       const rawBalance = await userProvider.getBalance(address);

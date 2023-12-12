@@ -1,10 +1,13 @@
+'use client';
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Box } from '@mui/system';
 import CustomModal from './CustomModal';
 import makeStyles from '@mui/styles/makeStyles';
-import { fetchScores } from 'utils/leaderboard';
-import { DataType, ReturnDataType } from 'types/leaderboard';
+import { fetchScores } from '@/utils/leaderboard';
+import { DataType, ReturnDataType } from '@/types/leaderboard';
 import './navigation.css';
 import {
   TableBody,
@@ -16,8 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { ReactComponent as TwitterIcon } from 'assets/images/icons/twitter.svg';
-import { LEADERBOARD_GAME_LIST } from 'constants/leaderboard';
+import { LEADERBOARD_GAME_LIST } from '@/constants/leaderboard';
 const useStyles = makeStyles({
   title: {
     position: 'absolute',
@@ -180,8 +182,6 @@ const TableModal = ({
   };
 
   // shorten user id letters
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
   const handleShareOnTwitter = () => {
     const currentGame = LEADERBOARD_GAME_LIST.filter(
       (game) => game.key === selectedGame,
@@ -194,10 +194,11 @@ const TableModal = ({
       text: `I ranked #${myRank} on the ${display} Top Score Leaderboard. Check out @niftyleague games: https://app.niftyleague.com/`,
       hashtags: 'NiftyLeague,NFT,NFTGaming',
     };
-    window.open(
-      `https://twitter.com/intent/tweet?${`${new URLSearchParams(obj)}`}`,
-      '_blank',
-    );
+    if (typeof window !== 'undefined')
+      window.open(
+        `https://twitter.com/intent/tweet?${`${new URLSearchParams(obj)}`}`,
+        '_blank',
+      );
   };
 
   return (
@@ -264,7 +265,7 @@ const TableModal = ({
         <TableBody className="body">
           {data ? (
             data.map((i) => (
-              <TableRow className="row first">
+              <TableRow className="row first" key={`${i}`}>
                 <TableCell className={`cell index ${classes.rank}`}>
                   <span
                     className={classes.rankBody}
@@ -364,7 +365,13 @@ const TableModal = ({
               className={classes.twitter}
               onClick={handleShareOnTwitter}
             >
-              Share on twitter <TwitterIcon />
+              Share on twitter{' '}
+              <Image
+                src="/images/icons/twitter.svg"
+                alt="Twitter Icon"
+                width={22}
+                height={20}
+              />
             </Typography>
           )}
         </TableBody>

@@ -1,7 +1,9 @@
+'use client';
+
 import { useContext } from 'react';
 
 // auth provider
-import AuthContext from 'contexts/TokenContext';
+import AuthContext from '@/contexts/AuthTokenContext';
 
 // ==============================|| AUTH HOOKS ||============================== //
 

@@ -1,3 +1,5 @@
+'use client';
+
 import ReactGA from 'react-ga4';
 
 const initGA = () => {
@@ -5,18 +7,19 @@ const initGA = () => {
   if (isDev) {
     return;
   }
-
-  const userId = window.localStorage.getItem('user-id');
-  ReactGA.initialize(
-    process.env.REACT_APP_GA_CONTAINER_ID || '',
-    userId
-      ? {
-          gaOptions: {
-            userId: userId,
-          },
-        }
-      : undefined,
-  );
+  if (typeof window !== 'undefined') {
+    const userId = window.localStorage.getItem('user-id');
+    ReactGA.initialize(
+      process.env.NEXT_PUBLIC_GA_CONTAINER_ID || '',
+      userId
+        ? {
+            gaOptions: {
+              userId: userId,
+            },
+          }
+        : undefined,
+    );
+  }
 };
 
 const sendEvent = (action = '', category = '', label = '') => {
@@ -30,7 +33,8 @@ const sendPageview = (path: string) => {
 };
 
 const sendUserId = (userId: string) => {
-  window.localStorage.setItem('user-id', userId);
+  if (typeof window !== 'undefined')
+    window.localStorage.setItem('user-id', userId);
   ReactGA.set({ userId });
 };
 

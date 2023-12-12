@@ -1,3 +1,5 @@
+'use client';
+
 import useGamerProfile from './useGamerProfile';
 import useProfileAvatarFee from './useProfileAvatarFee';
 import useProfileFavDegens from './useProfileFavDegens';

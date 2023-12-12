@@ -1,8 +1,8 @@
 import { SetStateAction } from 'react';
-import { Degen } from 'types/degens';
-import { DegenFilter } from 'types/degenFilter';
+import { Degen } from '@/types/degens';
+import { DegenFilter } from '@/types/degenFilter';
 import DEFAULT_STATIC_FILTER from './constants';
-import { BURN_ADDYS } from 'constants/addresses';
+import { BURN_ADDYS } from '@/constants/addresses';
 
 export const tranformDataByFilter = (
   degens: Degen[],
@@ -15,6 +15,7 @@ export const tranformDataByFilter = (
     cosmetics = [],
     sort,
     searchTerm = [],
+    walletAddress = [],
   }: DegenFilter,
 ): Degen[] => {
   let result = degens.filter(
@@ -32,14 +33,10 @@ export const tranformDataByFilter = (
       // Filter all burn addys
       if (BURN_ADDYS.includes(owner)) return false;
 
-      // Filter for custom URL with addy
-      const walletAddress = window.location.pathname.replace(
-        /(\/(degens)|\/)/g,
-        '',
-      );
       if (
-        walletAddress?.length > 26 &&
-        !(owner.toLowerCase() === walletAddress.toLowerCase())
+        walletAddress?.length &&
+        walletAddress[0].length > 26 &&
+        !(owner.toLowerCase() === walletAddress[0].toLowerCase())
       ) {
         return false;
       }
@@ -115,17 +112,18 @@ export const tranformDataByFilter = (
     result.sort((a, b) => Number(a.id) - Number(b.id));
   } else if (sort === 'idDown') {
     result.sort((a, b) => Number(b.id) - Number(a.id));
-  } else if (sort === 'priceUp') {
-    result.sort((a, b) => Number(a.price) - Number(b.price));
-  } else if (sort === 'priceDown') {
-    result.sort((a, b) => Number(b.price) - Number(a.price));
-  } else if (sort === 'mostRented') {
-    result.sort((a, b) => Number(b.total_rented) - Number(a.total_rented));
-  } else if (sort === 'leastRented') {
-    result.sort((a, b) => Number(a.total_rented) - Number(b.total_rented));
-  } else if (sort === 'recentRented') {
-    result.sort((a, b) => b.last_rented_at - a.last_rented_at);
   }
+  // else if (sort === 'priceUp') {
+  //   result.sort((a, b) => Number(a.price) - Number(b.price));
+  // } else if (sort === 'priceDown') {
+  //   result.sort((a, b) => Number(b.price) - Number(a.price));
+  // } else if (sort === 'mostRented') {
+  //   result.sort((a, b) => Number(b.total_rented) - Number(a.total_rented));
+  // } else if (sort === 'leastRented') {
+  //   result.sort((a, b) => Number(a.total_rented) - Number(b.total_rented));
+  // } else if (sort === 'recentRented') {
+  //   result.sort((a, b) => b.last_rented_at - a.last_rented_at);
+  // }
 
   return result;
 };
@@ -143,7 +141,7 @@ export const updateFilterValue = (
   // eslint-disable-next-line guard-for-in
   for (const key in params) {
     const value = params[key as keyof DegenFilter];
-    if (key === 'searchTerm') {
+    if (key === 'searchTerm' || key === 'walletAddress') {
       newFilter[key] = [value];
     } else {
       if (!value) {
@@ -155,6 +153,7 @@ export const updateFilterValue = (
           key === 'prices' ? Number(type) : String(type),
         );
       actions &&
+        actions[key] &&
         actions[key](
           newValue || DEFAULT_STATIC_FILTER[key as keyof DegenFilter],
         );

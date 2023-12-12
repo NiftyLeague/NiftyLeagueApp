@@ -1,17 +1,22 @@
+'use client';
+
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
-import { getLeaderboardRankAnalyticsEventName } from 'constants/leaderboard';
-import useAuth from 'hooks/useAuth';
-import usePlayerProfile from 'hooks/usePlayerProfile';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
+import { getLeaderboardRankAnalyticsEventName } from '@/constants/leaderboard';
+import useAuth from '@/hooks/useAuth';
+import usePlayerProfile from '@/hooks/usePlayerProfile';
 import ResponsiveTable from 'mui5-responsive-table';
 import { toast } from 'react-toastify';
-import { DataType, ReturnDataType, TableProps } from 'types/leaderboard';
-import { sendEvent } from 'utils/google-analytics';
-import { fetchRankByUserId, fetchScores } from 'utils/leaderboard';
-import TopModal from '../TopModal';
+import { DataType, ReturnDataType, TableProps } from '@/types/leaderboard';
+import { sendEvent } from '@/utils/google-analytics';
+import { fetchRankByUserId, fetchScores } from '@/utils/leaderboard';
+import { errorMsgHandler } from '@/utils/errorHandlers';
+
+const TopModal = dynamic(() => import('../TopModal'), { ssr: false });
 
 const useStyles = makeStyles(() => ({
   loadingBox: {
@@ -137,7 +142,7 @@ export default function EnhancedTable({
       setMyRank(res);
       document?.querySelector('.wen-game-modal')?.parentElement?.click();
     } catch (error) {
-      toast.error(error, { theme: 'dark' });
+      toast.error(errorMsgHandler(error), { theme: 'dark' });
       return;
     }
   };
@@ -217,7 +222,13 @@ export default function EnhancedTable({
               }}
               onClick={handleCheckYourRank}
             >
-              <RankIcon />
+              <Image
+                src="/images/icons/rank_icon.svg"
+                alt="Rank Icon"
+                width={25}
+                height={20}
+                style={{ marginRight: 4 }}
+              />
               RANK
             </Typography>
           )}

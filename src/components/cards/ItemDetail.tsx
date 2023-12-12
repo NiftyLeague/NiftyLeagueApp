@@ -1,9 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import useFlags from 'hooks/useFlags';
-import { Item } from 'types/comic';
-import ImageCard from 'components/cards/ImageCard';
+import useFlags from '@/hooks/useFlags';
+import { Item } from '@/types/comic';
+import ImageCard from '@/components/cards/ImageCard';
 
 export interface ItemDetailProps {
   data: Item | null;
@@ -13,7 +12,7 @@ export interface ItemDetailProps {
 const ItemDetail: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<ItemDetailProps>>
 > = ({ data, subIndex }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { enableEquip } = useFlags();
 
   if (!data || (data?.balance && data?.balance > 1 && subIndex < 0)) {
@@ -30,7 +29,7 @@ const ItemDetail: React.FC<
   const { equipped, image, multiplier, title, thumbnail } = data;
 
   const handleEquip = () => {
-    navigate('/dashboard/degens');
+    router.push('/dashboard/degens');
   };
 
   return (

@@ -1,9 +1,10 @@
 // assets
-import { IconDashboard } from '@tabler/icons';
+import { IconDashboard, IconLayoutGrid } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconDashboard,
+  IconLayoutGrid,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -16,7 +17,7 @@ const PrivateItems = {
       id: 'dashboard',
       title: 'My Dashboard',
       type: 'collapse',
-      icon: icons.IconDashboard,
+      icon: icons.IconLayoutGrid,
       children: [
         {
           id: 'dashboard',

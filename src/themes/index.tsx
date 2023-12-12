@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // project import
-import useConfig from 'hooks/useConfig';
+import useThemeConfig from '@/hooks/useThemeConfig';
 import Palette from './palette';
 import Typography from './typography';
 
@@ -20,7 +20,7 @@ import componentStyleOverrides from './compStyleOverride';
 import customShadows from './shadows';
 
 // types
-import { CustomShadowProps } from 'types/default-theme';
+import { CustomShadowProps } from '@/types/default-theme';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 interface Props {
@@ -30,12 +30,12 @@ interface Props {
 export default function ThemeCustomization({ children }: Props) {
   const {
     borderRadius,
-    fontFamily,
+    // fontFamily,
     navType,
     outlinedFilled,
     presetColor,
     rtlLayout,
-  } = useConfig();
+  } = useThemeConfig();
 
   const theme: Theme = useMemo<Theme>(
     () => Palette(navType, presetColor),
@@ -44,8 +44,8 @@ export default function ThemeCustomization({ children }: Props) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const themeTypography: TypographyOptions = useMemo<TypographyOptions>(
-    () => Typography(theme, borderRadius, fontFamily),
-    [theme, borderRadius, fontFamily],
+    () => Typography(theme, borderRadius), //, fontFamily),
+    [theme, borderRadius],
   );
   const themeCustomShadows: CustomShadowProps = useMemo<CustomShadowProps>(
     () => customShadows(navType, theme),

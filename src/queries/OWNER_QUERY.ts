@@ -1,7 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 
-export const OWNER_QUERY = gql`
+const OWNER_QUERY = gql`
   query addressCharactersSearch($address: ID!) {
     owner(id: $address) {
       id
@@ -42,3 +41,5 @@ export const OWNER_QUERY = gql`
     }
   }
 `;
+
+export default OWNER_QUERY;

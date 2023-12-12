@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/sdk';
+import { mainnet, goerli } from 'viem/chains';
 import ALLOWED_COLORS_STORAGE_ABI from './abis/AllowedColorsStorage.json';
 import BALANCE_MANAGER_ABI from './abis/BalanceManager.json';
 import HYDRA_DISTRIBUTOR_ABI from './abis/HydraDistributor.json';
@@ -8,7 +8,7 @@ import NIFTY_BURNING_COMICS_L2_ABI from './abis/NiftyBurningComicsL2.json';
 import NIFTY_DEGEN_ABI from './abis/NiftyDegen.json';
 import NIFTY_ITEM_L2 from './abis/NiftyItemL2.json';
 import NIFTY_LAUNCH_COMICS_ABI from './abis/NiftyLaunchComics.json';
-import { LOCAL_CHAIN_ID } from '../constants/networks';
+import { LOCAL_CHAIN_ID } from '@/constants/networks';
 
 const CONTRACTS: {
   [chainId: number]: {
@@ -49,7 +49,7 @@ const CONTRACTS: {
       abi: NIFTY_LAUNCH_COMICS_ABI,
     },
   },
-  [ChainId.GÖRLI]: {
+  [goerli.id]: {
     AllowedColorsStorage: {
       address: '0x4cf79525c3447AA62B2dafFA876878BEA02e85EA',
       abi: ALLOWED_COLORS_STORAGE_ABI,
@@ -87,7 +87,7 @@ const CONTRACTS: {
       abi: NIFTY_LAUNCH_COMICS_ABI,
     },
   },
-  [ChainId.MAINNET]: {
+  [mainnet.id]: {
     AllowedColorsStorage: {
       address: '0xee7b4d3C69DE4883daE82EcDb3B629d24A5590d7',
       abi: ALLOWED_COLORS_STORAGE_ABI,

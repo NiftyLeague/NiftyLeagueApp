@@ -1,4 +1,4 @@
-import { TERMINATE_RENTAL_API_URL } from 'constants/url';
+import { TERMINATE_RENTAL_API_URL } from '@/constants/url';
 import useAuth from './useAuth';
 
 const useTeminateRental = () => {

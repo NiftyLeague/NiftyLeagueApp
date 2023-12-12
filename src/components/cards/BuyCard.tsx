@@ -1,7 +1,6 @@
-import React from 'react';
+import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
-import useComicDimension from 'hooks/useComicDimension';
-import { ReactComponent as BuyComicIcon } from 'assets/images/comics/shopping-cart.svg';
+import useComicDimension from '@/hooks/useComicDimension';
 
 export interface BuyCardProps {
   isNew: boolean;
@@ -31,7 +30,12 @@ const BuyCard: React.FC<
       onClick={handleBuyComic}
       sx={{ cursor: 'pointer' }}
     >
-      <BuyComicIcon width={cardWidth - 50} height={cardHeight - 50} />
+      <Image
+        src="/images/comics/shopping-cart.svg"
+        alt="Shopping Cart"
+        width={cardWidth - 50}
+        height={cardHeight - 50}
+      />
       <Typography mt={0.5} color="#5820D6" sx={{ textDecoration: 'underline' }}>
         {isNew ? 'Buy' : 'Buy More'}
       </Typography>

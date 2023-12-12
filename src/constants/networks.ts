@@ -1,37 +1,34 @@
-import { ChainId } from '@sushiswap/sdk';
-import { Network, NetworkName } from 'types/web3';
-
-import Goerli from '../assets/images/networks/goerli-network.jpg';
-import Mainnet from '../assets/images/networks/mainnet-network.jpg';
+import { mainnet, goerli } from 'viem/chains';
+import { Network, NetworkName } from '@/types/web3';
 
 export const NetworkContextName = 'NETWORK';
 
 export const LOCAL_CHAIN_ID = 31337;
 
 export const NETWORK_ICON = {
-  [ChainId.MAINNET]: Mainnet,
-  [ChainId.GÖRLI]: Goerli,
+  [mainnet.id]: '/images/networks/mainnet-network.jpg',
+  [goerli.id]: '/images/networks/goerli-network.jpg',
 };
 
 export const NETWORK_LABEL = {
   [LOCAL_CHAIN_ID]: 'localhost',
-  [ChainId.MAINNET]: 'Ethereum',
-  [ChainId.GÖRLI]: 'Görli',
+  [mainnet.id]: 'Ethereum',
+  [goerli.id]: 'Görli',
 };
 
 // needs to match hardhat settings otherwise use rpcUrl for our localProvider initialization
 export const NETWORK_NAME: { [chainId: number]: NetworkName } = {
   [LOCAL_CHAIN_ID]: 'localhost',
-  [ChainId.MAINNET]: 'mainnet',
-  [ChainId.GÖRLI]: 'goerli',
+  [mainnet.id]: 'mainnet',
+  [goerli.id]: 'goerli',
 };
 
 export const RPC = {
-  [ChainId.MAINNET]: `https://mainnet.infura.io/v3/${
-    process.env.REACT_APP_INFURA_PROJECT_ID as string
+  [mainnet.id]: `https://mainnet.infura.io/v3/${
+    process.env.NEXT_PUBLIC_INFURA_PROJECT_ID as string
   }`,
-  [ChainId.GÖRLI]: `https://goerli.infura.io/v3/${
-    process.env.REACT_APP_INFURA_PROJECT_ID as string
+  [goerli.id]: `https://goerli.infura.io/v3/${
+    process.env.NEXT_PUBLIC_INFURA_PROJECT_ID as string
   }`,
 };
 
@@ -40,22 +37,22 @@ export const NETWORKS: { [network: string]: Network } = {
     blockExplorer: '',
     chainId: LOCAL_CHAIN_ID,
     label: NETWORK_LABEL[LOCAL_CHAIN_ID],
-    rpcUrl: `http://${window.location.hostname}:8545`,
+    rpcUrl: `http://localhost:8545`,
   },
   mainnet: {
     blockExplorer: 'https://etherscan.io/',
-    chainId: ChainId.MAINNET,
-    label: NETWORK_LABEL[ChainId.MAINNET],
-    name: NETWORK_NAME[ChainId.MAINNET],
-    rpcUrl: RPC[ChainId.MAINNET],
+    chainId: mainnet.id,
+    label: NETWORK_LABEL[mainnet.id],
+    name: NETWORK_NAME[mainnet.id],
+    rpcUrl: RPC[mainnet.id],
   },
   goerli: {
     blockExplorer: 'https://goerli.etherscan.io/',
-    chainId: ChainId.GÖRLI,
+    chainId: goerli.id,
     faucet: 'https://goerlifaucet.com/',
-    label: NETWORK_LABEL[ChainId.GÖRLI],
-    name: NETWORK_NAME[ChainId.GÖRLI],
-    rpcUrl: RPC[ChainId.GÖRLI],
+    label: NETWORK_LABEL[goerli.id],
+    name: NETWORK_NAME[goerli.id],
+    rpcUrl: RPC[goerli.id],
   },
 };
 
@@ -69,29 +66,10 @@ export const NETWORK = (chainId: number): Network =>
 
 export const SUPPORTED_CHAIN_IDS: number[] = [
   LOCAL_CHAIN_ID,
-  ChainId.MAINNET,
-  ChainId.GÖRLI,
+  mainnet.id,
+  goerli.id,
 ];
 
-export const VALID_ETHERS_NETWORKS: number[] = [
-  ChainId.MAINNET,
-  ChainId.ROPSTEN,
-  ChainId.RINKEBY,
-  ChainId.GÖRLI,
-  ChainId.KOVAN,
-  ChainId.MATIC,
-  ChainId.MATIC_TESTNET,
-  ChainId.BSC,
-  ChainId.BSC_TESTNET,
-  ChainId.XDAI,
-];
+export const VALID_ETHERS_NETWORKS: number[] = [mainnet.id, goerli.id];
 
-export const VALID_NOTIFY_NETWORKS: number[] = [
-  ChainId.MAINNET,
-  ChainId.ROPSTEN,
-  ChainId.RINKEBY,
-  ChainId.GÖRLI,
-  ChainId.KOVAN,
-  ChainId.BSC,
-  ChainId.XDAI,
-];
+export const VALID_NOTIFY_NETWORKS: number[] = [mainnet.id, goerli.id];

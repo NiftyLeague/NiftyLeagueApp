@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { useTheme } from '@mui/material/styles';
 import MuiAvatar, { AvatarProps } from '@mui/material/Avatar';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
-import { LinkTarget } from 'types';
+import { LinkTarget } from '@/types';
 
 // ==============================|| AVATAR ||============================== //
 
@@ -13,7 +13,6 @@ interface avatarProps extends AvatarProps {
   src?: string;
   className?: string;
   color?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component?: OverridableComponent<any> /** Any component can override */;
   target?: LinkTarget;
   href?: string;

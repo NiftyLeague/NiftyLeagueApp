@@ -1,7 +1,6 @@
-import React from 'react';
 import { Box } from '@mui/material';
-import { Comic } from 'types/comic';
-import ImageCard from 'components/cards/ImageCard';
+import { Comic } from '@/types/comic';
+import ImageCard from '@/components/cards/ImageCard';
 
 export interface ComicDetailProps {
   data: Comic | null;

@@ -1,21 +1,36 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+'use client';
 
-import { initGA, sendPageview } from 'utils/google-analytics';
+import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useReportWebVitals } from 'next/web-vitals';
+import { initGA, sendPageview } from '@/utils/google-analytics';
 
 const useGoogleAnalytics = () => {
-  const location = useLocation();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     initGA();
   }, []);
 
   useEffect(() => {
-    const currentPath = location.pathname + location.search;
-    if ((window as any).ga) {
+    const currentPath = pathname + searchParams.toString();
+    if (typeof window !== 'undefined' && (window as any).ga) {
       sendPageview(currentPath);
     }
-  }, [location]);
+  }, [pathname, searchParams]);
+
+  useReportWebVitals((metric) => {
+    if (typeof window !== 'undefined' && window?.gtag) {
+      window.gtag('event', metric.name, {
+        value: Math.round(
+          metric.name === 'CLS' ? metric.value * 1000 : metric.value,
+        ), // values must be integers
+        event_label: metric.id, // id unique to current page load
+        non_interaction: true, // avoids affecting bounce rate.
+      });
+    }
+  });
 };
 
 export default useGoogleAnalytics;

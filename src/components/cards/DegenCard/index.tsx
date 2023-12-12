@@ -1,4 +1,7 @@
+'use client';
+
 import { useContext, memo } from 'react';
+import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
 import {
   Box,
@@ -17,18 +20,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIconFilled from '@mui/icons-material/Favorite';
 import FavoriteIconOutlined from '@mui/icons-material/FavoriteBorderOutlined';
 import { toast } from 'react-toastify';
-// import Chip from 'components/extended/Chip';
-import SkeletonDegenPlaceholder from 'components/cards/Skeleton/DegenPlaceholder';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import { formatNumberToDisplay } from 'utils/numbers';
-import NetworkContext from 'contexts/NetworkContext';
+// import Chip from '@/components/extended/Chip';
+import SkeletonDegenPlaceholder from '@/components/cards/Skeleton/DegenPlaceholder';
+import useClaimableNFTL from '@/hooks/useClaimableNFTL';
+import { formatNumberToDisplay } from '@/utils/numbers';
+import NetworkContext from '@/contexts/NetworkContext';
 import DegenImage from './DegenImage';
-import { downloadDegenAsZip } from 'utils/file';
-import { ReactComponent as DownloadSolid } from 'assets/images/icons/download-solid.svg';
-// import EnableDisableDegenDialogContent from 'pages/dashboard/degens/dialogs/EnableDegenDialogContent';
-import { Degen } from 'types/degens';
-// import { DISABLE_RENT_API_URL } from 'constants/url';
-import useAuth from 'hooks/useAuth';
+import { downloadDegenAsZip } from '@/utils/file';
+import { errorMsgHandler } from '@/utils/errorHandlers';
+// import EnableDisableDegenDialogContent from '@/app/dashboard/degens/dialogs/EnableDegenDialogContent';
+import { Degen } from '@/types/degens';
+// import { DISABLE_RENT_API_URL } from '@/constants/url';
+import useAuth from '@/hooks/useAuth';
 
 // const chipStyles = (isSmall: boolean) => ({
 //   color: 'white',
@@ -80,6 +83,8 @@ const DegenClaimBal: React.FC<
     >{`${amountParsed} NFTL`}</Typography>
   );
 });
+
+DegenClaimBal.displayName = 'DegenClaimBal';
 
 const DegenCard: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>
@@ -135,7 +140,7 @@ const DegenCard: React.FC<
         try {
           await downloadDegenAsZip(authToken, id);
         } catch (err) {
-          toast.error(err.message, { theme: 'dark' });
+          toast.error(errorMsgHandler(err), { theme: 'dark' });
         }
       }
     };
@@ -356,7 +361,9 @@ const DegenCard: React.FC<
                 >
                   IP
                 </Typography>
-                <DownloadSolid
+                <Image
+                  src="/images/icons/download-solid.svg"
+                  alt="Download Icon"
                   width={size === 'small' ? 12 : 16}
                   height={size === 'small' ? 12 : 16}
                 />
@@ -384,6 +391,8 @@ const DegenCard: React.FC<
     );
   },
 );
+
+DegenCard.displayName = 'DegenCard';
 
 const DegenCardInView: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<DegenCardProps>>

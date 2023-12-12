@@ -1,5 +1,5 @@
 import { Container } from '@mui/material';
-import Definitions from 'components/Definitions';
+import Definitions from '@/components/Definitions';
 
 const TermsOfServiceContent = () => {
   return (

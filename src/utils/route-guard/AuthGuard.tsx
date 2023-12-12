@@ -1,10 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 
 // project imports
-import { GuardProps } from 'types';
+import { GuardProps } from '@/types';
 import { useContext, useEffect, useState } from 'react';
-import NetworkContext from 'contexts/NetworkContext';
-import { ADDRESS_VERIFICATION } from 'constants/url';
+import NetworkContext from '@/contexts/NetworkContext';
+import { ADDRESS_VERIFICATION } from '@/constants/url';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import useAuth from '@/hooks/useAuth';
 
 // ==============================|| AUTH GUARD ||============================== //
 
@@ -13,18 +17,16 @@ import { ADDRESS_VERIFICATION } from 'constants/url';
  * @param {PropTypes.node} children children element/node
  */
 const AuthGuard = ({ children }: GuardProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { address } = useContext(NetworkContext);
   const [success, setSuccess] = useState(false);
-  const [auth, setAuth] = useState(
-    window.localStorage.getItem('authentication-token'),
-  );
+  const { authToken, isLoggedIn } = useAuth();
 
   useEffect(() => {
     const checkAddress = async () => {
-      if (auth) {
+      if (authToken?.length) {
         const result = await fetch(ADDRESS_VERIFICATION, {
-          headers: { authorizationToken: auth },
+          headers: { authorizationToken: authToken },
         })
           .then((res) => {
             if (res.status === 404) setSuccess(false);
@@ -33,25 +35,23 @@ const AuthGuard = ({ children }: GuardProps) => {
           .catch(() => {
             setSuccess(false);
           });
-        if (result && result.slice(1, -1) === address.toLowerCase()) {
+        if (result && result.slice(1, -1) === address?.toLowerCase()) {
           setSuccess(true);
-        } else {
+        } else if (typeof window !== 'undefined' && window.localStorage) {
           window.localStorage.removeItem('authentication-token');
           window.localStorage.removeItem('uuid-token');
           window.localStorage.removeItem('nonce');
           window.localStorage.removeItem('user-id');
-          setAuth(null);
         }
       }
     };
     // eslint-disable-next-line no-void
-    if (auth && address) void checkAddress();
+    if (authToken?.length && address?.length) void checkAddress();
 
-    if (!auth && !success) {
-      navigate('/', { replace: true });
+    if (!isLoggedIn && !success) {
+      router.replace('/');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth, success]);
+  }, [address, authToken, isLoggedIn, router, success]);
 
   return children;
 };

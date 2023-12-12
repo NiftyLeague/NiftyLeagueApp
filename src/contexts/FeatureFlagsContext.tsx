@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, ReactNode, useState } from 'react';
 
 /**
@@ -26,12 +28,12 @@ function useProcessFlagsFromEnv(key: string, defaultValue: FlagSet) {
   return { flags };
 }
 
-type ConfigProviderProps = {
+type ThemeConfigProviderProps = {
   children: ReactNode;
 };
 
-export function FeatureFlagProvider({ children }: ConfigProviderProps) {
-  const { flags } = useProcessFlagsFromEnv('REACT_APP_FEATURE_FLAGS', {
+export function FeatureFlagProvider({ children }: ThemeConfigProviderProps) {
+  const { flags } = useProcessFlagsFromEnv('NEXT_PUBLIC_FEATURE_FLAGS', {
     displayMyItems: false,
     enableEquip: false,
   });

@@ -1,8 +1,10 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { Contracts } from 'types/web3';
+import { Contracts } from '@/types/web3';
 import useContractReader from './useContractReader';
-import { DEGEN_CONTRACT } from 'constants/contracts';
-import { REMOVED_TRAITS_INTERVAL } from 'constants/index';
+import { DEGEN_CONTRACT } from '@/constants/contracts';
+import { REMOVED_TRAITS_INTERVAL } from '@/constants/index';
 
 export default function useRemovedTraits(readContracts: Contracts): number[] {
   const [removedTraits, setRemovedTraits] = useState<number[]>([]);
