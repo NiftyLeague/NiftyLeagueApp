@@ -1,5 +1,5 @@
 // project imports
-import { GuardProps } from 'types';
+import { GuardProps } from '@/types';
 
 // ==============================|| GUEST GUARD ||============================== //
 

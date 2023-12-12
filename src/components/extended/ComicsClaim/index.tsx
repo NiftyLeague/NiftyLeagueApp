@@ -1,5 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+'use client';
+
+import { forwardRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   Button,
   Checkbox,
@@ -13,15 +15,15 @@ import {
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import NetworkContext from 'contexts/NetworkContext';
-import useClaimCallback from 'hooks/comics/useClaimCallback';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import useClaimCallback from '@/hooks/comics/useClaimCallback';
 import useUserUnclaimedAmount, {
   ClaimResult,
-} from 'hooks/comics/useUserUnclaimedAmount';
+} from '@/hooks/comics/useUserUnclaimedAmount';
 
 import snapshot from './snapshot.json';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+const Alert = forwardRef<HTMLDivElement, AlertProps>(
   function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   },
@@ -34,7 +36,7 @@ function CustomizedSnackbar({
   msg: string;
   setDialogOpen: (boolean) => void;
 }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -147,8 +149,9 @@ function ClaimDialog({
             inputProps={{ 'aria-label': 'primary checkbox' }}
             onChange={handleToggleChecked}
           />
-          Please accept our <Link to="/terms-of-service">Terms of Service</Link>{' '}
-          before claiming.
+          Please accept our{' '}
+          <Link href="/terms-of-service">Terms of Service</Link> before
+          claiming.
         </DialogContentText>
         {fullScreen && (
           <Button
@@ -180,16 +183,15 @@ function ClaimDialog({
 }
 
 export default function ComicsClaim(): JSX.Element | null {
-  const { selectedChainId, validAccount, address } = useContext(NetworkContext);
+  const { address, isConnected } = useWeb3ModalAccount();
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [availableComics, setAvailableComics] = useState({ p5: 0, p6: 0 });
   const claimCheck = snapshot.find(
-    (owner) => owner.address === address.toLowerCase(),
+    (owner) => owner.address === address?.toLowerCase(),
   ) || { p5: 0, p6: 0 };
 
-  return (claimCheck.p5 > 0 || claimCheck.p6 > 0) &&
-    validAccount &&
-    selectedChainId ? (
+  return (claimCheck.p5 > 0 || claimCheck.p6 > 0) && isConnected ? (
     <>
       <ClaimButton
         setDialogOpen={setDialogOpen}

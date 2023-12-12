@@ -1,8 +1,10 @@
+'use client';
+
 import { Menu, MenuItem, Stack } from '@mui/material';
 import { Children, cloneElement, ReactElement, useRef, useState } from 'react';
-import { MenuItemBaseProps } from 'types';
-import { callAll } from 'utils';
-import DegenSortOptions from 'constants/sort';
+import { MenuItemBaseProps } from '@/types';
+import callAll from '@/utils/callAll';
+import DegenSortOptions from '@/constants/sort';
 
 const sortOptions: MenuItemBaseProps[] = DegenSortOptions;
 interface Props {

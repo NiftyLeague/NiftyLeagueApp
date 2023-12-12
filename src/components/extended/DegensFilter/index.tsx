@@ -1,4 +1,6 @@
-import React, {
+'use client';
+
+import {
   ChangeEvent,
   SetStateAction,
   useCallback,
@@ -7,8 +9,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useSearchParams } from 'react-router-dom';
-// import useFlags from 'hooks/useFlags';
+import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+// import useFlags from '@/hooks/useFlags';
 import isEmpty from 'lodash/isEmpty';
 import {
   Button,
@@ -27,9 +30,9 @@ import {
   // rentals,
   tribes,
   // wearables,
-} from 'constants/filters';
-import * as CosmeticsFilter from 'constants/cosmeticsFilters';
-import { DegenFilter } from 'types/degenFilter';
+} from '@/constants/filters';
+import * as CosmeticsFilter from '@/constants/cosmeticsFilters';
+import { DegenFilter } from '@/types/degenFilter';
 import { updateFilterValue } from './utils';
 import FilterAccordion from './FilterAccordion';
 // import FilterRangeSlider from './FilterRangeSlider';
@@ -79,7 +82,9 @@ const DegensFilter = ({
   const classes = useStyles();
   const theme = useTheme();
   const mountedRef = useRef(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const params = useMemo(
     () =>
       Object.fromEntries(searchParams.entries()) as {
@@ -87,7 +92,6 @@ const DegensFilter = ({
       },
     [searchParams],
   );
-
   const isParamsEmpty = isEmpty(params);
   // const { displayMyItems } = useFlags();
 
@@ -121,45 +125,54 @@ const DegensFilter = ({
   // Previously tried useEffect but it was unreliable since tribe and backgrounds will overwrite each other
   const handleChangeCommitted = useCallback(
     (source: FilterSource, value: string | null = null) => {
-      let keyValue = {};
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
 
       switch (source) {
         case 'prices':
-          keyValue = { prices: pricesRangeValue.join('-') };
+          if (!value) current.delete('prices');
+          else current.set('prices', pricesRangeValue.join('-'));
           break;
         case 'multipliers':
-          keyValue = { multipliers: value };
+          if (!value) current.delete('multipliers');
+          else current.set('multipliers', value);
           break;
         case 'rentals':
-          keyValue = { rentals: value };
+          if (!value) current.delete('rentals');
+          else current.set('rentals', value);
           break;
         case 'tribes':
-          keyValue = { tribes: value };
+          if (!value) current.delete('tribes');
+          else current.set('tribes', value);
           break;
         case 'backgrounds':
-          keyValue = { backgrounds: value };
+          if (!value) current.delete('backgrounds');
+          else current.set('backgrounds', value);
           break;
         case 'cosmetics':
-          keyValue = { cosmetics: value };
+          if (!value) current.delete('cosmetics');
+          else current.set('cosmetics', value);
           break;
         case 'wearables':
-          keyValue = { wearables: value };
+          if (!value) current.delete('wearables');
+          else current.set('wearables', value);
           break;
         case 'searchTerm':
-          keyValue = { searchTerm: [value] };
+          if (!value) current.delete('searchTerm');
+          // else current.set('searchTerm', [value]);
+          else current.set('searchTerm', value);
+          break;
+        case 'walletAddress':
+          if (!value) current.delete('walletAddress');
+          // else current.set('searchTerm', [value]);
+          else current.set('walletAddress', value);
           break;
       }
 
-      const newParams = {
-        ...params,
-        ...keyValue,
-      };
-      if (value?.length === 0) {
-        delete newParams[source];
-      }
-      setSearchParams(newParams);
+      const search = current.toString();
+      const query = search ? `?${search}` : '';
+      router.push(`${pathname}${query}`);
     },
-    [params, pricesRangeValue, setSearchParams],
+    [pricesRangeValue, pathname, router, searchParams],
   );
 
   // For checkbox filter
@@ -199,7 +212,7 @@ const DegensFilter = ({
   const handleReset = () => {
     if (isParamsEmpty) return;
     setAllFilterValues();
-    setSearchParams({});
+    router.push(pathname);
   };
 
   useEffect(() => {
@@ -243,8 +256,9 @@ const DegensFilter = ({
       cosmetics: newFilters.cosmetics,
       wearables: newFilters.wearables,
       searchTerm: newFilters.searchTerm,
+      walletAddress: newFilters.walletAddress,
     });
-  }, [defaultFilterValues, isDegenOwner, onFilter, params, setSearchParams]);
+  }, [defaultFilterValues, isDegenOwner, onFilter, params]);
 
   return (
     <Stack
@@ -297,7 +311,12 @@ const DegensFilter = ({
                 }
                 label={
                   <Stack direction="row" alignItems="center">
-                    <tribe.icon width={18} height={18} />
+                    <Image
+                      src={tribe.icon}
+                      alt="Tribe Icon"
+                      width={18}
+                      height={18}
+                    />
                     <Typography variant="body1" className={classes.tribeName}>
                       {tribe.name}
                     </Typography>
@@ -475,8 +494,8 @@ const DegensFilter = ({
                 const traitGroup = Object.entries(
                   CosmeticsFilter.TRAIT_VALUE_MAP[categoryKey],
                 )
-                  .sort((a: [string, string], b: [string, string]) =>
-                    a[1].localeCompare(b[1]),
+                  .sort((a: [string, unknown], b: [string, unknown]) =>
+                    (a[1] as string).localeCompare(b[1] as string),
                   )
                   .map((item) => item[0]);
                 return (

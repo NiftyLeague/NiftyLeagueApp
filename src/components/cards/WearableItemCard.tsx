@@ -1,7 +1,7 @@
-import React from 'react';
+import Image from 'next/image';
 import { Box, Stack, Theme, SxProps, Typography } from '@mui/material';
-import { Item } from 'types/comic';
-import ImageCard from 'components/cards/ImageCard';
+import { Item } from '@/types/comic';
+import ImageCard from '@/components/cards/ImageCard';
 
 export interface WearableItemCardProps {
   data: Item;
@@ -76,7 +76,12 @@ const WearableItemCard: React.FC<
           width={CARD_WIDTH}
           height={CARD_HEIGHT}
         >
-          <img src={empty} alt={title} />
+          <Image
+            src={empty as string}
+            alt={title}
+            width={CARD_WIDTH}
+            height={CARD_HEIGHT}
+          />
         </Box>
       </Box>
     );

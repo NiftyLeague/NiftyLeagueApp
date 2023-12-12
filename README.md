@@ -8,8 +8,8 @@ This repository holds all the code for the Nifty League App v2.
 
 Make sure you have installed all of the **following** prerequisites on your development machine:
 
-- Node => `lts/gallium`
-- NPM => `^6.x.x`
+- Node => `lts/iron`
+- NPM => `^8.x.x`
 - Yarn => `^1.22.x`
 - Git => `^2.x.x`
 
@@ -26,10 +26,16 @@ yarn prepare
 ### Install all depedencies
 
 ```bash
-yarn install
+yarn
 ```
 
-### Run on your local
+### Run local
+
+```bash
+yarn dev
+```
+
+### Run production
 
 ```bash
 yarn start

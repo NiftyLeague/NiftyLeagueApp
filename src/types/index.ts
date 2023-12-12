@@ -1,22 +1,14 @@
-import React, { FunctionComponent, ReactElement } from 'react';
+import { FunctionComponent } from 'react';
+import { TablerIconsProps } from '@tabler/icons-react';
 
 // material-ui
 import { SvgIconTypeMap, ChipProps, TableCellProps } from '@mui/material';
-
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 // project imports
-import { CartStateProps } from './cart';
-import { KanbanStateProps } from './kanban';
-import { CustomerStateProps } from './customer';
-import { ContactStateProps } from './contact';
-import { ProductStateProps } from './e-commerce';
-import { ChatStateProps } from './chat';
-import { MailStateProps } from './mail';
-import { UserStateProps } from './user';
-
+import { InitialLoginContextProps } from './auth';
 import { SnackbarProps } from './snackbar';
-import { TablerIconsProps } from '@tabler/icons-react';
+import { MenuProps } from './menu';
 
 export type ArrangementOrder = 'asc' | 'desc' | undefined;
 
@@ -51,9 +43,7 @@ export type OverrideIcon =
   | (OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
       muiName: string;
     })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | React.ComponentClass<any>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | FunctionComponent<React.PropsWithChildren<React.PropsWithChildren<any>>>
   | ((props: TablerIconsProps) => JSX.Element);
 
@@ -113,15 +103,9 @@ export interface ColorPaletteProps {
 }
 
 export interface DefaultRootStateProps {
+  acount: InitialLoginContextProps;
+  menu: MenuProps;
   snackbar: SnackbarProps;
-  cart: CartStateProps;
-  kanban: KanbanStateProps;
-  customer: CustomerStateProps;
-  contact: ContactStateProps;
-  product: ProductStateProps;
-  chat: ChatStateProps;
-  mail: MailStateProps;
-  user: UserStateProps;
 }
 
 export interface ColorProps {
@@ -129,7 +113,7 @@ export interface ColorProps {
 }
 
 export type GuardProps = {
-  children: ReactElement | null;
+  children: React.ReactNode;
 };
 
 export interface StringColorProps {
@@ -163,7 +147,6 @@ export type ChangeEventFunc = (e: React.ChangeEvent<HTMLInputElement>) => void;
 // amit
 
 export type KeyedObject = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: string | number | KeyedObject | any;
 };
 

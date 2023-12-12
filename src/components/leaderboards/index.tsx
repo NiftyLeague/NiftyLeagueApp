@@ -1,6 +1,8 @@
+'use client';
+
 /* eslint-disable no-nested-ternary */
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Box,
   FormControl,
@@ -14,18 +16,19 @@ import {
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { makeStyles } from '@mui/styles';
-import { sendEvent } from 'utils/google-analytics';
-import { TableType } from 'types/leaderboard';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
+import { sendEvent } from '@/utils/google-analytics';
+import { TableType } from '@/types/leaderboard';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import {
   getGameLeaderboardViewedAnalyticsEventName,
   LEADERBOARD_GAME_LIST,
   LEADERBOARD_TIME_FILTERS,
   NiftySmashersTables,
-} from 'constants/leaderboard';
-import EnhancedTable from 'components/leaderboards/EnhancedTable/EnhancedTable';
+} from '@/constants/leaderboard';
+import EnhancedTable from '@/components/leaderboards/EnhancedTable/EnhancedTable';
 // import { EmojiEvents, Paid, CrisisAlert } from '@mui/icons-material';
-// import TopModal from './TopModal';
+// const TopModal = dynamic(() => import('../TopModal'), { ssr: false });
+
 import './navigation.css';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +42,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function LeaderBoards(): JSX.Element {
   const { listItemButtonStyle } = useStyles();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { game: defaultGame } = Object.fromEntries(searchParams.entries());
   const [selectedGame, setGame] = useState<string>(
     defaultGame &&
@@ -56,10 +61,10 @@ export default function LeaderBoards(): JSX.Element {
     if (eventName) {
       sendEvent(eventName, GOOGLE_ANALYTICS.CATEGORIES.LEADERBOARD);
     }
-    setSearchParams({
-      game: selectedGame,
-    });
-  }, [selectedGame, setSearchParams]);
+    const params = new URLSearchParams(searchParams);
+    params.set('game', selectedGame);
+    router.push(pathname + '?' + params.toString());
+  }, [selectedGame, router, pathname, searchParams]);
 
   const handleChangeGame = (event: SelectChangeEvent) => {
     const gameKey = event.target.value;

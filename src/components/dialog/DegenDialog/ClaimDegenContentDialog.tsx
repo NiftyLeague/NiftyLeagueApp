@@ -1,11 +1,13 @@
+'use client';
+
 import { Button, Stack, Typography } from '@mui/material';
 import { useCallback, useState, useContext, useEffect } from 'react';
-import { Degen } from 'types/degens';
-import NetworkContext from 'contexts/NetworkContext';
-import useClaimableNFTL from 'hooks/useClaimableNFTL';
-import { NFTL_CONTRACT } from 'constants/contracts';
-import { DEBUG } from 'constants/index';
-import { formatNumberToDisplay } from 'utils/numbers';
+import { Degen } from '@/types/degens';
+import NetworkContext from '@/contexts/NetworkContext';
+import useClaimableNFTL from '@/hooks/useClaimableNFTL';
+import { NFTL_CONTRACT } from '@/constants/contracts';
+import { DEBUG } from '@/constants/index';
+import { formatNumberToDisplay } from '@/utils/numbers';
 
 export interface ClaimDegenContentDialogProps {
   degen?: Degen;
@@ -35,7 +37,6 @@ const ClaimDegenContentDialog = ({
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
       setMockAccumulated(0);
       setTimeout(() => setRefreshKey(Math.random() + 1), 5000);

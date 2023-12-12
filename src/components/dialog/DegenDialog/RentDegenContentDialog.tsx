@@ -1,5 +1,10 @@
+'use client';
+
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { ethers } from 'ethers';
+
 import {
   Box,
   Button,
@@ -22,21 +27,23 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import useRentalPassCount from 'hooks/useRentalPassCount';
-import useAccount from 'hooks/useAccount';
-import { Degen } from 'types/degens';
-import { ethers } from 'ethers';
-import useRent from 'hooks/useRent';
-import { toast } from 'react-toastify';
-import DegenImage from 'components/cards/DegenCard/DegenImage';
-import { sendEvent } from 'utils/google-analytics';
+
+import { Degen } from '@/types/degens';
+import { errorMsgHandler } from '@/utils/errorHandlers';
+import { formatNumberToDisplay } from '@/utils/numbers';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
+import { sendEvent } from '@/utils/google-analytics';
+import BalanceContext from '@/contexts/BalanceContext';
+import ConnectWrapper from '@/components/wrapper/ConnectWrapper';
+import DegenImage from '@/components/cards/DegenCard/DegenImage';
+import useAccount from '@/hooks/useAccount';
+import useRent from '@/hooks/useRent';
+import useRentalPassCount from '@/hooks/useRentalPassCount';
+import useLocalStorage from '@/hooks/useLocalStorage';
+
 import TermsOfServiceDialog from '../TermsOfServiceDialog';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
 import RentStepper from './RentStepper';
-import { formatNumberToDisplay } from 'utils/numbers';
-import ConnectWrapper from 'components/wrapper/ConnectWrapper';
 import CowSwapWidget from './CowSwapWidget';
-import BalanceContext from 'contexts/BalanceContext';
 
 export interface RentDegenContentDialogProps {
   degen?: Degen;
@@ -114,12 +121,14 @@ const RentDegenContentDialog = ({
   onClose,
 }: RentDegenContentDialogProps) => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const { account } = useAccount(refreshAccKey);
-  const [agreement, setAgreement] = useState<boolean>(
-    localStorage.getItem('aggreement-accepted') === 'ACCEPTED',
+  const [aggreementAccepted, setAggreementAccepted] = useLocalStorage<string>(
+    'aggreement-accepted',
+    'FALSE',
   );
+  const agreement = aggreementAccepted === 'ACCEPTED';
   const [rentFor, setRentFor] = useState<string>('myself');
   const [ethAddress, setEthAddress] = useState<string>('');
   const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
@@ -215,7 +224,7 @@ const RentDegenContentDialog = ({
       );
     } catch (err: any) {
       setLoading(false);
-      toast.error(err.message, { theme: 'dark' });
+      toast.error(errorMsgHandler(err), { theme: 'dark' });
     }
   }, [rent]);
 
@@ -236,18 +245,16 @@ const RentDegenContentDialog = ({
 
   const handleTOSDialogClose = (event, reason) => {
     if (reason === 'accepted') {
-      setAgreement(true);
-      localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+      setAggreementAccepted('ACCEPTED');
     }
     setOpenTOS(false);
   };
 
   const handleAgreementChange = (event) => {
-    setAgreement(event.target.checked);
     if (event.target.checked) {
-      localStorage.setItem('aggreement-accepted', 'ACCEPTED');
+      setAggreementAccepted('ACCEPTED');
     } else {
-      localStorage.removeItem('aggreement-accepted');
+      setAggreementAccepted('FALSE');
     }
   };
 
@@ -283,8 +290,8 @@ const RentDegenContentDialog = ({
   };
 
   const handleClickPlay = useCallback(() => {
-    navigate('/games/smashers');
-  }, [navigate]);
+    router.push('/games/smashers');
+  }, [router]);
 
   const handleBuyNFTL = () => {
     sendEvent(

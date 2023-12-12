@@ -1,4 +1,4 @@
-import { Game } from 'types/games';
+import { Game } from '@/types/games';
 import { GOOGLE_ANALYTICS } from './google-analytics';
 
 const games: Game[] = [

@@ -1,7 +1,9 @@
+'use client';
+
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
-import { Contracts } from 'types/web3';
-// import { DEBUG } from 'constants/index';
+import { Contracts } from '@/types/web3';
+// import { DEBUG } from '@/constants/index';
 
 export default function useSingleCallResult(
   contracts: Contracts,
@@ -26,7 +28,6 @@ export default function useSingleCallResult(
         //     args,
         //   );
         if (args && args.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           newValue = await contract[functionName](...args);
           // if (DEBUG)
           //   console.log(
@@ -40,7 +41,6 @@ export default function useSingleCallResult(
           //     newValue,
           //   );
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           newValue = await contract[functionName]();
         }
         if (formatter && typeof formatter === 'function') {

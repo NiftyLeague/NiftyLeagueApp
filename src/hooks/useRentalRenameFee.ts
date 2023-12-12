@@ -1,4 +1,6 @@
-import { RENTAL_RENAME_URL } from 'constants/url';
+'use client';
+
+import { RENTAL_RENAME_URL } from '@/constants/url';
 import { useEffect, useState } from 'react';
 import useAuth from './useAuth';
 

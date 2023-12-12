@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useCallback, useEffect, useState } from 'react';
 import {
   Container,
@@ -19,23 +21,22 @@ import {
   Alert,
   InputAdornment,
 } from '@mui/material';
-import { DialogProps } from 'types/dialog';
-import { sendEvent } from 'utils/google-analytics';
+import { DialogProps } from '@/types/dialog';
+import { sendEvent } from '@/utils/google-analytics';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useQuery } from 'react-query';
-import { formatNumberToDisplay } from 'utils/numbers';
+import { formatNumberToDisplay } from '@/utils/numbers';
 import {
   GET_PRODUCT,
   NFTL_PURCHASE_URL,
   PURCHASE_ARCADE_TOKEN_BALANCE_API,
-} from 'constants/url';
-import arcadeToken from 'assets/images/icons/arcade_token.png';
-import useAccount from 'hooks/useAccount';
-import { GOOGLE_ANALYTICS } from 'constants/google-analytics';
-import useAuth from 'hooks/useAuth';
+} from '@/constants/url';
+import useAccount from '@/hooks/useAccount';
+import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
+import useAuth from '@/hooks/useAuth';
 
 const PRODUCT_ID = 'arcade-token-four-pack';
 
@@ -248,8 +249,8 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
                   Total:{' '}
                   <Box
                     component="img"
-                    src={arcadeToken}
-                    alt=""
+                    src="/images/icons/arcade_token.png"
+                    alt="Arcade Token"
                     width="16px"
                     mx={0.5}
                   />{' '}

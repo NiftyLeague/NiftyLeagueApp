@@ -8,4 +8,5 @@ export interface DegenFilter {
   cosmetics: string[];
   wearables: string[];
   searchTerm: string[];
+  walletAddress?: string[];
 }

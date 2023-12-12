@@ -1,12 +1,14 @@
+'use client';
+
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { useState, useEffect } from 'react';
 import { Contract, Signer } from 'ethers';
-import { Contracts, Provider } from 'types/web3';
-import { getProviderAndSigner } from 'helpers';
-import { SUPPORTED_CHAIN_IDS } from 'constants/networks';
-import CONTRACTS from 'contracts/deployments';
-import EXTERNAL_CONTRACTS from 'contracts/externalContracts';
+import { Contracts, Provider } from '@/types/web3';
+import { getProviderAndSigner } from '@/utils/ethers';
+import { SUPPORTED_CHAIN_IDS } from '@/constants/networks';
+import CONTRACTS from '@/contracts/deployments';
+import EXTERNAL_CONTRACTS from '@/contracts/externalContracts';
 
 /*
   ~ What it does? ~

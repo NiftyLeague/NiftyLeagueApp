@@ -1,10 +1,9 @@
-import { Link as RouterLink } from 'react-router-dom';
+import RouterLink from 'next/link';
+import Image from 'next/image';
 import { Link } from '@mui/material';
 
-import logo from 'assets/images/logo.png';
-
-import { useDispatch } from 'store';
-import { activeItem } from 'store/slices/menu';
+import { useDispatch } from '@/store';
+import { activeItem } from '@/store/slices/menu';
 
 // ==============================|| LOGO PNG/SVG ||============================== //
 
@@ -16,8 +15,8 @@ const Logo = () => {
   };
 
   return (
-    <Link component={RouterLink} to="/" onClick={handleClickActive}>
-      <img src={logo} alt="NiftyLogo" width="32" />
+    <Link component={RouterLink} href="/" onClick={handleClickActive}>
+      <Image src="/images/logo.png" alt="NiftyLogo" width="32" height="31" />
     </Link>
   );
 };

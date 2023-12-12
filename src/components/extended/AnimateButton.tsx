@@ -1,4 +1,6 @@
-import React, { Ref } from 'react';
+'use client';
+
+import { Ref, forwardRef } from 'react';
 // third-party
 import { motion, useCycle } from 'framer-motion';
 
@@ -17,7 +19,7 @@ interface AnimateButtonProps {
 
 // ==============================|| ANIMATION BUTTON ||============================== //
 
-const AnimateButton = React.forwardRef(
+const AnimateButton = forwardRef(
   (
     { children, type, direction, offset, scale }: AnimateButtonProps,
     ref: Ref<HTMLDivElement>,
@@ -112,4 +114,5 @@ AnimateButton.defaultProps = {
   },
 };
 
+AnimateButton.displayName = 'AnimateButton';
 export default AnimateButton;

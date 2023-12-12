@@ -1,7 +1,9 @@
+'use client';
+
 import { useState, useEffect, useContext } from 'react';
-import NetworkContext from 'contexts/NetworkContext';
+import NetworkContext from '@/contexts/NetworkContext';
 import { isWindows, isMacOs } from 'react-device-detect';
-import { DEGEN_BASE_API_URL } from 'constants/url';
+import { DEGEN_BASE_API_URL } from '@/constants/url';
 
 const useVersion = () => {
   const { targetNetwork } = useContext(NetworkContext);
@@ -16,7 +18,7 @@ const useVersion = () => {
     os = 'linux';
   }
   if (isMacOs) {
-    message = 'Download for Mac OS will be added soon!';
+    message = 'Download for Mac OS not available';
     os = 'osx';
   }
 

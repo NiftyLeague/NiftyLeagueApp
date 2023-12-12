@@ -1,150 +1,74 @@
-/* eslint-disable no-console */
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+'use client';
+
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { ethers, Signer, providers } from 'ethers';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
-import { ChainId } from '@sushiswap/sdk';
-import Web3Modal, { providers as Web3ModalProviders } from 'web3modal';
+import { mainnet } from 'viem/chains';
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalProvider,
+} from '@web3modal/ethers5/react';
 import isEmpty from 'lodash/isEmpty';
 
 import {
   Contracts,
   Ethereumish,
   LocalProvider,
-  MainnetProvider,
   Network,
   UserProvider,
-  Web3ModalProvider,
-} from 'types/web3';
-import { Tx } from 'types/notify';
-import useNetworkInfo from 'hooks/useNetworkInfo';
-import useContractLoader from 'hooks/useContractLoader';
-import useUserProvider from 'hooks/useUserProvider';
-import Notifier from 'helpers/Notifier';
-import { toast } from 'react-toastify';
-import { NetworkName } from 'types/web3';
-import { NETWORKS, VALID_ETHERS_NETWORKS } from 'constants/networks';
-import { ALCHEMY_ID, DEBUG } from 'constants/index';
+} from '@/types/web3';
+import { Tx } from '@/types/notify';
+import useContractLoader from '@/hooks/useContractLoader';
+import Notifier from '@/utils/Notifier';
+import { NetworkName } from '@/types/web3';
+import { NETWORKS, VALID_ETHERS_NETWORKS } from '@/constants/networks';
+import { ALCHEMY_ID, DEBUG } from '@/constants/index';
 
 const { getDefaultProvider, Web3Provider } = providers;
 
-if (window.ethereum)
-  (window.ethereum as Ethereumish).autoRefreshOnNetworkChange = false;
+// if (typeof window !== 'undefined' && window?.ethereum)
+//   (window.ethereum as Ethereumish).autoRefreshOnNetworkChange = false;
 
 // 📡 What chain are your contracts deployed to? (localhost, goerli, mainnet)
-const targetNetwork = NETWORKS[process.env.REACT_APP_NETWORK as NetworkName];
+const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_NETWORK as NetworkName];
 
 // 🛰 providers
-if (DEBUG) console.log('📡 Connecting to Mainnet Ethereum');
 const providerOptions = {
-  infura: process.env.REACT_APP_INFURA_PROJECT_ID,
-  etherscan: process.env.REACT_APP_ETHERSCAN_KEY,
-  alchemy: ALCHEMY_ID[ChainId.MAINNET],
+  infura: process.env.NEXT_PUBLIC_INFURA_PROJECT_ID,
+  etherscan: process.env.NEXT_PUBLIC_ETHERSCAN_KEY,
+  alchemy: ALCHEMY_ID[targetNetwork.chainId],
 };
-const mainnetProvider = getDefaultProvider(
-  NETWORKS.mainnet.chainId,
-  providerOptions,
-) as MainnetProvider;
 
 // 🏠 Your local provider is usually pointed at your local blockchain
-if (DEBUG)
-  console.log('🏠 Connecting to local provider:', targetNetwork.rpcUrl);
-const localProviderOptions = {
-  ...providerOptions,
-  alchemy: ALCHEMY_ID[targetNetwork.chainId] as string | undefined,
-};
 const localProvider = getDefaultProvider(
   VALID_ETHERS_NETWORKS.includes(targetNetwork.chainId)
     ? targetNetwork.chainId
     : targetNetwork.rpcUrl,
-  localProviderOptions,
+  providerOptions,
 ) as LocalProvider;
 
-/*
-  Web3 modal helps us "connect" external wallets:
-*/
-const web3Modal = new Web3Modal({
-  cacheProvider: true,
-  theme: 'dark',
-  providerOptions: {
-    injected: {
-      package: null,
-    },
-    walletlink: {
-      package: CoinbaseWalletSDK, // Required
-      options: {
-        infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-      },
-    },
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-      },
-    },
-    ...(window.ethereum
-      ? {}
-      : {
-          'custom-metamask': {
-            display: {
-              logo: Web3ModalProviders.METAMASK.logo,
-              name: 'Install MetaMask',
-              description: 'Connect using browser wallet',
-            },
-            package: {},
-            connector: async () => {
-              window.open('https://metamask.io');
-              throw new Error('MetaMask not installed');
-            },
-          },
-        }),
-  },
-});
-
-const logoutOfWeb3Modal = () => {
-  web3Modal.clearCachedProvider();
-  window.localStorage.removeItem('authentication-token');
-  window.localStorage.removeItem('uuid-token');
-  window.localStorage.removeItem('nonce');
-  window.localStorage.removeItem('user-id');
-  setTimeout(() => {
-    window.location.reload();
-  }, 1);
-};
-
 interface Context {
-  address: string;
-  loadWeb3Modal: () => Promise<void>;
+  address?: `0x${string}`;
   localProvider: LocalProvider;
-  logoutOfWeb3Modal: () => void;
   switchToNetwork: (chainId: number) => void;
-  mainnetProvider: MainnetProvider;
   readContracts: Contracts;
   selectedChainId?: number;
   signer?: Signer;
   targetNetwork: Network;
   tx: Tx;
   userProvider?: UserProvider;
-  validAccount: boolean;
-  web3Modal: Web3Modal;
   writeContracts: Contracts;
 }
 
 const CONTEXT_INITIAL_STATE: Context = {
-  address: '',
-  loadWeb3Modal: async () => new Promise(() => null),
+  address: undefined,
   switchToNetwork: (chainId: number) => {},
   localProvider,
-  logoutOfWeb3Modal,
-  mainnetProvider,
   readContracts: {},
   selectedChainId: undefined,
   signer: undefined,
   targetNetwork,
   tx: async (_tx, _callback) => new Promise(() => null),
   userProvider: undefined,
-  validAccount: false,
-  web3Modal,
   writeContracts: {},
 };
 
@@ -155,21 +79,18 @@ export const NetworkProvider = ({
 }: {
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
-  const [injectedProvider, setInjectedProvider] = useState<
-    UserProvider | undefined
-  >(undefined);
-  const [address, setAddress] = useState('');
+  const { address, chainId: selectedChainId } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
+  const [userProvider, setUserProvider] = useState<UserProvider>();
+  const [signer, setSigner] = useState<providers.JsonRpcSigner | undefined>();
 
-  // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
-  const userProvider = useUserProvider(
-    injectedProvider,
-    localProvider as providers.JsonRpcProvider,
-    targetNetwork,
-  );
-  const signer = userProvider?.getSigner();
-
-  // You can warn the user if you would like them to be on a specific network
-  const { chainId: selectedChainId } = useNetworkInfo(userProvider);
+  useEffect(() => {
+    if (walletProvider) {
+      const provider = new Web3Provider(walletProvider);
+      setUserProvider(provider);
+      setSigner(provider.getSigner());
+    }
+  }, [walletProvider]);
 
   // The Notifier wraps transactions and provides notificiations
   const tx = Notifier(userProvider, targetNetwork, true);
@@ -179,46 +100,6 @@ export const NetworkProvider = ({
 
   // If you want to make 🔐 write transactions to your contracts, use the userProvider:
   const writeContracts = useContractLoader(userProvider);
-
-  const updateWeb3ModalTheme = useCallback(async () => {
-    const web3Theme = 'dark';
-    await web3Modal.updateTheme(web3Theme);
-  }, []);
-
-  const loadWeb3Modal = useCallback(async () => {
-    try {
-      const provider: Web3ModalProvider =
-        (await web3Modal.connect()) as Web3ModalProvider;
-      await updateWeb3ModalTheme();
-      setInjectedProvider(new Web3Provider(provider));
-      provider.on('accountsChanged', (accounts) => {
-        if (DEBUG) console.log('web3 accountsChanged:', accounts);
-        setInjectedProvider(new Web3Provider(provider));
-      });
-      provider.on('chainChanged', (chainId) => {
-        if (DEBUG) console.log('web3 chainChanged:', chainId);
-        setInjectedProvider(new Web3Provider(provider));
-      });
-      provider.on('connect', (info) => {
-        if (DEBUG) console.log('web3 info:', info);
-      });
-      provider.on('disconnect', (error) => {
-        if (DEBUG) console.log('web3 error:', error);
-      });
-    } catch (err) {
-      console.error(err);
-      if (err.message === 'User Rejected') {
-        toast.error(
-          "User Rejected! Please unlock your wallet if you haven't yet!",
-          {
-            theme: 'dark',
-          },
-        );
-      } else {
-        toast.error(err.message, { theme: 'dark' });
-      }
-    }
-  }, [setInjectedProvider, updateWeb3ModalTheme]);
 
   const switchToNetwork = useCallback(
     async (chainId: number) => {
@@ -240,21 +121,10 @@ export const NetworkProvider = ({
   );
 
   useEffect(() => {
-    // eslint-disable-next-line no-void
-    if (web3Modal.cachedProvider) void loadWeb3Modal();
-  }, [loadWeb3Modal]);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void updateWeb3ModalTheme();
-  }, [updateWeb3ModalTheme]);
-
-  useEffect(() => {
     if (
       DEBUG &&
       address &&
       localProvider &&
-      mainnetProvider &&
       !isEmpty(readContracts) &&
       selectedChainId &&
       targetNetwork &&
@@ -262,7 +132,6 @@ export const NetworkProvider = ({
       !isEmpty(writeContracts)
     ) {
       console.log('_________________ 🏗 Nifty League _________________');
-      console.log('🌎 mainnetProvider', mainnetProvider);
       console.log('📡 userProvider', userProvider);
       console.log('📡 localProvider', localProvider);
       console.log('🕵🏻‍♂️ selectedChainId:', selectedChainId);
@@ -273,27 +142,9 @@ export const NetworkProvider = ({
     }
   }, [address, readContracts, selectedChainId, userProvider, writeContracts]);
 
-  useEffect(() => {
-    (async () => {
-      if (!signer) {
-        return;
-      }
-
-      try {
-        const addr = await signer.getAddress();
-        setAddress(addr);
-      } catch (err) {
-        setAddress('');
-      }
-    })();
-  }, [signer]);
-
   const context = {
     address,
-    loadWeb3Modal,
     localProvider,
-    logoutOfWeb3Modal,
-    mainnetProvider,
     readContracts,
     selectedChainId,
     signer,
@@ -301,8 +152,6 @@ export const NetworkProvider = ({
     switchToNetwork,
     tx,
     userProvider,
-    validAccount: Boolean(web3Modal.cachedProvider),
-    web3Modal,
     writeContracts,
   };
 

@@ -1,6 +1,8 @@
+'use client';
+
 import { useCallback, useEffect, useState } from 'react';
-import { GAMER_ACCOUNT_API } from 'constants/url';
-import { Account } from 'types/account';
+import { GAMER_ACCOUNT_API } from '@/constants/url';
+import { Account } from '@/types/account';
 import useAuth from './useAuth';
 
 const useAccount = (
@@ -27,7 +29,7 @@ const useAccount = (
         setAccount(JSON.parse(result));
       }
     } catch (err) {
-      setAccError(err);
+      setAccError(true);
     }
   }, [authToken]);
 

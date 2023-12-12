@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Definitions = (): JSX.Element => (
   <>
     <h3>Interpretation and Definitions</h3>

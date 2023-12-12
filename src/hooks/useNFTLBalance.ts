@@ -1,8 +1,10 @@
+'use client';
+
 import { useContext, useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
-import NetworkContext from 'contexts/NetworkContext';
+import NetworkContext from '@/contexts/NetworkContext';
 import useContractReader from './useContractReader';
-import { NFTL_CONTRACT } from 'constants/contracts';
+import { NFTL_CONTRACT } from '@/constants/contracts';
 
 /*
   ~ What it does? ~
@@ -15,7 +17,7 @@ import { NFTL_CONTRACT } from 'constants/contracts';
 */
 
 export default function useNFTLBalance(
-  address: string,
+  address: string = '',
   refreshKey?: string | number,
 ): number {
   const { readContracts } = useContext(NetworkContext);
@@ -28,7 +30,7 @@ export default function useNFTLBalance(
     undefined,
     undefined,
     refreshKey,
-    !address,
+    !address.length,
   ) as BigNumber;
   useEffect(() => {
     if (result && result !== balance) setBalance(result);

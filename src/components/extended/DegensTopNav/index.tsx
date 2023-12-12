@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { GridOn, GridView, KeyboardArrowDown } from '@mui/icons-material';
-import SortButton from 'components/extended/SortButton';
+import SortButton from '@/components/extended/SortButton';
 
 const useStyles = makeStyles(() => ({
   searchTextField: {

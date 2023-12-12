@@ -1,43 +1,87 @@
-import { EquipItemSlot } from 'types/equip';
+import { EquipItemSlot } from '@/types/equip';
+import Image from 'next/image';
 import { GOOGLE_ANALYTICS } from './google-analytics';
-import { ReactComponent as CapeSlot } from 'assets/images/equips/cape-slot.svg';
-import { ReactComponent as CompanionSlot } from 'assets/images/equips/companion-slot.svg';
-import { ReactComponent as HaloSlot } from 'assets/images/equips/halo-slot.svg';
-import { ReactComponent as BatSlot } from 'assets/images/equips/bat-slot.svg';
-import { ReactComponent as CapeInventoryEmpty } from 'assets/images/equips/cape-inventory-empty.svg';
-import { ReactComponent as CompanionInventoryEmpty } from 'assets/images/equips/companion-inventory-empty.svg';
-import { ReactComponent as HaloInventoryEmpty } from 'assets/images/equips/halo-inventory-empty.svg';
-import { ReactComponent as BatInventoryEmpty } from 'assets/images/equips/bat-inventory-empty.svg';
-import CapeImage from 'assets/images/equips/cape.png';
-import CompanionImage from 'assets/images/equips/companion.png';
-import HaloImage from 'assets/images/equips/halo.png';
-import BreadBatImage from 'assets/images/equips/bread-bat.png';
-import DiamondBatImage from 'assets/images/equips/diamond-bat.png';
-import PurpleBatImage from 'assets/images/equips/purple-bat.png';
 
 export const SLOTS: EquipItemSlot[] = [
   {
     name: 'Back',
-    empty: <CapeSlot />,
-    filled: <img src={CapeImage} width={40} height={40} alt="Back" />,
+    empty: (
+      <Image
+        src="/images/equips/cape-slot.svg"
+        alt="Cape Slot"
+        width={40}
+        height={40}
+      />
+    ),
+    filled: (
+      <Image src="/images/equips/cape.png" width={40} height={40} alt="Back" />
+    ),
   },
   {
     name: 'Head',
-    empty: <HaloSlot />,
-    filled: <img src={HaloImage} width={40} height={40} alt="Head" />,
+    empty: (
+      <Image
+        src="/images/equips/halo-slot.svg"
+        alt="Halo Slot"
+        width={40}
+        height={40}
+      />
+    ),
+    filled: (
+      <Image src="/images/equips/halo.png" width={40} height={40} alt="Head" />
+    ),
   },
   {
     name: 'Pet',
-    empty: <CompanionSlot />,
-    filled: <img src={CompanionImage} width={40} height={40} alt="Pet" />,
+    empty: (
+      <Image
+        src="/images/equips/companion-slot.svg"
+        alt="Companion Slot"
+        width={40}
+        height={40}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/companion.png"
+        width={40}
+        height={40}
+        alt="Pet"
+      />
+    ),
   },
   {
     name: 'Weapon',
-    empty: <BatSlot />,
+    empty: (
+      <Image
+        src="/images/equips/bat-slot.svg"
+        alt="Bat Slot"
+        width={40}
+        height={40}
+      />
+    ),
     filledArr: [
-      <img src={DiamondBatImage} width={40} height={40} alt="Diamond Bat" />,
-      <img src={PurpleBatImage} width={40} height={40} alt="Purple Bat" />,
-      <img src={BreadBatImage} width={40} height={40} alt="Bread Bat" />,
+      <Image
+        src="/images/equips/diamond-bat.png"
+        width={40}
+        height={40}
+        alt="Diamond Bat"
+        key="diamond"
+      />,
+      <Image
+        src="/images/equips/purple-bat.png"
+        width={40}
+        height={40}
+        alt="Purple Bat"
+        key="purple"
+      />,
+      <Image
+        src="/images/equips/bread-bat.png"
+        width={40}
+        height={40}
+        alt="Bread Bat"
+        key="bread"
+      />,
     ],
   },
 ];
@@ -45,35 +89,123 @@ export const SLOTS: EquipItemSlot[] = [
 export const INVENTORIES: EquipItemSlot[] = [
   {
     name: 'Cape',
-    empty: <CapeInventoryEmpty width={30} height={30} />,
-    filled: <img src={CapeImage} alt="Cape" className="inventory" />,
+    empty: (
+      <Image
+        src="/images/equips/cape-inventory-empty.svg"
+        alt="Cape Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/cape.png"
+        alt="Cape"
+        className="inventory"
+        width={30}
+        height={30}
+      />
+    ),
   },
   {
     name: 'Halo',
-    empty: <HaloInventoryEmpty width={30} height={30} />,
-    filled: <img src={HaloImage} alt="Halo" className="inventory" />,
+    empty: (
+      <Image
+        src="/images/equips/halo-inventory-empty.svg"
+        alt="Halo Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/halo.png"
+        alt="Halo"
+        className="inventory"
+        width={30}
+        height={30}
+      />
+    ),
   },
   {
     name: 'Companion',
-    empty: <CompanionInventoryEmpty width={30} height={30} />,
-    filled: <img src={CompanionImage} alt="Companion" className="inventory" />,
+    empty: (
+      <Image
+        src="/images/equips/companion-inventory-empty.svg"
+        alt="Companion Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/companion.png"
+        alt="Companion"
+        className="inventory"
+        width={30}
+        height={30}
+      />
+    ),
   },
   {
     name: 'Diamond Bat',
-    empty: <BatInventoryEmpty width={30} height={30} />,
+    empty: (
+      <Image
+        src="/images/equips/bat-inventory-empty.svg"
+        alt="Bat Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
     filled: (
-      <img src={DiamondBatImage} alt="Diamond Bat" className="inventory" />
+      <Image
+        src="/images/equips/diamond-bat.png"
+        alt="Diamond Bat"
+        className="inventory"
+        width={30}
+        height={30}
+      />
     ),
   },
   {
     name: 'Purple Bat',
-    empty: <BatInventoryEmpty width={30} height={30} />,
-    filled: <img src={PurpleBatImage} alt="Purple Bat" className="inventory" />,
+    empty: (
+      <Image
+        src="/images/equips/bat-inventory-empty.svg"
+        alt="Bat Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/purple-bat.png"
+        alt="Purple Bat"
+        className="inventory"
+        width={30}
+        height={30}
+      />
+    ),
   },
   {
     name: 'Bread Bat',
-    empty: <BatInventoryEmpty width={30} height={30} />,
-    filled: <img src={BreadBatImage} alt="Bread Bat" className="inventory" />,
+    empty: (
+      <Image
+        src="/images/equips/bat-inventory-empty.svg"
+        alt="Bat Inventory Empty"
+        width={30}
+        height={30}
+      />
+    ),
+    filled: (
+      <Image
+        src="/images/equips/bread-bat.png"
+        alt="Bread Bat"
+        className="inventory"
+        width={30}
+        height={30}
+      />
+    ),
   },
 ];
 
