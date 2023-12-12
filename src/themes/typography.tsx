@@ -4,9 +4,9 @@ import { TypographyOptions } from '@mui/material/styles/createTypography';
 const Typography = (
   theme: Theme,
   borderRadius: number,
-  fontFamily: string,
+  // fontFamily: string,
 ): TypographyOptions => ({
-  fontFamily,
+  // fontFamily,
   h6: {
     fontWeight: 500,
     color: theme.palette.grey[600],

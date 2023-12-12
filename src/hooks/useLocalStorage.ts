@@ -1,38 +1,67 @@
-import { useState, useEffect } from 'react';
+'use client';
+
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function useLocalStorage<ValueType>(
-  key: string,
-  defaultValue: ValueType,
-) {
-  const [value, setValue] = useState(() => {
-    const storedValue = localStorage.getItem(key);
-    return storedValue === null ? defaultValue : JSON.parse(storedValue);
-  });
+function safeJSONParse(input: any) {
+  try {
+    return JSON.parse(input);
+  } catch (e) {
+    return input;
+  }
+}
 
+export default function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+): [T, Dispatch<SetStateAction<T>>] {
+  const [storedValue, setStoredValue] = useState(initialValue);
+  // We will use this flag to trigger the reading from localStorage
+  const [firstLoadDone, setFirstLoadDone] = useState(false);
+
+  // Use an effect hook in order to prevent SSR inconsistencies and errors.
+  // This will update the state with the value from the local storage after
+  // the first initial value is applied.
   useEffect(() => {
-    const listener = (e: StorageEvent) => {
-      if (e.storageArea === localStorage && e.key === key) {
-        setValue(e.newValue ? JSON.parse(e.newValue) : e.newValue);
+    const fromLocal = () => {
+      if (typeof window === 'undefined') {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? (safeJSONParse(item) as T) : initialValue;
+      } catch (error) {
+        console.error(error);
+        return initialValue;
       }
     };
-    window.addEventListener('storage', listener);
 
-    return () => {
-      window.removeEventListener('storage', listener);
-    };
-  }, [key, defaultValue]);
+    // Set the value from localStorage
+    setStoredValue(fromLocal);
+    // First load is done
+    setFirstLoadDone(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(initialValue), key]);
 
-  const setValueInLocalStorage = (newValue: ValueType) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue((currentValue: any) => {
-      const result =
-        typeof newValue === 'function' ? newValue(currentValue) : newValue;
-      localStorage.setItem(key, JSON.stringify(result));
-      return result;
-    });
-  };
+  // Instead of replacing the setState function, react to changes.
+  // Whenever the state value changes, save it in the local storage.
+  useEffect(() => {
+    // If it's the first load, don't store the value.
+    // Otherwise, the initial value will overwrite the local storage.
+    if (!firstLoadDone) {
+      return;
+    }
 
-  return [value, setValueInLocalStorage];
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(storedValue));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [storedValue, firstLoadDone, key]);
+
+  // Return the original useState functions
+  return [storedValue, setStoredValue];
 }

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Alert from '@mui/material/Alert';
 
 declare module '@mui/material/Alert' {

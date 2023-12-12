@@ -1,9 +1,9 @@
-import { DataType, ReturnDataType, Order } from 'types/leaderboard';
+import { DataType, ReturnDataType, Order } from '@/types/leaderboard';
 import {
   GET_RANK_BY_USER_ID_API,
   LEADERBOARD_SCORE_API_URL,
   LEADERBOARD_USERNAMES_API_URL,
-} from 'constants/url';
+} from '@/constants/url';
 
 export const fetchUserNames = async (items: any): Promise<DataType[]> => {
   try {
@@ -28,7 +28,6 @@ export const fetchScores = async (
       LEADERBOARD_SCORE_API_URL as string
     }?game=${gameType}&score_type=${scoreType}&time_window=${timeFilter}&count=${count}&offset=${offset}`,
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
   const addAvg = json.data.map((data: DataType) => {
     const { earnings, matches } = data?.stats || {};
@@ -79,13 +78,11 @@ export const fetchScores = async (
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return { data: addAvg, count: json.count };
 };
 
 function descendingComparator(a: DataType, b: DataType, orderBy: any) {
   const [numberOfA, numberOfB] =
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     orderBy !== 'rank'
       ? [parseFloat(a.stats[orderBy]), parseFloat(b.stats[orderBy])]
       : [a.rank, b.rank];

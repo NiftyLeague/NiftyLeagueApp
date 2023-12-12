@@ -1,5 +1,5 @@
 // types
-import { ConfigProps } from 'types/config';
+import { ConfigProps } from '@/types/config';
 
 export const JWT_API = {
   secret: 'SECRET-KEY',
@@ -23,7 +23,7 @@ export const BASE_PATH = '';
 export const DASHBOARD_PATH = '/';
 
 const config: ConfigProps = {
-  fontFamily: `'Roboto', sans-serif`,
+  // fontFamily: `'Roboto', sans-serif`,
   borderRadius: 8,
   outlinedFilled: true,
   navType: 'dark', // light, dark

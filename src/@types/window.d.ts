@@ -1,7 +1,6 @@
 import { providers, Web3Provider } from 'ethers';
-import { IUnityInstanceParameters } from 'react-unity-webgl/distribution/interfaces/unity-instance-parameters';
 import { UnityContext } from 'react-unity-webgl';
-import { Ethereumish } from 'types/web3';
+import { Ethereumish } from '@/types/web3';
 
 interface BSC {
   bbcSignTx?: (e) => void;
@@ -32,10 +31,11 @@ interface UnityInstance extends UnityContext {
 
 declare global {
   interface Window {
+    gtag: Gtag.Gtag;
     BinanceChain?: BSC;
     createUnityInstance: (
       canvasHtmlElement: HTMLCanvasElement,
-      parameters: IUnityInstanceParameters,
+      parameters: any,
       onProgress?: (progression: number) => void,
     ) => Promise<UnityInstance>;
     ethereum?: Ethereumish;
@@ -45,7 +45,7 @@ declare global {
       loaded: () => {};
       [eventName: string]: () => {};
     };
-    unityInstance?: UnityInstance;
+    unityInstance: UnityInstance | null;
     Web3?: {
       providers?: {
         HttpProvider?: Web3Provider;

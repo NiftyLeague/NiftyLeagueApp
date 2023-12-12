@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
-import { DEBUG } from 'constants/index';
-import useSingleCallResult from '../useSingleCallResult';
+import { DEBUG } from '@/constants/index';
+import useSingleCallResult from '@/hooks/useSingleCallResult';
 import useMerkleDistributorContract from './useMerkleDistributorContract';
 import useUserClaimData from './useUserClaimData';
 

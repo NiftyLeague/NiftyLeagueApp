@@ -2,8 +2,8 @@ import { useContext, cloneElement } from 'react';
 import { IconButton, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { DialogContext } from '.';
-import { DialogAction } from 'types/dialog';
-import { callAll } from 'utils';
+import { DialogAction } from '@/types/dialog';
+import callAll from '@/utils/callAll';
 
 const IconButtonStyle = styled(IconButton)(({ theme }) => ({
   position: 'absolute',

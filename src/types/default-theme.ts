@@ -1,8 +1,8 @@
 import { Color, PaletteMode } from '@mui/material';
-import { Property } from 'csstype';
+// import { Property } from 'csstype';
 
 export interface CustomizationProps {
-  fontFamily: Property.FontFamily;
+  // fontFamily: Property.FontFamily;
   borderRadius?: number;
   navType: PaletteMode;
   presetColor?: string;

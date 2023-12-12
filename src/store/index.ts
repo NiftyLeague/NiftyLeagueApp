@@ -6,22 +6,30 @@ import {
   TypedUseSelectorHook,
 } from 'react-redux';
 
-import { persistStore } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 // project imports
 import rootReducer from './reducer';
 
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
 // ==============================|| REDUX - MAIN STORE ||============================== //
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false, immutableCheck: false }),
 });
 
 const persister = persistStore(store);
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof persistedReducer>;
 
 export type AppDispatch = typeof store.dispatch;
 

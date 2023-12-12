@@ -1,8 +1,10 @@
+'use client';
+
 import { useContext, useEffect, useState } from 'react';
-import { ChainId } from '@sushiswap/sdk';
+import { mainnet, goerli } from 'viem/chains';
 import { utils } from 'ethers';
-import NetworkContext from 'contexts/NetworkContext';
-import { COMICS_MERKLE_ROOT } from 'constants/contracts';
+import NetworkContext from '@/contexts/NetworkContext';
+import { COMICS_MERKLE_ROOT } from '@/constants/contracts';
 
 const { getAddress, isAddress } = utils;
 
@@ -15,6 +17,11 @@ interface UserClaimData {
 
 const CLAIM_PROMISES: { [key: string]: Promise<any | UserClaimData | null> } =
   {};
+
+enum ChainId {
+  MAINNET = mainnet.id,
+  GÖRLI = goerli.id,
+}
 
 // returns the claim for the given address, or null if not valid
 function fetchClaim(

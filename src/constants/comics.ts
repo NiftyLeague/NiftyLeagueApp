@@ -1,42 +1,4 @@
-import { Comic, Item } from 'types/comic';
-
-import ComicP1 from 'assets/images/comics/page1.png';
-import ComicP2 from 'assets/images/comics/page2.png';
-import ComicP3 from 'assets/images/comics/page3.png';
-import ComicP4 from 'assets/images/comics/page4.png';
-import ComicP5 from 'assets/images/comics/page5.png';
-import ComicP6 from 'assets/images/comics/page6.png';
-
-import ComicThumbnailP1 from 'assets/images/comics/thumbnail/page1.png';
-import ComicThumbnailP2 from 'assets/images/comics/thumbnail/page2.png';
-import ComicThumbnailP3 from 'assets/images/comics/thumbnail/page3.png';
-import ComicThumbnailP4 from 'assets/images/comics/thumbnail/page4.png';
-import ComicThumbnailP5 from 'assets/images/comics/thumbnail/page5.png';
-import ComicThumbnailP6 from 'assets/images/comics/thumbnail/page6.png';
-
-import ItemP1 from 'assets/images/comics/items/1.gif';
-import ItemP2 from 'assets/images/comics/items/2.gif';
-import ItemP3 from 'assets/images/comics/items/3.gif';
-import ItemP4 from 'assets/images/comics/items/4.gif';
-import ItemP5 from 'assets/images/comics/items/5.gif';
-import ItemP6 from 'assets/images/comics/items/6.gif';
-import ItemP7 from 'assets/images/comics/items/7.gif';
-
-import ItemThumbnailP1 from 'assets/images/comics/items/thumbnail/1.png';
-import ItemThumbnailP2 from 'assets/images/comics/items/thumbnail/2.png';
-import ItemThumbnailP3 from 'assets/images/comics/items/thumbnail/3.png';
-import ItemThumbnailP4 from 'assets/images/comics/items/thumbnail/4.png';
-import ItemThumbnailP5 from 'assets/images/comics/items/thumbnail/5.png';
-import ItemThumbnailP6 from 'assets/images/comics/items/thumbnail/6.png';
-import ItemThumbnailP7 from 'assets/images/comics/items/thumbnail/7.png';
-
-import ItemEmptyP1 from 'assets/images/comics/items/empty/1.svg';
-import ItemEmptyP2 from 'assets/images/comics/items/empty/2.svg';
-import ItemEmptyP3 from 'assets/images/comics/items/empty/3.svg';
-import ItemEmptyP4 from 'assets/images/comics/items/empty/4.svg';
-import ItemEmptyP5 from 'assets/images/comics/items/empty/5.svg';
-import ItemEmptyP6 from 'assets/images/comics/items/empty/6.svg';
-import ItemEmptyP7 from 'assets/images/comics/items/empty/7.svg';
+import { Comic, Item } from '@/types/comic';
 
 export const COMICS: Comic[] = [
   {
@@ -45,8 +7,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Cape',
     viewsCount: 0,
-    image: ComicP1,
-    thumbnail: ComicThumbnailP1,
+    image: '/images/comics/page1.png',
+    thumbnail: '/images/comics/thumbnail/page1.png',
   },
   {
     id: 2,
@@ -54,8 +16,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Halo',
     viewsCount: 0,
-    image: ComicP2,
-    thumbnail: ComicThumbnailP2,
+    image: '/images/comics/page2.png',
+    thumbnail: '/images/comics/thumbnail/page2.png',
   },
   {
     id: 3,
@@ -63,8 +25,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Diamond Bat',
     viewsCount: 0,
-    image: ComicP3,
-    thumbnail: ComicThumbnailP3,
+    image: '/images/comics/page3.png',
+    thumbnail: '/images/comics/thumbnail/page3.png',
   },
   {
     id: 4,
@@ -72,8 +34,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Bread Bat',
     viewsCount: 0,
-    image: ComicP4,
-    thumbnail: ComicThumbnailP4,
+    image: '/images/comics/page4.png',
+    thumbnail: '/images/comics/thumbnail/page4.png',
   },
   {
     id: 5,
@@ -81,8 +43,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Purple Bat',
     viewsCount: 0,
-    image: ComicP5,
-    thumbnail: ComicThumbnailP5,
+    image: '/images/comics/page5.png',
+    thumbnail: '/images/comics/thumbnail/page5.png',
   },
   {
     id: 6,
@@ -90,8 +52,8 @@ export const COMICS: Comic[] = [
     multiplier: 1.5,
     wearableName: 'Companion Character',
     viewsCount: 0,
-    image: ComicP6,
-    thumbnail: ComicThumbnailP6,
+    image: '/images/comics/page6.png',
+    thumbnail: '/images/comics/thumbnail/page6.png',
   },
 ];
 
@@ -102,9 +64,9 @@ export const ITEMS: Item[] = [
     multiplier: 2,
     wearableName: '',
     balance: 0,
-    image: ItemP1,
-    thumbnail: ItemThumbnailP1,
-    empty: ItemEmptyP1,
+    image: '/images/comics/items/1.gif',
+    thumbnail: '/images/comics/items/thumbnail/1.png',
+    empty: '/images/comics/items/empty/1.svg',
   },
   {
     id: 2,
@@ -112,9 +74,9 @@ export const ITEMS: Item[] = [
     multiplier: 1,
     wearableName: '',
     balance: 0,
-    image: ItemP2,
-    thumbnail: ItemThumbnailP2,
-    empty: ItemEmptyP2,
+    image: '/images/comics/items/2.gif',
+    thumbnail: '/images/comics/items/thumbnail/2.png',
+    empty: '/images/comics/items/empty/2.svg',
     equipped: true,
   },
   {
@@ -123,9 +85,9 @@ export const ITEMS: Item[] = [
     multiplier: 1,
     wearableName: '',
     balance: 0,
-    image: ItemP3,
-    thumbnail: ItemThumbnailP3,
-    empty: ItemEmptyP3,
+    image: '/images/comics/items/3.gif',
+    thumbnail: '/images/comics/items/thumbnail/3.png',
+    empty: '/images/comics/items/empty/3.svg',
   },
   {
     id: 4,
@@ -133,9 +95,9 @@ export const ITEMS: Item[] = [
     multiplier: 1,
     wearableName: '',
     balance: 0,
-    image: ItemP4,
-    thumbnail: ItemThumbnailP4,
-    empty: ItemEmptyP4,
+    image: '/images/comics/items/4.gif',
+    thumbnail: '/images/comics/items/thumbnail/4.png',
+    empty: '/images/comics/items/empty/4.svg',
   },
   {
     id: 5,
@@ -143,9 +105,9 @@ export const ITEMS: Item[] = [
     multiplier: 1,
     wearableName: '',
     balance: 0,
-    image: ItemP5,
-    thumbnail: ItemThumbnailP5,
-    empty: ItemEmptyP5,
+    image: '/images/comics/items/5.gif',
+    thumbnail: '/images/comics/items/thumbnail/5.png',
+    empty: '/images/comics/items/empty/5.svg',
   },
   {
     id: 6,
@@ -153,9 +115,9 @@ export const ITEMS: Item[] = [
     multiplier: 3,
     wearableName: '',
     balance: 0,
-    image: ItemP6,
-    thumbnail: ItemThumbnailP6,
-    empty: ItemEmptyP6,
+    image: '/images/comics/items/6.gif',
+    thumbnail: '/images/comics/items/thumbnail/6.png',
+    empty: '/images/comics/items/empty/6.svg',
   },
   {
     id: 7,
@@ -163,9 +125,9 @@ export const ITEMS: Item[] = [
     multiplier: 0,
     wearableName: '',
     balance: 0,
-    image: ItemP7,
-    thumbnail: ItemThumbnailP7,
-    empty: ItemEmptyP7,
+    image: '/images/comics/items/7.gif',
+    thumbnail: '/images/comics/items/thumbnail/7.png',
+    empty: '/images/comics/items/empty/7.svg',
     isNew: false,
   },
 ];

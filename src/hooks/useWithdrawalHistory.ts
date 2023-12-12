@@ -1,6 +1,8 @@
+'use client';
+
 import { useCallback, useEffect, useState } from 'react';
-import { WITHDRAW_NFTL_LIST } from 'constants/url';
-import { WithdrawalHistory } from 'types/account';
+import { WITHDRAW_NFTL_LIST } from '@/constants/url';
+import { WithdrawalHistory } from '@/types/account';
 import useAuth from './useAuth';
 
 const useWithdrawalHistory = (state?: WithdrawalHistory['state']) => {

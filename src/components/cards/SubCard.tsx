@@ -1,4 +1,4 @@
-import React, { ReactNode, Ref } from 'react';
+import { ReactNode, forwardRef, Ref } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -24,7 +24,7 @@ interface SubCardProps {
 
 // ==============================|| CUSTOM SUB CARD ||============================== //
 
-const SubCard = React.forwardRef(
+const SubCard = forwardRef(
   (
     {
       children,
@@ -108,5 +108,7 @@ const SubCard = React.forwardRef(
 SubCard.defaultProps = {
   content: true,
 };
+
+SubCard.displayName = 'SubCard';
 
 export default SubCard;

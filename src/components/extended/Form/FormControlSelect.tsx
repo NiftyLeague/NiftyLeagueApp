@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 // material-ui
@@ -11,7 +13,7 @@ import {
 } from '@mui/material';
 
 // project imports
-import { GenericCardProps } from 'types';
+import { GenericCardProps } from '@/types';
 
 // ==============================|| FORM CONTROL SELECT ||============================== //
 

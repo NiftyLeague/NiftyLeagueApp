@@ -1,7 +1,7 @@
 import { PaletteMode } from '@mui/material';
 
 export type ConfigProps = {
-  fontFamily: string;
+  // fontFamily: string;
   borderRadius: number;
   outlinedFilled: boolean;
   navType: PaletteMode;
@@ -12,7 +12,7 @@ export type ConfigProps = {
 };
 
 export type CustomizationProps = {
-  fontFamily: string;
+  // fontFamily: string;
   borderRadius: number;
   outlinedFilled: boolean;
   navType: PaletteMode;
@@ -25,7 +25,7 @@ export type CustomizationProps = {
   onChangeLocale: (locale: string) => void;
   onChangeRTL: (rtlLayout: boolean) => void;
   onChangeContainer: () => void;
-  onChangeFontFamily: (fontFamily: string) => void;
+  // onChangeFontFamily: (fontFamily: string) => void;
   onChangeBorderRadius: (event: Event, newValue: number | number[]) => void;
   onChangeOutlinedField: (outlinedFilled: boolean) => void;
 };

@@ -1,18 +1,23 @@
-import { ChainId } from '@sushiswap/sdk';
+import { mainnet, goerli } from 'viem/chains';
+
+enum ChainId {
+  MAINNET = mainnet.id,
+  GÖRLI = goerli.id,
+}
 
 // MY ALCHEMY_ID, SWAP IN YOURS FROM https://dashboard.alchemyapi.io/
 export const ALCHEMY_ID: { [key in ChainId]?: string } = {
-  [ChainId.MAINNET]: process.env.REACT_APP_ALCHEMY_MAINNET_API as string,
-  [ChainId.GÖRLI]: process.env.REACT_APP_ALCHEMY_GOERLI_API as string,
+  [mainnet.id]: process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API as string,
+  [goerli.id]: process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API as string,
 };
 
-export const SUBGRAPH_URI = `${process.env.REACT_APP_SUBGRAPH_URI as string}${
-  process.env.REACT_APP_SUBGRAPH_VERSION || ''
+export const SUBGRAPH_URI = `${process.env.NEXT_PUBLIC_SUBGRAPH_URI as string}${
+  process.env.NEXT_PUBLIC_SUBGRAPH_VERSION || ''
 }`;
 
 export const DEBUG =
   process.env.NODE_ENV === 'development' ||
-  process.env.REACT_APP_DEBUG === 'true';
+  process.env.NEXT_PUBLIC_DEBUG === 'true';
 
 // Request polling intervals
 

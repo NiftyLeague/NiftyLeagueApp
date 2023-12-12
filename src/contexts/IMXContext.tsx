@@ -1,4 +1,6 @@
-import React, {
+'use client';
+
+import {
   createContext,
   useCallback,
   useContext,
@@ -6,11 +8,12 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import isEmpty from 'lodash/isEmpty';
 import { Link, ImmutableXClient, ImmutableMethodResults } from '@imtbl/imx-sdk';
-import NetworkContext from 'contexts/NetworkContext';
-import { IMX_NL_ITEMS } from 'constants/contracts';
-import useItemsBalance from 'hooks/useItemsBalance';
-import { Item } from 'types/comic';
+import NetworkContext from '@/contexts/NetworkContext';
+import { IMX_NL_ITEMS } from '@/constants/contracts';
+import useItemsBalance from '@/hooks/useItemsBalance';
+import { Item } from '@/types/comic';
 
 export interface Context {
   balance?: ImmutableMethodResults.ImmutableGetBalanceResult;
@@ -30,7 +33,7 @@ const CONTEXT_INITIAL_STATE: Context = {
   client: undefined,
   inventory: undefined,
   itemsBalance: [],
-  link: new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
+  link: new Link(process.env.NEXT_PUBLIC_SANDBOX_LINK_URL),
   linkSetup: async () => new Promise(() => null),
   loading: true,
   registeredUser: false,
@@ -43,12 +46,12 @@ const IMXContext = createContext(CONTEXT_INITIAL_STATE);
 export const IMXProvider = ({
   children,
 }: {
-  children: React.ReactElement | React.ReactElement[];
+  children: React.ReactNode | React.ReactNode[];
 }): JSX.Element => {
   const { address, selectedChainId } = useContext(NetworkContext);
   // initialise Immutable X Link SDK
   const link = useMemo(
-    () => new Link(process.env.REACT_APP_SANDBOX_LINK_URL),
+    () => new Link(process.env.NEXT_PUBLIC_SANDBOX_LINK_URL),
     [],
   );
 
@@ -93,12 +96,12 @@ export const IMXProvider = ({
 
   // initialise an Immutable X Client to interact with apis more easily
   async function buildIMX() {
-    const publicApiUrl: string = process.env.REACT_APP_SANDBOX_ENV_URL ?? '';
+    const publicApiUrl: string = process.env.NEXT_PUBLIC_SANDBOX_ENV_URL ?? '';
     setClient(await ImmutableXClient.build({ publicApiUrl }));
   }
 
   useEffect(() => {
-    if (address) {
+    if (address?.length && !isEmpty(client)) {
       updateUser(address);
     }
   }, [address, client, updateUser, imxRefreshKey]);

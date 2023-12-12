@@ -1,9 +1,9 @@
+import Image from 'next/image';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { EnhancedTableProps } from 'types/leaderboard';
+import { EnhancedTableProps } from '@/types/leaderboard';
 import { useTheme, Typography } from '@mui/material';
-import { ReactComponent as RankIcon } from 'assets/images/icons/rank_icon.svg';
 
 export default function EnhancedTableHead(
   props: EnhancedTableProps,
@@ -41,7 +41,13 @@ export default function EnhancedTableHead(
             }}
             onClick={handleCheckYourRank}
           >
-            <RankIcon />
+            <Image
+              src="/images/icons/rank_icon.svg"
+              alt="Rank Icon"
+              width={25}
+              height={20}
+              style={{ marginRight: 4 }}
+            />
             RANK
           </Typography>
         </TableCell>

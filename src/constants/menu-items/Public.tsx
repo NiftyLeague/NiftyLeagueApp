@@ -1,18 +1,16 @@
 // assets
 import {
   IconDeviceGamepad,
-  IconLayoutGrid,
   IconListNumbers,
   IconMoodCrazyHappy,
   IconSquarePlus,
   IconTag,
   IconTicket,
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconDeviceGamepad,
-  IconLayoutGrid,
   IconListNumbers,
   IconMoodCrazyHappy,
   IconSquarePlus,
@@ -34,27 +32,9 @@ const PublicItems = {
       icon: icons.IconDeviceGamepad,
       breadcrumbs: false,
     },
-    /*
-    {
-      id: '',
-      title: 'Nifty League App',
-      type: 'item',
-      url: '/',
-      icon: icons.IconLayoutGrid,
-      breadcrumbs: false,
-    },
-*/
-    {
-      id: 'mint-o-matic',
-      title: 'Mint-O-Matic',
-      type: 'item',
-      url: '/mint-o-matic',
-      icon: icons.IconSquarePlus,
-      breadcrumbs: false,
-    },
     {
       id: 'degens',
-      title: 'All DEGENs',
+      title: 'DEGENs',
       type: 'item',
       url: '/degens',
       icon: icons.IconMoodCrazyHappy,
@@ -69,13 +49,21 @@ const PublicItems = {
       breadcrumbs: false,
     },
     {
-      id: 'raffle',
-      title: 'Raffle',
+      id: 'mint-o-matic',
+      title: 'Mint-O-Matic',
       type: 'item',
-      url: '/raffle',
-      icon: icons.IconTicket,
+      url: '/mint-o-matic',
+      icon: icons.IconSquarePlus,
       breadcrumbs: false,
     },
+    // {
+    //   id: 'raffle',
+    //   title: 'Raffle',
+    //   type: 'item',
+    //   url: '/raffle',
+    //   icon: icons.IconTicket,
+    //   breadcrumbs: false,
+    // },
   ],
 };
 
