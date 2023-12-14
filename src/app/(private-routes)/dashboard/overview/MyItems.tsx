@@ -86,7 +86,7 @@ const MyItems = (): JSX.Element => {
         ) : (
           <Stack justifyContent="center" alignItems="center">
             <Link
-              href={ITEM_PURCHASE_URL[selectedNetworkId as string]}
+              href={ITEM_PURCHASE_URL[selectedNetworkId as number]}
               target="_blank"
               rel="noreferrer"
             >
