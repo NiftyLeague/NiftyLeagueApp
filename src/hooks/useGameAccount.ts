@@ -5,7 +5,7 @@ import { GAMER_ACCOUNT_API } from '@/constants/url';
 import { Account } from '@/types/account';
 import useAuth from './useAuth';
 
-const useAccount = (
+const useGameAccount = (
   refreshKey?: string | number,
 ): { error: boolean; account: Account | undefined } => {
   const [account, setAccount] = useState<Account | undefined>(undefined);
@@ -40,4 +40,4 @@ const useAccount = (
   return { error, account };
 };
 
-export default useAccount;
+export default useGameAccount;

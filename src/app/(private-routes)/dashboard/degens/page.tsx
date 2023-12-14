@@ -3,7 +3,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import { useAccount } from 'wagmi';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { useSearchParams } from 'next/navigation';
@@ -46,7 +46,7 @@ import EmptyState from '@/components/EmptyState';
 import DegenDialog from '@/components/dialog/DegenDialog';
 import BalanceContext from '@/contexts/BalanceContext';
 import DegensTopNav from '@/components/extended/DegensTopNav';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import useLocalStorageContext from '@/hooks/useLocalStorageContext';
 
 const CollapsibleSidebarLayout = dynamic(
   () => import('@/app/_layout/_CollapsibleSidebarLayout'),
@@ -63,7 +63,7 @@ const DEGENS_PER_PAGE = 12;
 
 const DashboardDegensPage = (): JSX.Element => {
   const { authToken } = useAuth();
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected } = useAccount();
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [filters, setFilters] = useState<DegenFilter>(DEFAULT_STATIC_FILTER);
   const [defaultValues, setDefaultValues] = useState<DegenFilter | undefined>(
@@ -82,13 +82,13 @@ const DashboardDegensPage = (): JSX.Element => {
   const [layoutMode, setLayoutMode] = useState<string>('gridView');
   const { enableEquip } = useFlags();
   const { favs: favsData } = useProfileFavDegens();
-  const [favs, setFavs] = useLocalStorage<string[]>('FAV_DEGENS', []);
+  const { favDegens, setFavDegens } = useLocalStorageContext();
 
   useEffect(() => {
     if (favsData && favsData !== 'null') {
-      setFavs(favsData.split(','));
+      setFavDegens(favsData.split(','));
     }
-  }, [favsData, setFavs]);
+  }, [favsData, setFavDegens]);
 
   const { loading: loadingAllRentals, data } = useFetch<Degen[]>(
     `${DEGEN_BASE_API_URL}/cache/rentals/rentables.json`,
@@ -239,10 +239,7 @@ const DashboardDegensPage = (): JSX.Element => {
 
   const handleClickFavorite = useCallback(
     async (degen) => {
-      const newFavs = xor(
-        favs.filter((f) => f),
-        [degen.id],
-      );
+      const newFavs = xor(favDegens?.filter((f) => f), [degen.id]);
       await fetch(`${PROFILE_FAV_DEGENS_API}`, {
         method: 'POST',
         body: JSON.stringify({
@@ -252,9 +249,9 @@ const DashboardDegensPage = (): JSX.Element => {
           authorizationToken: authToken,
         } as any,
       });
-      setFavs(newFavs);
+      setFavDegens(newFavs);
     },
-    [authToken, favs, setFavs],
+    [authToken, favDegens, setFavDegens],
   );
 
   const renderSkeletonItem = useCallback(
@@ -300,7 +297,7 @@ const DashboardDegensPage = (): JSX.Element => {
         <DegenCard
           degen={degen}
           degenEquipEnabled={enableEquip}
-          favs={favs}
+          favs={favDegens}
           isDashboardDegen
           onClickClaim={() => handleClaimDegen(degen)}
           onClickDetail={() => handleViewTraits(degen)}
@@ -314,7 +311,7 @@ const DashboardDegensPage = (): JSX.Element => {
     ),
     [
       enableEquip,
-      favs,
+      favDegens,
       handleClaimDegen,
       handleClickEditName,
       handleClickFavorite,

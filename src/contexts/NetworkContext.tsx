@@ -1,74 +1,40 @@
 'use client';
 
-import { createContext, useCallback, useEffect, useState } from 'react';
-import { ethers, Signer, providers } from 'ethers';
-import { mainnet } from 'viem/chains';
-import {
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from '@web3modal/ethers5/react';
+import { createContext, useEffect } from 'react';
+import { useAccount, useWalletClient, type WalletClient } from 'wagmi';
+import { useWeb3ModalState } from '@web3modal/wagmi/react';
 import isEmpty from 'lodash/isEmpty';
 
-import {
-  Contracts,
-  Ethereumish,
-  LocalProvider,
-  Network,
-  UserProvider,
-} from '@/types/web3';
+import { Contracts } from '@/types/web3';
+import { DEBUG } from '@/constants/index';
+import { TARGET_NETWORK } from '@/constants/networks';
 import { Tx } from '@/types/notify';
-import useContractLoader from '@/hooks/useContractLoader';
 import Notifier from '@/utils/Notifier';
-import { NetworkName } from '@/types/web3';
-import { NETWORKS, VALID_ETHERS_NETWORKS } from '@/constants/networks';
-import { ALCHEMY_ID, DEBUG } from '@/constants/index';
-
-const { getDefaultProvider, Web3Provider } = providers;
-
-// if (typeof window !== 'undefined' && window?.ethereum)
-//   (window.ethereum as Ethereumish).autoRefreshOnNetworkChange = false;
-
-// 📡 What chain are your contracts deployed to? (localhost, goerli, mainnet)
-const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_NETWORK as NetworkName];
-
-// 🛰 providers
-const providerOptions = {
-  infura: process.env.NEXT_PUBLIC_INFURA_PROJECT_ID,
-  etherscan: process.env.NEXT_PUBLIC_ETHERSCAN_KEY,
-  alchemy: ALCHEMY_ID[targetNetwork.chainId],
-};
-
-// 🏠 Your local provider is usually pointed at your local blockchain
-const localProvider = getDefaultProvider(
-  VALID_ETHERS_NETWORKS.includes(targetNetwork.chainId)
-    ? targetNetwork.chainId
-    : targetNetwork.rpcUrl,
-  providerOptions,
-) as LocalProvider;
+import useContractLoader from '@/hooks/useContractLoader';
+import useEthersProvider, { type Provider } from '@/hooks/useEthersProvider';
+import useEthersSigner, { type Signer } from '@/hooks/useEthersSigner';
 
 interface Context {
   address?: `0x${string}`;
-  localProvider: LocalProvider;
-  switchToNetwork: (chainId: number) => void;
+  isConnected: boolean;
+  publicProvider?: Provider;
   readContracts: Contracts;
-  selectedChainId?: number;
+  selectedNetworkId?: number;
   signer?: Signer;
-  targetNetwork: Network;
   tx: Tx;
-  userProvider?: UserProvider;
+  walletClient?: WalletClient;
   writeContracts: Contracts;
 }
 
 const CONTEXT_INITIAL_STATE: Context = {
   address: undefined,
-  switchToNetwork: (chainId: number) => {},
-  localProvider,
+  isConnected: false,
+  publicProvider: undefined,
   readContracts: {},
-  selectedChainId: undefined,
+  selectedNetworkId: undefined,
   signer: undefined,
-  targetNetwork,
   tx: async (_tx, _callback) => new Promise(() => null),
-  userProvider: undefined,
+  walletClient: undefined,
   writeContracts: {},
 };
 
@@ -79,79 +45,75 @@ export const NetworkProvider = ({
 }: {
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
-  const { address, chainId: selectedChainId } = useWeb3ModalAccount();
-  const { walletProvider } = useWeb3ModalProvider();
-  const [userProvider, setUserProvider] = useState<UserProvider>();
-  const [signer, setSigner] = useState<providers.JsonRpcSigner | undefined>();
+  const chainId = TARGET_NETWORK?.chainId || 1;
+  const { address, isConnected } = useAccount();
+  const { selectedNetworkId } = useWeb3ModalState() as {
+    open: boolean;
+    selectedNetworkId?: number;
+  };
 
-  useEffect(() => {
-    if (walletProvider) {
-      const provider = new Web3Provider(walletProvider);
-      setUserProvider(provider);
-      setSigner(provider.getSigner());
-    }
-  }, [walletProvider]);
+  const { data: walletClient } = useWalletClient({ chainId });
+  const publicProvider = useEthersProvider({ chainId });
+  const signer = useEthersSigner({ chainId });
 
   // The Notifier wraps transactions and provides notificiations
-  const tx = Notifier(userProvider, targetNetwork, true);
+  const tx = Notifier(signer, true);
 
   // Load in your local 📝 contract and read a value from it:
-  const readContracts = useContractLoader(localProvider);
+  const readContracts = useContractLoader(publicProvider);
 
-  // If you want to make 🔐 write transactions to your contracts, use the userProvider:
-  const writeContracts = useContractLoader(userProvider);
-
-  const switchToNetwork = useCallback(
-    async (chainId: number) => {
-      if (!userProvider) {
-        return;
-      }
-      try {
-        const transactionStatus = await userProvider.send(
-          'wallet_switchEthereumChain',
-          [{ chainId: ethers.utils.hexValue(chainId) }],
-        );
-        return transactionStatus;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('Switching network already pending - ', error);
-      }
-    },
-    [userProvider],
-  );
+  // If you want to make 🔐 write transactions to your contracts, use the signer:
+  const writeContracts = useContractLoader(signer);
 
   useEffect(() => {
     if (
       DEBUG &&
+      isConnected &&
       address &&
-      localProvider &&
+      publicProvider &&
+      selectedNetworkId &&
+      signer &&
+      walletClient &&
       !isEmpty(readContracts) &&
-      selectedChainId &&
-      targetNetwork &&
-      userProvider &&
       !isEmpty(writeContracts)
     ) {
-      console.log('_________________ 🏗 Nifty League _________________');
-      console.log('📡 userProvider', userProvider);
-      console.log('📡 localProvider', localProvider);
-      console.log('🕵🏻‍♂️ selectedChainId:', selectedChainId);
-      console.log('🔭 targetNetwork:', targetNetwork);
-      console.log('👩‍💼 user address:', address);
-      console.log('📝 readContracts', readContracts);
-      console.log('🔐 writeContracts', writeContracts);
+      console.group('_________________ ✅ Nifty League _________________');
+      console.log('🌐 publicProvider', publicProvider);
+      console.log('📡 walletClient', walletClient);
+      console.log('📝 signer', signer);
+      console.log('👤 address:', address);
+      console.log('⛓️ selectedNetworkId:', selectedNetworkId);
+      console.log('📍 targetNetwork:', TARGET_NETWORK);
+      console.log('🔓 readContracts', readContracts);
+      console.log('🔏 writeContracts', writeContracts);
+      console.groupEnd();
+    } else if (DEBUG && publicProvider && !isEmpty(readContracts)) {
+      console.group('_________________ 🚫 Offline User _________________');
+      console.log('🌐 publicProvider', publicProvider);
+      console.log('⛓️ selectedNetworkId:', selectedNetworkId);
+      console.log('📍 targetNetwork:', TARGET_NETWORK);
+      console.log('🔓 readContracts', readContracts);
+      console.groupEnd();
     }
-  }, [address, readContracts, selectedChainId, userProvider, writeContracts]);
+  }, [
+    address,
+    isConnected,
+    publicProvider,
+    readContracts,
+    selectedNetworkId,
+    signer,
+    walletClient,
+    writeContracts,
+  ]);
 
   const context = {
     address,
-    localProvider,
+    isConnected,
+    publicProvider,
     readContracts,
-    selectedChainId,
+    selectedNetworkId,
     signer,
-    targetNetwork,
-    switchToNetwork,
     tx,
-    userProvider,
     writeContracts,
   };
 

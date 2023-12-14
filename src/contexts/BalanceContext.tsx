@@ -51,7 +51,6 @@ export const BalanceProvider = ({
 }): JSX.Element => {
   const { address, readContracts } = useContext(NetworkContext);
   const [refreshClaimKey, setRefreshClaimKey] = useState(0);
-  const [refreshBalKey, setRefreshBalKey] = useState(0);
   const {
     loading,
     data,
@@ -62,7 +61,7 @@ export const BalanceProvider = ({
     data?: { owner: Owner };
   } = useQuery(OWNER_QUERY, {
     variables: { address: address?.toLowerCase() },
-    skip: !address?.length,
+    skip: !address,
   });
   const { characterCount = 0 } = data?.owner || {};
   const isDegenOwner = characterCount > 0;
@@ -87,25 +86,21 @@ export const BalanceProvider = ({
     refreshClaimKey,
   );
 
-  const userNFTLBalance = useNFTLBalance(address, refreshBalKey);
+  const { balance: userNFTLBalance, refetch: refreshNFTLBalance } =
+    useNFTLBalance();
 
   const refreshClaimableNFTL = () => {
     setRefreshClaimKey(Math.random());
   };
 
-  const refreshNFTLBalance = useCallback(() => {
-    setRefreshBalKey(Math.random());
-  }, []);
-
   const refreshDegenBalance = useCallback(() => {
-    if (address?.length) refetchDegens({ address: address.toLowerCase() });
+    if (address) refetchDegens({ address: address.toLowerCase() });
   }, [address, refetchDegens]);
 
   useEffect(() => {
-    if (!address?.length) return;
+    if (!address) return;
     refreshDegenBalance();
     refreshClaimableNFTL();
-    refreshNFTLBalance();
   }, [address, refreshDegenBalance, refreshNFTLBalance]);
 
   return (

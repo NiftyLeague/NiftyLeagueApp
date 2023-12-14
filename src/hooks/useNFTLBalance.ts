@@ -1,10 +1,9 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
-import { BigNumber, utils } from 'ethers';
-import NetworkContext from '@/contexts/NetworkContext';
-import useContractReader from './useContractReader';
-import { NFTL_CONTRACT } from '@/constants/contracts';
+import { useCallback, useEffect, useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
+import { NFTL_TOKEN_ADDRESS } from '@/constants/contracts';
+import { TARGET_NETWORK } from '@/constants/networks';
 
 /*
   ~ What it does? ~
@@ -13,27 +12,47 @@ import { NFTL_CONTRACT } from '@/constants/contracts';
 
   ~ How can I use? ~
 
-  const yourBalance = useNFTLBalance(address);
+  const { balance, loading, refetch } = useNFTLBalance();
 */
 
-export default function useNFTLBalance(
-  address: string = '',
-  refreshKey?: string | number,
-): number {
-  const { readContracts } = useContext(NetworkContext);
-  const [balance, setBalance] = useState(BigNumber.from(0));
-  const result = useContractReader(
-    readContracts,
-    NFTL_CONTRACT,
-    'balanceOf',
-    [address],
-    undefined,
-    undefined,
-    refreshKey,
-    !address.length,
-  ) as BigNumber;
+interface NFTLBalanceState {
+  balance: number;
+  loading: boolean;
+  refetch: () => void;
+}
+
+export default function useNFTLBalance(): NFTLBalanceState {
+  const { address, isConnected } = useAccount();
+  const [balance, setBalance] = useState(0);
+  const {
+    data,
+    isLoading: loading,
+    refetch: refetchBal,
+  } = useBalance({
+    address,
+    token: NFTL_TOKEN_ADDRESS[TARGET_NETWORK.chainId],
+    watch: true,
+    cacheTime: 60_000,
+    formatUnits: 'ether',
+    enabled: isConnected,
+  });
+
+  const updateBal = useCallback(
+    (formatted?: string) => {
+      if (formatted && Number(formatted) !== balance)
+        setBalance(Number(formatted));
+    },
+    [balance],
+  );
+
   useEffect(() => {
-    if (result && result !== balance) setBalance(result);
-  }, [result, balance]);
-  return parseFloat(utils.formatEther(balance));
+    updateBal(data?.formatted);
+  }, [data?.formatted, updateBal]);
+
+  const refetch = useCallback(async () => {
+    const { data } = await refetchBal();
+    updateBal(data?.formatted);
+  }, [updateBal, refetchBal]);
+
+  return { balance, loading, refetch };
 }

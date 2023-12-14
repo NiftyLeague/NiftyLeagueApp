@@ -1,5 +1,6 @@
-import { useDisconnect, useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import { useAccount, useDisconnect } from 'wagmi';
 import { Button } from '@mui/material';
+import useAuth from '@/hooks/useAuth';
 
 export interface LogoutButtonProps {
   sx?: React.CSSProperties;
@@ -8,12 +9,13 @@ export interface LogoutButtonProps {
 const LogoutButton: React.FC<
   React.PropsWithChildren<React.PropsWithChildren<LogoutButtonProps>>
 > = ({ sx }) => {
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected } = useAccount();
+  const { isLoggedIn } = useAuth();
   const { disconnect } = useDisconnect();
   if (isConnected) {
     return (
       <Button sx={sx} variant="outlined" onClick={() => disconnect()}>
-        Log Out
+        {isLoggedIn ? 'Log Out' : 'Disconnect Wallet'}
       </Button>
     );
   }

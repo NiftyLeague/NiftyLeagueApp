@@ -1,36 +1,30 @@
 import { useContext, useMemo } from 'react';
-import { Contract } from 'ethers';
+import { type Contract, type ContractInterface } from 'ethers';
 import NetworkContext from '@/contexts/NetworkContext';
 import { getContract } from '@/utils/ethers';
 import { COMICS_MERKLE_DISTRIBUTOR_ADDRESS } from '@/constants/contracts';
 import COMICS_MERKLE_DISTRIBUTOR_ABI from '@/contracts/abis/comics-merkle-distributor.json';
 
-function useContract(address: string, ABI, withSignerIfPossible = true) {
-  const { userProvider, address: account } = useContext(NetworkContext);
+function useContract(contractAddress: string, ABI: ContractInterface) {
+  const { signer } = useContext(NetworkContext);
 
   return useMemo(() => {
-    if (!address?.length || !ABI || !userProvider) return null;
+    if (!contractAddress || !ABI || !signer) return null;
     try {
-      return getContract(
-        address,
-        ABI,
-        userProvider,
-        withSignerIfPossible && account ? account : undefined,
-      );
+      return getContract(contractAddress, ABI, signer);
     } catch (error) {
       console.error('Failed to get contract', error);
       return null;
     }
-  }, [address, ABI, userProvider, withSignerIfPossible, account]);
+  }, [contractAddress, ABI, signer]);
 }
 
 export default function useMerkleDistributorContract(): Contract | null {
-  const { selectedChainId } = useContext(NetworkContext);
+  const { selectedNetworkId } = useContext(NetworkContext);
   return useContract(
-    selectedChainId
-      ? COMICS_MERKLE_DISTRIBUTOR_ADDRESS[selectedChainId]
+    selectedNetworkId
+      ? COMICS_MERKLE_DISTRIBUTOR_ADDRESS[selectedNetworkId]
       : undefined,
     COMICS_MERKLE_DISTRIBUTOR_ABI,
-    true,
   );
 }

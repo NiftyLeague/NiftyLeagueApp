@@ -30,7 +30,7 @@ import { WITHDRAW_NFTL_AVAILABILITY } from '@/constants/url';
 import { formatDateTime } from '@/utils/dateTime';
 import TermsOfServiceDialog from '@/components/dialog/TermsOfServiceDialog';
 import useAuth from '@/hooks/useAuth';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import useLocalStorageContext from '@/hooks/useLocalStorageContext';
 
 const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
   const [withdrawDisabled, setWithdrawDisabled] = useState(false);
@@ -85,10 +85,7 @@ const WithdrawForm = ({
   const [openTOS, setOpenTOS] = useState<boolean>(false);
   const [, setIsOpen] = useContext(DialogContext);
   const [loading, setLoading] = useState(false);
-  const [aggreementAccepted, setAggreementAccepted] = useLocalStorage<string>(
-    'aggreement-accepted',
-    'FALSE',
-  );
+  const { agrementAccepted, setAgreementAccepted } = useLocalStorageContext();
   const { withdrawalHistory } = useWithdrawalHistory('pending');
   const { withdrawDisabled, availableAt } =
     useWithdrawalDisabled(withdrawalHistory);
@@ -108,7 +105,7 @@ const WithdrawForm = ({
     defaultValues: {
       amountSelected: 0,
       amountInput: '',
-      isCheckedTerm: aggreementAccepted === 'ACCEPTED',
+      isCheckedTerm: agrementAccepted === 'ACCEPTED',
     },
   });
   const theme = useTheme();
@@ -149,7 +146,7 @@ const WithdrawForm = ({
   const handleTOSDialogClose = (event, reason) => {
     if (reason === 'accepted') {
       setValue('isCheckedTerm', true);
-      setAggreementAccepted('ACCEPTED');
+      setAgreementAccepted('ACCEPTED');
     }
     setOpenTOS(false);
   };
@@ -255,9 +252,9 @@ const WithdrawForm = ({
                     onChange={(e) => {
                       field.onChange(e);
                       if (e.target.checked) {
-                        setAggreementAccepted('ACCEPTED');
+                        setAgreementAccepted('ACCEPTED');
                       } else {
-                        setAggreementAccepted('FALSE');
+                        setAgreementAccepted('FALSE');
                       }
                     }}
                   />
