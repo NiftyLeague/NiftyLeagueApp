@@ -237,7 +237,7 @@ const DashboardComicsPage = (): JSX.Element => {
                   {imx.itemsBalance.length > 0 && (
                     <Grid item>
                       <Link
-                        href={ITEM_PURCHASE_URL[selectedNetworkId as string]}
+                        href={ITEM_PURCHASE_URL[selectedNetworkId as number]}
                         target="_blank"
                         rel="noreferrer"
                       >
