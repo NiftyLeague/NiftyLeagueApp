@@ -36,10 +36,10 @@ import { sendEvent } from '@/utils/google-analytics';
 import BalanceContext from '@/contexts/BalanceContext';
 import ConnectWrapper from '@/components/wrapper/ConnectWrapper';
 import DegenImage from '@/components/cards/DegenCard/DegenImage';
-import useAccount from '@/hooks/useAccount';
+import useGameAccount from '@/hooks/useGameAccount';
 import useRent from '@/hooks/useRent';
 import useRentalPassCount from '@/hooks/useRentalPassCount';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import useLocalStorageContext from '@/hooks/useLocalStorageContext';
 
 import TermsOfServiceDialog from '../TermsOfServiceDialog';
 import RentStepper from './RentStepper';
@@ -123,12 +123,9 @@ const RentDegenContentDialog = ({
   const classes = useStyles();
   const router = useRouter();
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const { account } = useAccount(refreshAccKey);
-  const [aggreementAccepted, setAggreementAccepted] = useLocalStorage<string>(
-    'aggreement-accepted',
-    'FALSE',
-  );
-  const agreement = aggreementAccepted === 'ACCEPTED';
+  const { account } = useGameAccount(refreshAccKey);
+  const { agrementAccepted, setAgreementAccepted } = useLocalStorageContext();
+  const agreement = agrementAccepted === 'ACCEPTED';
   const [rentFor, setRentFor] = useState<string>('myself');
   const [ethAddress, setEthAddress] = useState<string>('');
   const [isUseRentalPass, setIsUseRentalPass] = useState<boolean>(false);
@@ -245,16 +242,16 @@ const RentDegenContentDialog = ({
 
   const handleTOSDialogClose = (event, reason) => {
     if (reason === 'accepted') {
-      setAggreementAccepted('ACCEPTED');
+      setAgreementAccepted('ACCEPTED');
     }
     setOpenTOS(false);
   };
 
   const handleAgreementChange = (event) => {
     if (event.target.checked) {
-      setAggreementAccepted('ACCEPTED');
+      setAgreementAccepted('ACCEPTED');
     } else {
-      setAggreementAccepted('FALSE');
+      setAgreementAccepted('FALSE');
     }
   };
 

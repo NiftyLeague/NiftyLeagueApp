@@ -12,7 +12,7 @@ import ComicPlaceholder from '@/components/cards/Skeleton/ComicPlaceholder';
 import { ITEM_PURCHASE_URL } from '@/constants/url';
 
 const MyItems = (): JSX.Element => {
-  const { selectedChainId } = useContext(NetworkContext);
+  const { selectedNetworkId } = useContext(NetworkContext);
   const router = useRouter();
   const imx = useContext(IMXContext);
   const filteredItems = useMemo(
@@ -86,7 +86,7 @@ const MyItems = (): JSX.Element => {
         ) : (
           <Stack justifyContent="center" alignItems="center">
             <Link
-              href={ITEM_PURCHASE_URL[selectedChainId as number]}
+              href={ITEM_PURCHASE_URL[selectedNetworkId as string]}
               target="_blank"
               rel="noreferrer"
             >

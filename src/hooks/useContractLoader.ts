@@ -18,13 +18,13 @@ import EXTERNAL_CONTRACTS from '@/contracts/externalContracts';
 
   ~ How can I use? ~
 
-  const readContracts = useContractLoader(localProvider) // or
-  const writeContracts = useContractLoader(userProvider)
+  const readContracts = useContractLoader(publicProvider) // or
+  const writeContracts = useContractLoader(signer)
 
   ~ Features ~
 
-  - localProvider enables reading values from contracts
-  - userProvider enables writing transactions into contracts
+  - publicProvider enables reading values from contracts
+  - signers enable writing transactions into contracts
   - Example of using setPurpose function from our contract and writing transactions by Transactor.js helper:
     await tx( writeContracts.YourContract.setPurpose(newPurpose) )
 

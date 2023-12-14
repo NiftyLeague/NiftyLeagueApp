@@ -5,11 +5,10 @@ import NetworkContext from '@/contexts/NetworkContext';
 import useImportNFTLToWallet from '@/hooks/useImportNFTLToWallet';
 
 const AddNFTLToMetamask = (): JSX.Element | null => {
-  const { userProvider } = useContext(NetworkContext);
+  const { isConnected } = useContext(NetworkContext);
   const { handleImportNFTLToWallet } = useImportNFTLToWallet();
 
-  return userProvider?.provider?.isMetaMask &&
-    userProvider?.provider?.request ? (
+  return isConnected ? (
     <Button
       onClick={handleImportNFTLToWallet}
       variant="outlined"

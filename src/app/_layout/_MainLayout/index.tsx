@@ -4,9 +4,10 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { PersistGate } from 'redux-persist/integration/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useNetwork, useSwitchNetwork, useAccount } from 'wagmi';
 
 // Redux
 import { Provider as ReduxProvider } from 'react-redux';
@@ -31,12 +32,13 @@ import {
 } from '@mui/material';
 
 // app context
-import { BalanceProvider } from '@/contexts/BalanceContext';
-import { ThemeConfigProvider } from '@/contexts/ThemeConfigContext';
-import { FeatureFlagProvider } from '@/contexts/FeatureFlagsContext';
 import { AuthTokenProvider } from '@/contexts/AuthTokenContext';
+import { BalanceProvider } from '@/contexts/BalanceContext';
+import { FeatureFlagProvider } from '@/contexts/FeatureFlagsContext';
+import { LocalStorageProvider } from '@/contexts/LocalStorageContext';
+import { NetworkProvider } from '@/contexts/NetworkContext';
+import { ThemeConfigProvider } from '@/contexts/ThemeConfigContext';
 import { Web3ModalProvider } from '@/contexts/Web3Modal';
-import NetworkContext, { NetworkProvider } from '@/contexts/NetworkContext';
 
 // project imports
 import { capitalize } from '@/utils/string';
@@ -46,6 +48,7 @@ import navigation from '@/constants/menu-items';
 import ThemeCustomization from '@/themes';
 import useThemeConfig from '@/hooks/useThemeConfig';
 import useGoogleAnalytics from '@/hooks/useGoogleAnalytics';
+import { TARGET_NETWORK } from '@/constants/networks';
 
 // components
 import Breadcrumbs from '@/components/extended/Breadcrumbs';
@@ -119,6 +122,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useGoogleAnalytics();
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const { chain } = useNetwork();
+  const { address } = useAccount();
+  const { switchNetwork } = useSwitchNetwork();
 
   const theme = useTheme();
   const { container } = useThemeConfig();
@@ -126,9 +132,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const matchDownSm = useMediaQuery(theme.breakpoints.down('md'));
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
   const { drawerOpen } = useSelector((state) => state.menu);
-
-  const { address, targetNetwork, selectedChainId, switchToNetwork } =
-    useContext(NetworkContext);
 
   useEffect(() => {
     dispatch(openDrawer(!matchDownMd));
@@ -190,8 +193,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           }}
         >
           {address &&
-            targetNetwork?.name &&
-            targetNetwork.chainId !== selectedChainId && (
+            TARGET_NETWORK?.name &&
+            TARGET_NETWORK.chainId !== chain?.id && (
               <Box
                 sx={{
                   display: 'flex',
@@ -208,12 +211,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                   <WarningIcon />
                 </Icon>
                 <Typography px={2} fontSize={20} fontWeight={600}>
-                  Please switch to {capitalize(targetNetwork.name)}
+                  Please switch to {capitalize(TARGET_NETWORK.name)}
                 </Typography>
                 <Button
                   sx={{ padding: '2px 16px' }}
                   variant="contained"
-                  onClick={() => switchToNetwork(targetNetwork.chainId)}
+                  onClick={() => switchNetwork?.(TARGET_NETWORK.chainId)}
                 >
                   Switch
                 </Button>
@@ -252,25 +255,27 @@ const MainLayoutWrapper = ({ children }: { children: React.ReactNode }) => (
   <ApolloProvider client={client}>
     <QueryClientProvider client={queryClient}>
       <ReduxProvider store={store}>
-        <Web3ModalProvider>
-          <NetworkProvider>
-            <ThemeConfigProvider>
-              <ThemeCustomization>
-                <Locales>
-                  <PersistGate loading={null} persistor={persister}>
-                    <AuthTokenProvider>
-                      <BalanceProvider>
-                        <FeatureFlagProvider>
-                          <MainLayout>{children}</MainLayout>
-                        </FeatureFlagProvider>
-                      </BalanceProvider>
-                    </AuthTokenProvider>
-                  </PersistGate>
-                </Locales>
-              </ThemeCustomization>
-            </ThemeConfigProvider>
-          </NetworkProvider>
-        </Web3ModalProvider>
+        <LocalStorageProvider>
+          <Web3ModalProvider>
+            <NetworkProvider>
+              <ThemeConfigProvider>
+                <ThemeCustomization>
+                  <Locales>
+                    <PersistGate loading={null} persistor={persister}>
+                      <AuthTokenProvider>
+                        <BalanceProvider>
+                          <FeatureFlagProvider>
+                            <MainLayout>{children}</MainLayout>
+                          </FeatureFlagProvider>
+                        </BalanceProvider>
+                      </AuthTokenProvider>
+                    </PersistGate>
+                  </Locales>
+                </ThemeCustomization>
+              </ThemeConfigProvider>
+            </NetworkProvider>
+          </Web3ModalProvider>
+        </LocalStorageProvider>
       </ReduxProvider>
     </QueryClientProvider>
   </ApolloProvider>

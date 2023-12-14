@@ -120,7 +120,9 @@ export const transformRentals = (
         playerAddress: accounts?.player?.address,
         playerNickname: isDirectRenter
           ? 'Myself'
-          : (accounts?.player?.address && nicknames[accounts.player.address]) ||
+          : (accounts?.player?.address &&
+              nicknames?.length &&
+              nicknames[accounts.player.address]) ||
             'No nickname',
         rentalName: name_cased,
         category,

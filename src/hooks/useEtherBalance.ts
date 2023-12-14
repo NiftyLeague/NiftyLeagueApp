@@ -1,49 +1,46 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useState } from 'react';
-import NetworkContext from '@/contexts/NetworkContext';
-import { ethers } from 'ethers';
+import { useAccount, useBalance } from 'wagmi';
 
 /*
   ~ What it does? ~
 
-  Gets your ETH balance
+  Gets your ETH balance formatted in ether units
 
   ~ How can I use? ~
 
   const {balance, refetch, loading} = useEtherBalance();
 */
 
+type RefetchEthBalance = (options: {
+  throwOnError: boolean;
+  cancelRefetch: boolean;
+}) => Promise<{
+  decimals: number;
+  formatted: string;
+  symbol: string;
+  value: bigint;
+}>;
+
 interface EtherBalanceState {
   balance: number;
   loading: boolean;
-  refetch: () => void;
+  refetch: RefetchEthBalance;
 }
 
 export default function useEtherBalance(): EtherBalanceState {
-  const { address, userProvider } = useContext(NetworkContext);
-  const [balance, setBalance] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchEtherBalance = useCallback(async () => {
-    if (!address?.length || !userProvider) return;
-    try {
-      setLoading(true);
-      const rawBalance = await userProvider.getBalance(address);
-      setBalance(Number(ethers.utils.formatEther(rawBalance)));
-    } catch (err) {
-    } finally {
-      setLoading(false);
-    }
-  }, [address, userProvider]);
-
-  useEffect(() => {
-    fetchEtherBalance();
-  }, [fetchEtherBalance]);
+  const { address, isConnected } = useAccount();
+  const { data, isLoading, isFetched, refetch } = useBalance({
+    address,
+    watch: true,
+    cacheTime: 10_000,
+    formatUnits: 'ether',
+    enabled: isConnected,
+  });
 
   return {
-    balance,
-    refetch: fetchEtherBalance,
-    loading,
+    balance: isFetched ? Number(data?.formatted) : 0,
+    loading: isLoading,
+    refetch: refetch as unknown as RefetchEthBalance,
   };
 }
