@@ -1,14 +1,13 @@
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { CardMedia, SxProps } from '@mui/material';
-import NetworkContext from '@/contexts/NetworkContext';
 import { DEGEN_BASE_IMAGE_URL } from '@/constants/url';
+import { TARGET_NETWORK } from '@/constants/networks';
 import { LEGGIES } from '@/constants/degens';
 const IMAGE_HEIGHT = 320;
 
 const DegenImage = memo(
   ({ tokenId, sx }: { tokenId: string | number; sx?: SxProps<{}> }) => {
-    const { targetNetwork } = useContext(NetworkContext);
-    const imageURL = `${DEGEN_BASE_IMAGE_URL}/${targetNetwork.name}/images/${tokenId}`;
+    const imageURL = `${DEGEN_BASE_IMAGE_URL}/${TARGET_NETWORK.name}/images/${tokenId}`;
     // @ts-ignore
     const imageHeight = sx?.height ?? IMAGE_HEIGHT;
     let setting: any = {

@@ -1,8 +1,8 @@
 'use client';
 
-import { useContext, useMemo, createContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
-import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import { useAccount } from 'wagmi';
 import merge from 'lodash/merge';
 
 import { useGamerProfile, useProfileAvatarFee } from '@/hooks/useGamerProfile';
@@ -35,7 +35,7 @@ const defaultValue: {
 
 const GamerProfile = (): JSX.Element => {
   const { profile, error, loadingProfile } = useGamerProfile();
-  const { address } = useWeb3ModalAccount();
+  const { address } = useAccount();
   const { avatarsAndFee } = useProfileAvatarFee();
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const { data } = useFetch<Degen[]>(

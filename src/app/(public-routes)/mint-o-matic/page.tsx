@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import { Button, Stack, Typography } from '@mui/material';
 import BalanceContext from '@/contexts/BalanceContext';
 import useAuth from '@/hooks/useAuth';
@@ -20,22 +19,12 @@ const MintPage = () => {
   const [isLoaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
   const { isDegenOwner } = useContext(BalanceContext);
-  const { isLoggedIn, signMsg } = useAuth();
-  const modal = useWeb3Modal();
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected, isLoggedIn, handleConnectWallet } = useAuth();
 
   const searchParams = useSearchParams();
   const { nifty_artists: isForNiftyArtists } = Object.fromEntries(
     searchParams.entries(),
   );
-
-  const handleConnectWallet = useCallback(() => {
-    if (!isConnected) {
-      modal.open();
-      return;
-    }
-    signMsg();
-  }, [isConnected, modal, signMsg]);
 
   if (!isForNiftyArtists) {
     if (!isLoggedIn) {
@@ -55,7 +44,7 @@ const MintPage = () => {
             onClick={handleConnectWallet}
             sx={{ mt: 4 }}
           >
-            Connect Wallet
+            {isConnected ? 'Log In' : 'Connect Wallet'}
           </Button>
         </Stack>
       );

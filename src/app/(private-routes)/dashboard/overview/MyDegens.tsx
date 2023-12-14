@@ -24,7 +24,7 @@ import useFetch from '@/hooks/useFetch';
 import { useProfileFavDegens } from '@/hooks/useGamerProfile';
 import useAuth from '@/hooks/useAuth';
 import { Degen } from '@/types/degens';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import useLocalStorageContext from '@/hooks/useLocalStorageContext';
 
 const DegenCard = dynamic(
   () =>
@@ -59,13 +59,13 @@ const MyDegens = (): JSX.Element => {
   const [isRentDialog, setIsRentDialog] = useState<boolean>(false);
   const router = useRouter();
   const { favs: favsData } = useProfileFavDegens();
-  const [favs, setFavs] = useLocalStorage<string[]>('FAV_DEGENS', []);
+  const { favDegens, setFavDegens } = useLocalStorageContext();
 
   useEffect(() => {
     if (favsData && favsData !== 'null') {
-      setFavs(favsData.split(','));
+      setFavDegens(favsData.split(','));
     }
-  }, [favsData, setFavs]);
+  }, [favsData, setFavDegens]);
 
   const { loading, characters } = useContext(BalanceContext);
 
@@ -142,10 +142,7 @@ const MyDegens = (): JSX.Element => {
 
   const handleClickFavorite = useCallback(
     async (degen) => {
-      const newFavs = xor(
-        favs.filter((f) => f),
-        [degen.id],
-      );
+      const newFavs = xor(favDegens?.filter((f) => f), [degen.id]);
       await fetch(`${PROFILE_FAV_DEGENS_API}`, {
         method: 'POST',
         body: JSON.stringify({
@@ -155,9 +152,9 @@ const MyDegens = (): JSX.Element => {
           authorizationToken: authToken,
         } as any,
       });
-      setFavs(newFavs);
+      setFavDegens(newFavs);
     },
-    [authToken, favs, setFavs],
+    [authToken, favDegens, setFavDegens],
   );
 
   return (
@@ -187,7 +184,7 @@ const MyDegens = (): JSX.Element => {
             <Box sx={BoxDegenStyles} key={degen.id}>
               <DegenCard
                 degen={degen}
-                favs={favs}
+                favs={favDegens}
                 isDashboardDegen
                 onClickDetail={() => handleViewTraits(degen)}
                 onClickEditName={() => handleClickEditName(degen)}

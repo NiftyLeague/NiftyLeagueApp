@@ -42,12 +42,12 @@ export default function useComicsBalance(refreshKey = 0): {
       );
       setLoading(false);
     }
-    if (!address?.length) {
+    if (!address) {
       setLoading(false);
       setComicsBal([]);
     }
 
-    if (address?.length && readContracts && readContracts[COMICS_CONTRACT]) {
+    if (address && readContracts && readContracts[COMICS_CONTRACT]) {
       // eslint-disable-next-line no-void
       void checkUserComics();
     }

@@ -38,7 +38,7 @@ const DashboardComicsPage = (): JSX.Element => {
   const { comicsBalance, loading: loadingComics } = useComicsBalance();
   const router = useRouter();
   const imx = useContext(IMXContext);
-  const { selectedChainId } = useContext(NetworkContext);
+  const { selectedNetworkId } = useContext(NetworkContext);
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -237,7 +237,7 @@ const DashboardComicsPage = (): JSX.Element => {
                   {imx.itemsBalance.length > 0 && (
                     <Grid item>
                       <Link
-                        href={ITEM_PURCHASE_URL[selectedChainId as number]}
+                        href={ITEM_PURCHASE_URL[selectedNetworkId as number]}
                         target="_blank"
                         rel="noreferrer"
                       >

@@ -4,7 +4,8 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import type { Metadata } from 'next';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   Grid,
   IconButton,
@@ -32,7 +33,6 @@ import usePagination from '@/hooks/usePagination';
 import { DegenFilter } from '@/types/degenFilter';
 import { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
-import { v4 as uuidv4 } from 'uuid';
 import DegenDialog from '@/components/dialog/DegenDialog';
 import BalanceContext from '@/contexts/BalanceContext';
 import DegensTopNav from '@/components/extended/DegensTopNav';

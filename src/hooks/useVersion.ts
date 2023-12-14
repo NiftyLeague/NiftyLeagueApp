@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
-import NetworkContext from '@/contexts/NetworkContext';
+import { useState, useEffect } from 'react';
 import { isWindows, isMacOs } from 'react-device-detect';
 import { DEGEN_BASE_API_URL } from '@/constants/url';
+import { TARGET_NETWORK } from '@/constants/networks';
 
 const useVersion = () => {
-  const { targetNetwork } = useContext(NetworkContext);
   const [version, setVersion] = useState('');
-  const env = targetNetwork.chainId === 1 ? 'prod' : 'stage';
+  const env = TARGET_NETWORK.chainId === 1 ? 'prod' : 'stage';
   const isLinux = window?.navigator?.userAgent?.indexOf('Linux') >= 0;
   let os = isWindows && 'win';
   let message = isWindows && 'Download for Windows';

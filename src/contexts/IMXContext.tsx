@@ -10,6 +10,7 @@ import {
 } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Link, ImmutableXClient, ImmutableMethodResults } from '@imtbl/imx-sdk';
+
 import NetworkContext from '@/contexts/NetworkContext';
 import { IMX_NL_ITEMS } from '@/constants/contracts';
 import useItemsBalance from '@/hooks/useItemsBalance';
@@ -48,7 +49,7 @@ export const IMXProvider = ({
 }: {
   children: React.ReactNode | React.ReactNode[];
 }): JSX.Element => {
-  const { address, selectedChainId } = useContext(NetworkContext);
+  const { address, selectedNetworkId } = useContext(NetworkContext);
   // initialise Immutable X Link SDK
   const link = useMemo(
     () => new Link(process.env.NEXT_PUBLIC_SANDBOX_LINK_URL),
@@ -71,11 +72,11 @@ export const IMXProvider = ({
     async (user) => {
       setWallet(user);
       setBalance(await client.getBalance({ user, tokenAddress: 'eth' }));
-      if (selectedChainId)
+      if (selectedNetworkId)
         setInventory(
           await client.getAssets({
             user,
-            collection: IMX_NL_ITEMS[selectedChainId],
+            collection: IMX_NL_ITEMS[selectedNetworkId],
             page_size: 200,
           }),
         );
@@ -87,7 +88,7 @@ export const IMXProvider = ({
         setRegisteredUser(false);
       }
     },
-    [client, selectedChainId],
+    [client, selectedNetworkId],
   );
 
   useEffect(() => {
@@ -101,7 +102,7 @@ export const IMXProvider = ({
   }
 
   useEffect(() => {
-    if (address?.length && !isEmpty(client)) {
+    if (address && !isEmpty(client)) {
       updateUser(address);
     }
   }, [address, client, updateUser, imxRefreshKey]);

@@ -1,25 +1,18 @@
-import { useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import { Button, Typography, Container } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
 
 const ProfileVerification = (): JSX.Element => {
-  const modal = useWeb3Modal();
-  const { isConnected } = useWeb3ModalAccount();
-  const { signMsg } = useAuth();
-
-  const handleConnectWallet = () => {
-    if (!isConnected) {
-      modal.open();
-      return;
-    }
-    signMsg();
-  };
+  const { isConnected, handleConnectWallet } = useAuth();
 
   return (
     <Container style={{ textAlign: 'center', padding: '40px' }}>
-      <Typography mb={2}>Please connect your wallet</Typography>
+      <Typography mb={2}>
+        {isConnected
+          ? 'Please sign message to log in'
+          : 'Please connect your wallet'}
+      </Typography>
       <Button variant="contained" onClick={handleConnectWallet}>
-        Connect Wallet
+        {isConnected ? 'Log In' : 'Connect Wallet'}
       </Button>
     </Container>
   );

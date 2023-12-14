@@ -20,7 +20,7 @@ import HoverDataCard from '@/components/cards/HoverDataCard';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/dialog';
 import NetworkContext from '@/contexts/NetworkContext';
 import useArcadeBalance from '@/hooks/useArcadeBalance';
-import useAccount from '@/hooks/useAccount';
+import useGameAccount from '@/hooks/useGameAccount';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from '@/constants/contracts';
 import { DEBUG } from '@/constants/index';
@@ -48,7 +48,7 @@ const MyNFTL = (): JSX.Element => {
   const [refreshTimeout, setRefreshTimeout] = useState(0);
   const [refreshAccKey, setRefreshAccKey] = useState(0);
   const [openBuyAT, setOpenBuyAT] = useState(false);
-  const { account, error: accError } = useAccount(refreshAccKey);
+  const { account, error: accError } = useGameAccount(refreshAccKey);
   const { userNFTLBalance, refreshNFTLBalance } = useContext(BalanceContext);
 
   const [mockAccrued, setMockAccrued] = useState(0);

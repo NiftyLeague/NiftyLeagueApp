@@ -17,7 +17,7 @@ import { submitTxWithGasEstimate } from '@/utils/Notifier';
 import { NotifyCallback } from '@/types/notify';
 import NetworkContext from '@/contexts/NetworkContext';
 import { DEGEN_CONTRACT } from '@/constants/contracts';
-import { NETWORK_NAME } from '@/constants/networks';
+import { NETWORK_NAME, TARGET_NETWORK } from '@/constants/networks';
 import { DEBUG } from '@/constants/index';
 import { getMintableTraits, TraitArray } from './helpers';
 
@@ -131,7 +131,6 @@ const CharacterCreator = memo(
     setProgress,
     unityContext,
   }: CharacterCreatorProps) => {
-    const { targetNetwork } = useContext(NetworkContext);
     const removedTraitsCallback = useRef<
       null | ((removedTraits: string) => void)
     >();
@@ -182,11 +181,11 @@ const CharacterCreator = memo(
 
     const getConfiguration = useCallback(
       (e: CustomEvent<{ callback: (network: string) => void }>) => {
-        const networkName = NETWORK_NAME[targetNetwork.chainId];
+        const networkName = NETWORK_NAME[TARGET_NETWORK.chainId];
         const version = process.env.NEXT_PUBLIC_SUBGRAPH_VERSION ?? '';
         setTimeout(() => e.detail.callback(`${networkName},${version}`), 1000);
       },
-      [targetNetwork.chainId],
+      [],
     );
 
     const toggleIsMinting = useCallback((e: CustomEvent<boolean>) => {

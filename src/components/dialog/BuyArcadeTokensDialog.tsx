@@ -34,7 +34,7 @@ import {
   NFTL_PURCHASE_URL,
   PURCHASE_ARCADE_TOKEN_BALANCE_API,
 } from '@/constants/url';
-import useAccount from '@/hooks/useAccount';
+import useGameAccount from '@/hooks/useGameAccount';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import useAuth from '@/hooks/useAuth';
 
@@ -60,7 +60,7 @@ const BuyArcadeTokensDialog: FC<BuyArcadeTokensDialogProps> = ({
   const { authToken } = useAuth();
 
   const [refreshAccKey, setRefreshAccKey] = useState(0);
-  const { account } = useAccount(refreshAccKey);
+  const { account } = useGameAccount(refreshAccKey);
   const accountBalance = account?.balance ?? 0;
 
   const fetchArcadeTokenDetails = useCallback(async () => {

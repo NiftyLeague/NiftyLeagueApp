@@ -1,96 +1,43 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Container from '@mui/material/Container';
-
-import NetworkContext from '@/contexts/NetworkContext';
-import { getProviderAndSigner } from '@/utils/ethers';
-import { WALLET_VERIFICATION } from '@/constants/url';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import useSignAuthMsg from '@/hooks/useSignAuthMsg';
+import useAuth from '@/hooks/useAuth';
+import { UUID_Token, Nonce } from '@/types/auth';
 
 const GameVerification = (): JSX.Element => {
-  const { address, userProvider } = useContext(NetworkContext);
-  const [msgSent, setMsgSent] = useState(false);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
-  const [authToken, setAuthToken] = useLocalStorage<string>(
-    'authentication-token',
-    '',
-  );
-  const [uuidToken, setUUIDToken] = useLocalStorage<string>('uuid-token', '');
-  const [nonce, setNonce] = useLocalStorage<string>(
-    'nonce',
-    searchParams.get('nonce') || '',
-  );
+  const token = searchParams.get('token') as UUID_Token | undefined;
+  const nonce = searchParams.get('nonce') as Nonce | undefined;
+  const { signMessage, isError, isSuccess } = useSignAuthMsg({ token, nonce });
+  const { isConnected, handleConnectWallet } = useAuth();
+  const [msgSent, setMsgSent] = useState(false);
 
   useEffect(() => {
     const signMsg = async () => {
-      if (address?.length && userProvider && nonce && token) {
-        const { signer } = getProviderAndSigner(userProvider);
-        if (signer) {
-          const addressToLower = address.toLowerCase();
-          const signAddress = `${addressToLower.substr(
-            0,
-            6,
-          )}...${addressToLower.substr(-4)}`;
-          const verification = await signer.signMessage(
-            `Please sign this message to verify that ${signAddress} belongs to you. ${
-              nonce || ''
-            }`,
-          );
-          setMsgSent(true);
-          const result = await fetch(WALLET_VERIFICATION, {
-            method: 'POST',
-            body: JSON.stringify({
-              token,
-              nonce,
-              verification,
-              address: addressToLower,
-            }),
-          })
-            .then((res) => {
-              if (res.status === 404) setError(true);
-              return res.text();
-            })
-            .catch(() => {
-              setError(true);
-            });
-          if (result && result.length) {
-            setSuccess(true);
-            setAuthToken(result.slice(1, -1));
-            setUUIDToken(token);
-            setNonce(nonce);
-          }
-        }
+      if (!isConnected) handleConnectWallet();
+      if (isConnected && nonce && token) {
+        signMessage();
+        setMsgSent(true);
       }
     };
     // eslint-disable-next-line no-void
     if (!msgSent) void signMsg();
-  }, [
-    address,
-    msgSent,
-    nonce,
-    setAuthToken,
-    setNonce,
-    setUUIDToken,
-    token,
-    userProvider,
-  ]);
+  }, [handleConnectWallet, isConnected, msgSent, nonce, signMessage, token]);
 
   return (
     <Container style={{ textAlign: 'center', padding: '40px' }}>
-      {error || success ? (
+      {isError || isSuccess ? (
         <>
-          {error && 'Error signing message'}
-          {success &&
+          {isError && 'Error signing message'}
+          {isSuccess &&
             'Successfully verified account! Please return to the Nifty League desktop app'}
         </>
       ) : (
         <>
-          {address
+          {isConnected
             ? 'Please sign message to verify address ownership'
             : 'Please connect your wallet'}
         </>
