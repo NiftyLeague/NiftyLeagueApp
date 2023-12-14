@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAccount } from 'wagmi';
 import {
   Button,
   Checkbox,
@@ -15,7 +16,7 @@ import {
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
-import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+
 import useClaimCallback from '@/hooks/comics/useClaimCallback';
 import useUserUnclaimedAmount, {
   ClaimResult,
@@ -183,7 +184,7 @@ function ClaimDialog({
 }
 
 export default function ComicsClaim(): JSX.Element | null {
-  const { address, isConnected } = useWeb3ModalAccount();
+  const { address, isConnected } = useAccount();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [availableComics, setAvailableComics] = useState({ p5: 0, p6: 0 });

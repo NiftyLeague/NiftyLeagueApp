@@ -52,22 +52,22 @@ function fetchClaim(
 // parse distributorContract blob and detect if user has claim data
 // null means we know it does not
 export default function useUserClaimData(): UserClaimData | null | undefined {
-  const { selectedChainId, address: account } = useContext(NetworkContext);
-  const key = `${selectedChainId as number}:${account}`;
+  const { address: account, selectedNetworkId } = useContext(NetworkContext);
+  const key = `${selectedNetworkId}:${account}`;
   const [claimInfo, setClaimInfo] = useState<{
     [key: string]: UserClaimData | null;
   }>({});
 
   useEffect(() => {
-    if (!account || !selectedChainId) return;
-    void fetchClaim(account, selectedChainId).then(
+    if (!account || !selectedNetworkId) return;
+    void fetchClaim(account, selectedNetworkId).then(
       (accountClaimInfo: UserClaimData) =>
         setClaimInfo((prevClaimInfo) => ({
           ...prevClaimInfo,
           [key]: accountClaimInfo,
         })),
     );
-  }, [account, selectedChainId, key]);
+  }, [account, selectedNetworkId, key]);
 
-  return account && selectedChainId ? claimInfo[key] : undefined;
+  return account && selectedNetworkId ? claimInfo[key] : undefined;
 }

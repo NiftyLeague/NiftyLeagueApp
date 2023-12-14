@@ -1,14 +1,15 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { isOpera, browserName } from 'react-device-detect';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { Box, Button, Stack } from '@mui/material';
-import NetworkContext from '@/contexts/NetworkContext';
+import { useAccount } from 'wagmi';
+
 import useArcadeBalance from '@/hooks/useArcadeBalance';
 // import useFetch from '@/hooks/useFetch';
-import { NETWORK_NAME } from '@/constants/networks';
+import { NETWORK_NAME, TARGET_NETWORK } from '@/constants/networks';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import { getGameViewedAnalyticsEventName } from '@/constants/games';
 // import { ALL_RENTAL_API_URL } from '@/constants/url';
@@ -29,7 +30,7 @@ interface GameProps {
 const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
   const { authToken } = useAuth();
   const pathname = usePathname();
-  const { address, targetNetwork } = useContext(NetworkContext);
+  const { address } = useAccount();
   const {
     arcadeBalance,
     loading: arcadeLoading,
@@ -72,7 +73,7 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
 
   const getConfiguration = useCallback(
     (e: CustomEvent<{ callback: (network: string) => void }>) => {
-      const networkName = NETWORK_NAME[targetNetwork.chainId];
+      const networkName = NETWORK_NAME[TARGET_NETWORK.chainId];
       const version = process.env.NEXT_PUBLIC_SUBGRAPH_VERSION;
       // eslint-disable-next-line no-console
       if (DEBUG) console.log(`${networkName},${version ?? ''}`);
@@ -81,7 +82,7 @@ const Game = ({ unityContext, arcadeTokenRequired = false }: GameProps) => {
         1000,
       );
     },
-    [targetNetwork.chainId],
+    [],
   );
 
   const onMouse = useCallback(() => {

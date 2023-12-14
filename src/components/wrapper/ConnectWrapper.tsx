@@ -1,6 +1,4 @@
-import { useCallback } from 'react';
 import { Button } from '@mui/material';
-import { useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import useAuth from '@/hooks/useAuth';
 
 export interface ConnectWrapperProps {
@@ -21,23 +19,15 @@ export interface ConnectWrapperProps {
 
 const ConnectWrapper = (props: ConnectWrapperProps) => {
   const { children, buttonText, ...otherProps } = props;
-  const modal = useWeb3Modal();
-  const { isConnected } = useWeb3ModalAccount();
-  const { isLoggedIn, signMsg } = useAuth();
-
-  const handleConnectWallet = useCallback(() => {
-    if (!isConnected) {
-      modal.open();
-      return;
-    }
-    signMsg();
-  }, [isConnected, signMsg, modal]);
+  const { isConnected, isLoggedIn, handleConnectWallet } = useAuth();
 
   return isLoggedIn ? (
     children
   ) : (
     <Button variant="contained" {...otherProps} onClick={handleConnectWallet}>
-      {buttonText || 'Connect Wallet'}
+      {isConnected
+        ? buttonText?.replace('Connect Wallet', 'Sign In') || 'Sign In'
+        : buttonText || 'Connect Wallet'}
     </Button>
   );
 };

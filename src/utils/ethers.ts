@@ -96,13 +96,12 @@ export const getProviderOrSigner = (
 export const getContract = (
   address: string,
   ABI: ContractInterface,
-  provider: Provider,
-  account?: string,
+  signer: Signer,
 ): Contract => {
   if (!isAddress(address) || address === constants.AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
-  return new Contract(address, ABI, getProviderOrSigner(provider, account));
+  return new Contract(address, ABI, signer);
 };
 
 export const getProviderAndSigner = (

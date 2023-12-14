@@ -4,6 +4,7 @@ import { createContext, ReactNode } from 'react';
 
 // project import
 import defaultConfig from '@/config';
+import { ConfigProps } from '@/types/config';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 // types
@@ -32,7 +33,7 @@ type ThemeConfigProviderProps = {
 };
 
 function ThemeConfigProvider({ children }: ThemeConfigProviderProps) {
-  const [config, setConfig] = useLocalStorage('berry-config', {
+  const [config, setConfig] = useLocalStorage<ConfigProps>('berry-config', {
     // fontFamily: initialState.fontFamily,
     borderRadius: initialState.borderRadius,
     outlinedFilled: initialState.outlinedFilled,
@@ -44,65 +45,41 @@ function ThemeConfigProvider({ children }: ThemeConfigProviderProps) {
   });
 
   const onChangeMenuType = (navType: PaletteMode) => {
-    setConfig({
-      ...config,
-      navType,
-    });
+    setConfig({ ...(config as ConfigProps), navType });
   };
 
   const onChangePresetColor = (presetColor: string) => {
-    setConfig({
-      ...config,
-      presetColor,
-    });
+    setConfig({ ...(config as ConfigProps), presetColor });
   };
 
   const onChangeLocale = (locale: string) => {
-    setConfig({
-      ...config,
-      locale,
-    });
+    setConfig({ ...(config as ConfigProps), locale });
   };
 
   const onChangeRTL = (rtlLayout: boolean) => {
-    setConfig({
-      ...config,
-      rtlLayout,
-    });
+    setConfig({ ...(config as ConfigProps), rtlLayout });
   };
 
   const onChangeContainer = () => {
-    setConfig({
-      ...config,
-      container: !config.container,
-    });
+    setConfig({ ...(config as ConfigProps), container: !config?.container });
   };
 
   // const onChangeFontFamily = (fontFamily: string) => {
-  //   setConfig({
-  //     ...config,
-  //     fontFamily,
-  //   });
+  //   setConfig({ ...config as ConfigProps, fontFamily });
   // };
 
   const onChangeBorderRadius = (event: Event, newValue: number | number[]) => {
-    setConfig({
-      ...config,
-      borderRadius: newValue as number,
-    });
+    setConfig({ ...(config as ConfigProps), borderRadius: newValue as number });
   };
 
   const onChangeOutlinedField = (outlinedFilled: boolean) => {
-    setConfig({
-      ...config,
-      outlinedFilled,
-    });
+    setConfig({ ...(config as ConfigProps), outlinedFilled });
   };
 
   return (
     <ThemeConfigContext.Provider
       value={{
-        ...config,
+        ...(config as ConfigProps),
         onChangeMenuType,
         onChangePresetColor,
         onChangeLocale,

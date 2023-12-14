@@ -7,17 +7,17 @@ import useUserClaimData from './useUserClaimData';
 export default function useClaimCallback(): {
   claimCallback: () => Promise<void>;
 } {
-  const { selectedChainId, address: account, tx } = useContext(NetworkContext);
+  const { address, tx, selectedNetworkId } = useContext(NetworkContext);
   // get claim data for this account
   const claimData = useUserClaimData();
   const distributorContract = useMerkleDistributorContract();
 
   const claimCallback = async () => {
-    if (!claimData || !account || !selectedChainId || !distributorContract)
+    if (!claimData || !address || !selectedNetworkId || !distributorContract)
       return;
     const args = [
       claimData.index,
-      account,
+      address,
       claimData.amount0,
       claimData.amount1,
       claimData.proof,

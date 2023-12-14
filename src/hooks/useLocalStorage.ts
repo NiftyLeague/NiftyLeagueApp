@@ -1,6 +1,12 @@
 'use client';
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -15,8 +21,8 @@ function safeJSONParse(input: any) {
 export default function useLocalStorage<T>(
   key: string,
   initialValue: T,
-): [T, Dispatch<SetStateAction<T>>] {
-  const [storedValue, setStoredValue] = useState(initialValue);
+): [T | undefined, Dispatch<SetStateAction<T | undefined>>, () => void] {
+  const [storedValue, setStoredValue] = useState<T | undefined>(initialValue);
   // We will use this flag to trigger the reading from localStorage
   const [firstLoadDone, setFirstLoadDone] = useState(false);
 
@@ -54,7 +60,7 @@ export default function useLocalStorage<T>(
     }
 
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && storedValue) {
         window.localStorage.setItem(key, JSON.stringify(storedValue));
       }
     } catch (error) {
@@ -62,6 +68,13 @@ export default function useLocalStorage<T>(
     }
   }, [storedValue, firstLoadDone, key]);
 
+  const clearStoredValue = useCallback(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(key);
+      setStoredValue(undefined);
+    }
+  }, [key]);
+
   // Return the original useState functions
-  return [storedValue, setStoredValue];
+  return [storedValue, setStoredValue, clearStoredValue];
 }

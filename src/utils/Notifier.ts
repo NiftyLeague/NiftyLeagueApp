@@ -18,7 +18,7 @@ import { GasStationResponse, Network, Provider } from '@/types/web3';
 import { NotifyCallback, NotifyError, Tx } from '@/types/notify';
 import { calculateGasMargin, getProviderAndSigner } from '@/utils/ethers';
 import { DEBUG } from '@/constants/index';
-import { VALID_NOTIFY_NETWORKS } from '@/constants/networks';
+import { VALID_NOTIFY_NETWORKS, TARGET_NETWORK } from '@/constants/networks';
 
 // Wrapper around BlockNative's wonderful Notify.js
 // https://docs.blocknative.com/notify
@@ -92,7 +92,6 @@ const unknownTarget = {
 
 export default function Notifier(
   providerOrSigner?: Provider | Signer,
-  targetNetwork: Network = unknownTarget,
   darkMode = false,
 ): Tx {
   return useCallback(
@@ -131,7 +130,7 @@ export default function Notifier(
           notify = Notify(options);
         }
 
-        // TODO: Should replace this with targetNetwork.blockExplorer
+        // TODO: Should replace this with TARGET_NETWORK.blockExplorer
         let etherscanNetwork = '';
         if (network.name && network.chainId > 1)
           etherscanNetwork = `${network.name}.`;
@@ -146,7 +145,7 @@ export default function Notifier(
             const safeTx = { ...tx };
             // TODO: Replace gasPrice with EIP-1559 specifications if non-promise txs are needed
             if (!tx.gasPrice)
-              safeTx.gasPrice = await loadGasPrice(targetNetwork);
+              safeTx.gasPrice = await loadGasPrice(TARGET_NETWORK);
             if (!tx.gasLimit) safeTx.gasLimit = utils.hexlify(120000);
             if (DEBUG) console.log('RUNNING TX', safeTx);
             result = await (signer as Signer).sendTransaction(safeTx);
@@ -165,7 +164,7 @@ export default function Notifier(
             }));
           } else {
             const networkName =
-              network.name === 'unknown' ? targetNetwork.label : network.name;
+              network.name === 'unknown' ? TARGET_NETWORK.label : network.name;
             toast.info(
               ({ data }) => `${networkName} Transaction Sent: ${data}`,
               {
@@ -216,6 +215,6 @@ export default function Notifier(
         return null;
       }
     },
-    [providerOrSigner, targetNetwork, darkMode],
+    [providerOrSigner, darkMode],
   );
 }

@@ -11,10 +11,6 @@ export type UserProvider = providers.Web3Provider;
 
 export type Provider = LocalProvider | UserProvider | providers.Provider;
 
-export interface Web3ModalProvider extends providers.ExternalProvider {
-  on: (type: string, callback: (value: string | number) => void) => void;
-}
-
 export interface Ethereumish {
   autoRefreshOnNetworkChange?: boolean;
   chainId?: string;
@@ -40,12 +36,11 @@ export interface Contracts {
   [contractName: string]: ethers.Contract;
 }
 
-export type NetworkName = 'localhost' | 'mainnet' | 'goerli';
+export type NetworkName = 'mainnet' | 'goerli' | 'hardhat';
 
 export interface Network {
   blockExplorer: string;
   chainId: number;
-  faucet?: string;
   gasPrice?: BigNumber;
   label: string;
   name?: NetworkName;

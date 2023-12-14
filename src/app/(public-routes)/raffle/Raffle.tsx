@@ -23,7 +23,7 @@ function useDepositBalance(refreshKey = 0): number {
     undefined,
     undefined,
     refreshKey,
-    !address?.length,
+    !address,
   ) as BigNumber;
   useEffect(() => {
     if (result && result !== balance) setBalance(result);

@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useContext, useEffect, useState } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -10,7 +11,7 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+
 import { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
 import { BigNumber, BigNumberish, utils } from 'ethers';
@@ -21,6 +22,7 @@ import { DEGEN_BASE_IMAGE_URL } from '@/constants/url';
 import { DEBUG } from '@/constants/index';
 import RenameStepper from './RenameStepper';
 import BalanceContext from '@/contexts/BalanceContext';
+import { TARGET_NETWORK } from '@/constants/networks';
 
 interface Props {
   degen?: Degen;
@@ -28,8 +30,7 @@ interface Props {
 }
 
 const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
-  const { address, tx, writeContracts, targetNetwork } =
-    useContext(NetworkContext);
+  const { address, tx, writeContracts } = useContext(NetworkContext);
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -127,7 +128,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
             <CardMedia
               component="img"
               image={`${DEGEN_BASE_IMAGE_URL}/${
-                targetNetwork.name
+                TARGET_NETWORK.name
               }/images/${degen?.id}.${
                 degen?.background === 'Legendary' ? 'mp4' : 'png'
               }`}

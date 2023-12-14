@@ -1,5 +1,7 @@
 'use client';
 
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useEnsAvatar, useEnsName } from 'wagmi';
 import {
   Avatar,
   Box,
@@ -9,18 +11,17 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import NetworkContext from '@/contexts/NetworkContext';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { NFTL_CONTRACT } from '@/constants/contracts';
-import { sendUserId } from '@/utils/google-analytics';
-import { formatNumberToDisplay } from '@/utils/numbers';
-import { DEBUG } from '@/constants/index';
 
-import { useGamerProfile } from '@/hooks/useGamerProfile';
+import { DEBUG } from '@/constants/index';
+import { formatNumberToDisplay } from '@/utils/numbers';
+import { NFTL_CONTRACT } from '@/constants/contracts';
 import { ProfileAvatar } from '@/types/account';
-import useAuth from '@/hooks/useAuth';
-import ConnectWrapper from '@/components/wrapper/ConnectWrapper';
+import { sendUserId } from '@/utils/google-analytics';
+import { useGamerProfile } from '@/hooks/useGamerProfile';
 import BalanceContext from '@/contexts/BalanceContext';
+import ConnectWrapper from '@/components/wrapper/ConnectWrapper';
+import NetworkContext from '@/contexts/NetworkContext';
+import useAuth from '@/hooks/useAuth';
 
 const ClaimNFTLView = () => {
   const { writeContracts, tx } = useContext(NetworkContext);
@@ -69,7 +70,9 @@ const ClaimNFTLView = () => {
 const UserProfile = () => {
   const { palette } = useTheme();
   const { address } = useContext(NetworkContext);
-  const [username, setUserName] = useState<string | undefined>('');
+  const ensName = useEnsName({ address, chainId: 1 });
+  const ensAvatar = useEnsAvatar({ name: ensName.data, chainId: 1 });
+  const [username, setUserName] = useState<string | undefined>();
   const [avatar, setAvatar] = useState<ProfileAvatar | undefined>(undefined);
   const { fetchUserProfile } = useGamerProfile();
   const { isLoggedIn } = useAuth();
@@ -90,6 +93,17 @@ const UserProfile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
+  const displayName = useMemo(() => {
+    if (username?.length) return username;
+    if (!address) return 'Login to view dashboards';
+    const addressSubstring = `${address?.slice(0, 5)}...${address?.slice(
+      address.length - 5,
+      address.length - 1,
+    )}`;
+    if (ensName.isError || ensName.isLoading) return addressSubstring;
+    return ensName.data || addressSubstring;
+  }, [ensName, username, address]);
+
   return (
     <Box
       display="flex"
@@ -100,16 +114,13 @@ const UserProfile = () => {
       p={4}
       sx={{ border: `1px solid ${palette.grey[800]}` }}
     >
-      <Avatar alt="avatar" src={avatar?.url} sx={{ height: 80, width: 80 }} />
+      <Avatar
+        alt="avatar"
+        src={ensAvatar.data || avatar?.url}
+        sx={{ height: 80, width: 80 }}
+      />
       <Stack direction="column" alignItems="center" marginY={2}>
-        <Typography>
-          {username || address?.length
-            ? `${address?.slice(0, 5)}...${address?.slice(
-                address.length - 5,
-                address.length - 1,
-              )}`
-            : 'Login to view dashboards'}
-        </Typography>
+        <Typography>{displayName}</Typography>
       </Stack>
       <ConnectWrapper fullWidth>
         <ClaimNFTLView />
