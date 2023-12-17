@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import groupBy from 'lodash/groupBy';
 import { ITEMS } from '@/constants/comics';
 import { ImmutableMethodResults } from '@imtbl/imx-sdk';
-import { Item } from '@/types/comic';
+import type { Item } from '@/types/comic';
 
 /*
   ~ What it does? ~

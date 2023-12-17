@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { formatEther } from 'ethers';
-import { Contracts } from '@/types/web3';
+import type { Contracts } from '@/types/web3';
 import useContractReader from './useContractReader';
 import { NFTL_CONTRACT } from '@/constants/contracts';
 

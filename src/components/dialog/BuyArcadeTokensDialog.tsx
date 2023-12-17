@@ -21,7 +21,7 @@ import {
   Alert,
   InputAdornment,
 } from '@mui/material';
-import { DialogProps } from '@/types/dialog';
+import type { DialogProps } from '@/types/dialog';
 import { sendEvent } from '@/utils/google-analytics';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';

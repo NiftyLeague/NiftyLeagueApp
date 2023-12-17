@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Contracts } from '@/types/web3';
+import type { Contracts } from '@/types/web3';
 import useContractReader from './useContractReader';
 import { DEGEN_CONTRACT } from '@/constants/contracts';
 import { REMOVED_TRAITS_INTERVAL } from '@/constants/index';

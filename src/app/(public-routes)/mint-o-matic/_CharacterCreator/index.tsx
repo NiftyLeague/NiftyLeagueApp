@@ -14,7 +14,7 @@ import { type BigNumberish } from 'ethers';
 
 import useRemovedTraits from '@/hooks/useRemovedTraits';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
-import { NotifyCallback } from '@/types/notify';
+import type { NotifyCallback } from '@/types/notify';
 import NetworkContext from '@/contexts/NetworkContext';
 import { DEGEN_CONTRACT } from '@/constants/contracts';
 import { NETWORK_NAME, TARGET_NETWORK } from '@/constants/networks';

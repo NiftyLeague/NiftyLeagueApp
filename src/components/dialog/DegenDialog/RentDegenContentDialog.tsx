@@ -28,7 +28,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';

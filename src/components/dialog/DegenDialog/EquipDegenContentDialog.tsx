@@ -19,7 +19,7 @@ import { openSnackbar } from '@/store/slices/snackbar';
 import { sendEvent } from '@/utils/google-analytics';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import { COMICS_OPENSEA_URL } from '@/constants/url';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import DegenImage from '@/components/cards/DegenCard/DegenImage';
 import EmptyState from '@/components/EmptyState';
 import {

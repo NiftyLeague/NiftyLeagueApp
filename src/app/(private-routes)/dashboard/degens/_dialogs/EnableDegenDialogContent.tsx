@@ -12,7 +12,7 @@ import {
   Button,
 } from '@mui/material';
 import { useState } from 'react';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { DISABLE_RENT_API_URL } from '@/constants/url';
 import { toast } from 'react-toastify';
 import DegenImage from '@/components/cards/DegenCard/DegenImage';

@@ -2,7 +2,7 @@
 
 import { Button, Stack, Typography } from '@mui/material';
 import { useCallback, useState, useContext, useEffect } from 'react';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
 import useClaimableNFTL from '@/hooks/useClaimableNFTL';
 import { NFTL_CONTRACT } from '@/constants/contracts';

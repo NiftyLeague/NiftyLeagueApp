@@ -4,18 +4,17 @@ import { toast } from 'react-toastify';
 import axios, { AxiosResponse } from 'axios';
 import Notify, { API, InitOptions } from 'bnc-notify';
 import { EthereumTransactionLog, EthereumTransactionData } from 'bnc-sdk';
-import {
-  parseUnits,
-  toBeHex,
-  type Contract,
-  type JsonRpcSigner,
-  type TransactionRequest,
-  type TransactionResponse,
+import { parseUnits, toBeHex } from 'ethers';
+import type {
+  Contract,
+  JsonRpcSigner,
+  TransactionRequest,
+  TransactionResponse,
 } from 'ethers';
 // import { setIntervalAsync, clearIntervalAsync } from 'set-interval-async/dynamic';
 import { serializeError } from 'eth-rpc-errors';
-import { GasStationResponse, Network, Provider } from '@/types/web3';
-import { NotifyCallback, NotifyError, Tx } from '@/types/notify';
+import type { GasStationResponse, Network, Provider } from '@/types/web3';
+import type { NotifyCallback, NotifyError, Tx } from '@/types/notify';
 import { calculateGasMargin, getProviderAndSigner } from '@/utils/ethers';
 import { DEBUG } from '@/constants/index';
 import {

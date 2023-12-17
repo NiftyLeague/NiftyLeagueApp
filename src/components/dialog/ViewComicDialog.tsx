@@ -6,7 +6,7 @@ import {
   DialogContent,
   useMediaQuery,
 } from '@mui/material';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 import { useTheme } from '@mui/material/styles';
 
 export interface ViewComicDialogProps {

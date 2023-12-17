@@ -20,7 +20,7 @@ import {
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useMemo } from 'react';
-import { Rentals, RentalType } from '@/types/rentals';
+import type { Rentals, RentalType } from '@/types/rentals';
 import { transformRentals } from '@/app/(private-routes)/dashboard/_utils/transformRentals';
 import usePlayerProfile from '@/hooks/usePlayerProfile';
 import Countdown from 'react-countdown';

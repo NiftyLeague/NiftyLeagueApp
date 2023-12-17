@@ -1,4 +1,4 @@
-import { EquipItemSlot } from '@/types/equip';
+import type { EquipItemSlot } from '@/types/equip';
 import Image from 'next/image';
 import { GOOGLE_ANALYTICS } from './google-analytics';
 

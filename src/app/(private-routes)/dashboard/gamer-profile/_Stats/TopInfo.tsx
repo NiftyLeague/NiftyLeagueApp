@@ -6,7 +6,7 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
 import GamerProfileContext from '@/contexts/GamerProfileContext';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
-import { Profile } from '@/types/account';
+import type { Profile } from '@/types/account';
 
 import ProgressGamer from './ProgressGamer';
 import ChangeProfileNameDialog from './ChangeProfileNameDialog';

@@ -13,8 +13,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Character, Owner } from '@/types/graph';
 import NetworkContext from './NetworkContext';
+import type { Character, Owner } from '@/types/graph';
 
 interface Context {
   isDegenOwner: boolean;

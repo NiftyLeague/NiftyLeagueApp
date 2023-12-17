@@ -1,4 +1,4 @@
-import { DegenFilter } from '@/types/degenFilter';
+import type { DegenFilter } from '@/types/degenFilter';
 
 const DEFAULT_STATIC_FILTER: DegenFilter = {
   prices: [100, 3500],

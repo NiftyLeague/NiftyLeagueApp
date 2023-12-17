@@ -5,7 +5,7 @@ import { type BigNumberish } from 'ethers';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_CONTRACT } from '@/constants/contracts';
 import { COMICS } from '@/constants/comics';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 
 /*
   ~ What it does? ~

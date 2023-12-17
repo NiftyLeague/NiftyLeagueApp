@@ -1,7 +1,7 @@
 import { BrowserProvider, Provider } from 'ethers';
 
 import { UnityContext } from 'react-unity-webgl';
-import { Ethereumish } from '@/types/web3';
+import type { Ethereumish } from '@/types/web3';
 
 interface BSC {
   bbcSignTx?: (e) => void;

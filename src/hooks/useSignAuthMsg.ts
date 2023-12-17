@@ -4,7 +4,7 @@ import { useAccount, useSignMessage } from 'wagmi';
 import { useDispatch } from '@/store';
 import { login, logout } from '@/store/slices/account';
 
-import { AUTH_Token, UUID_Token, Nonce } from '@/types/auth';
+import type { AUTH_Token, UUID_Token, Nonce } from '@/types/auth';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import { sendEvent } from '@/utils/google-analytics';
 import { WALLET_VERIFICATION } from '@/constants/url';

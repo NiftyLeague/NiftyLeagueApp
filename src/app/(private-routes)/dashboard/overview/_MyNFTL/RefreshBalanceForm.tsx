@@ -23,7 +23,7 @@ import { type BigNumberish, parseEther } from 'ethers';
 import { DialogContext } from '@/components/dialog';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useContractReader from '@/hooks/useContractReader';
-import { WithdrawalHistory } from '@/types/account';
+import type { WithdrawalHistory } from '@/types/account';
 import { formatDateTime } from '@/utils/dateTime';
 import NetworkContext from '@/contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT } from '@/constants/contracts';

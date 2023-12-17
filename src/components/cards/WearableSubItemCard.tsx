@@ -1,5 +1,5 @@
 import { Box, Theme, Stack, SxProps, Typography } from '@mui/material';
-import { Item } from '@/types/comic';
+import type { Item } from '@/types/comic';
 import ImageCard from '@/components/cards/ImageCard';
 
 export interface WearableSubItemCardProps {

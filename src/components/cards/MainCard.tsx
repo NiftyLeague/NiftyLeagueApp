@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 // project imports
-import { KeyedObject } from '@/types';
+import type { KeyedObject } from '@/types';
 
 // constant
 const headerSX = {
