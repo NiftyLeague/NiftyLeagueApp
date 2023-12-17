@@ -19,7 +19,7 @@ export const NETWORK_LABEL = {
   [LOCAL_CHAIN_ID]: hardhat.name,
 };
 
-// needs to match hardhat settings otherwise use rpcUrl for our localProvider initialization
+// needs to match hardhat settings otherwise use rpcUrl for our publicProvider initialization
 export const NETWORK_NAME: { [chainId: number]: NetworkName } = {
   [MAINNET_ID]: 'mainnet',
   [GOERLI_ID]: goerli.network,

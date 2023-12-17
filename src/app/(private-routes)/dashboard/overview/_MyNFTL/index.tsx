@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
-import { BigNumber, providers, utils } from 'ethers';
+import { type TransactionResponse, parseEther } from 'ethers';
 
 import { sectionSpacing } from '@/themes/constant';
 import SectionTitle from '@/components/sections/SectionTitle';
@@ -75,9 +75,7 @@ const MyNFTL = (): JSX.Element => {
       // eslint-disable-next-line no-console
       if (DEBUG) console.log('deposit', amount);
       const txRes = await tx(
-        writeContracts[GAME_ACCOUNT_CONTRACT].deposit(
-          utils.parseEther(`${amount}`),
-        ),
+        writeContracts[GAME_ACCOUNT_CONTRACT].deposit(parseEther(`${amount}`)),
       );
       setRefreshAccKey(Math.random());
       refreshNFTLBalance();
@@ -90,10 +88,10 @@ const MyNFTL = (): JSX.Element => {
     async (
       amount: number,
     ): Promise<{
-      txRes: providers.TransactionResponse | null;
+      txRes: TransactionResponse | null;
       error?: Error;
     }> => {
-      const amountWEI = utils.parseEther(`${amount}`);
+      const amountWEI = parseEther(`${amount}`);
       const body = JSON.stringify({
         amount: amountWEI.toString(),
         address,
@@ -119,7 +117,7 @@ const MyNFTL = (): JSX.Element => {
         const txRes = await tx(
           writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
             amountWEI,
-            BigNumber.from(nonce),
+            BigInt(nonce),
             expire_at,
             signature,
           ),

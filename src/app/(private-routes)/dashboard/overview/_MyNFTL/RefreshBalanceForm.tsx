@@ -19,7 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BigNumber, utils } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers';
 import { DialogContext } from '@/components/dialog';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useContractReader from '@/hooks/useContractReader';
@@ -31,7 +31,7 @@ import { BALANCE_INTERVAL } from '@/constants/index';
 
 function useBalanceManagerNonce(address: string = ''): number {
   const { writeContracts } = useContext(NetworkContext);
-  const [nonce, setNonce] = useState(BigNumber.from(0));
+  const [nonce, setNonce] = useState<bigint>(0n);
   const result = useContractReader(
     writeContracts,
     GAME_ACCOUNT_CONTRACT,
@@ -41,13 +41,13 @@ function useBalanceManagerNonce(address: string = ''): number {
     undefined,
     undefined,
     !address.length,
-  ) as BigNumber;
+  ) as BigNumberish;
 
   useEffect(() => {
-    if (result && result !== nonce) setNonce(result);
+    if (result && result !== nonce) setNonce(BigInt(result));
   }, [result, nonce]);
 
-  return nonce.toNumber();
+  return Number(nonce);
 }
 
 const HistoryTable = ({
@@ -82,8 +82,8 @@ const HistoryTable = ({
     };
     const res = await tx(
       writeContracts[GAME_ACCOUNT_CONTRACT].withdraw(
-        utils.parseEther(`${amount}`),
-        BigNumber.from(nonce),
+        parseEther(`${amount}`),
+        BigInt(nonce),
         expire_at,
         signature,
       ),

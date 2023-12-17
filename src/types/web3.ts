@@ -1,15 +1,27 @@
-import { BigNumber, ethers, providers } from 'ethers';
+import {
+  type AlchemyProvider,
+  type BrowserProvider,
+  type Contract,
+  type EtherscanProvider,
+  type FallbackProvider,
+  type InfuraProvider,
+  type JsonRpcApiProvider,
+  type JsonRpcProvider,
+} from 'ethers';
 
 export type MainnetProvider =
-  | providers.InfuraProvider
-  | providers.EtherscanProvider
-  | providers.AlchemyProvider;
+  | InfuraProvider
+  | EtherscanProvider
+  | AlchemyProvider;
 
-export type LocalProvider = providers.JsonRpcProvider | MainnetProvider;
+export type PublicProvider =
+  | FallbackProvider
+  | JsonRpcProvider
+  | JsonRpcApiProvider;
 
-export type UserProvider = providers.Web3Provider;
+export type UserProvider = BrowserProvider;
 
-export type Provider = LocalProvider | UserProvider | providers.Provider;
+export type Provider = PublicProvider | UserProvider | MainnetProvider;
 
 export interface Ethereumish {
   autoRefreshOnNetworkChange?: boolean;
@@ -33,7 +45,7 @@ export interface Ethereumish {
 }
 
 export interface Contracts {
-  [contractName: string]: ethers.Contract;
+  [contractName: string]: Contract;
 }
 
 export type NetworkName = 'mainnet' | 'goerli' | 'hardhat';
@@ -41,7 +53,7 @@ export type NetworkName = 'mainnet' | 'goerli' | 'hardhat';
 export interface Network {
   blockExplorer: string;
   chainId: number;
-  gasPrice?: BigNumber;
+  gasPrice?: bigint;
   label: string;
   name?: NetworkName;
   rpcUrl: string;
