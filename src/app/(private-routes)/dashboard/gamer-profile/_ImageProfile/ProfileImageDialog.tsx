@@ -18,7 +18,7 @@ import SearchRental from '@/app/(private-routes)/dashboard/rentals/SearchRental'
 import EmptyState from '@/components/EmptyState';
 import DegenInternalImage from './DegenInternalImage';
 
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { UPDATE_PROFILE_AVATAR_API } from '@/constants/url';
 import useAuth from '@/hooks/useAuth';
 

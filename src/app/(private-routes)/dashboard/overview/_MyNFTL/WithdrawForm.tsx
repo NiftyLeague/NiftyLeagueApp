@@ -25,7 +25,7 @@ import { DialogContext } from '@/components/dialog';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useFetch from '@/hooks/useFetch';
-import { WithdrawalHistory } from '@/types/account';
+import type { WithdrawalHistory } from '@/types/account';
 import { WITHDRAW_NFTL_AVAILABILITY } from '@/constants/url';
 import { formatDateTime } from '@/utils/dateTime';
 import TermsOfServiceDialog from '@/components/dialog/TermsOfServiceDialog';

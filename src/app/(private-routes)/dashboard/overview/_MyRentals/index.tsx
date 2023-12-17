@@ -4,8 +4,8 @@ import SectionTitle from '@/components/sections/SectionTitle';
 import RentalsTableSimple from './RentalsTableSimple';
 import { sectionSpacing } from '@/themes/constant';
 import usePlayerProfile from '@/hooks/usePlayerProfile';
-import { FC } from 'react';
-import { Rentals } from '@/types/rentals';
+import type { FC } from 'react';
+import type { Rentals } from '@/types/rentals';
 import { transformRentals } from '@/app/(private-routes)/dashboard/_utils/transformRentals';
 
 export interface ColumnType {

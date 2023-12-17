@@ -14,7 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RentalDataGrid } from '@/types/rentalDataGrid';
+import type { RentalDataGrid } from '@/types/rentalDataGrid';
 import DegenImage from '@/components/cards/DegenCard/DegenImage';
 import useAuth from '@/hooks/useAuth';
 import useLocalStorage from '@/hooks/useLocalStorage';

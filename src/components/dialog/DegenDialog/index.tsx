@@ -7,7 +7,7 @@ import { DEGEN_CONTRACT } from '@/constants/contracts';
 import { TRAIT_INDEXES } from '@/constants/cosmeticsFilters';
 import NetworkContext from '@/contexts/NetworkContext';
 import { useContext, useEffect, useState } from 'react';
-import { CharacterType, Degen, GetDegenResponse } from '@/types/degens';
+import type { CharacterType, Degen, GetDegenResponse } from '@/types/degens';
 import RentDegenContentDialog from './RentDegenContentDialog';
 import ClaimDegenContentDialog from './ClaimDegenContentDialog';
 import ViewTraitsContentDialog from './ViewTraitsContentDialog';

@@ -7,11 +7,7 @@ import {
   type InterfaceAbi,
   ZeroAddress,
 } from 'ethers';
-import {
-  type Provider,
-  type PublicProvider,
-  type UserProvider,
-} from '@/types/web3';
+import type { Provider, PublicProvider, UserProvider } from '@/types/web3';
 
 export * from './dateTime';
 

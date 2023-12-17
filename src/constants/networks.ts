@@ -1,5 +1,5 @@
 import { mainnet, goerli, hardhat } from 'viem/chains';
-import { Network, NetworkName } from '@/types/web3';
+import type { Network, NetworkName } from '@/types/web3';
 
 export const NetworkContextName = 'NETWORK';
 

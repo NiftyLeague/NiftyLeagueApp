@@ -18,7 +18,7 @@ import EmptyState from '@/components/EmptyState';
 import BottomInfo from './_Stats/BottomInfo';
 
 import { DEGEN_BASE_API_URL } from '@/constants/url';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { sectionSpacing } from '@/themes/constant';
 import BalanceContext from '@/contexts/BalanceContext';
 import { GamerProfileProvider } from '@/contexts/GamerProfileContext';

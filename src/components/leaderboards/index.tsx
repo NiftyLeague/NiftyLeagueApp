@@ -17,7 +17,7 @@ import {
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { makeStyles } from '@mui/styles';
 import { sendEvent } from '@/utils/google-analytics';
-import { TableType } from '@/types/leaderboard';
+import type { TableType } from '@/types/leaderboard';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
 import {
   getGameLeaderboardViewedAnalyticsEventName,

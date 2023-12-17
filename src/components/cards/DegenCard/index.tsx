@@ -29,7 +29,7 @@ import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from '@/utils/file';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 // import EnableDisableDegenDialogContent from '@/app/dashboard/degens/dialogs/EnableDegenDialogContent';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 // import { DISABLE_RENT_API_URL } from '@/constants/url';
 import useAuth from '@/hooks/useAuth';
 

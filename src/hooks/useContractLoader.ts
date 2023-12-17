@@ -4,7 +4,7 @@
 /* eslint-disable global-require */
 import { useState, useEffect } from 'react';
 import { Contract, JsonRpcSigner } from 'ethers';
-import { Contracts, Provider } from '@/types/web3';
+import type { Contracts, Provider } from '@/types/web3';
 import { getProviderAndSigner } from '@/utils/ethers';
 import { SUPPORTED_CHAIN_IDS } from '@/constants/networks';
 import CONTRACTS from '@/contracts/deployments';

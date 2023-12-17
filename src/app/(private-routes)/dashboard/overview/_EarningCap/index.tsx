@@ -4,7 +4,7 @@ import usePlayerProfile from '@/hooks/usePlayerProfile';
 import { transformRentals } from '@/app/(private-routes)/dashboard/_utils/transformRentals';
 import { FC } from 'react';
 import { sectionSpacing } from '@/themes/constant';
-import { Rentals } from '@/types/rentals';
+import type { Rentals } from '@/types/rentals';
 import { ColumnType } from '../_MyRentals';
 import RentalsTableSimple from '../_MyRentals/RentalsTableSimple';
 interface EarningCapProps {

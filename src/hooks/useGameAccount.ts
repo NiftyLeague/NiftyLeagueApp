@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { GAMER_ACCOUNT_API } from '@/constants/url';
-import { Account } from '@/types/account';
+import type { Account } from '@/types/account';
 import useAuth from './useAuth';
 
 const useGameAccount = (

@@ -12,7 +12,7 @@ import {
   MY_RENTAL_API_URL_INACTIVE,
   RENTED_FROM_ME_API_URL,
 } from '@/constants/url';
-import { Rentals, RentalType } from '@/types/rentals';
+import type { Rentals, RentalType } from '@/types/rentals';
 import SearchRental from './SearchRental';
 import InputLabel from '@/components/extended/Form/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';

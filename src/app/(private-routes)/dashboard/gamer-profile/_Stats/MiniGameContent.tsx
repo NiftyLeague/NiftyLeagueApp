@@ -3,7 +3,7 @@ import { Stack } from '@mui/material';
 import { secondsToHours } from 'date-fns';
 
 import GamerProfileContext from '@/contexts/GamerProfileContext';
-import { ProfileMiniGame } from '@/types/account';
+import type { ProfileMiniGame } from '@/types/account';
 import Item from './Item';
 
 interface MiniGameContentProps {

@@ -15,7 +15,7 @@ import LeftInfo from './LeftInfo';
 import MiniGameContent from './MiniGameContent';
 import GamerProfileContext from '@/contexts/GamerProfileContext';
 
-import { ProfileNiftySmsher, ProfileMiniGame } from '@/types/account';
+import type { ProfileNiftySmsher, ProfileMiniGame } from '@/types/account';
 
 interface BottomInfoProps {
   nifty_smashers: ProfileNiftySmsher | undefined;

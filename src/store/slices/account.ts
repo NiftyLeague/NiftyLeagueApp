@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 // action - state management
-import { InitialLoginContextProps } from '@/types/auth';
+import type { InitialLoginContextProps } from '@/types/auth';
 
 export const initialState: InitialLoginContextProps = {
   isLoggedIn: false,

@@ -32,7 +32,7 @@ import {
   // wearables,
 } from '@/constants/filters';
 import * as CosmeticsFilter from '@/constants/cosmeticsFilters';
-import { DegenFilter } from '@/types/degenFilter';
+import type { DegenFilter } from '@/types/degenFilter';
 import { updateFilterValue } from './utils';
 import FilterAccordion from './FilterAccordion';
 // import FilterRangeSlider from './FilterRangeSlider';

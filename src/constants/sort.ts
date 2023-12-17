@@ -1,4 +1,4 @@
-import { MenuItemBaseProps } from '@/types';
+import type { MenuItemBaseProps } from '@/types';
 
 const DegenSortOptions: MenuItemBaseProps[] = [
   {

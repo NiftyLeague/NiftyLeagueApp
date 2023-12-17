@@ -1,6 +1,6 @@
 import { SetStateAction } from 'react';
-import { Degen } from '@/types/degens';
-import { DegenFilter } from '@/types/degenFilter';
+import type { Degen } from '@/types/degens';
+import type { DegenFilter } from '@/types/degenFilter';
 import DEFAULT_STATIC_FILTER from './constants';
 import { BURN_ADDYS } from '@/constants/addresses';
 

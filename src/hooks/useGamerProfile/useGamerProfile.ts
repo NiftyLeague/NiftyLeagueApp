@@ -3,7 +3,7 @@
 import { GET_GAMER_PROFILE_API } from '@/constants/url';
 import useAuth from '@/hooks/useAuth';
 import useFetch from '@/hooks/useFetch';
-import { Profile } from '@/types/account';
+import type { Profile } from '@/types/account';
 
 const useGamerProfile = (): {
   error?: Error;

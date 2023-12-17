@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { type GuardProps } from '@/types';
+import type { GuardProps } from '@/types';
 import useAuth from '@/hooks/useAuth';
 
 // ==============================|| AUTH GUARD ||============================== //
