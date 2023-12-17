@@ -17,7 +17,7 @@ import {
   Link,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { providers } from 'ethers';
+import { type TransactionResponse } from 'ethers';
 import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
@@ -61,7 +61,7 @@ const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
 interface WithdrawFormProps {
   onWithdrawEarnings: (
     amount: number,
-  ) => Promise<{ txRes: providers.TransactionResponse | null; error?: Error }>;
+  ) => Promise<{ txRes: TransactionResponse | null; error?: Error }>;
   balance: number;
 }
 

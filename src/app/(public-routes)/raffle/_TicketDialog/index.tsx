@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import NetworkContext from '@/contexts/NetworkContext';
-import { BigNumber, utils } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers';
 import { NFTL_CONTRACT, NFTL_RAFFLE_CONTRACT } from '@/constants/contracts';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
 import { DEBUG } from '@/constants/index';
@@ -30,10 +30,10 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
-  const [allowance, setAllowance] = useState<BigNumber>(BigNumber.from('0'));
+  const [allowance, setAllowance] = useState<bigint>(0n);
   const [isProcessingPurchase, setProcessingPurchase] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const insufficientAllowance = allowance.lt(BigNumber.from(1000));
+  const insufficientAllowance = allowance < 1000n;
   const insufficientBalance = userNFTLBalance < 1000;
 
   useEffect(() => {
@@ -49,8 +49,11 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
     const getAllowance = async () => {
       const raffleContract = writeContracts[NFTL_RAFFLE_CONTRACT];
       const nftl = writeContracts[NFTL_CONTRACT];
-      const allowanceBN = await nftl.allowance(address, raffleContract.address);
-      setAllowance(BigNumber.from(allowanceBN.toString()));
+      const allowanceBN = (await nftl.allowance(
+        address,
+        raffleContract.address,
+      )) as BigNumberish;
+      setAllowance(BigInt(allowanceBN.toString()));
     };
     if (
       writeContracts &&
@@ -81,12 +84,12 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
         await tx(
           nftl.increaseAllowance(
             raffleContract.address,
-            utils.parseEther('10000000'),
+            parseEther('10000000'),
           ),
         );
-        setAllowance(BigNumber.from('10000000'));
+        setAllowance(10000000n);
       }
-      const args = [utils.parseEther(input)];
+      const args = [parseEther(input)];
       const result = await submitTxWithGasEstimate(
         tx,
         raffleContract,

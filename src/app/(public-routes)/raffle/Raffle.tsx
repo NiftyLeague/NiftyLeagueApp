@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { BigNumber, utils } from 'ethers';
+import { type BigNumberish, formatEther } from 'ethers';
 import { Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { sectionSpacing } from '@/themes/constant';
@@ -14,7 +14,7 @@ import { NFTL_RAFFLE_CONTRACT } from '@/constants/contracts';
 
 function useDepositBalance(refreshKey = 0): number {
   const { address, readContracts } = useContext(NetworkContext);
-  const [balance, setBalance] = useState(BigNumber.from(0));
+  const [balance, setBalance] = useState<bigint>(0n);
   const result = useContractReader(
     readContracts,
     NFTL_RAFFLE_CONTRACT,
@@ -24,11 +24,11 @@ function useDepositBalance(refreshKey = 0): number {
     undefined,
     refreshKey,
     !address,
-  ) as BigNumber;
+  ) as BigNumberish;
   useEffect(() => {
-    if (result && result !== balance) setBalance(result);
+    if (result && result !== balance) setBalance(BigInt(result));
   }, [result, balance]);
-  return parseFloat(utils.formatEther(balance));
+  return parseFloat(formatEther(balance));
 }
 
 function useTicketBalance(): {

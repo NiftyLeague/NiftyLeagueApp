@@ -3,7 +3,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { useState, useEffect } from 'react';
-import { Contract, Signer } from 'ethers';
+import { Contract, JsonRpcSigner } from 'ethers';
 import { Contracts, Provider } from '@/types/web3';
 import { getProviderAndSigner } from '@/utils/ethers';
 import { SUPPORTED_CHAIN_IDS } from '@/constants/networks';
@@ -37,7 +37,7 @@ interface Config {
 }
 
 export default function useContractLoader(
-  providerOrSigner: Provider | Signer | undefined,
+  providerOrSigner: Provider | JsonRpcSigner | undefined,
   config: Config = {},
 ): Contracts {
   const [contracts, setContracts] = useState<Contracts>({});
@@ -48,14 +48,16 @@ export default function useContractLoader(
       if (providerOrSigner && typeof providerOrSigner !== 'undefined') {
         try {
           // we need to check to see if this providerOrSigner has a signer or not
-          const { provider, signer } = getProviderAndSigner(providerOrSigner);
+          const { provider, signer } =
+            await getProviderAndSigner(providerOrSigner);
           // if no signer is returned we can still use the provider
-          let signerOrProvider: Provider | Signer = signer as Signer;
+          let signerOrProvider: Provider | JsonRpcSigner =
+            signer as JsonRpcSigner;
           if (!signer) signerOrProvider = provider as Provider;
 
           const { chainId } = await (provider as Provider).getNetwork();
           // eslint-disable-next-line no-underscore-dangle
-          const _chainId = config.chainId || chainId;
+          const _chainId = Number(config.chainId || chainId);
           if (!SUPPORTED_CHAIN_IDS.includes(_chainId)) return;
           // eslint-disable-next-line no-underscore-dangle
           const deployedContractList = CONTRACTS[_chainId];

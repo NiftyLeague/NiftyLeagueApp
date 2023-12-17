@@ -14,7 +14,7 @@ import {
 
 import { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
-import { BigNumber, BigNumberish, utils } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers';
 import { NFTL_CONTRACT, DEGEN_CONTRACT } from '@/constants/contracts';
 import { getErrorForName } from '@/utils/name';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
@@ -34,10 +34,10 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   const { userNFTLBalance } = useContext(BalanceContext);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
-  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [allowance, setAllowance] = useState<bigint>(0n);
   const [isLoadingRename, setLoadingRename] = useState(false);
   const [renameSuccess, setRenameSuccess] = useState(false);
-  const insufficientAllowance = allowance < BigNumber.from(1000);
+  const insufficientAllowance = allowance < 1000n;
   const insufficientBalance = userNFTLBalance < 1000;
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
         address,
         DEGENAddress,
       )) as BigNumberish;
-      setAllowance(allowanceBN);
+      setAllowance(BigInt(allowanceBN));
     };
     setRenameSuccess(false);
     if (
@@ -90,10 +90,8 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
         // eslint-disable-next-line no-console
         if (DEBUG) console.log('Current allowance too low');
         const DEGENAddress = degenContract.address;
-        await tx(
-          nftl.increaseAllowance(DEGENAddress, utils.parseEther('100000')),
-        );
-        setAllowance(BigNumber.from('1000'));
+        await tx(nftl.increaseAllowance(DEGENAddress, parseEther('100000')));
+        setAllowance(1000n);
       }
       const args = [parseInt(degen?.id || '', 10), input];
       const result = await submitTxWithGasEstimate(

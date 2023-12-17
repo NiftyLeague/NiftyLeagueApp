@@ -3,7 +3,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { ethers } from 'ethers';
+import { isAddress } from 'ethers';
 
 import {
   Box,
@@ -194,7 +194,7 @@ const RentDegenContentDialog = ({
 
   const validateAddress = (value: string) => {
     setEthAddress(value);
-    if (!ethers.utils.isAddress(value)) {
+    if (!isAddress(value)) {
       setAddressError('Address is invalid!');
     } else if (!value) {
       setAddressError('Please input an address');
