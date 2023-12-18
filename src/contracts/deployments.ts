@@ -9,10 +9,11 @@ import NIFTY_DEGEN_ABI from './abis/NiftyDegen.json';
 import NIFTY_ITEM_L2 from './abis/NiftyItemL2.json';
 import NIFTY_LAUNCH_COMICS_ABI from './abis/NiftyLaunchComics.json';
 import { LOCAL_CHAIN_ID } from '@/constants/networks';
+import type { InterfaceAbi } from 'ethers6';
 
 const CONTRACTS: {
   [chainId: number]: {
-    [contractName: string]: { address: string; abi: any[] };
+    [contractName: string]: { address: `0x${string}`; abi: InterfaceAbi };
   };
 } = {
   [LOCAL_CHAIN_ID]: {
