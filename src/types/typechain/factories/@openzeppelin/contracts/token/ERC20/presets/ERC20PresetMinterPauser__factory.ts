@@ -6,8 +6,12 @@ import {
   ContractFactory,
   ContractTransactionResponse,
   Interface,
-} from 'ethers';
-import type { Signer, ContractDeployTransaction, ContractRunner } from 'ethers';
+} from 'ethers6';
+import type {
+  Signer,
+  ContractDeployTransaction,
+  ContractRunner,
+} from 'ethers6';
 import type { NonPayableOverrides } from '../../../../../../common';
 import type {
   ERC20PresetMinterPauser,

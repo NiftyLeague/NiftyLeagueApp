@@ -6,14 +6,14 @@ import {
   ContractFactory,
   ContractTransactionResponse,
   Interface,
-} from 'ethers';
+} from 'ethers6';
 import type {
   Signer,
   BigNumberish,
   AddressLike,
   ContractDeployTransaction,
   ContractRunner,
-} from 'ethers';
+} from 'ethers6';
 import type { NonPayableOverrides } from '../../../common';
 import type {
   NFTLTimelock,

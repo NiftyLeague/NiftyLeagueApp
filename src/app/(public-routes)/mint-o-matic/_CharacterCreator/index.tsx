@@ -10,7 +10,7 @@ import {
 } from 'react';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { isMobileOnly, withOrientationChange } from 'react-device-detect';
-import { type BigNumberish } from 'ethers';
+import { type BigNumberish } from 'ethers6';
 
 import useRemovedTraits from '@/hooks/useRemovedTraits';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';

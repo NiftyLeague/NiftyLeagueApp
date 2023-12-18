@@ -2,7 +2,7 @@
 
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { type BigNumberish, formatEther, parseEther } from 'ethers';
+import { type BigNumberish, formatEther, parseEther } from 'ethers6';
 import { OrderKind } from '@cowprotocol/cow-sdk';
 import {
   createOrderSwapEtherToNFTL,

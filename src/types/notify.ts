@@ -2,7 +2,7 @@ import {
   type TransactionResponse,
   type TransactionRequest,
   type TransactionReceipt,
-} from 'ethers';
+} from 'ethers6';
 import {
   EthereumTransactionLog,
   EthereumTransactionData,

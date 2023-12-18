@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext, useEffect, useState } from 'react';
-import { type BigNumberish } from 'ethers';
+import { type BigNumberish } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_CONTRACT } from '@/constants/contracts';
 import { COMICS } from '@/constants/comics';

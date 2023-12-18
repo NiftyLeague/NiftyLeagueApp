@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import NetworkContext from '@/contexts/NetworkContext';
-import { type BigNumberish, parseEther } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers6';
 import { NFTL_CONTRACT, NFTL_RAFFLE_CONTRACT } from '@/constants/contracts';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
 import { DEBUG } from '@/constants/index';

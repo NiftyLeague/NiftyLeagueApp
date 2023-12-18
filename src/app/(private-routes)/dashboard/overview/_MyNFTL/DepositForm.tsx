@@ -19,7 +19,7 @@ import {
   type TransactionResponse,
   parseEther,
   formatEther,
-} from 'ethers';
+} from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from '@/constants/contracts';
 import { DialogContext } from '@/components/dialog';

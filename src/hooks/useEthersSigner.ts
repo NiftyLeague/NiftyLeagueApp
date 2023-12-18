@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type WalletClient, useWalletClient } from 'wagmi';
-import { BrowserProvider, JsonRpcSigner } from 'ethers';
+import { BrowserProvider, JsonRpcSigner } from 'ethers6';
 
 export type Signer = JsonRpcSigner | undefined;
 

@@ -3,7 +3,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { useState, useEffect } from 'react';
-import { Contract, JsonRpcSigner } from 'ethers';
+import { Contract, JsonRpcSigner } from 'ethers6';
 import type { Contracts, Provider } from '@/types/web3';
 import { getProviderAndSigner } from '@/utils/ethers';
 import { SUPPORTED_CHAIN_IDS } from '@/constants/networks';
