@@ -126,6 +126,8 @@ export type { AllowedColorsStorage } from './src/contracts/AllowedColorsStorage'
 export { AllowedColorsStorage__factory } from './factories/src/contracts/AllowedColorsStorage__factory';
 export type { BalanceManager } from './src/contracts/BalanceManager';
 export { BalanceManager__factory } from './factories/src/contracts/BalanceManager__factory';
+export type { WETH } from './src/contracts/external/WETH';
+export { WETH__factory } from './factories/src/contracts/external/WETH__factory';
 export type { HydraDistributor } from './src/contracts/HydraDistributor';
 export { HydraDistributor__factory } from './factories/src/contracts/HydraDistributor__factory';
 export type { NiftyBurningComicsL2 } from './src/contracts/imx/NiftyBurningComicsL2';

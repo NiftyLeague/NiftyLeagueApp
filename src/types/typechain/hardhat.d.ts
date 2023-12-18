@@ -246,6 +246,10 @@ declare module 'hardhat/types/runtime' {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.BalanceManager__factory>;
     getContractFactory(
+      name: 'WETH',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.WETH__factory>;
+    getContractFactory(
       name: 'HydraDistributor',
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.HydraDistributor__factory>;
@@ -621,6 +625,11 @@ declare module 'hardhat/types/runtime' {
       signer?: ethers.Signer,
     ): Promise<Contracts.BalanceManager>;
     getContractAt(
+      name: 'WETH',
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer,
+    ): Promise<Contracts.WETH>;
+    getContractAt(
       name: 'HydraDistributor',
       address: string | ethers.Addressable,
       signer?: ethers.Signer,
@@ -959,6 +968,10 @@ declare module 'hardhat/types/runtime' {
       signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.BalanceManager>;
     deployContract(
+      name: 'WETH',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
+    ): Promise<Contracts.WETH>;
+    deployContract(
       name: 'HydraDistributor',
       signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.HydraDistributor>;
@@ -1333,6 +1346,11 @@ declare module 'hardhat/types/runtime' {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.BalanceManager>;
+    deployContract(
+      name: 'WETH',
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
+    ): Promise<Contracts.WETH>;
     deployContract(
       name: 'HydraDistributor',
       args: any[],

@@ -3,6 +3,7 @@
 /* eslint-disable */
 export * as nftlRaffleSol from './NFTLRaffle.sol';
 export * as nameableCharacterSol from './NameableCharacter.sol';
+export * as external from './external';
 export * as imx from './imx';
 export * as interfaces from './interfaces';
 export * as mocks from './mocks';
