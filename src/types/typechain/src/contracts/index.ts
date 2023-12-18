@@ -5,6 +5,8 @@ import type * as nftlRaffleSol from './NFTLRaffle.sol';
 export type { nftlRaffleSol };
 import type * as nameableCharacterSol from './NameableCharacter.sol';
 export type { nameableCharacterSol };
+import type * as external from './external';
+export type { external };
 import type * as imx from './imx';
 export type { imx };
 import type * as interfaces from './interfaces';

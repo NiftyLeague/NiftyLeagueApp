@@ -6,8 +6,7 @@ import {
   NFTL_TOKEN_ADDRESS,
 } from '@/constants/contracts';
 import { formatNumberToDisplay2 } from './numbers';
-import { ERC20__factory } from '@/types/typechain';
-import { WETH__factory } from '@/types/WETH__factory';
+import { ERC20__factory, WETH__factory } from '@/types/typechain';
 
 export const getCowMarketPrice = async ({
   kind,
