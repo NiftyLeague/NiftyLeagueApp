@@ -2,11 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   Pausable,
   PausableInterface,
-} from "../../../../@openzeppelin/contracts/security/Pausable";
+} from '../../../../@openzeppelin/contracts/security/Pausable';
 
 const _abi = [
   {
@@ -14,39 +14,39 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
     ],
-    name: "Paused",
-    type: "event",
+    name: 'Paused',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
     ],
-    name: "Unpaused",
-    type: "event",
+    name: 'Unpaused',
+    type: 'event',
   },
   {
     inputs: [],
-    name: "paused",
+    name: 'paused',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 

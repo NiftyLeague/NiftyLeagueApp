@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,98 +21,98 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface BalanceManagerInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "deposit"
-      | "initialize"
-      | "maintainer"
-      | "nftl"
-      | "nonce"
-      | "owner"
-      | "renounceOwnership"
-      | "signatures"
-      | "transferOwnership"
-      | "updateMaintainer"
-      | "withdraw"
-      | "withdrawByDAO"
+      | 'deposit'
+      | 'initialize'
+      | 'maintainer'
+      | 'nftl'
+      | 'nonce'
+      | 'owner'
+      | 'renounceOwnership'
+      | 'signatures'
+      | 'transferOwnership'
+      | 'updateMaintainer'
+      | 'withdraw'
+      | 'withdrawByDAO',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "Initialized"
-      | "MaintainerUpdated"
-      | "NFTLDeposited"
-      | "NFTLWithdrawn"
-      | "NFTLWithdrawnByDAO"
-      | "OwnershipTransferred"
+      | 'Initialized'
+      | 'MaintainerUpdated'
+      | 'NFTLDeposited'
+      | 'NFTLWithdrawn'
+      | 'NFTLWithdrawnByDAO'
+      | 'OwnershipTransferred',
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "deposit",
-    values: [BigNumberish]
+    functionFragment: 'deposit',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "initialize",
-    values: [AddressLike, AddressLike]
+    functionFragment: 'initialize',
+    values: [AddressLike, AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "maintainer",
-    values?: undefined
+    functionFragment: 'maintainer',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "nftl", values?: undefined): string;
-  encodeFunctionData(functionFragment: "nonce", values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'nftl', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'nonce', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "signatures",
-    values: [BytesLike]
+    functionFragment: 'renounceOwnership',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
+    functionFragment: 'signatures',
+    values: [BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "updateMaintainer",
-    values: [AddressLike]
+    functionFragment: 'transferOwnership',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "withdraw",
-    values: [BigNumberish, BigNumberish, BigNumberish, BytesLike]
+    functionFragment: 'updateMaintainer',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "withdrawByDAO",
-    values: [AddressLike, BigNumberish]
+    functionFragment: 'withdraw',
+    values: [BigNumberish, BigNumberish, BigNumberish, BytesLike],
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'withdrawByDAO',
+    values: [AddressLike, BigNumberish],
   ): string;
 
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "maintainer", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nftl", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nonce", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'deposit', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'maintainer', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'nftl', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'nonce', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
+    functionFragment: 'renounceOwnership',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "signatures", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'signatures', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
+    functionFragment: 'transferOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "updateMaintainer",
-    data: BytesLike
+    functionFragment: 'updateMaintainer',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "withdrawByDAO",
-    data: BytesLike
+    functionFragment: 'withdrawByDAO',
+    data: BytesLike,
   ): Result;
 }
 
@@ -132,12 +132,12 @@ export namespace MaintainerUpdatedEvent {
   export type InputTuple = [
     by: AddressLike,
     oldMaintainer: AddressLike,
-    newMaintainer: AddressLike
+    newMaintainer: AddressLike,
   ];
   export type OutputTuple = [
     by: string,
     oldMaintainer: string,
-    newMaintainer: string
+    newMaintainer: string,
   ];
   export interface OutputObject {
     by: string;
@@ -167,7 +167,7 @@ export namespace NFTLWithdrawnEvent {
   export type InputTuple = [
     by: AddressLike,
     beneficiary: AddressLike,
-    amount: BigNumberish
+    amount: BigNumberish,
   ];
   export type OutputTuple = [by: string, beneficiary: string, amount: bigint];
   export interface OutputObject {
@@ -185,7 +185,7 @@ export namespace NFTLWithdrawnByDAOEvent {
   export type InputTuple = [
     by: AddressLike,
     beneficiary: AddressLike,
-    amount: BigNumberish
+    amount: BigNumberish,
   ];
   export type OutputTuple = [by: string, beneficiary: string, amount: bigint];
   export interface OutputObject {
@@ -221,70 +221,70 @@ export interface BalanceManager extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
-  deposit: TypedContractMethod<[_amount: BigNumberish], [void], "nonpayable">;
+  deposit: TypedContractMethod<[_amount: BigNumberish], [void], 'nonpayable'>;
 
   initialize: TypedContractMethod<
     [_nftl: AddressLike, _maintainer: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  maintainer: TypedContractMethod<[], [string], "view">;
+  maintainer: TypedContractMethod<[], [string], 'view'>;
 
-  nftl: TypedContractMethod<[], [string], "view">;
+  nftl: TypedContractMethod<[], [string], 'view'>;
 
-  nonce: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  nonce: TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceOwnership: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  signatures: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+  signatures: TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   updateMaintainer: TypedContractMethod<
     [_maintainer: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   withdraw: TypedContractMethod<
@@ -292,113 +292,113 @@ export interface BalanceManager extends BaseContract {
       _amount: BigNumberish,
       _nonce: BigNumberish,
       _expireAt: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   withdrawByDAO: TypedContractMethod<
     [_beneficiary: AddressLike, _amount: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "deposit"
-  ): TypedContractMethod<[_amount: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'deposit',
+  ): TypedContractMethod<[_amount: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "initialize"
+    nameOrSignature: 'initialize',
   ): TypedContractMethod<
     [_nftl: AddressLike, _maintainer: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "maintainer"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'maintainer',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "nftl"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'nftl',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "nonce"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+    nameOrSignature: 'nonce',
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'owner',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'renounceOwnership',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "signatures"
-  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+    nameOrSignature: 'signatures',
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'transferOwnership',
+  ): TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "updateMaintainer"
-  ): TypedContractMethod<[_maintainer: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'updateMaintainer',
+  ): TypedContractMethod<[_maintainer: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "withdraw"
+    nameOrSignature: 'withdraw',
   ): TypedContractMethod<
     [
       _amount: BigNumberish,
       _nonce: BigNumberish,
       _expireAt: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "withdrawByDAO"
+    nameOrSignature: 'withdrawByDAO',
   ): TypedContractMethod<
     [_beneficiary: AddressLike, _amount: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   getEvent(
-    key: "Initialized"
+    key: 'Initialized',
   ): TypedContractEvent<
     InitializedEvent.InputTuple,
     InitializedEvent.OutputTuple,
     InitializedEvent.OutputObject
   >;
   getEvent(
-    key: "MaintainerUpdated"
+    key: 'MaintainerUpdated',
   ): TypedContractEvent<
     MaintainerUpdatedEvent.InputTuple,
     MaintainerUpdatedEvent.OutputTuple,
     MaintainerUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "NFTLDeposited"
+    key: 'NFTLDeposited',
   ): TypedContractEvent<
     NFTLDepositedEvent.InputTuple,
     NFTLDepositedEvent.OutputTuple,
     NFTLDepositedEvent.OutputObject
   >;
   getEvent(
-    key: "NFTLWithdrawn"
+    key: 'NFTLWithdrawn',
   ): TypedContractEvent<
     NFTLWithdrawnEvent.InputTuple,
     NFTLWithdrawnEvent.OutputTuple,
     NFTLWithdrawnEvent.OutputObject
   >;
   getEvent(
-    key: "NFTLWithdrawnByDAO"
+    key: 'NFTLWithdrawnByDAO',
   ): TypedContractEvent<
     NFTLWithdrawnByDAOEvent.InputTuple,
     NFTLWithdrawnByDAOEvent.OutputTuple,
     NFTLWithdrawnByDAOEvent.OutputObject
   >;
   getEvent(
-    key: "OwnershipTransferred"
+    key: 'OwnershipTransferred',
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
     OwnershipTransferredEvent.OutputTuple,
@@ -406,7 +406,7 @@ export interface BalanceManager extends BaseContract {
   >;
 
   filters: {
-    "Initialized(uint8)": TypedContractEvent<
+    'Initialized(uint8)': TypedContractEvent<
       InitializedEvent.InputTuple,
       InitializedEvent.OutputTuple,
       InitializedEvent.OutputObject
@@ -417,7 +417,7 @@ export interface BalanceManager extends BaseContract {
       InitializedEvent.OutputObject
     >;
 
-    "MaintainerUpdated(address,address,address)": TypedContractEvent<
+    'MaintainerUpdated(address,address,address)': TypedContractEvent<
       MaintainerUpdatedEvent.InputTuple,
       MaintainerUpdatedEvent.OutputTuple,
       MaintainerUpdatedEvent.OutputObject
@@ -428,7 +428,7 @@ export interface BalanceManager extends BaseContract {
       MaintainerUpdatedEvent.OutputObject
     >;
 
-    "NFTLDeposited(address,uint256)": TypedContractEvent<
+    'NFTLDeposited(address,uint256)': TypedContractEvent<
       NFTLDepositedEvent.InputTuple,
       NFTLDepositedEvent.OutputTuple,
       NFTLDepositedEvent.OutputObject
@@ -439,7 +439,7 @@ export interface BalanceManager extends BaseContract {
       NFTLDepositedEvent.OutputObject
     >;
 
-    "NFTLWithdrawn(address,address,uint256)": TypedContractEvent<
+    'NFTLWithdrawn(address,address,uint256)': TypedContractEvent<
       NFTLWithdrawnEvent.InputTuple,
       NFTLWithdrawnEvent.OutputTuple,
       NFTLWithdrawnEvent.OutputObject
@@ -450,7 +450,7 @@ export interface BalanceManager extends BaseContract {
       NFTLWithdrawnEvent.OutputObject
     >;
 
-    "NFTLWithdrawnByDAO(address,address,uint256)": TypedContractEvent<
+    'NFTLWithdrawnByDAO(address,address,uint256)': TypedContractEvent<
       NFTLWithdrawnByDAOEvent.InputTuple,
       NFTLWithdrawnByDAOEvent.OutputTuple,
       NFTLWithdrawnByDAOEvent.OutputObject
@@ -461,7 +461,7 @@ export interface BalanceManager extends BaseContract {
       NFTLWithdrawnByDAOEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
+    'OwnershipTransferred(address,address)': TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject

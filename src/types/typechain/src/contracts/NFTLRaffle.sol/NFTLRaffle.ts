@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from '../../../common';
 
 export declare namespace NFTLRaffle {
   export type WinnerInfoStruct = {
@@ -33,391 +33,391 @@ export declare namespace NFTLRaffle {
   export type WinnerInfoStructOutput = [
     ticketId: bigint,
     winner: string,
-    prizeTokenId: bigint
+    prizeTokenId: bigint,
   ] & { ticketId: bigint; winner: string; prizeTokenId: bigint };
 }
 
 export interface NFTLRaffleInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "NFTL_AMOUNT_FOR_TICKET"
-      | "allowUserDeposit"
-      | "assignTicketToUsers"
-      | "cancelSubscription"
-      | "chargeLINK"
-      | "currentWinnerTicketCount"
-      | "deposit"
-      | "depositPrizeNFT"
-      | "disallowUserDeposit"
-      | "distributeTicketsToCitadelKeyHolders"
-      | "distributeTicketsToUsers"
-      | "getRandomWordsList"
-      | "getUserCount"
-      | "getUserList"
-      | "getWinners"
-      | "initialize"
-      | "isTicketAssignedToUsers"
-      | "isUserDepositAllowed"
-      | "isWinnerTicketId"
-      | "manageConsumers"
-      | "nftl"
-      | "onERC721Received"
-      | "owner"
-      | "pause"
-      | "paused"
-      | "prizeNFT"
-      | "prizeNFTTokenIndex"
-      | "prizeNFTokenIds"
-      | "raffleStartAt"
-      | "randomWordList"
-      | "rawFulfillRandomWords"
-      | "renounceOwnership"
-      | "requestRandomWordsForWinnerSelection"
-      | "s_subscriptionId"
-      | "ticketCountByUser"
-      | "ticketIdList"
-      | "ticketRangeByUser"
-      | "totalTicketCount"
-      | "totalWinnerTicketCount"
-      | "transferOwnership"
-      | "unpause"
-      | "updateTotalWinnerTicketCount"
-      | "userByTicketId"
-      | "userDeposits"
-      | "winners"
-      | "withdrawLINK"
+      | 'NFTL_AMOUNT_FOR_TICKET'
+      | 'allowUserDeposit'
+      | 'assignTicketToUsers'
+      | 'cancelSubscription'
+      | 'chargeLINK'
+      | 'currentWinnerTicketCount'
+      | 'deposit'
+      | 'depositPrizeNFT'
+      | 'disallowUserDeposit'
+      | 'distributeTicketsToCitadelKeyHolders'
+      | 'distributeTicketsToUsers'
+      | 'getRandomWordsList'
+      | 'getUserCount'
+      | 'getUserList'
+      | 'getWinners'
+      | 'initialize'
+      | 'isTicketAssignedToUsers'
+      | 'isUserDepositAllowed'
+      | 'isWinnerTicketId'
+      | 'manageConsumers'
+      | 'nftl'
+      | 'onERC721Received'
+      | 'owner'
+      | 'pause'
+      | 'paused'
+      | 'prizeNFT'
+      | 'prizeNFTTokenIndex'
+      | 'prizeNFTokenIds'
+      | 'raffleStartAt'
+      | 'randomWordList'
+      | 'rawFulfillRandomWords'
+      | 'renounceOwnership'
+      | 'requestRandomWordsForWinnerSelection'
+      | 's_subscriptionId'
+      | 'ticketCountByUser'
+      | 'ticketIdList'
+      | 'ticketRangeByUser'
+      | 'totalTicketCount'
+      | 'totalWinnerTicketCount'
+      | 'transferOwnership'
+      | 'unpause'
+      | 'updateTotalWinnerTicketCount'
+      | 'userByTicketId'
+      | 'userDeposits'
+      | 'winners'
+      | 'withdrawLINK',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "Initialized"
-      | "OwnershipTransferred"
-      | "Paused"
-      | "RandomWordsReceived"
-      | "RandomWordsRequested"
-      | "TicketDistributed"
-      | "Unpaused"
-      | "UserDeposited"
-      | "WinnerSelected"
+      | 'Initialized'
+      | 'OwnershipTransferred'
+      | 'Paused'
+      | 'RandomWordsReceived'
+      | 'RandomWordsRequested'
+      | 'TicketDistributed'
+      | 'Unpaused'
+      | 'UserDeposited'
+      | 'WinnerSelected',
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "NFTL_AMOUNT_FOR_TICKET",
-    values?: undefined
+    functionFragment: 'NFTL_AMOUNT_FOR_TICKET',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "allowUserDeposit",
-    values?: undefined
+    functionFragment: 'allowUserDeposit',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "assignTicketToUsers",
-    values?: undefined
+    functionFragment: 'assignTicketToUsers',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "cancelSubscription",
-    values?: undefined
+    functionFragment: 'cancelSubscription',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "chargeLINK",
-    values: [BigNumberish]
+    functionFragment: 'chargeLINK',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "currentWinnerTicketCount",
-    values?: undefined
+    functionFragment: 'currentWinnerTicketCount',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit",
-    values: [BigNumberish]
+    functionFragment: 'deposit',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "depositPrizeNFT",
-    values: [BigNumberish[]]
+    functionFragment: 'depositPrizeNFT',
+    values: [BigNumberish[]],
   ): string;
   encodeFunctionData(
-    functionFragment: "disallowUserDeposit",
-    values?: undefined
+    functionFragment: 'disallowUserDeposit',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "distributeTicketsToCitadelKeyHolders",
-    values: [AddressLike[], BigNumberish[]]
+    functionFragment: 'distributeTicketsToCitadelKeyHolders',
+    values: [AddressLike[], BigNumberish[]],
   ): string;
   encodeFunctionData(
-    functionFragment: "distributeTicketsToUsers",
-    values: [AddressLike[], BigNumberish[]]
+    functionFragment: 'distributeTicketsToUsers',
+    values: [AddressLike[], BigNumberish[]],
   ): string;
   encodeFunctionData(
-    functionFragment: "getRandomWordsList",
-    values?: undefined
+    functionFragment: 'getRandomWordsList',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "getUserCount",
-    values?: undefined
+    functionFragment: 'getUserCount',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "getUserList",
-    values?: undefined
+    functionFragment: 'getUserList',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "getWinners",
-    values?: undefined
+    functionFragment: 'getWinners',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "initialize",
-    values: [AddressLike, BigNumberish, BigNumberish, AddressLike, AddressLike]
+    functionFragment: 'initialize',
+    values: [AddressLike, BigNumberish, BigNumberish, AddressLike, AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "isTicketAssignedToUsers",
-    values?: undefined
+    functionFragment: 'isTicketAssignedToUsers',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "isUserDepositAllowed",
-    values?: undefined
+    functionFragment: 'isUserDepositAllowed',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "isWinnerTicketId",
-    values: [BigNumberish]
+    functionFragment: 'isWinnerTicketId',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "manageConsumers",
-    values: [AddressLike, boolean]
+    functionFragment: 'manageConsumers',
+    values: [AddressLike, boolean],
   ): string;
-  encodeFunctionData(functionFragment: "nftl", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'nftl', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "onERC721Received",
-    values: [AddressLike, AddressLike, BigNumberish, BytesLike]
+    functionFragment: 'onERC721Received',
+    values: [AddressLike, AddressLike, BigNumberish, BytesLike],
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "pause", values?: undefined): string;
-  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(functionFragment: "prizeNFT", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'prizeNFT', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "prizeNFTTokenIndex",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "prizeNFTokenIds",
-    values: [BigNumberish]
+    functionFragment: 'prizeNFTTokenIndex',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "raffleStartAt",
-    values?: undefined
+    functionFragment: 'prizeNFTokenIds',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "randomWordList",
-    values: [BigNumberish]
+    functionFragment: 'raffleStartAt',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "rawFulfillRandomWords",
-    values: [BigNumberish, BigNumberish[]]
+    functionFragment: 'randomWordList',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: 'rawFulfillRandomWords',
+    values: [BigNumberish, BigNumberish[]],
   ): string;
   encodeFunctionData(
-    functionFragment: "requestRandomWordsForWinnerSelection",
-    values?: undefined
+    functionFragment: 'renounceOwnership',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "s_subscriptionId",
-    values?: undefined
+    functionFragment: 'requestRandomWordsForWinnerSelection',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "ticketCountByUser",
-    values: [AddressLike]
+    functionFragment: 's_subscriptionId',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "ticketIdList",
-    values: [BigNumberish]
+    functionFragment: 'ticketCountByUser',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "ticketRangeByUser",
-    values: [AddressLike]
+    functionFragment: 'ticketIdList',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "totalTicketCount",
-    values?: undefined
+    functionFragment: 'ticketRangeByUser',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "totalWinnerTicketCount",
-    values?: undefined
+    functionFragment: 'totalTicketCount',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "updateTotalWinnerTicketCount",
-    values: [BigNumberish]
+    functionFragment: 'totalWinnerTicketCount',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "userByTicketId",
-    values: [BigNumberish]
+    functionFragment: 'transferOwnership',
+    values: [AddressLike],
+  ): string;
+  encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'updateTotalWinnerTicketCount',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "userDeposits",
-    values: [AddressLike]
+    functionFragment: 'userByTicketId',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "winners",
-    values: [BigNumberish]
+    functionFragment: 'userDeposits',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "withdrawLINK",
-    values: [AddressLike]
+    functionFragment: 'winners',
+    values: [BigNumberish],
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'withdrawLINK',
+    values: [AddressLike],
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "NFTL_AMOUNT_FOR_TICKET",
-    data: BytesLike
+    functionFragment: 'NFTL_AMOUNT_FOR_TICKET',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "allowUserDeposit",
-    data: BytesLike
+    functionFragment: 'allowUserDeposit',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assignTicketToUsers",
-    data: BytesLike
+    functionFragment: 'assignTicketToUsers',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "cancelSubscription",
-    data: BytesLike
+    functionFragment: 'cancelSubscription',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "chargeLINK", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'chargeLINK', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "currentWinnerTicketCount",
-    data: BytesLike
+    functionFragment: 'currentWinnerTicketCount',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'deposit', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "depositPrizeNFT",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "disallowUserDeposit",
-    data: BytesLike
+    functionFragment: 'depositPrizeNFT',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "distributeTicketsToCitadelKeyHolders",
-    data: BytesLike
+    functionFragment: 'disallowUserDeposit',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "distributeTicketsToUsers",
-    data: BytesLike
+    functionFragment: 'distributeTicketsToCitadelKeyHolders',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getRandomWordsList",
-    data: BytesLike
+    functionFragment: 'distributeTicketsToUsers',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUserCount",
-    data: BytesLike
+    functionFragment: 'getRandomWordsList',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUserList",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getWinners", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "isTicketAssignedToUsers",
-    data: BytesLike
+    functionFragment: 'getUserCount',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isUserDepositAllowed",
-    data: BytesLike
+    functionFragment: 'getUserList',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'getWinners', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'isTicketAssignedToUsers',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isWinnerTicketId",
-    data: BytesLike
+    functionFragment: 'isUserDepositAllowed',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "manageConsumers",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "nftl", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "onERC721Received",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "prizeNFT", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "prizeNFTTokenIndex",
-    data: BytesLike
+    functionFragment: 'isWinnerTicketId',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "prizeNFTokenIds",
-    data: BytesLike
+    functionFragment: 'manageConsumers',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'nftl', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'onERC721Received',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'prizeNFT', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'prizeNFTTokenIndex',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "raffleStartAt",
-    data: BytesLike
+    functionFragment: 'prizeNFTokenIds',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "randomWordList",
-    data: BytesLike
+    functionFragment: 'raffleStartAt',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "rawFulfillRandomWords",
-    data: BytesLike
+    functionFragment: 'randomWordList',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
+    functionFragment: 'rawFulfillRandomWords',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "requestRandomWordsForWinnerSelection",
-    data: BytesLike
+    functionFragment: 'renounceOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "s_subscriptionId",
-    data: BytesLike
+    functionFragment: 'requestRandomWordsForWinnerSelection',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "ticketCountByUser",
-    data: BytesLike
+    functionFragment: 's_subscriptionId',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "ticketIdList",
-    data: BytesLike
+    functionFragment: 'ticketCountByUser',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "ticketRangeByUser",
-    data: BytesLike
+    functionFragment: 'ticketIdList',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalTicketCount",
-    data: BytesLike
+    functionFragment: 'ticketRangeByUser',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalWinnerTicketCount",
-    data: BytesLike
+    functionFragment: 'totalTicketCount',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "updateTotalWinnerTicketCount",
-    data: BytesLike
+    functionFragment: 'totalWinnerTicketCount',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "userByTicketId",
-    data: BytesLike
+    functionFragment: 'transferOwnership',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'updateTotalWinnerTicketCount',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "userDeposits",
-    data: BytesLike
+    functionFragment: 'userByTicketId',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "winners", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "withdrawLINK",
-    data: BytesLike
+    functionFragment: 'userDeposits',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'winners', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'withdrawLINK',
+    data: BytesLike,
   ): Result;
 }
 
@@ -461,7 +461,7 @@ export namespace PausedEvent {
 export namespace RandomWordsReceivedEvent {
   export type InputTuple = [
     requestId: BigNumberish,
-    randomWords: BigNumberish[]
+    randomWords: BigNumberish[],
   ];
   export type OutputTuple = [requestId: bigint, randomWords: bigint[]];
   export interface OutputObject {
@@ -477,7 +477,7 @@ export namespace RandomWordsReceivedEvent {
 export namespace RandomWordsRequestedEvent {
   export type InputTuple = [
     requestId: BigNumberish,
-    randomCountToRequest: BigNumberish
+    randomCountToRequest: BigNumberish,
   ];
   export type OutputTuple = [requestId: bigint, randomCountToRequest: bigint];
   export interface OutputObject {
@@ -533,13 +533,13 @@ export namespace WinnerSelectedEvent {
     by: AddressLike,
     winner: AddressLike,
     ticketId: BigNumberish,
-    prizeTokenId: BigNumberish
+    prizeTokenId: BigNumberish,
   ];
   export type OutputTuple = [
     by: string,
     winner: string,
     ticketId: bigint,
-    prizeTokenId: bigint
+    prizeTokenId: bigint,
   ];
   export interface OutputObject {
     by: string;
@@ -562,88 +562,88 @@ export interface NFTLRaffle extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
-  NFTL_AMOUNT_FOR_TICKET: TypedContractMethod<[], [bigint], "view">;
+  NFTL_AMOUNT_FOR_TICKET: TypedContractMethod<[], [bigint], 'view'>;
 
-  allowUserDeposit: TypedContractMethod<[], [void], "nonpayable">;
+  allowUserDeposit: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  assignTicketToUsers: TypedContractMethod<[], [void], "nonpayable">;
+  assignTicketToUsers: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  cancelSubscription: TypedContractMethod<[], [void], "nonpayable">;
+  cancelSubscription: TypedContractMethod<[], [void], 'nonpayable'>;
 
   chargeLINK: TypedContractMethod<
     [_amount: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  currentWinnerTicketCount: TypedContractMethod<[], [bigint], "view">;
+  currentWinnerTicketCount: TypedContractMethod<[], [bigint], 'view'>;
 
-  deposit: TypedContractMethod<[_amount: BigNumberish], [void], "nonpayable">;
+  deposit: TypedContractMethod<[_amount: BigNumberish], [void], 'nonpayable'>;
 
   depositPrizeNFT: TypedContractMethod<
     [_prizeNFTTokenIds: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  disallowUserDeposit: TypedContractMethod<[], [void], "nonpayable">;
+  disallowUserDeposit: TypedContractMethod<[], [void], 'nonpayable'>;
 
   distributeTicketsToCitadelKeyHolders: TypedContractMethod<
     [_holders: AddressLike[], _keyCount: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   distributeTicketsToUsers: TypedContractMethod<
     [_users: AddressLike[], _ticketCount: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  getRandomWordsList: TypedContractMethod<[], [bigint[]], "view">;
+  getRandomWordsList: TypedContractMethod<[], [bigint[]], 'view'>;
 
-  getUserCount: TypedContractMethod<[], [bigint], "view">;
+  getUserCount: TypedContractMethod<[], [bigint], 'view'>;
 
-  getUserList: TypedContractMethod<[], [string[]], "view">;
+  getUserList: TypedContractMethod<[], [string[]], 'view'>;
 
   getWinners: TypedContractMethod<
     [],
     [NFTLRaffle.WinnerInfoStructOutput[]],
-    "view"
+    'view'
   >;
 
   initialize: TypedContractMethod<
@@ -652,103 +652,103 @@ export interface NFTLRaffle extends BaseContract {
       _pendingPeriod: BigNumberish,
       _totalWinnerTicketCount: BigNumberish,
       _prizeNFT: AddressLike,
-      _vrfCoordinator: AddressLike
+      _vrfCoordinator: AddressLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  isTicketAssignedToUsers: TypedContractMethod<[], [boolean], "view">;
+  isTicketAssignedToUsers: TypedContractMethod<[], [boolean], 'view'>;
 
-  isUserDepositAllowed: TypedContractMethod<[], [boolean], "view">;
+  isUserDepositAllowed: TypedContractMethod<[], [boolean], 'view'>;
 
   isWinnerTicketId: TypedContractMethod<
     [arg0: BigNumberish],
     [boolean],
-    "view"
+    'view'
   >;
 
   manageConsumers: TypedContractMethod<
     [_consumer: AddressLike, _add: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  nftl: TypedContractMethod<[], [string], "view">;
+  nftl: TypedContractMethod<[], [string], 'view'>;
 
   onERC721Received: TypedContractMethod<
     [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish, arg3: BytesLike],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  pause: TypedContractMethod<[], [void], "nonpayable">;
+  pause: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  paused: TypedContractMethod<[], [boolean], "view">;
+  paused: TypedContractMethod<[], [boolean], 'view'>;
 
-  prizeNFT: TypedContractMethod<[], [string], "view">;
+  prizeNFT: TypedContractMethod<[], [string], 'view'>;
 
   prizeNFTTokenIndex: TypedContractMethod<
     [arg0: BigNumberish],
     [bigint],
-    "view"
+    'view'
   >;
 
-  prizeNFTokenIds: TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+  prizeNFTokenIds: TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
 
-  raffleStartAt: TypedContractMethod<[], [bigint], "view">;
+  raffleStartAt: TypedContractMethod<[], [bigint], 'view'>;
 
-  randomWordList: TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+  randomWordList: TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
 
   rawFulfillRandomWords: TypedContractMethod<
     [_requestId: BigNumberish, _randomWords: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceOwnership: TypedContractMethod<[], [void], 'nonpayable'>;
 
   requestRandomWordsForWinnerSelection: TypedContractMethod<
     [],
     [bigint],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  s_subscriptionId: TypedContractMethod<[], [bigint], "view">;
+  s_subscriptionId: TypedContractMethod<[], [bigint], 'view'>;
 
-  ticketCountByUser: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  ticketCountByUser: TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
 
-  ticketIdList: TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+  ticketIdList: TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
 
   ticketRangeByUser: TypedContractMethod<
     [arg0: AddressLike],
     [[bigint, bigint] & { startTicketId: bigint; endTicketId: bigint }],
-    "view"
+    'view'
   >;
 
-  totalTicketCount: TypedContractMethod<[], [bigint], "view">;
+  totalTicketCount: TypedContractMethod<[], [bigint], 'view'>;
 
-  totalWinnerTicketCount: TypedContractMethod<[], [bigint], "view">;
+  totalWinnerTicketCount: TypedContractMethod<[], [bigint], 'view'>;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  unpause: TypedContractMethod<[], [void], "nonpayable">;
+  unpause: TypedContractMethod<[], [void], 'nonpayable'>;
 
   updateTotalWinnerTicketCount: TypedContractMethod<
     [_totalWinnerTicketCount: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  userByTicketId: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  userByTicketId: TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
 
-  userDeposits: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  userDeposits: TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
 
   winners: TypedContractMethod<
     [arg0: BigNumberish],
@@ -757,266 +757,264 @@ export interface NFTLRaffle extends BaseContract {
         ticketId: bigint;
         winner: string;
         prizeTokenId: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  withdrawLINK: TypedContractMethod<[_to: AddressLike], [void], "nonpayable">;
+  withdrawLINK: TypedContractMethod<[_to: AddressLike], [void], 'nonpayable'>;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "NFTL_AMOUNT_FOR_TICKET"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'NFTL_AMOUNT_FOR_TICKET',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "allowUserDeposit"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'allowUserDeposit',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "assignTicketToUsers"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'assignTicketToUsers',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "cancelSubscription"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'cancelSubscription',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "chargeLINK"
-  ): TypedContractMethod<[_amount: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'chargeLINK',
+  ): TypedContractMethod<[_amount: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "currentWinnerTicketCount"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'currentWinnerTicketCount',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "deposit"
-  ): TypedContractMethod<[_amount: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'deposit',
+  ): TypedContractMethod<[_amount: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "depositPrizeNFT"
+    nameOrSignature: 'depositPrizeNFT',
   ): TypedContractMethod<
     [_prizeNFTTokenIds: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "disallowUserDeposit"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'disallowUserDeposit',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "distributeTicketsToCitadelKeyHolders"
+    nameOrSignature: 'distributeTicketsToCitadelKeyHolders',
   ): TypedContractMethod<
     [_holders: AddressLike[], _keyCount: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "distributeTicketsToUsers"
+    nameOrSignature: 'distributeTicketsToUsers',
   ): TypedContractMethod<
     [_users: AddressLike[], _ticketCount: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "getRandomWordsList"
-  ): TypedContractMethod<[], [bigint[]], "view">;
+    nameOrSignature: 'getRandomWordsList',
+  ): TypedContractMethod<[], [bigint[]], 'view'>;
   getFunction(
-    nameOrSignature: "getUserCount"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'getUserCount',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "getUserList"
-  ): TypedContractMethod<[], [string[]], "view">;
+    nameOrSignature: 'getUserList',
+  ): TypedContractMethod<[], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "getWinners"
-  ): TypedContractMethod<[], [NFTLRaffle.WinnerInfoStructOutput[]], "view">;
+    nameOrSignature: 'getWinners',
+  ): TypedContractMethod<[], [NFTLRaffle.WinnerInfoStructOutput[]], 'view'>;
   getFunction(
-    nameOrSignature: "initialize"
+    nameOrSignature: 'initialize',
   ): TypedContractMethod<
     [
       _nftl: AddressLike,
       _pendingPeriod: BigNumberish,
       _totalWinnerTicketCount: BigNumberish,
       _prizeNFT: AddressLike,
-      _vrfCoordinator: AddressLike
+      _vrfCoordinator: AddressLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "isTicketAssignedToUsers"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'isTicketAssignedToUsers',
+  ): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isUserDepositAllowed"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'isUserDepositAllowed',
+  ): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isWinnerTicketId"
-  ): TypedContractMethod<[arg0: BigNumberish], [boolean], "view">;
+    nameOrSignature: 'isWinnerTicketId',
+  ): TypedContractMethod<[arg0: BigNumberish], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "manageConsumers"
+    nameOrSignature: 'manageConsumers',
   ): TypedContractMethod<
     [_consumer: AddressLike, _add: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "nftl"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'nftl',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "onERC721Received"
+    nameOrSignature: 'onERC721Received',
   ): TypedContractMethod<
     [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish, arg3: BytesLike],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'owner',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "pause"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'pause',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "paused"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'paused',
+  ): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "prizeNFT"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'prizeNFT',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "prizeNFTTokenIndex"
-  ): TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+    nameOrSignature: 'prizeNFTTokenIndex',
+  ): TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "prizeNFTokenIds"
-  ): TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+    nameOrSignature: 'prizeNFTokenIds',
+  ): TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "raffleStartAt"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'raffleStartAt',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "randomWordList"
-  ): TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+    nameOrSignature: 'randomWordList',
+  ): TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "rawFulfillRandomWords"
+    nameOrSignature: 'rawFulfillRandomWords',
   ): TypedContractMethod<
     [_requestId: BigNumberish, _randomWords: BigNumberish[]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'renounceOwnership',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "requestRandomWordsForWinnerSelection"
-  ): TypedContractMethod<[], [bigint], "nonpayable">;
+    nameOrSignature: 'requestRandomWordsForWinnerSelection',
+  ): TypedContractMethod<[], [bigint], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "s_subscriptionId"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 's_subscriptionId',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "ticketCountByUser"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+    nameOrSignature: 'ticketCountByUser',
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "ticketIdList"
-  ): TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+    nameOrSignature: 'ticketIdList',
+  ): TypedContractMethod<[arg0: BigNumberish], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "ticketRangeByUser"
+    nameOrSignature: 'ticketRangeByUser',
   ): TypedContractMethod<
     [arg0: AddressLike],
     [[bigint, bigint] & { startTicketId: bigint; endTicketId: bigint }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "totalTicketCount"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'totalTicketCount',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "totalWinnerTicketCount"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'totalWinnerTicketCount',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'transferOwnership',
+  ): TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "unpause"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'unpause',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "updateTotalWinnerTicketCount"
+    nameOrSignature: 'updateTotalWinnerTicketCount',
   ): TypedContractMethod<
     [_totalWinnerTicketCount: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "userByTicketId"
-  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+    nameOrSignature: 'userByTicketId',
+  ): TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "userDeposits"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "winners"
-  ): TypedContractMethod<
+    nameOrSignature: 'userDeposits',
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'winners'): TypedContractMethod<
     [arg0: BigNumberish],
     [
       [bigint, string, bigint] & {
         ticketId: bigint;
         winner: string;
         prizeTokenId: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "withdrawLINK"
-  ): TypedContractMethod<[_to: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'withdrawLINK',
+  ): TypedContractMethod<[_to: AddressLike], [void], 'nonpayable'>;
 
   getEvent(
-    key: "Initialized"
+    key: 'Initialized',
   ): TypedContractEvent<
     InitializedEvent.InputTuple,
     InitializedEvent.OutputTuple,
     InitializedEvent.OutputObject
   >;
   getEvent(
-    key: "OwnershipTransferred"
+    key: 'OwnershipTransferred',
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "Paused"
+    key: 'Paused',
   ): TypedContractEvent<
     PausedEvent.InputTuple,
     PausedEvent.OutputTuple,
     PausedEvent.OutputObject
   >;
   getEvent(
-    key: "RandomWordsReceived"
+    key: 'RandomWordsReceived',
   ): TypedContractEvent<
     RandomWordsReceivedEvent.InputTuple,
     RandomWordsReceivedEvent.OutputTuple,
     RandomWordsReceivedEvent.OutputObject
   >;
   getEvent(
-    key: "RandomWordsRequested"
+    key: 'RandomWordsRequested',
   ): TypedContractEvent<
     RandomWordsRequestedEvent.InputTuple,
     RandomWordsRequestedEvent.OutputTuple,
     RandomWordsRequestedEvent.OutputObject
   >;
   getEvent(
-    key: "TicketDistributed"
+    key: 'TicketDistributed',
   ): TypedContractEvent<
     TicketDistributedEvent.InputTuple,
     TicketDistributedEvent.OutputTuple,
     TicketDistributedEvent.OutputObject
   >;
   getEvent(
-    key: "Unpaused"
+    key: 'Unpaused',
   ): TypedContractEvent<
     UnpausedEvent.InputTuple,
     UnpausedEvent.OutputTuple,
     UnpausedEvent.OutputObject
   >;
   getEvent(
-    key: "UserDeposited"
+    key: 'UserDeposited',
   ): TypedContractEvent<
     UserDepositedEvent.InputTuple,
     UserDepositedEvent.OutputTuple,
     UserDepositedEvent.OutputObject
   >;
   getEvent(
-    key: "WinnerSelected"
+    key: 'WinnerSelected',
   ): TypedContractEvent<
     WinnerSelectedEvent.InputTuple,
     WinnerSelectedEvent.OutputTuple,
@@ -1024,7 +1022,7 @@ export interface NFTLRaffle extends BaseContract {
   >;
 
   filters: {
-    "Initialized(uint8)": TypedContractEvent<
+    'Initialized(uint8)': TypedContractEvent<
       InitializedEvent.InputTuple,
       InitializedEvent.OutputTuple,
       InitializedEvent.OutputObject
@@ -1035,7 +1033,7 @@ export interface NFTLRaffle extends BaseContract {
       InitializedEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
+    'OwnershipTransferred(address,address)': TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
@@ -1046,7 +1044,7 @@ export interface NFTLRaffle extends BaseContract {
       OwnershipTransferredEvent.OutputObject
     >;
 
-    "Paused(address)": TypedContractEvent<
+    'Paused(address)': TypedContractEvent<
       PausedEvent.InputTuple,
       PausedEvent.OutputTuple,
       PausedEvent.OutputObject
@@ -1057,7 +1055,7 @@ export interface NFTLRaffle extends BaseContract {
       PausedEvent.OutputObject
     >;
 
-    "RandomWordsReceived(uint256,uint256[])": TypedContractEvent<
+    'RandomWordsReceived(uint256,uint256[])': TypedContractEvent<
       RandomWordsReceivedEvent.InputTuple,
       RandomWordsReceivedEvent.OutputTuple,
       RandomWordsReceivedEvent.OutputObject
@@ -1068,7 +1066,7 @@ export interface NFTLRaffle extends BaseContract {
       RandomWordsReceivedEvent.OutputObject
     >;
 
-    "RandomWordsRequested(uint256,uint256)": TypedContractEvent<
+    'RandomWordsRequested(uint256,uint256)': TypedContractEvent<
       RandomWordsRequestedEvent.InputTuple,
       RandomWordsRequestedEvent.OutputTuple,
       RandomWordsRequestedEvent.OutputObject
@@ -1079,7 +1077,7 @@ export interface NFTLRaffle extends BaseContract {
       RandomWordsRequestedEvent.OutputObject
     >;
 
-    "TicketDistributed(address,uint256)": TypedContractEvent<
+    'TicketDistributed(address,uint256)': TypedContractEvent<
       TicketDistributedEvent.InputTuple,
       TicketDistributedEvent.OutputTuple,
       TicketDistributedEvent.OutputObject
@@ -1090,7 +1088,7 @@ export interface NFTLRaffle extends BaseContract {
       TicketDistributedEvent.OutputObject
     >;
 
-    "Unpaused(address)": TypedContractEvent<
+    'Unpaused(address)': TypedContractEvent<
       UnpausedEvent.InputTuple,
       UnpausedEvent.OutputTuple,
       UnpausedEvent.OutputObject
@@ -1101,7 +1099,7 @@ export interface NFTLRaffle extends BaseContract {
       UnpausedEvent.OutputObject
     >;
 
-    "UserDeposited(address,uint256)": TypedContractEvent<
+    'UserDeposited(address,uint256)': TypedContractEvent<
       UserDepositedEvent.InputTuple,
       UserDepositedEvent.OutputTuple,
       UserDepositedEvent.OutputObject
@@ -1112,7 +1110,7 @@ export interface NFTLRaffle extends BaseContract {
       UserDepositedEvent.OutputObject
     >;
 
-    "WinnerSelected(address,address,uint256,uint256)": TypedContractEvent<
+    'WinnerSelected(address,address,uint256,uint256)': TypedContractEvent<
       WinnerSelectedEvent.InputTuple,
       WinnerSelectedEvent.OutputTuple,
       WinnerSelectedEvent.OutputObject

@@ -2,11 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   Initializable,
   InitializableInterface,
-} from "../../../../../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable";
+} from '../../../../../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable';
 
 const _abi = [
   {
@@ -14,13 +14,13 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint8",
-        name: "version",
-        type: "uint8",
+        internalType: 'uint8',
+        name: 'version',
+        type: 'uint8',
       },
     ],
-    name: "Initialized",
-    type: "event",
+    name: 'Initialized',
+    type: 'event',
   },
 ] as const;
 
@@ -31,7 +31,7 @@ export class Initializable__factory {
   }
   static connect(
     address: string,
-    runner?: ContractRunner | null
+    runner?: ContractRunner | null,
   ): Initializable {
     return new Contract(address, _abi, runner) as unknown as Initializable;
   }

@@ -2,35 +2,35 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   INiftyLaunchComics,
   INiftyLaunchComicsInterface,
-} from "../../../../src/contracts/interfaces/INiftyLaunchComics";
+} from '../../../../src/contracts/interfaces/INiftyLaunchComics';
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "account",
-        type: "address",
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
       },
       {
-        internalType: "uint256[]",
-        name: "ids",
-        type: "uint256[]",
+        internalType: 'uint256[]',
+        name: 'ids',
+        type: 'uint256[]',
       },
       {
-        internalType: "uint256[]",
-        name: "values",
-        type: "uint256[]",
+        internalType: 'uint256[]',
+        name: 'values',
+        type: 'uint256[]',
       },
     ],
-    name: "burnBatch",
+    name: 'burnBatch',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const;
 
@@ -41,7 +41,7 @@ export class INiftyLaunchComics__factory {
   }
   static connect(
     address: string,
-    runner?: ContractRunner | null
+    runner?: ContractRunner | null,
   ): INiftyLaunchComics {
     return new Contract(address, _abi, runner) as unknown as INiftyLaunchComics;
   }

@@ -1,13 +1,13 @@
 import { OrderSigningUtils, OrderBookApi } from '@cowprotocol/cow-sdk';
-import { Contract, parseEther, formatEther } from 'ethers';
-import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
-import wethAbi from '@/contracts/abis/weth.json';
+import { parseEther, formatEther } from 'ethers';
 import {
   COWSWAP_VAULT_RELAYER_ADDRESS,
   WETH_ADDRESS,
   NFTL_TOKEN_ADDRESS,
 } from '@/constants/contracts';
 import { formatNumberToDisplay2 } from './numbers';
+import { ERC20__factory } from '@/types/typechain';
+import { WETH__factory } from '@/types/WETH__factory';
 
 export const getCowMarketPrice = async ({
   kind,
@@ -39,14 +39,14 @@ export const createOrderSwapEtherToNFTL = async ({
   try {
     // Wrap ETH
     handleTxnState('Sign the wrapping with your wallet');
-    const wEth = new Contract(WETH_ADDRESS[chainId], wethAbi);
+    const wEth = WETH__factory.connect(WETH_ADDRESS[chainId]);
     await wEth.connect(signer).deposit({
       value: parseEther(etherVal),
     });
 
     // Approve WETH to Vault Relayer
     handleTxnState('Allow CowSwap to use your WETH');
-    const erc20 = new Contract(WETH_ADDRESS[chainId], ERC20.abi);
+    const erc20 = ERC20__factory.connect(WETH_ADDRESS[chainId]);
     const tx = await erc20
       .connect(signer)
       .approve(COWSWAP_VAULT_RELAYER_ADDRESS, parseEther(etherVal));
