@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export declare namespace NiftyLeagueCharacter {
   export type CharacterTraitsStruct = {
@@ -71,7 +71,7 @@ export declare namespace NiftyLeagueCharacter {
     hands: bigint,
     neckwear: bigint,
     leftItem: bigint,
-    rightItem: bigint
+    rightItem: bigint,
   ] & {
     tribe: bigint;
     skinColor: bigint;
@@ -101,312 +101,312 @@ export declare namespace NiftyLeagueCharacter {
 export interface NiftyDegenInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "MAX_SUPPLY"
-      | "NAME_CHANGE_PRICE"
-      | "SPECIAL_CHARACTERS"
-      | "approve"
-      | "balanceOf"
-      | "changeName"
-      | "getApproved"
-      | "getCharacterTraits"
-      | "getNFTPrice"
-      | "getName"
-      | "getRemovedTraits"
-      | "initPoolSizes"
-      | "isApprovedForAll"
-      | "isAvailableAndAllowedTrait"
-      | "isAvailableTrait"
-      | "isNameReserved"
-      | "isUnique"
-      | "name"
-      | "overrideMintPrice"
-      | "owner"
-      | "ownerOf"
-      | "pauseMinting"
-      | "paused"
-      | "purchase"
-      | "renounceOwnership"
-      | "safeTransferFrom(address,address,uint256)"
-      | "safeTransferFrom(address,address,uint256,bytes)"
-      | "setApprovalForAll"
-      | "setBaseURI"
-      | "supportsInterface"
-      | "symbol"
-      | "tokenURI"
-      | "totalSupply"
-      | "transferFrom"
-      | "transferOwnership"
-      | "unpauseMinting"
-      | "validateName"
-      | "withdraw"
+      | 'MAX_SUPPLY'
+      | 'NAME_CHANGE_PRICE'
+      | 'SPECIAL_CHARACTERS'
+      | 'approve'
+      | 'balanceOf'
+      | 'changeName'
+      | 'getApproved'
+      | 'getCharacterTraits'
+      | 'getNFTPrice'
+      | 'getName'
+      | 'getRemovedTraits'
+      | 'initPoolSizes'
+      | 'isApprovedForAll'
+      | 'isAvailableAndAllowedTrait'
+      | 'isAvailableTrait'
+      | 'isNameReserved'
+      | 'isUnique'
+      | 'name'
+      | 'overrideMintPrice'
+      | 'owner'
+      | 'ownerOf'
+      | 'pauseMinting'
+      | 'paused'
+      | 'purchase'
+      | 'renounceOwnership'
+      | 'safeTransferFrom(address,address,uint256)'
+      | 'safeTransferFrom(address,address,uint256,bytes)'
+      | 'setApprovalForAll'
+      | 'setBaseURI'
+      | 'supportsInterface'
+      | 'symbol'
+      | 'tokenURI'
+      | 'totalSupply'
+      | 'transferFrom'
+      | 'transferOwnership'
+      | 'unpauseMinting'
+      | 'validateName'
+      | 'withdraw',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "Approval"
-      | "ApprovalForAll"
-      | "NameUpdated"
-      | "OwnershipTransferred"
-      | "Paused"
-      | "Transfer"
-      | "Unpaused"
+      | 'Approval'
+      | 'ApprovalForAll'
+      | 'NameUpdated'
+      | 'OwnershipTransferred'
+      | 'Paused'
+      | 'Transfer'
+      | 'Unpaused',
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "MAX_SUPPLY",
-    values?: undefined
+    functionFragment: 'MAX_SUPPLY',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "NAME_CHANGE_PRICE",
-    values?: undefined
+    functionFragment: 'NAME_CHANGE_PRICE',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "SPECIAL_CHARACTERS",
-    values?: undefined
+    functionFragment: 'SPECIAL_CHARACTERS',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "approve",
-    values: [AddressLike, BigNumberish]
+    functionFragment: 'approve',
+    values: [AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "balanceOf",
-    values: [AddressLike]
+    functionFragment: 'balanceOf',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "changeName",
-    values: [BigNumberish, string]
+    functionFragment: 'changeName',
+    values: [BigNumberish, string],
   ): string;
   encodeFunctionData(
-    functionFragment: "getApproved",
-    values: [BigNumberish]
+    functionFragment: 'getApproved',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "getCharacterTraits",
-    values: [BigNumberish]
+    functionFragment: 'getCharacterTraits',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "getNFTPrice",
-    values?: undefined
+    functionFragment: 'getNFTPrice',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "getName",
-    values: [BigNumberish]
+    functionFragment: 'getName',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "getRemovedTraits",
-    values?: undefined
+    functionFragment: 'getRemovedTraits',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "initPoolSizes",
-    values?: undefined
+    functionFragment: 'initPoolSizes',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "isApprovedForAll",
-    values: [AddressLike, AddressLike]
+    functionFragment: 'isApprovedForAll',
+    values: [AddressLike, AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "isAvailableAndAllowedTrait",
-    values: [BigNumberish, BigNumberish]
+    functionFragment: 'isAvailableAndAllowedTrait',
+    values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "isAvailableTrait",
-    values: [BigNumberish]
+    functionFragment: 'isAvailableTrait',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "isNameReserved",
-    values: [string]
+    functionFragment: 'isNameReserved',
+    values: [string],
   ): string;
   encodeFunctionData(
-    functionFragment: "isUnique",
-    values: [BigNumberish]
+    functionFragment: 'isUnique',
+    values: [BigNumberish],
   ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'name', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "overrideMintPrice",
-    values: [BigNumberish]
+    functionFragment: 'overrideMintPrice',
+    values: [BigNumberish],
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "ownerOf",
-    values: [BigNumberish]
+    functionFragment: 'ownerOf',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "pauseMinting",
-    values?: undefined
+    functionFragment: 'pauseMinting',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "purchase",
+    functionFragment: 'purchase',
     values: [
       [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish],
       [BigNumberish, BigNumberish, BigNumberish],
       BigNumberish[],
       BigNumberish[],
-      [BigNumberish, BigNumberish]
-    ]
+      [BigNumberish, BigNumberish],
+    ],
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: 'renounceOwnership',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "safeTransferFrom(address,address,uint256)",
-    values: [AddressLike, AddressLike, BigNumberish]
+    functionFragment: 'safeTransferFrom(address,address,uint256)',
+    values: [AddressLike, AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
-    values: [AddressLike, AddressLike, BigNumberish, BytesLike]
+    functionFragment: 'safeTransferFrom(address,address,uint256,bytes)',
+    values: [AddressLike, AddressLike, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "setApprovalForAll",
-    values: [AddressLike, boolean]
+    functionFragment: 'setApprovalForAll',
+    values: [AddressLike, boolean],
   ): string;
-  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
+  encodeFunctionData(functionFragment: 'setBaseURI', values: [string]): string;
   encodeFunctionData(
-    functionFragment: "supportsInterface",
-    values: [BytesLike]
+    functionFragment: 'supportsInterface',
+    values: [BytesLike],
   ): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "tokenURI",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "totalSupply",
-    values?: undefined
+    functionFragment: 'tokenURI',
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "transferFrom",
-    values: [AddressLike, AddressLike, BigNumberish]
+    functionFragment: 'totalSupply',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
+    functionFragment: 'transferFrom',
+    values: [AddressLike, AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "unpauseMinting",
-    values?: undefined
+    functionFragment: 'transferOwnership',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "validateName",
-    values: [string]
+    functionFragment: 'unpauseMinting',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'validateName',
+    values: [string],
+  ): string;
+  encodeFunctionData(functionFragment: 'withdraw', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "MAX_SUPPLY", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'MAX_SUPPLY', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "NAME_CHANGE_PRICE",
-    data: BytesLike
+    functionFragment: 'NAME_CHANGE_PRICE',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "SPECIAL_CHARACTERS",
-    data: BytesLike
+    functionFragment: 'SPECIAL_CHARACTERS',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "changeName", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'changeName', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getApproved",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getCharacterTraits",
-    data: BytesLike
+    functionFragment: 'getApproved',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getNFTPrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getName", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getRemovedTraits",
-    data: BytesLike
+    functionFragment: 'getCharacterTraits',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "initPoolSizes",
-    data: BytesLike
+    functionFragment: 'getNFTPrice',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'getName', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'getRemovedTraits',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isApprovedForAll",
-    data: BytesLike
+    functionFragment: 'initPoolSizes',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isAvailableAndAllowedTrait",
-    data: BytesLike
+    functionFragment: 'isApprovedForAll',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isAvailableTrait",
-    data: BytesLike
+    functionFragment: 'isAvailableAndAllowedTrait',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isNameReserved",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "isUnique", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "overrideMintPrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "pauseMinting",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "purchase", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
+    functionFragment: 'isAvailableTrait',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeTransferFrom(address,address,uint256)",
-    data: BytesLike
+    functionFragment: 'isNameReserved',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'isUnique', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'overrideMintPrice',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'ownerOf', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'pauseMinting',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'purchase', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'renounceOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
-    data: BytesLike
+    functionFragment: 'safeTransferFrom(address,address,uint256)',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setApprovalForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "supportsInterface",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "totalSupply",
-    data: BytesLike
+    functionFragment: 'safeTransferFrom(address,address,uint256,bytes)',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferFrom",
-    data: BytesLike
+    functionFragment: 'setApprovalForAll',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'setBaseURI', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'supportsInterface',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'tokenURI', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'totalSupply',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
+    functionFragment: 'transferFrom',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "unpauseMinting",
-    data: BytesLike
+    functionFragment: 'transferOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "validateName",
-    data: BytesLike
+    functionFragment: 'unpauseMinting',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'validateName',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
 }
 
 export namespace ApprovalEvent {
   export type InputTuple = [
     owner: AddressLike,
     approved: AddressLike,
-    tokenId: BigNumberish
+    tokenId: BigNumberish,
   ];
   export type OutputTuple = [owner: string, approved: string, tokenId: bigint];
   export interface OutputObject {
@@ -424,12 +424,12 @@ export namespace ApprovalForAllEvent {
   export type InputTuple = [
     owner: AddressLike,
     operator: AddressLike,
-    approved: boolean
+    approved: boolean,
   ];
   export type OutputTuple = [
     owner: string,
     operator: string,
-    approved: boolean
+    approved: boolean,
   ];
   export interface OutputObject {
     owner: string;
@@ -446,12 +446,12 @@ export namespace NameUpdatedEvent {
   export type InputTuple = [
     tokenId: BigNumberish,
     previousName: string,
-    newName: string
+    newName: string,
   ];
   export type OutputTuple = [
     tokenId: bigint,
     previousName: string,
-    newName: string
+    newName: string,
   ];
   export interface OutputObject {
     tokenId: bigint;
@@ -493,7 +493,7 @@ export namespace TransferEvent {
   export type InputTuple = [
     from: AddressLike,
     to: AddressLike,
-    tokenId: BigNumberish
+    tokenId: BigNumberish,
   ];
   export type OutputTuple = [from: string, to: string, tokenId: bigint];
   export interface OutputObject {
@@ -528,113 +528,113 @@ export interface NiftyDegen extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
-  MAX_SUPPLY: TypedContractMethod<[], [bigint], "view">;
+  MAX_SUPPLY: TypedContractMethod<[], [bigint], 'view'>;
 
-  NAME_CHANGE_PRICE: TypedContractMethod<[], [bigint], "view">;
+  NAME_CHANGE_PRICE: TypedContractMethod<[], [bigint], 'view'>;
 
-  SPECIAL_CHARACTERS: TypedContractMethod<[], [bigint], "view">;
+  SPECIAL_CHARACTERS: TypedContractMethod<[], [bigint], 'view'>;
 
   approve: TypedContractMethod<
     [to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], "view">;
+  balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], 'view'>;
 
   changeName: TypedContractMethod<
     [tokenId: BigNumberish, newName: string],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  getApproved: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  getApproved: TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
 
   getCharacterTraits: TypedContractMethod<
     [tokenId: BigNumberish],
     [NiftyLeagueCharacter.CharacterTraitsStructOutput],
-    "view"
+    'view'
   >;
 
-  getNFTPrice: TypedContractMethod<[], [bigint], "view">;
+  getNFTPrice: TypedContractMethod<[], [bigint], 'view'>;
 
-  getName: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  getName: TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
 
-  getRemovedTraits: TypedContractMethod<[], [bigint[]], "view">;
+  getRemovedTraits: TypedContractMethod<[], [bigint[]], 'view'>;
 
-  initPoolSizes: TypedContractMethod<[], [void], "nonpayable">;
+  initPoolSizes: TypedContractMethod<[], [void], 'nonpayable'>;
 
   isApprovedForAll: TypedContractMethod<
     [owner: AddressLike, operator: AddressLike],
     [boolean],
-    "view"
+    'view'
   >;
 
   isAvailableAndAllowedTrait: TypedContractMethod<
     [tribe: BigNumberish, trait: BigNumberish],
     [boolean],
-    "view"
+    'view'
   >;
 
   isAvailableTrait: TypedContractMethod<
     [trait: BigNumberish],
     [boolean],
-    "view"
+    'view'
   >;
 
-  isNameReserved: TypedContractMethod<[nameString: string], [boolean], "view">;
+  isNameReserved: TypedContractMethod<[nameString: string], [boolean], 'view'>;
 
-  isUnique: TypedContractMethod<[traitCombo: BigNumberish], [boolean], "view">;
+  isUnique: TypedContractMethod<[traitCombo: BigNumberish], [boolean], 'view'>;
 
-  name: TypedContractMethod<[], [string], "view">;
+  name: TypedContractMethod<[], [string], 'view'>;
 
   overrideMintPrice: TypedContractMethod<
     [newPrice: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
 
-  pauseMinting: TypedContractMethod<[], [void], "nonpayable">;
+  pauseMinting: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  paused: TypedContractMethod<[], [boolean], "view">;
+  paused: TypedContractMethod<[], [boolean], 'view'>;
 
   purchase: TypedContractMethod<
     [
@@ -643,169 +643,169 @@ export interface NiftyDegen extends BaseContract {
         BigNumberish,
         BigNumberish,
         BigNumberish,
-        BigNumberish
+        BigNumberish,
       ],
       head: [BigNumberish, BigNumberish, BigNumberish],
       clothing: BigNumberish[],
       accessories: BigNumberish[],
-      items: [BigNumberish, BigNumberish]
+      items: [BigNumberish, BigNumberish],
     ],
     [void],
-    "payable"
+    'payable'
   >;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceOwnership: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  "safeTransferFrom(address,address,uint256)": TypedContractMethod<
+  'safeTransferFrom(address,address,uint256)': TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  "safeTransferFrom(address,address,uint256,bytes)": TypedContractMethod<
+  'safeTransferFrom(address,address,uint256,bytes)': TypedContractMethod<
     [
       from: AddressLike,
       to: AddressLike,
       tokenId: BigNumberish,
-      data: BytesLike
+      data: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   setApprovalForAll: TypedContractMethod<
     [operator: AddressLike, approved: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  setBaseURI: TypedContractMethod<[baseURI: string], [void], "nonpayable">;
+  setBaseURI: TypedContractMethod<[baseURI: string], [void], 'nonpayable'>;
 
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
-    "view"
+    'view'
   >;
 
-  symbol: TypedContractMethod<[], [string], "view">;
+  symbol: TypedContractMethod<[], [string], 'view'>;
 
-  tokenURI: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  tokenURI: TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
 
-  totalSupply: TypedContractMethod<[], [bigint], "view">;
+  totalSupply: TypedContractMethod<[], [bigint], 'view'>;
 
   transferFrom: TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  unpauseMinting: TypedContractMethod<[], [void], "nonpayable">;
+  unpauseMinting: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  validateName: TypedContractMethod<[newName: string], [boolean], "view">;
+  validateName: TypedContractMethod<[newName: string], [boolean], 'view'>;
 
-  withdraw: TypedContractMethod<[], [void], "nonpayable">;
+  withdraw: TypedContractMethod<[], [void], 'nonpayable'>;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "MAX_SUPPLY"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'MAX_SUPPLY',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "NAME_CHANGE_PRICE"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'NAME_CHANGE_PRICE',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "SPECIAL_CHARACTERS"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'SPECIAL_CHARACTERS',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "approve"
+    nameOrSignature: 'approve',
   ): TypedContractMethod<
     [to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "balanceOf"
-  ): TypedContractMethod<[owner: AddressLike], [bigint], "view">;
+    nameOrSignature: 'balanceOf',
+  ): TypedContractMethod<[owner: AddressLike], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "changeName"
+    nameOrSignature: 'changeName',
   ): TypedContractMethod<
     [tokenId: BigNumberish, newName: string],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "getApproved"
-  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+    nameOrSignature: 'getApproved',
+  ): TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "getCharacterTraits"
+    nameOrSignature: 'getCharacterTraits',
   ): TypedContractMethod<
     [tokenId: BigNumberish],
     [NiftyLeagueCharacter.CharacterTraitsStructOutput],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "getNFTPrice"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'getNFTPrice',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "getName"
-  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+    nameOrSignature: 'getName',
+  ): TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "getRemovedTraits"
-  ): TypedContractMethod<[], [bigint[]], "view">;
+    nameOrSignature: 'getRemovedTraits',
+  ): TypedContractMethod<[], [bigint[]], 'view'>;
   getFunction(
-    nameOrSignature: "initPoolSizes"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'initPoolSizes',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "isApprovedForAll"
+    nameOrSignature: 'isApprovedForAll',
   ): TypedContractMethod<
     [owner: AddressLike, operator: AddressLike],
     [boolean],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "isAvailableAndAllowedTrait"
+    nameOrSignature: 'isAvailableAndAllowedTrait',
   ): TypedContractMethod<
     [tribe: BigNumberish, trait: BigNumberish],
     [boolean],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "isAvailableTrait"
-  ): TypedContractMethod<[trait: BigNumberish], [boolean], "view">;
+    nameOrSignature: 'isAvailableTrait',
+  ): TypedContractMethod<[trait: BigNumberish], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isNameReserved"
-  ): TypedContractMethod<[nameString: string], [boolean], "view">;
+    nameOrSignature: 'isNameReserved',
+  ): TypedContractMethod<[nameString: string], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isUnique"
-  ): TypedContractMethod<[traitCombo: BigNumberish], [boolean], "view">;
+    nameOrSignature: 'isUnique',
+  ): TypedContractMethod<[traitCombo: BigNumberish], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "name"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'name',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "overrideMintPrice"
-  ): TypedContractMethod<[newPrice: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'overrideMintPrice',
+  ): TypedContractMethod<[newPrice: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'owner',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "ownerOf"
-  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+    nameOrSignature: 'ownerOf',
+  ): TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "pauseMinting"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'pauseMinting',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "paused"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'paused',
+  ): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "purchase"
+    nameOrSignature: 'purchase',
   ): TypedContractMethod<
     [
       character: [
@@ -813,124 +813,124 @@ export interface NiftyDegen extends BaseContract {
         BigNumberish,
         BigNumberish,
         BigNumberish,
-        BigNumberish
+        BigNumberish,
       ],
       head: [BigNumberish, BigNumberish, BigNumberish],
       clothing: BigNumberish[],
       accessories: BigNumberish[],
-      items: [BigNumberish, BigNumberish]
+      items: [BigNumberish, BigNumberish],
     ],
     [void],
-    "payable"
+    'payable'
   >;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'renounceOwnership',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "safeTransferFrom(address,address,uint256)"
+    nameOrSignature: 'safeTransferFrom(address,address,uint256)',
   ): TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "safeTransferFrom(address,address,uint256,bytes)"
+    nameOrSignature: 'safeTransferFrom(address,address,uint256,bytes)',
   ): TypedContractMethod<
     [
       from: AddressLike,
       to: AddressLike,
       tokenId: BigNumberish,
-      data: BytesLike
+      data: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setApprovalForAll"
+    nameOrSignature: 'setApprovalForAll',
   ): TypedContractMethod<
     [operator: AddressLike, approved: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setBaseURI"
-  ): TypedContractMethod<[baseURI: string], [void], "nonpayable">;
+    nameOrSignature: 'setBaseURI',
+  ): TypedContractMethod<[baseURI: string], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "supportsInterface"
-  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
+    nameOrSignature: 'supportsInterface',
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "symbol"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'symbol',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "tokenURI"
-  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+    nameOrSignature: 'tokenURI',
+  ): TypedContractMethod<[tokenId: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "totalSupply"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'totalSupply',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "transferFrom"
+    nameOrSignature: 'transferFrom',
   ): TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'transferOwnership',
+  ): TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "unpauseMinting"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'unpauseMinting',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "validateName"
-  ): TypedContractMethod<[newName: string], [boolean], "view">;
+    nameOrSignature: 'validateName',
+  ): TypedContractMethod<[newName: string], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "withdraw"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'withdraw',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
 
   getEvent(
-    key: "Approval"
+    key: 'Approval',
   ): TypedContractEvent<
     ApprovalEvent.InputTuple,
     ApprovalEvent.OutputTuple,
     ApprovalEvent.OutputObject
   >;
   getEvent(
-    key: "ApprovalForAll"
+    key: 'ApprovalForAll',
   ): TypedContractEvent<
     ApprovalForAllEvent.InputTuple,
     ApprovalForAllEvent.OutputTuple,
     ApprovalForAllEvent.OutputObject
   >;
   getEvent(
-    key: "NameUpdated"
+    key: 'NameUpdated',
   ): TypedContractEvent<
     NameUpdatedEvent.InputTuple,
     NameUpdatedEvent.OutputTuple,
     NameUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "OwnershipTransferred"
+    key: 'OwnershipTransferred',
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "Paused"
+    key: 'Paused',
   ): TypedContractEvent<
     PausedEvent.InputTuple,
     PausedEvent.OutputTuple,
     PausedEvent.OutputObject
   >;
   getEvent(
-    key: "Transfer"
+    key: 'Transfer',
   ): TypedContractEvent<
     TransferEvent.InputTuple,
     TransferEvent.OutputTuple,
     TransferEvent.OutputObject
   >;
   getEvent(
-    key: "Unpaused"
+    key: 'Unpaused',
   ): TypedContractEvent<
     UnpausedEvent.InputTuple,
     UnpausedEvent.OutputTuple,
@@ -938,7 +938,7 @@ export interface NiftyDegen extends BaseContract {
   >;
 
   filters: {
-    "Approval(address,address,uint256)": TypedContractEvent<
+    'Approval(address,address,uint256)': TypedContractEvent<
       ApprovalEvent.InputTuple,
       ApprovalEvent.OutputTuple,
       ApprovalEvent.OutputObject
@@ -949,7 +949,7 @@ export interface NiftyDegen extends BaseContract {
       ApprovalEvent.OutputObject
     >;
 
-    "ApprovalForAll(address,address,bool)": TypedContractEvent<
+    'ApprovalForAll(address,address,bool)': TypedContractEvent<
       ApprovalForAllEvent.InputTuple,
       ApprovalForAllEvent.OutputTuple,
       ApprovalForAllEvent.OutputObject
@@ -960,7 +960,7 @@ export interface NiftyDegen extends BaseContract {
       ApprovalForAllEvent.OutputObject
     >;
 
-    "NameUpdated(uint256,string,string)": TypedContractEvent<
+    'NameUpdated(uint256,string,string)': TypedContractEvent<
       NameUpdatedEvent.InputTuple,
       NameUpdatedEvent.OutputTuple,
       NameUpdatedEvent.OutputObject
@@ -971,7 +971,7 @@ export interface NiftyDegen extends BaseContract {
       NameUpdatedEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
+    'OwnershipTransferred(address,address)': TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
@@ -982,7 +982,7 @@ export interface NiftyDegen extends BaseContract {
       OwnershipTransferredEvent.OutputObject
     >;
 
-    "Paused(address)": TypedContractEvent<
+    'Paused(address)': TypedContractEvent<
       PausedEvent.InputTuple,
       PausedEvent.OutputTuple,
       PausedEvent.OutputObject
@@ -993,7 +993,7 @@ export interface NiftyDegen extends BaseContract {
       PausedEvent.OutputObject
     >;
 
-    "Transfer(address,address,uint256)": TypedContractEvent<
+    'Transfer(address,address,uint256)': TypedContractEvent<
       TransferEvent.InputTuple,
       TransferEvent.OutputTuple,
       TransferEvent.OutputObject
@@ -1004,7 +1004,7 @@ export interface NiftyDegen extends BaseContract {
       TransferEvent.OutputObject
     >;
 
-    "Unpaused(address)": TypedContractEvent<
+    'Unpaused(address)': TypedContractEvent<
       UnpausedEvent.InputTuple,
       UnpausedEvent.OutputTuple,
       UnpausedEvent.OutputObject

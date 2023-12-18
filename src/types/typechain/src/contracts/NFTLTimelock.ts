@@ -10,41 +10,41 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface NFTLTimelockInterface extends Interface {
   getFunction(
-    nameOrSignature: "beneficiary" | "release" | "releaseTime" | "token"
+    nameOrSignature: 'beneficiary' | 'release' | 'releaseTime' | 'token',
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "beneficiary",
-    values?: undefined
+    functionFragment: 'beneficiary',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "release", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'release', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "releaseTime",
-    values?: undefined
+    functionFragment: 'releaseTime',
+    values?: undefined,
   ): string;
-  encodeFunctionData(functionFragment: "token", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'token', values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "beneficiary",
-    data: BytesLike
+    functionFragment: 'beneficiary',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'release', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "releaseTime",
-    data: BytesLike
+    functionFragment: 'releaseTime',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
 }
 
 export interface NFTLTimelock extends BaseContract {
@@ -56,64 +56,64 @@ export interface NFTLTimelock extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
-  beneficiary: TypedContractMethod<[], [string], "view">;
+  beneficiary: TypedContractMethod<[], [string], 'view'>;
 
-  release: TypedContractMethod<[], [void], "nonpayable">;
+  release: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  releaseTime: TypedContractMethod<[], [bigint], "view">;
+  releaseTime: TypedContractMethod<[], [bigint], 'view'>;
 
-  token: TypedContractMethod<[], [string], "view">;
+  token: TypedContractMethod<[], [string], 'view'>;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "beneficiary"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'beneficiary',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "release"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'release',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "releaseTime"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'releaseTime',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "token"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'token',
+  ): TypedContractMethod<[], [string], 'view'>;
 
   filters: {};
 }

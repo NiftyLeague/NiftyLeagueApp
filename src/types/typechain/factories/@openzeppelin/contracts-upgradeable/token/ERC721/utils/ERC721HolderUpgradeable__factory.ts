@@ -6,13 +6,13 @@ import {
   ContractFactory,
   ContractTransactionResponse,
   Interface,
-} from "ethers";
-import type { Signer, ContractDeployTransaction, ContractRunner } from "ethers";
-import type { NonPayableOverrides } from "../../../../../../common";
+} from 'ethers';
+import type { Signer, ContractDeployTransaction, ContractRunner } from 'ethers';
+import type { NonPayableOverrides } from '../../../../../../common';
 import type {
   ERC721HolderUpgradeable,
   ERC721HolderUpgradeableInterface,
-} from "../../../../../../@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable";
+} from '../../../../../../@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable';
 
 const _abi = [
   {
@@ -20,59 +20,59 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint8",
-        name: "version",
-        type: "uint8",
+        internalType: 'uint8',
+        name: 'version',
+        type: 'uint8',
       },
     ],
-    name: "Initialized",
-    type: "event",
+    name: 'Initialized',
+    type: 'event',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
       {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
+        internalType: 'bytes',
+        name: '',
+        type: 'bytes',
       },
     ],
-    name: "onERC721Received",
+    name: 'onERC721Received',
     outputs: [
       {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
+        internalType: 'bytes4',
+        name: '',
+        type: 'bytes4',
       },
     ],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const;
 
 const _bytecode =
-  "0x608060405234801561001057600080fd5b506101af806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063150b7a0214610030575b600080fd5b61004e61003e36600461009d565b630a85bd0160e11b949350505050565b6040516001600160e01b0319909116815260200160405180910390f35b80356001600160a01b038116811461008257600080fd5b919050565b634e487b7160e01b600052604160045260246000fd5b600080600080608085870312156100b357600080fd5b6100bc8561006b565b93506100ca6020860161006b565b925060408501359150606085013567ffffffffffffffff808211156100ee57600080fd5b818701915087601f83011261010257600080fd5b81358181111561011457610114610087565b604051601f8201601f19908116603f0116810190838211818310171561013c5761013c610087565b816040528281528a602084870101111561015557600080fd5b8260208601602083013760006020848301015280955050505050509295919450925056fea26469706673582212205fc6b13de23352e68f8500b8c45ac8e1c7542e09691dba9126d3d9e1adcdf99764736f6c634300080b0033";
+  '0x608060405234801561001057600080fd5b506101af806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063150b7a0214610030575b600080fd5b61004e61003e36600461009d565b630a85bd0160e11b949350505050565b6040516001600160e01b0319909116815260200160405180910390f35b80356001600160a01b038116811461008257600080fd5b919050565b634e487b7160e01b600052604160045260246000fd5b600080600080608085870312156100b357600080fd5b6100bc8561006b565b93506100ca6020860161006b565b925060408501359150606085013567ffffffffffffffff808211156100ee57600080fd5b818701915087601f83011261010257600080fd5b81358181111561011457610114610087565b604051601f8201601f19908116603f0116810190838211818310171561013c5761013c610087565b816040528281528a602084870101111561015557600080fd5b8260208601602083013760006020848301015280955050505050509295919450925056fea26469706673582212205fc6b13de23352e68f8500b8c45ac8e1c7542e09691dba9126d3d9e1adcdf99764736f6c634300080b0033';
 
 type ERC721HolderUpgradeableConstructorParams =
   | [signer?: Signer]
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: ERC721HolderUpgradeableConstructorParams
+  xs: ERC721HolderUpgradeableConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class ERC721HolderUpgradeable__factory extends ContractFactory {
@@ -85,7 +85,7 @@ export class ERC721HolderUpgradeable__factory extends ContractFactory {
   }
 
   override getDeployTransaction(
-    overrides?: NonPayableOverrides & { from?: string }
+    overrides?: NonPayableOverrides & { from?: string },
   ): Promise<ContractDeployTransaction> {
     return super.getDeployTransaction(overrides || {});
   }
@@ -97,7 +97,7 @@ export class ERC721HolderUpgradeable__factory extends ContractFactory {
     >;
   }
   override connect(
-    runner: ContractRunner | null
+    runner: ContractRunner | null,
   ): ERC721HolderUpgradeable__factory {
     return super.connect(runner) as ERC721HolderUpgradeable__factory;
   }
@@ -109,12 +109,12 @@ export class ERC721HolderUpgradeable__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    runner?: ContractRunner | null
+    runner?: ContractRunner | null,
   ): ERC721HolderUpgradeable {
     return new Contract(
       address,
       _abi,
-      runner
+      runner,
     ) as unknown as ERC721HolderUpgradeable;
   }
 }

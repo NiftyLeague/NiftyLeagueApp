@@ -2,35 +2,35 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   IMintable,
   IMintableInterface,
-} from "../../../../@imtbl/imx-contracts/contracts/IMintable";
+} from '../../../../@imtbl/imx-contracts/contracts/IMintable';
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "to",
-        type: "address",
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
       },
       {
-        internalType: "uint256",
-        name: "quantity",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'quantity',
+        type: 'uint256',
       },
       {
-        internalType: "bytes",
-        name: "mintingBlob",
-        type: "bytes",
+        internalType: 'bytes',
+        name: 'mintingBlob',
+        type: 'bytes',
       },
     ],
-    name: "mintFor",
+    name: 'mintFor',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const;
 
