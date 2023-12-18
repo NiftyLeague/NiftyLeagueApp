@@ -32,7 +32,7 @@ export default function useNFTLBalance(): NFTLBalanceState {
     address,
     token: NFTL_TOKEN_ADDRESS[TARGET_NETWORK.chainId],
     watch: true,
-    cacheTime: 60_000,
+    cacheTime: 300_000,
     formatUnits: 'ether',
     enabled: isConnected,
   });

@@ -7,19 +7,22 @@ import {
   MERKLE_DISTRIBUTOR_ADDRESS,
 } from '@/constants/contracts';
 import { LOCAL_CHAIN_ID } from '@/constants/networks';
+import type { InterfaceAbi } from 'ethers6';
 
 const EXTERNAL_CONTRACTS: {
   [chainId: number]: {
-    [contractName: string]: { address: string; abi: any[] };
+    [contractName: string]: { address: `0x${string}`; abi: InterfaceAbi };
   };
 } = {
   [LOCAL_CHAIN_ID]: {
     MerkleDistributor: {
-      address: MERKLE_DISTRIBUTOR_ADDRESS[LOCAL_CHAIN_ID],
+      address: MERKLE_DISTRIBUTOR_ADDRESS[LOCAL_CHAIN_ID] as `0x${string}`,
       abi: MERKLE_ABI,
     },
     ComicsMerkleDistributor: {
-      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[LOCAL_CHAIN_ID],
+      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[
+        LOCAL_CHAIN_ID
+      ] as `0x${string}`,
       abi: COMICS_MERKLE_ABI,
     },
   },
@@ -29,21 +32,21 @@ const EXTERNAL_CONTRACTS: {
       abi: DAI_ABI,
     },
     MerkleDistributor: {
-      address: MERKLE_DISTRIBUTOR_ADDRESS[mainnet.id],
+      address: MERKLE_DISTRIBUTOR_ADDRESS[mainnet.id] as `0x${string}`,
       abi: MERKLE_ABI,
     },
     ComicsMerkleDistributor: {
-      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[mainnet.id],
+      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[mainnet.id] as `0x${string}`,
       abi: COMICS_MERKLE_ABI,
     },
   },
   [goerli.id]: {
     MerkleDistributor: {
-      address: MERKLE_DISTRIBUTOR_ADDRESS[goerli.id],
+      address: MERKLE_DISTRIBUTOR_ADDRESS[goerli.id] as `0x${string}`,
       abi: MERKLE_ABI,
     },
     ComicsMerkleDistributor: {
-      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[goerli.id],
+      address: COMICS_MERKLE_DISTRIBUTOR_ADDRESS[goerli.id] as `0x${string}`,
       abi: COMICS_MERKLE_ABI,
     },
   },
