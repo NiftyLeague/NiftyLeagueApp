@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { formatEther } from 'ethers';
+import { formatEther } from 'ethers6';
 import type { Contracts } from '@/types/web3';
 import useContractReader from './useContractReader';
 import { NFTL_CONTRACT } from '@/constants/contracts';

@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { mainnet, goerli } from 'viem/chains';
-import { getAddress, isAddress } from 'ethers';
+import { getAddress, isAddress } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_MERKLE_ROOT } from '@/constants/contracts';
 

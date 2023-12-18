@@ -14,7 +14,7 @@ import {
 
 import type { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
-import { type BigNumberish, parseEther } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers6';
 import { NFTL_CONTRACT, DEGEN_CONTRACT } from '@/constants/contracts';
 import { getErrorForName } from '@/utils/name';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';

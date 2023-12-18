@@ -19,7 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { type BigNumberish, parseEther } from 'ethers';
+import { type BigNumberish, parseEther } from 'ethers6';
 import { DialogContext } from '@/components/dialog';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useContractReader from '@/hooks/useContractReader';

@@ -1,5 +1,5 @@
 import { OrderSigningUtils, OrderBookApi } from '@cowprotocol/cow-sdk';
-import { parseEther, formatEther } from 'ethers';
+import { parseEther, formatEther } from 'ethers6';
 import {
   COWSWAP_VAULT_RELAYER_ADDRESS,
   WETH_ADDRESS,

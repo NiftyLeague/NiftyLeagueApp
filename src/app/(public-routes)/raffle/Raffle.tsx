@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { type BigNumberish, formatEther } from 'ethers';
+import { type BigNumberish, formatEther } from 'ethers6';
 import { Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { sectionSpacing } from '@/themes/constant';

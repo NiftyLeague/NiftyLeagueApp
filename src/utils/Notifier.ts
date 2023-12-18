@@ -4,13 +4,13 @@ import { toast } from 'react-toastify';
 import axios, { AxiosResponse } from 'axios';
 import Notify, { API, InitOptions } from 'bnc-notify';
 import { EthereumTransactionLog, EthereumTransactionData } from 'bnc-sdk';
-import { parseUnits, toBeHex } from 'ethers';
+import { parseUnits, toBeHex } from 'ethers6';
 import type {
   Contract,
   JsonRpcSigner,
   TransactionRequest,
   TransactionResponse,
-} from 'ethers';
+} from 'ethers6';
 // import { setIntervalAsync, clearIntervalAsync } from 'set-interval-async/dynamic';
 import { serializeError } from 'eth-rpc-errors';
 import type { GasStationResponse, Network, Provider } from '@/types/web3';

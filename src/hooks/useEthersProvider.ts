@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type PublicClient, usePublicClient } from 'wagmi';
-import { FallbackProvider, JsonRpcProvider } from 'ethers';
+import { FallbackProvider, JsonRpcProvider } from 'ethers6';
 import { type HttpTransport } from 'viem';
 
 export type Provider = FallbackProvider | JsonRpcProvider;

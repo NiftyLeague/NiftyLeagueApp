@@ -6,7 +6,7 @@ import {
   parseUnits,
   type InterfaceAbi,
   ZeroAddress,
-} from 'ethers';
+} from 'ethers6';
 import type { Provider, PublicProvider, UserProvider } from '@/types/web3';
 
 export * from './dateTime';

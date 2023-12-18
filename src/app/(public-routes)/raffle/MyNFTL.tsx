@@ -4,7 +4,7 @@ import { useContext, useState, useCallback, useEffect } from 'react';
 import { Grid, Button, Stack, IconButton } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
-import { type TransactionResponse, parseEther } from 'ethers';
+import { type TransactionResponse, parseEther } from 'ethers6';
 
 import { sectionSpacing } from '@/themes/constant';
 import SectionTitle from '@/components/sections/SectionTitle';
