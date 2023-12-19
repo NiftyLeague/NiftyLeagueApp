@@ -27,7 +27,7 @@ interface Props {
 
 const EnableDisableDegenDialogContent = ({
   degen,
-  isEnabled,
+  isEnabled = false,
   onClose,
   onSuccess,
 }: Props): JSX.Element => {
@@ -119,10 +119,6 @@ const EnableDisableDegenDialogContent = ({
       </DialogActions>
     </>
   );
-};
-
-EnableDisableDegenDialogContent.defaultProps = {
-  isEnabled: false,
 };
 
 export default EnableDisableDegenDialogContent;

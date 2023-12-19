@@ -18,16 +18,12 @@ interface MUIInputLabelProps extends InputLabelProps {
 
 const InputLabel = ({
   children,
-  horizontal,
+  horizontal = false,
   ...others
 }: MUIInputLabelProps) => (
   <BInputLabel horizontal={horizontal} {...others}>
     {children}
   </BInputLabel>
 );
-
-InputLabel.defaultProps = {
-  horizontal: false,
-};
 
 export default InputLabel;

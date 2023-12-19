@@ -17,7 +17,14 @@ interface TSProps {
 
 const Transitions = forwardRef(
   (
-    { children, position, sx, type, direction, ...others }: TSProps,
+    {
+      children,
+      sx,
+      type = 'grow',
+      position = 'top-left',
+      direction = 'up',
+      ...others
+    }: TSProps,
     ref: Ref<ExoticComponent>,
   ) => {
     let positionSX = {
@@ -104,12 +111,6 @@ const Transitions = forwardRef(
     );
   },
 );
-
-Transitions.defaultProps = {
-  type: 'grow',
-  position: 'top-left',
-  direction: 'up',
-};
 
 Transitions.displayName = 'Transitions';
 export default Transitions;
