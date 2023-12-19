@@ -7,8 +7,8 @@ import { Contract, JsonRpcSigner } from 'ethers6';
 import type { Contracts, Provider } from '@/types/web3';
 import { getProviderAndSigner } from '@/utils/ethers';
 import { SUPPORTED_CHAIN_IDS } from '@/constants/networks';
-import CONTRACTS from '@/contracts/deployments';
-import EXTERNAL_CONTRACTS from '@/contracts/externalContracts';
+import CONTRACTS from '@/constants/contracts/deployments';
+import EXTERNAL_CONTRACTS from '@/constants/contracts/externalContracts';
 
 /*
   ~ What it does? ~

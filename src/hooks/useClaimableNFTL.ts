@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { formatEther } from 'ethers6';
 import { useContractRead } from 'wagmi';
 import { TARGET_NETWORK } from '@/constants/networks';
-import CONTRACTS from '@/contracts/deployments';
+import CONTRACTS from '@/constants/contracts/deployments';
 import type { Abi } from 'viem';
 
 const NFTL_CONTRACT = CONTRACTS[TARGET_NETWORK.chainId].NFTLToken;
