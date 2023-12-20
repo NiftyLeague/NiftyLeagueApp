@@ -5,7 +5,7 @@ import {
   DialogContent,
   useMediaQuery,
 } from '@mui/material';
-import { Item } from '@/types/comic';
+import type { Item } from '@/types/comic';
 import { useTheme } from '@mui/material/styles';
 import ItemDetail from '@/components/cards/ItemDetail';
 

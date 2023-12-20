@@ -20,16 +20,14 @@ interface ImportNFTLToWalletState {
 export default function useImportNFTLToWallet(): ImportNFTLToWalletState {
   const { data: walletClient } = useWalletClient();
   const { writeContracts } = useContext(NetworkContext);
-  const NFTLAddress =
-    writeContracts[NFTL_CONTRACT] && writeContracts[NFTL_CONTRACT].address;
 
   const handleImportNFTLToWallet = useCallback(async () => {
-    if (!walletClient || !NFTLAddress) return;
+    if (!walletClient || !writeContracts[NFTL_CONTRACT]) return;
     try {
       const success = await walletClient.watchAsset({
         type: 'ERC20',
         options: {
-          address: NFTLAddress,
+          address: await writeContracts[NFTL_CONTRACT].getAddress(),
           symbol: 'NFTL',
           decimals: 18,
           image:
@@ -44,7 +42,7 @@ export default function useImportNFTLToWallet(): ImportNFTLToWalletState {
     } catch (err) {
       console.log(err);
     }
-  }, [NFTLAddress, walletClient]);
+  }, [writeContracts, walletClient]);
 
   return {
     handleImportNFTLToWallet,

@@ -5,7 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { AUTH_Token, UUID_Token, Nonce, AgreementAccepted } from '@/types/auth';
+import type {
+  AUTH_Token,
+  UUID_Token,
+  Nonce,
+  AgreementAccepted,
+} from '@/types/auth';
 
 // ==============================|| Local Storage CONTEXT & PROVIDER ||============================== //
 

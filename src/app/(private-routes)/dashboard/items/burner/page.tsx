@@ -8,7 +8,7 @@ import IMXContext from '@/contexts/IMXContext';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_BURNER_CONTRACT, COMICS_CONTRACT } from '@/constants/contracts';
 import { DEBUG } from '@/constants/index';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 
 import Machine from './_components/machine';
 import MachineButton from './_components/machine-button';
@@ -43,7 +43,7 @@ const ComicsBurner = () => {
   useEffect(() => {
     const getAllowance = async () => {
       const burnContract = writeContracts[COMICS_BURNER_CONTRACT];
-      const burnContractAddress = burnContract.address;
+      const burnContractAddress = await burnContract.getAddress();
       const comicsContract = writeContracts[COMICS_CONTRACT];
       const approved = (await comicsContract.isApprovedForAll(
         address,

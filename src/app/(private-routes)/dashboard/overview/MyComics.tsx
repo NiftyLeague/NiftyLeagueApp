@@ -7,7 +7,7 @@ import { Box, Button, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import ComicCard from '@/components/cards/ComicCard';
 import SectionSlider from '@/components/sections/SectionSlider';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 import EmptyState from '@/components/EmptyState';
 import ViewComicDialog from '@/components/dialog/ViewComicDialog';
 import useComicsBalance from '@/hooks/useComicsBalance';

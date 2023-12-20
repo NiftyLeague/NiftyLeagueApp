@@ -7,7 +7,7 @@ import { Box } from '@mui/system';
 import CustomModal from './CustomModal';
 import makeStyles from '@mui/styles/makeStyles';
 import { fetchScores } from '@/utils/leaderboard';
-import { DataType, ReturnDataType } from '@/types/leaderboard';
+import type { DataType, ReturnDataType } from '@/types/leaderboard';
 import './navigation.css';
 import {
   TableBody,

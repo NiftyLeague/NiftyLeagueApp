@@ -3,7 +3,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { ethers } from 'ethers';
+import { isAddress } from 'ethers6';
 
 import {
   Box,
@@ -28,7 +28,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import { GOOGLE_ANALYTICS } from '@/constants/google-analytics';
@@ -194,7 +194,7 @@ const RentDegenContentDialog = ({
 
   const validateAddress = (value: string) => {
     setEthAddress(value);
-    if (!ethers.utils.isAddress(value)) {
+    if (!isAddress(value)) {
       setAddressError('Address is invalid!');
     } else if (!value) {
       setAddressError('Please input an address');

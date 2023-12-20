@@ -9,8 +9,8 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { RentalDataGrid } from '@/types/rentalDataGrid';
-import { ColumnType } from '.';
+import type { RentalDataGrid } from '@/types/rentalDataGrid';
+import type { ColumnType } from '.';
 import { v4 as uuidv4 } from 'uuid';
 import Countdown from 'react-countdown';
 import { formatNumberToDisplayWithCommas } from '@/utils/numbers';

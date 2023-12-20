@@ -11,7 +11,7 @@ import useAuth from '@/hooks/useAuth';
 import usePlayerProfile from '@/hooks/usePlayerProfile';
 import ResponsiveTable from 'mui5-responsive-table';
 import { toast } from 'react-toastify';
-import { DataType, ReturnDataType, TableProps } from '@/types/leaderboard';
+import type { DataType, ReturnDataType, TableProps } from '@/types/leaderboard';
 import { sendEvent } from '@/utils/google-analytics';
 import { fetchRankByUserId, fetchScores } from '@/utils/leaderboard';
 import { errorMsgHandler } from '@/utils/errorHandlers';

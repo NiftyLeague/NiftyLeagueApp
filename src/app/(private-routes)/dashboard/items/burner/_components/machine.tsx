@@ -4,7 +4,7 @@ import { memo, useContext, useState } from 'react';
 import useInterval from '@/hooks/useInterval';
 import IMXContext, { Context } from '@/contexts/IMXContext';
 import MachineFrame from './machine-frame';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 
 const ComicsBurnerMachine: React.FC<
   React.PropsWithChildren<

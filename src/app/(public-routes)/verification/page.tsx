@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Container from '@mui/material/Container';
 import useSignAuthMsg from '@/hooks/useSignAuthMsg';
 import useAuth from '@/hooks/useAuth';
-import { UUID_Token, Nonce } from '@/types/auth';
+import type { UUID_Token, Nonce } from '@/types/auth';
 
 const GameVerification = (): JSX.Element => {
   const searchParams = useSearchParams();

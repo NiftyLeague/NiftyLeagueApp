@@ -1,5 +1,5 @@
 // types
-import { ConfigProps } from '@/types/config';
+import type { ConfigProps } from '@/types/config';
 
 export const JWT_API = {
   secret: 'SECRET-KEY',

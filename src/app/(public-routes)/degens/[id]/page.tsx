@@ -5,7 +5,6 @@ import { useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 
-import { Degen, GetDegenResponse } from '@/types/degens';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 import { GET_DEGEN_DETAIL_URL } from '@/constants/url';
 import { TRAIT_INDEXES, TRIBES } from '@/constants/cosmeticsFilters';
@@ -13,7 +12,8 @@ import DegenDialog from '@/components/dialog/DegenDialog';
 import useAuth from '@/hooks/useAuth';
 import ViewTraitsContentDialog from '@/components/dialog/DegenDialog/ViewTraitsContentDialog';
 import ID_SEARCH_QUERY from '@/queries/ID_SEARCH_QUERY';
-import { Character } from '@/types/graph';
+import type { Degen, GetDegenResponse } from '@/types/degens';
+import type { Character } from '@/types/graph';
 
 const DegenTraitsDetailsPage = ({
   params,

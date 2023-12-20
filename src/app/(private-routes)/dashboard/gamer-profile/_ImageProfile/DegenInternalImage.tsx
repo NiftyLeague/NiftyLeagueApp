@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { CardMedia } from '@mui/material';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 
 const DegenInternalImage = memo(({ degen }: { degen: Degen }) => {
   let setting: any = {

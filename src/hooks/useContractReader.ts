@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 import { useCallback, useState, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
-import { Contracts } from '@/types/web3';
+import type { Contracts } from '@/types/web3';
 import useAsyncInterval from './useAsyncInterval';
 
 /*

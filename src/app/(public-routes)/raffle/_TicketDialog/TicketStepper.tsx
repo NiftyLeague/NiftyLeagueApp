@@ -178,5 +178,3 @@ export default function TicketStepper({
     </div>
   );
 }
-
-TicketStepper.defaultProps = { redirectToWallet: false };

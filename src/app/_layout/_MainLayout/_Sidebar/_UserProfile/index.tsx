@@ -15,9 +15,9 @@ import {
 import { DEBUG } from '@/constants/index';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import { NFTL_CONTRACT } from '@/constants/contracts';
-import { ProfileAvatar } from '@/types/account';
 import { sendUserId } from '@/utils/google-analytics';
 import { useGamerProfile } from '@/hooks/useGamerProfile';
+import type { ProfileAvatar } from '@/types/account';
 import BalanceContext from '@/contexts/BalanceContext';
 import ConnectWrapper from '@/components/wrapper/ConnectWrapper';
 import NetworkContext from '@/contexts/NetworkContext';

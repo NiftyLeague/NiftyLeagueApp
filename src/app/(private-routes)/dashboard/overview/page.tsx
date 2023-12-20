@@ -4,7 +4,7 @@
 // import ActiveRentalDialog from '@/components/dialog/ActiveRentalDialog';
 // import { ALL_RENTAL_API_URL } from '@/constants/url';
 // import useFetch from '@/hooks/useFetch';
-// import { Rentals } from '@/types/rentals';
+// import type { Rentals } from '@/types/rentals';
 // import EarningCap from './EarningCap';
 // import MyRentals from './MyRentals';
 // import useAuth from '@/hooks/useAuth';

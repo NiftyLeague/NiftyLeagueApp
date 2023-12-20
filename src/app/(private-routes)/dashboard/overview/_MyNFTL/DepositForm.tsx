@@ -11,17 +11,17 @@ import {
   Stack,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, forwardRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
-import { BigNumber, BigNumberish, providers, utils } from 'ethers';
+import { type TransactionResponse, parseEther, formatEther } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { GAME_ACCOUNT_CONTRACT, NFTL_CONTRACT } from '@/constants/contracts';
 import { DialogContext } from '@/components/dialog';
 import { formatNumberToDisplay } from '@/utils/numbers';
 
 interface DepositFormProps {
-  onDeposit: (amount: number) => Promise<providers.TransactionResponse | null>;
+  onDeposit: (amount: number) => Promise<TransactionResponse | null>;
   balance: number;
 }
 
@@ -34,7 +34,7 @@ const amountSelects: number[] = [25, 50, 75, 100];
 
 const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   const [balanceDeposit, setBalanceDeposit] = useState(0);
-  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [allowance, setAllowance] = useState<bigint>(0n);
   const [allowanceLoading, setAllowanceLoading] = useState(false);
   const [depositLoading, setDepositLoading] = useState(false);
   const { address, tx, writeContracts } = useContext(NetworkContext);
@@ -60,12 +60,12 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   useEffect(() => {
     const getAllowance = async () => {
       const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
-      const gameAccountAddress = gameAccountContract.address;
+      const gameAccountAddress = await gameAccountContract.getAddress();
       const nftl = writeContracts[NFTL_CONTRACT];
       const allowanceBN = (await nftl.allowance(
         address,
         gameAccountAddress,
-      )) as BigNumberish;
+      )) as bigint;
       setAllowance(allowanceBN);
     };
     if (
@@ -73,8 +73,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
       writeContracts[NFTL_CONTRACT] &&
       writeContracts[GAME_ACCOUNT_CONTRACT]
     ) {
-      // eslint-disable-next-line no-void
-      void getAllowance();
+      getAllowance();
     }
   }, [address, writeContracts]);
 
@@ -101,11 +100,9 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
   const handleIncreaseAllowance = async () => {
     setAllowanceLoading(true);
     const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
-    const gameAccountAddress = gameAccountContract.address;
+    const gameAccountAddress = await gameAccountContract.getAddress();
     const nftl = writeContracts[NFTL_CONTRACT];
-    const newAllowance = utils.parseEther(
-      `${Math.max(100000, Math.ceil(balance))}`,
-    );
+    const newAllowance = parseEther(`${Math.max(100000, Math.ceil(balance))}`);
     await tx(nftl.increaseAllowance(gameAccountAddress, newAllowance));
     setAllowance(newAllowance);
     setAllowanceLoading(false);
@@ -169,7 +166,11 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
             control={control}
             render={({ field }) => (
               <NumericFormat
-                {...field}
+                disabled={field.disabled}
+                name={field.name}
+                onBlur={field.onBlur}
+                value={field.value}
+                inputRef={field.ref}
                 isAllowed={({ value }) => Number(value) <= Number(balance)}
                 label="Amount of NFTL to deposit"
                 thousandSeparator
@@ -199,7 +200,7 @@ const DepositForm = ({ onDeposit, balance }: DepositFormProps): JSX.Element => {
         {errors.amountInput && (
           <Alert severity="error">{errors.amountInput.message}</Alert>
         )}
-        {parseFloat(utils.formatEther(allowance)) < balanceDeposit ? (
+        {parseFloat(formatEther(allowance)) < balanceDeposit ? (
           <LoadingButton
             size="large"
             variant="contained"

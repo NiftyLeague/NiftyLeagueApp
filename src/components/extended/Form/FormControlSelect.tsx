@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 // project imports
-import { GenericCardProps } from '@/types';
+import type { GenericCardProps } from '@/types';
 
 // ==============================|| FORM CONTROL SELECT ||============================== //
 

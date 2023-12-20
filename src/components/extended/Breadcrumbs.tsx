@@ -17,7 +17,7 @@ import { IconTallymark1 } from '@tabler/icons-react';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import { NavItemType, NavItemTypeObject, OverrideIcon } from '@/types';
+import type { NavItemType, NavItemTypeObject, OverrideIcon } from '@/types';
 
 const linkSX = {
   display: 'flex',

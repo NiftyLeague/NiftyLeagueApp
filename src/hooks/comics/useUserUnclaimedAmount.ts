@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { DEBUG } from '@/constants/index';
 import useSingleCallResult from '@/hooks/useSingleCallResult';
 import useMerkleDistributorContract from './useMerkleDistributorContract';
@@ -39,7 +38,7 @@ export default function useUserUnclaimedAmount(): ClaimResult {
   if (DEBUG) console.log('claimStats:', { canClaim, userClaimData });
   if (!canClaim || !userClaimData) return { p5: 0, p6: 0 };
   return {
-    p5: BigNumber.from(userClaimData.amount0).toNumber(),
-    p6: BigNumber.from(userClaimData.amount1).toNumber(),
+    p5: Number(BigInt(userClaimData.amount0)),
+    p6: Number(BigInt(userClaimData.amount1)),
   };
 }

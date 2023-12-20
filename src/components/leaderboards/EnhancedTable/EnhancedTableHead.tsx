@@ -2,7 +2,7 @@ import Image from 'next/image';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { EnhancedTableProps } from '@/types/leaderboard';
+import type { EnhancedTableProps } from '@/types/leaderboard';
 import { useTheme, Typography } from '@mui/material';
 
 export default function EnhancedTableHead(

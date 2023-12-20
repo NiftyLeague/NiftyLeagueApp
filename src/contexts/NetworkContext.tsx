@@ -5,11 +5,11 @@ import { useAccount, useWalletClient, type WalletClient } from 'wagmi';
 import { useWeb3ModalState } from '@web3modal/wagmi/react';
 import isEmpty from 'lodash/isEmpty';
 
-import { Contracts } from '@/types/web3';
 import { DEBUG } from '@/constants/index';
 import { TARGET_NETWORK } from '@/constants/networks';
-import { Tx } from '@/types/notify';
 import Notifier from '@/utils/Notifier';
+import type { Contracts } from '@/types/web3';
+import type { Tx } from '@/types/notify';
 import useContractLoader from '@/hooks/useContractLoader';
 import useEthersProvider, { type Provider } from '@/hooks/useEthersProvider';
 import useEthersSigner, { type Signer } from '@/hooks/useEthersSigner';

@@ -4,21 +4,24 @@ import { toast } from 'react-toastify';
 import axios, { AxiosResponse } from 'axios';
 import Notify, { API, InitOptions } from 'bnc-notify';
 import { EthereumTransactionLog, EthereumTransactionData } from 'bnc-sdk';
-import {
-  BigNumber,
+import { parseUnits, toBeHex } from 'ethers6';
+import type {
   Contract,
-  ContractFunction,
-  Signer,
-  utils,
-  providers,
-} from 'ethers';
+  JsonRpcSigner,
+  TransactionRequest,
+  TransactionResponse,
+} from 'ethers6';
 // import { setIntervalAsync, clearIntervalAsync } from 'set-interval-async/dynamic';
 import { serializeError } from 'eth-rpc-errors';
-import { GasStationResponse, Network, Provider } from '@/types/web3';
-import { NotifyCallback, NotifyError, Tx } from '@/types/notify';
+import type { GasStationResponse, Network, Provider } from '@/types/web3';
+import type { NotifyCallback, NotifyError, Tx } from '@/types/notify';
 import { calculateGasMargin, getProviderAndSigner } from '@/utils/ethers';
 import { DEBUG } from '@/constants/index';
-import { VALID_NOTIFY_NETWORKS, TARGET_NETWORK } from '@/constants/networks';
+import {
+  VALID_NOTIFY_NETWORKS,
+  TARGET_NETWORK,
+  NETWORKS,
+} from '@/constants/networks';
 
 // Wrapper around BlockNative's wonderful Notify.js
 // https://docs.blocknative.com/notify
@@ -28,15 +31,15 @@ const callbacks: { [hash: string]: NotifyCallback } = {};
 const loadGasPrice = async (
   targetNetwork: Network,
   speed = 'fast',
-): Promise<BigNumber> => {
-  let gasPrice = utils.parseUnits('20', 'gwei');
+): Promise<bigint> => {
+  let gasPrice = parseUnits('20', 'gwei');
   if (targetNetwork.gasPrice) {
     gasPrice = targetNetwork.gasPrice;
   } else if (navigator.onLine) {
     await axios
       .get('https://ethgasstation.info/json/ethgasAPI.json')
       .then((response: AxiosResponse<GasStationResponse>) => {
-        gasPrice = BigNumber.from(response.data[speed] * 100000000);
+        gasPrice = BigInt(response.data[speed] * 100000000);
       })
       .catch((error) => console.log(error));
   }
@@ -66,13 +69,13 @@ export const submitTxWithGasEstimate = (
   fn: string,
   args: unknown[],
   config = {},
-  minimumGas?: BigNumber,
+  minimumGas?: bigint,
   callback?: NotifyCallback,
-): Promise<void | providers.TransactionResponse | null> =>
+): Promise<void | TransactionResponse | null> =>
   contract.estimateGas[fn](...args, config)
-    .then(async (estimatedGasLimit) =>
+    .then(async (estimatedGasLimit: bigint) =>
       tx(
-        (contract[fn] as ContractFunction)(...args, {
+        contract[fn](...args, {
           ...config,
           gasLimit: calculateGasMargin(estimatedGasLimit, minimumGas),
         }),
@@ -83,24 +86,15 @@ export const submitTxWithGasEstimate = (
       handleError(error.error ?? error);
     });
 
-const unknownTarget = {
-  blockExplorer: '',
-  chainId: 0,
-  label: 'unknown',
-  rpcUrl: '',
-};
-
 export default function Notifier(
-  providerOrSigner?: Provider | Signer,
+  providerOrSigner?: Provider | JsonRpcSigner,
   darkMode = false,
 ): Tx {
   return useCallback(
     async (tx, callback) => {
       if (typeof providerOrSigner !== 'undefined') {
-        const { signer, provider } = getProviderAndSigner(providerOrSigner);
-        // auto select mainnet in case anything goes wrong finding provider
-        let network: providers.Network = { chainId: 1, name: 'mainnet' };
-        if (provider) network = await provider.getNetwork();
+        const { signer, provider } =
+          await getProviderAndSigner(providerOrSigner);
 
         let options: InitOptions = {};
         let notify: API | null = null;
@@ -108,7 +102,7 @@ export default function Notifier(
           options = {
             dappId: process.env.NEXT_PUBLIC_BLOCKNATIVE_DAPPID, // GET YOUR OWN KEY AT https://account.blocknative.com
             system: 'ethereum',
-            networkId: network.chainId,
+            networkId: TARGET_NETWORK.chainId,
             darkMode,
             transactionHandler: (txInformation) => {
               const txData = txInformation.transaction as
@@ -130,31 +124,30 @@ export default function Notifier(
           notify = Notify(options);
         }
 
-        // TODO: Should replace this with TARGET_NETWORK.blockExplorer
-        let etherscanNetwork = '';
-        if (network.name && network.chainId > 1)
-          etherscanNetwork = `${network.name}.`;
-        const etherscanTxUrl = `https://${etherscanNetwork}etherscan.io/tx/`;
+        const etherscanTxUrl = `${TARGET_NETWORK.blockExplorer}/tx/`;
 
         try {
-          let result: providers.TransactionResponse;
+          let result: TransactionResponse;
           if (tx instanceof Promise) {
             if (DEBUG) console.log('AWAITING TX', tx);
             result = await tx;
           } else {
-            const safeTx = { ...tx };
+            const safeTx = { ...tx } as TransactionRequest;
             // TODO: Replace gasPrice with EIP-1559 specifications if non-promise txs are needed
             if (!tx.gasPrice)
               safeTx.gasPrice = await loadGasPrice(TARGET_NETWORK);
-            if (!tx.gasLimit) safeTx.gasLimit = utils.hexlify(120000);
+            if (!tx.gasLimit) safeTx.gasLimit = toBeHex(120000);
             if (DEBUG) console.log('RUNNING TX', safeTx);
-            result = await (signer as Signer).sendTransaction(safeTx);
+            result = await (signer as JsonRpcSigner).sendTransaction(safeTx);
           }
           if (DEBUG) console.log('RESULT:', result);
           if (callback) callbacks[result.hash] = callback;
 
           // if it is a valid Notify.js network, use that, if not, just send a default notification
-          if (notify && VALID_NOTIFY_NETWORKS.includes(network.chainId)) {
+          if (
+            notify &&
+            VALID_NOTIFY_NETWORKS.includes(TARGET_NETWORK.chainId)
+          ) {
             const { emitter } = notify.hash(result.hash);
             emitter.on('all', (transaction) => ({
               onclick: () =>
@@ -163,8 +156,7 @@ export default function Notifier(
                 window.open(etherscanTxUrl + transaction.hash),
             }));
           } else {
-            const networkName =
-              network.name === 'unknown' ? TARGET_NETWORK.label : network.name;
+            const networkName = TARGET_NETWORK.label;
             toast.info(
               ({ data }) => `${networkName} Transaction Sent: ${data}`,
               {

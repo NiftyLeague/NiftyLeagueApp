@@ -17,7 +17,7 @@ import { DEBUG } from '@/constants/index';
 import { sendEvent } from '@/utils/google-analytics';
 import withVerification from '@/components/wrapper/Authentication';
 import Preloader from '@/components/Preloader';
-// import { Rentals } from '@/types/rentals';
+// import type { Rentals } from '@/types/rentals';
 // import EarningCap from '@/app/dashboard/overview/EarningCap';
 import ArcadeTokensRequired from '@/components/ArcadeTokensRequired';
 import useAuth from '@/hooks/useAuth';

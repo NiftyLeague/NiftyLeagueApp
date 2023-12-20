@@ -18,7 +18,7 @@ import {
   TRAIT_KEY_VALUE_MAP,
   TRAIT_NAME_MAP,
 } from '@/constants/cosmeticsFilters';
-import { Degen, GetDegenResponse } from '@/types/degens';
+import type { Degen, GetDegenResponse } from '@/types/degens';
 import { sendEvent } from '@/utils/google-analytics';
 
 export interface ViewTraitsContentDialogProps {

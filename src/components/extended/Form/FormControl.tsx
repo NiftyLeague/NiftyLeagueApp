@@ -7,7 +7,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import MUIFormControl from '@mui/material/FormControl';
-import { GenericCardProps } from '@/types';
+import type { GenericCardProps } from '@/types';
 
 // ==============================|| FORM CONTROL ||============================== //
 

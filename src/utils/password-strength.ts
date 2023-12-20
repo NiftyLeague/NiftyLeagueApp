@@ -1,7 +1,7 @@
 /**
  * Password validator for login pages
  */
-import { NumbColorFunc, StringBoolFunc, StringNumFunc } from '@/types';
+import type { NumbColorFunc, StringBoolFunc, StringNumFunc } from '@/types';
 import value from '@/styles/_themes-vars.module.scss';
 
 // has number

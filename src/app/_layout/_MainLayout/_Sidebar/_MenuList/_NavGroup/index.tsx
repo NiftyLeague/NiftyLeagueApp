@@ -7,7 +7,7 @@ import { Divider, List, Typography } from '@mui/material';
 // project imports
 import NavItem from '../_NavItem';
 import NavCollapse from '../_NavCollapse';
-import { GenericCardProps } from '@/types';
+import type { GenericCardProps } from '@/types';
 
 // ==============================|| SIDEBAR MENU LIST GROUP ||============================== //
 

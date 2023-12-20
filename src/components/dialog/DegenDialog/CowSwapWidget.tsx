@@ -2,7 +2,7 @@
 
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { BigNumber, BigNumberish, utils } from 'ethers';
+import { formatEther, parseEther } from 'ethers6';
 import { OrderKind } from '@cowprotocol/cow-sdk';
 import {
   createOrderSwapEtherToNFTL,
@@ -90,7 +90,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
   const [orderFulfilled, setOrderFulfilled] = useState<boolean>(false);
   const [orderBuyAmount, setOrderBuyAmount] = useState<string>('');
   const [deposited, setDeposited] = useState<boolean>(false);
-  const [allowance, setAllowance] = useState<BigNumberish>(BigNumber.from('0'));
+  const [allowance, setAllowance] = useState<bigint>(0n);
   const [allowanceLoading, setAllowanceLoading] = useState<boolean>(false);
   const [depositLoading, setDepositLoading] = useState<boolean>(false);
 
@@ -107,12 +107,12 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
   useEffect(() => {
     const getAllowance = async () => {
       const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
-      const gameAccountAddress = gameAccountContract.address;
+      const gameAccountAddress = await gameAccountContract.getAddress();
       const nftl = writeContracts[NFTL_CONTRACT];
       const allowanceBN = (await nftl.allowance(
         address,
         gameAccountAddress,
-      )) as BigNumberish;
+      )) as bigint;
       setAllowance(allowanceBN);
     };
     if (
@@ -129,7 +129,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     const orderDetail = await getOrderDetail(TARGET_NETWORK.chainId, orderId);
     if (orderDetail?.status === 'fulfilled') {
       setOrderFulfilled(true);
-      setOrderBuyAmount(utils.formatEther(orderDetail?.buyAmount ?? ''));
+      setOrderBuyAmount(formatEther(orderDetail?.buyAmount ?? ''));
       refreshNFTLBalance();
     } else {
       setTimeout(() => {
@@ -157,22 +157,18 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
       });
 
       const { feeAmount: fee, buyAmount, sellAmount } = quoteResponse?.quote;
-      setFeeAmount(utils.formatEther(fee));
+      setFeeAmount(formatEther(fee));
       if (kind === OrderKind.SELL) {
         setFromEthAmount('');
-        setReceiveNftlAmount(utils.formatEther(buyAmount));
+        setReceiveNftlAmount(formatEther(buyAmount));
       } else {
         setReceiveNftlAmount('');
-        setFromEthAmount(
-          utils.formatEther(
-            BigNumber.from(sellAmount).add(BigNumber.from(fee)),
-          ),
-        );
+        setFromEthAmount(formatEther(BigInt(sellAmount) + BigInt(fee)));
       }
     } catch (err: any) {
       if (err?.error_code === 'FeeExceedsFrom') {
         setFeeExceedAmount(true);
-        setFeeAmount(utils.formatEther(err.data.fee_amount));
+        setFeeAmount(formatEther(err.data.fee_amount));
       }
     } finally {
       setLoading(false);
@@ -252,7 +248,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     setDepositLoading(true);
     const txRes = await tx(
       writeContracts[GAME_ACCOUNT_CONTRACT].deposit(
-        utils.parseEther(`${Number(orderBuyAmount)}`),
+        parseEther(`${Number(orderBuyAmount)}`),
       ),
     );
     setDepositLoading(false);
@@ -267,7 +263,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
     const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
     const gameAccountAddress = gameAccountContract.address;
     const nftl = writeContracts[NFTL_CONTRACT];
-    const newAllowance = utils.parseEther(
+    const newAllowance = parseEther(
       `${Math.max(100000, Math.ceil(userNFTLBalance))}`,
     );
     await tx(nftl.increaseAllowance(gameAccountAddress, newAllowance));
@@ -286,7 +282,7 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
   };
 
   const isAllowDeposit =
-    parseFloat(utils.formatEther(allowance)) >= parseFloat(orderBuyAmount);
+    parseFloat(formatEther(allowance)) >= parseFloat(orderBuyAmount);
 
   return (
     <Stack direction="column">

@@ -1,13 +1,12 @@
 import { OrderSigningUtils, OrderBookApi } from '@cowprotocol/cow-sdk';
-import { Contract, ethers } from 'ethers';
-import ERC20 from '@openzeppelin/contracts/build/contracts/ERC20.json';
-import wethAbi from '@/contracts/abis/weth.json';
+import { parseEther, formatEther } from 'ethers6';
 import {
   COWSWAP_VAULT_RELAYER_ADDRESS,
   WETH_ADDRESS,
   NFTL_TOKEN_ADDRESS,
 } from '@/constants/contracts';
 import { formatNumberToDisplay2 } from './numbers';
+import { ERC20__factory, WETH__factory } from '@/types/typechain';
 
 export const getCowMarketPrice = async ({
   kind,
@@ -20,7 +19,7 @@ export const getCowMarketPrice = async ({
     kind,
     sellToken: WETH_ADDRESS[chainId],
     buyToken: NFTL_TOKEN_ADDRESS[chainId],
-    sellAmountBeforeFee: ethers.utils.parseEther(amount).toString(),
+    sellAmountBeforeFee: parseEther(amount).toString(),
     from: userAddress,
     receiver: userAddress,
     validTo: Math.floor(new Date().getTime() / 1000) + 3600, // Valid for 1 hr
@@ -39,20 +38,17 @@ export const createOrderSwapEtherToNFTL = async ({
   try {
     // Wrap ETH
     handleTxnState('Sign the wrapping with your wallet');
-    const wEth = new Contract(WETH_ADDRESS[chainId], wethAbi);
+    const wEth = WETH__factory.connect(WETH_ADDRESS[chainId]);
     await wEth.connect(signer).deposit({
-      value: ethers.utils.parseEther(etherVal),
+      value: parseEther(etherVal),
     });
 
     // Approve WETH to Vault Relayer
     handleTxnState('Allow CowSwap to use your WETH');
-    const erc20 = new Contract(WETH_ADDRESS[chainId], ERC20.abi);
+    const erc20 = ERC20__factory.connect(WETH_ADDRESS[chainId]);
     const tx = await erc20
       .connect(signer)
-      .approve(
-        COWSWAP_VAULT_RELAYER_ADDRESS,
-        ethers.utils.parseEther(etherVal),
-      );
+      .approve(COWSWAP_VAULT_RELAYER_ADDRESS, parseEther(etherVal));
     await tx.wait();
 
     const orderBookApi = new OrderBookApi({ chainId });
@@ -61,7 +57,7 @@ export const createOrderSwapEtherToNFTL = async ({
       buyToken: NFTL_TOKEN_ADDRESS[chainId],
       from: userAddress,
       receiver: userAddress,
-      sellAmountBeforeFee: ethers.utils.parseEther(etherVal).toString(),
+      sellAmountBeforeFee: parseEther(etherVal).toString(),
       validTo: Math.floor(new Date().getTime() / 1000) + 3600,
       // @ts-expect-error
       kind: OrderQuoteSide.kind.SELL,
@@ -76,7 +72,7 @@ export const createOrderSwapEtherToNFTL = async ({
         Number(etherVal),
         4,
       )} WETH for ${formatNumberToDisplay2(
-        Number(ethers.utils.formatEther(quote.buyAmount)),
+        Number(formatEther(quote.buyAmount)),
         2,
       )} NFTL`,
     );

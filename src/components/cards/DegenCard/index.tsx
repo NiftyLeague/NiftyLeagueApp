@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, memo } from 'react';
+import { memo, useMemo } from 'react';
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -24,12 +24,11 @@ import { toast } from 'react-toastify';
 import SkeletonDegenPlaceholder from '@/components/cards/Skeleton/DegenPlaceholder';
 import useClaimableNFTL from '@/hooks/useClaimableNFTL';
 import { formatNumberToDisplay } from '@/utils/numbers';
-import NetworkContext from '@/contexts/NetworkContext';
 import DegenImage from './DegenImage';
 import { downloadDegenAsZip } from '@/utils/file';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 // import EnableDisableDegenDialogContent from '@/app/dashboard/degens/dialogs/EnableDegenDialogContent';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 // import { DISABLE_RENT_API_URL } from '@/constants/url';
 import useAuth from '@/hooks/useAuth';
 
@@ -71,12 +70,9 @@ const DegenClaimBal: React.FC<
     React.PropsWithChildren<{ tokenId: string; fontSize: string }>
   >
 > = memo(({ tokenId, fontSize }) => {
-  const { readContracts } = useContext(NetworkContext);
-  const tokenIndices = [parseInt(tokenId, 10)];
-  const totalAccumulated = useClaimableNFTL(readContracts, tokenIndices);
-  const amountParsed = totalAccumulated
-    ? formatNumberToDisplay(totalAccumulated)
-    : 0;
+  const tokenIndices = useMemo(() => [parseInt(tokenId, 10)], [tokenId]);
+  const { totalAccrued } = useClaimableNFTL(tokenIndices);
+  const amountParsed = formatNumberToDisplay(totalAccrued);
   return (
     <Typography
       sx={{ textAlign: 'center', fontSize }}
