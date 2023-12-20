@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Stack, Typography } from '@mui/material';
-import { useCallback, useState, useContext, useEffect } from 'react';
+import { useCallback, useState, useContext, useEffect, useMemo } from 'react';
 import type { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
 import useClaimableNFTL from '@/hooks/useClaimableNFTL';
@@ -18,31 +18,23 @@ const ClaimDegenContentDialog = ({
   degen,
   onClose,
 }: ClaimDegenContentDialogProps) => {
-  const { tx, readContracts, writeContracts } = useContext(NetworkContext);
-  const [mockAccumulated, setMockAccumulated] = useState(0);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const { tx, writeContracts } = useContext(NetworkContext);
   const tokenId: any = degen?.id;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const tokenIndices = [parseInt(tokenId, 10)];
-  const totalAccumulated = useClaimableNFTL(
-    readContracts,
-    tokenIndices,
-    refreshKey,
-  );
-  useEffect(() => {
-    if (totalAccumulated) setMockAccumulated(totalAccumulated);
-  }, [totalAccumulated]);
+  const tokenIndices = useMemo(() => [parseInt(tokenId, 10)], [tokenId]);
+  const { totalAccrued, refetch } = useClaimableNFTL(tokenIndices);
+  const [mockAccumulated, setMockAccumulated] = useState(0);
+  useEffect(() => setMockAccumulated(totalAccrued), [totalAccrued]);
 
   const handleClaimNFTL = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       // eslint-disable-next-line no-console
-      if (DEBUG) console.log('claim', tokenIndices, totalAccumulated);
+      if (DEBUG) console.log('claim', tokenIndices, totalAccrued);
       await tx(writeContracts[NFTL_CONTRACT].claim(tokenIndices));
       setMockAccumulated(0);
-      setTimeout(() => setRefreshKey(Math.random() + 1), 5000);
+      setTimeout(() => refetch(), 5000);
       onClose?.(event);
     },
-    [totalAccumulated, tx, writeContracts, onClose, tokenIndices],
+    [onClose, refetch, tokenIndices, totalAccrued, tx, writeContracts],
   );
 
   const handleClose = useCallback(

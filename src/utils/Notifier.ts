@@ -86,13 +86,6 @@ export const submitTxWithGasEstimate = (
       handleError(error.error ?? error);
     });
 
-const unknownTarget = {
-  blockExplorer: '',
-  chainId: 0,
-  label: 'unknown',
-  rpcUrl: '',
-};
-
 export default function Notifier(
   providerOrSigner?: Provider | JsonRpcSigner,
   darkMode = false,
@@ -102,10 +95,6 @@ export default function Notifier(
       if (typeof providerOrSigner !== 'undefined') {
         const { signer, provider } =
           await getProviderAndSigner(providerOrSigner);
-        // auto select mainnet in case anything goes wrong finding provider
-        let network: Network = NETWORKS.mainnet;
-        // @ts-expect-error
-        if (provider) network = await provider.getNetwork();
 
         let options: InitOptions = {};
         let notify: API | null = null;
@@ -113,7 +102,7 @@ export default function Notifier(
           options = {
             dappId: process.env.NEXT_PUBLIC_BLOCKNATIVE_DAPPID, // GET YOUR OWN KEY AT https://account.blocknative.com
             system: 'ethereum',
-            networkId: network.chainId,
+            networkId: TARGET_NETWORK.chainId,
             darkMode,
             transactionHandler: (txInformation) => {
               const txData = txInformation.transaction as
@@ -155,7 +144,10 @@ export default function Notifier(
           if (callback) callbacks[result.hash] = callback;
 
           // if it is a valid Notify.js network, use that, if not, just send a default notification
-          if (notify && VALID_NOTIFY_NETWORKS.includes(network.chainId)) {
+          if (
+            notify &&
+            VALID_NOTIFY_NETWORKS.includes(TARGET_NETWORK.chainId)
+          ) {
             const { emitter } = notify.hash(result.hash);
             emitter.on('all', (transaction) => ({
               onclick: () =>
@@ -164,9 +156,7 @@ export default function Notifier(
                 window.open(etherscanTxUrl + transaction.hash),
             }));
           } else {
-            const networkName =
-              // @ts-expect-error
-              network.name === 'unknown' ? TARGET_NETWORK.label : network.name;
+            const networkName = TARGET_NETWORK.label;
             toast.info(
               ({ data }) => `${networkName} Transaction Sent: ${data}`,
               {

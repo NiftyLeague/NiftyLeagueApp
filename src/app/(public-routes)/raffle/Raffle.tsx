@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { type BigNumberish, formatEther } from 'ethers6';
+import { formatEther } from 'ethers6';
 import { Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { sectionSpacing } from '@/themes/constant';
@@ -24,9 +24,9 @@ function useDepositBalance(refreshKey = 0): number {
     undefined,
     refreshKey,
     !address,
-  ) as BigNumberish;
+  ) as bigint;
   useEffect(() => {
-    if (result && result !== balance) setBalance(BigInt(result));
+    if (result && result !== balance) setBalance(result);
   }, [result, balance]);
   return parseFloat(formatEther(balance));
 }

@@ -3,7 +3,7 @@ import type { Contract, InterfaceAbi } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { getContract } from '@/utils/ethers';
 import { COMICS_MERKLE_DISTRIBUTOR_ADDRESS } from '@/constants/contracts';
-import COMICS_MERKLE_DISTRIBUTOR_ABI from '@/contracts/abis/comics-merkle-distributor.json';
+import COMICS_MERKLE_DISTRIBUTOR_ABI from '@/constants/contracts/abis/comics-merkle-distributor.json';
 
 function useContract(contractAddress: string, ABI: InterfaceAbi) {
   const { signer } = useContext(NetworkContext);
