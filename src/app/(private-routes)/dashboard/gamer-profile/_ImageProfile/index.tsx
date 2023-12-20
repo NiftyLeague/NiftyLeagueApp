@@ -7,8 +7,8 @@ import DegenImage from '@/components/cards/DegenCard/DegenImage';
 import GamerProfileContext from '@/contexts/GamerProfileContext';
 import ProfileImageDialog from './ProfileImageDialog';
 
-import { Degen } from '@/types/degens';
-import { ProfileAvatar } from '@/types/account';
+import type { Degen } from '@/types/degens';
+import type { ProfileAvatar } from '@/types/account';
 
 interface ImageProfileProps {
   degens: Degen[] | undefined;

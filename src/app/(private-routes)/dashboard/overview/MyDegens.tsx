@@ -23,7 +23,7 @@ import BalanceContext from '@/contexts/BalanceContext';
 import useFetch from '@/hooks/useFetch';
 import { useProfileFavDegens } from '@/hooks/useGamerProfile';
 import useAuth from '@/hooks/useAuth';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import useLocalStorageContext from '@/hooks/useLocalStorageContext';
 
 const DegenCard = dynamic(

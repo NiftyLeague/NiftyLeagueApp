@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Rentals, RentalType } from '@/types/rentals';
+import type { Rentals, RentalType } from '@/types/rentals';
 import { areEqualArrays } from '@/utils/array';
 import { capitalize } from '@/utils/string';
 import { v4 as uuidv4 } from 'uuid';

@@ -1,6 +1,6 @@
 // material-ui
 import { Grid, Skeleton, Stack, Typography } from '@mui/material';
-import { GenericCardProps } from '@/types';
+import type { GenericCardProps } from '@/types';
 // project imports
 import MainCard from './MainCard';
 

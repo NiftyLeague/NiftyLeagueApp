@@ -17,7 +17,7 @@ import {
   Link,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { providers } from 'ethers';
+import { type TransactionResponse } from 'ethers6';
 import { useState, useContext, useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
@@ -25,7 +25,7 @@ import { DialogContext } from '@/components/dialog';
 import { formatNumberToDisplay } from '@/utils/numbers';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useFetch from '@/hooks/useFetch';
-import { WithdrawalHistory } from '@/types/account';
+import type { WithdrawalHistory } from '@/types/account';
 import { WITHDRAW_NFTL_AVAILABILITY } from '@/constants/url';
 import { formatDateTime } from '@/utils/dateTime';
 import TermsOfServiceDialog from '@/components/dialog/TermsOfServiceDialog';
@@ -61,7 +61,7 @@ const useWithdrawalDisabled = (history: WithdrawalHistory[]) => {
 interface WithdrawFormProps {
   onWithdrawEarnings: (
     amount: number,
-  ) => Promise<{ txRes: providers.TransactionResponse | null; error?: Error }>;
+  ) => Promise<{ txRes: TransactionResponse | null; error?: Error }>;
   balance: number;
 }
 
@@ -209,7 +209,11 @@ const WithdrawForm = ({
             control={control}
             render={({ field }) => (
               <NumericFormat
-                {...field}
+                disabled={field.disabled}
+                name={field.name}
+                onBlur={field.onBlur}
+                value={field.value}
+                inputRef={field.ref}
                 allowNegative={false}
                 isAllowed={({ value }) =>
                   Number(value) <= Number(balance) && Number(value) <= 100000
@@ -294,6 +298,9 @@ const WithdrawForm = ({
             Only 1 withdrawal per week is allowed at this time
           </Alert>
         )}
+        {balanceWithdraw > 100000 ? (
+          <Alert severity="error">Maximum weekly withdrawal is 100K NFTL</Alert>
+        ) : null}
         <LoadingButton
           size="large"
           type="submit"
@@ -303,7 +310,7 @@ const WithdrawForm = ({
           disabled={
             !getValues('isCheckedTerm') ||
             balanceWithdraw === 0 ||
-            balanceWithdraw >= 100000 ||
+            balanceWithdraw > 100000 ||
             withdrawDisabled
           }
         >

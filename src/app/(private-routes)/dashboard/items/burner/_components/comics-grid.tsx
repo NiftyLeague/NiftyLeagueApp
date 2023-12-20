@@ -14,7 +14,7 @@ import {
 import BurnIcon from '@mui/icons-material/Whatshot';
 
 import useComicsBalance from '@/hooks/useComicsBalance';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 
 const COMPRESSED_COMIC_IMAGES = [
   '/images/comics/burner/comics/page2.png',

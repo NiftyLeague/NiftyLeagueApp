@@ -1,6 +1,5 @@
-// types
-import { MenuProps } from '@/types/menu';
 import { createSlice } from '@reduxjs/toolkit';
+import type { MenuProps } from '@/types/menu';
 
 // initial state
 const initialState: MenuProps = {

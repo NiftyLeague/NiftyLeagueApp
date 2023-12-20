@@ -1,29 +1,53 @@
 'use client';
 
-import { useCallback } from 'react';
-import { utils } from 'ethers';
-import { Contracts } from '@/types/web3';
-import useContractReader from './useContractReader';
-import { NFTL_CONTRACT } from '@/constants/contracts';
+import { useCallback, useState, useEffect } from 'react';
+import { formatEther } from 'ethers6';
+import { useContractRead } from 'wagmi';
+import { TARGET_NETWORK } from '@/constants/networks';
+import CONTRACTS from '@/constants/contracts/deployments';
+import type { Abi } from 'viem';
+
+const NFTL_CONTRACT = CONTRACTS[TARGET_NETWORK.chainId].NFTLToken;
+
+interface NFTLClaimableState {
+  totalAccrued: number;
+  loading: boolean;
+  refetch: () => void;
+}
 
 export default function useClaimableNFTL(
-  contracts: Contracts,
   tokenIndices: number[],
-  refreshKey?: string | number,
-): number {
-  const formatter = useCallback((value: BigInt) => {
-    const totalAccumulatedStr = value && value.toString();
-    return totalAccumulatedStr && utils.formatEther(totalAccumulatedStr);
-  }, []);
-  const totalAccumulated = useContractReader(
-    contracts,
-    NFTL_CONTRACT,
-    'accumulatedMultiCheck',
-    [tokenIndices],
-    undefined,
-    formatter,
-    refreshKey,
-    !tokenIndices.length,
-  ) as string;
-  return parseFloat(totalAccumulated);
+): NFTLClaimableState {
+  const [totalAccrued, setTotalAccrued] = useState(0);
+  const {
+    data,
+    isLoading: loading,
+    refetch: refetchBal,
+  } = useContractRead({
+    address: NFTL_CONTRACT.address,
+    abi: NFTL_CONTRACT.abi as Abi,
+    functionName: 'accumulatedMultiCheck',
+    args: [tokenIndices],
+    cacheTime: 10_000,
+    enabled: tokenIndices.length > 0,
+    select: (data) => parseFloat(formatEther(data as bigint)),
+  });
+
+  const updateBal = useCallback(
+    (data?: number) => {
+      if (data && data !== totalAccrued) setTotalAccrued(data);
+    },
+    [totalAccrued],
+  );
+
+  useEffect(() => {
+    updateBal(data);
+  }, [data, updateBal]);
+
+  const refetch = useCallback(async () => {
+    const { data } = await refetchBal();
+    updateBal(data);
+  }, [updateBal, refetchBal]);
+
+  return { totalAccrued, loading, refetch };
 }

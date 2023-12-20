@@ -15,7 +15,7 @@ import ProgressBar from '@/components/wrapper/ProgressBar';
 import { useState } from 'react';
 import Countdown from 'react-countdown';
 import { useRouter } from 'next/navigation';
-import { Rentals } from '@/types/rentals';
+import type { Rentals } from '@/types/rentals';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 interface ActiveRentalDialogProps {

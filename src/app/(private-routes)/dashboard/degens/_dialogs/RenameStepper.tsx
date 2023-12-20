@@ -179,5 +179,4 @@ function RenameStepper({
   );
 }
 
-RenameStepper.defaultProps = { redirectToWallet: false };
 export default RenameStepper;

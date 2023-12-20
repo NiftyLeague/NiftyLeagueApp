@@ -1,5 +1,5 @@
 import { Box, Theme, SxProps, Typography } from '@mui/material';
-import { Comic } from '@/types/comic';
+import type { Comic } from '@/types/comic';
 import ImageCard from '@/components/cards/ImageCard';
 import useComicDimension from '@/hooks/useComicDimension';
 
@@ -117,7 +117,7 @@ const ComicCard: React.FC<
             <Typography
               sx={{ fontSize: 20, color: '#FFFFFF', fontWeight: 700 }}
             >
-              {balance}
+              <span>{balance}</span>
             </Typography>
           </Box>
         </Box>

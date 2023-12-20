@@ -29,7 +29,7 @@ const SubCard = forwardRef(
     {
       children,
       className,
-      content,
+      content = true,
       contentClass,
       darkTitle,
       secondary,
@@ -104,10 +104,6 @@ const SubCard = forwardRef(
     );
   },
 );
-
-SubCard.defaultProps = {
-  content: true,
-};
 
 SubCard.displayName = 'SubCard';
 

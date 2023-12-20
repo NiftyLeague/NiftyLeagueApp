@@ -1,6 +1,6 @@
 import Private from './Private';
 import Public from './Public';
-import { NavItemType } from '@/types';
+import type { NavItemType } from '@/types';
 
 // ==============================|| MENU ITEMS ||============================== //
 

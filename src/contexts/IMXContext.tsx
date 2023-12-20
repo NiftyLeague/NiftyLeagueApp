@@ -14,7 +14,7 @@ import { Link, ImmutableXClient, ImmutableMethodResults } from '@imtbl/imx-sdk';
 import NetworkContext from '@/contexts/NetworkContext';
 import { IMX_NL_ITEMS } from '@/constants/contracts';
 import useItemsBalance from '@/hooks/useItemsBalance';
-import { Item } from '@/types/comic';
+import type { Item } from '@/types/comic';
 
 export interface Context {
   balance?: ImmutableMethodResults.ImmutableGetBalanceResult;

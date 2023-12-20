@@ -1,4 +1,4 @@
-import { DataType, ReturnDataType, Order } from '@/types/leaderboard';
+import type { DataType, ReturnDataType, Order } from '@/types/leaderboard';
 import {
   GET_RANK_BY_USER_ID_API,
   LEADERBOARD_SCORE_API_URL,

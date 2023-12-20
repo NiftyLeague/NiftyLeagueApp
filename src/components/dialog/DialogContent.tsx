@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { DialogContext } from '.';
-import { DialogProps } from '@/types/dialog';
+import type { DialogProps } from '@/types/dialog';
 import { CloseIconButton } from './DialogActions';
 
 const DialogContentBase = (props: DialogProps) => {

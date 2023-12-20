@@ -5,7 +5,7 @@ import { Grid, Button, Box, Dialog } from '@mui/material';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import SectionSlider from '@/components/sections/SectionSlider';
-import { Degen } from '@/types/degens';
+import type { Degen } from '@/types/degens';
 import { DEGEN_BASE_API_URL } from '@/constants/url';
 import useFetch from '@/hooks/useFetch';
 import SkeletonDegenPlaceholder from '@/components/cards/Skeleton/DegenPlaceholder';

@@ -2,11 +2,9 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { mainnet, goerli } from 'viem/chains';
-import { utils } from 'ethers';
+import { getAddress, isAddress } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_MERKLE_ROOT } from '@/constants/contracts';
-
-const { getAddress, isAddress } = utils;
 
 interface UserClaimData {
   index: number;

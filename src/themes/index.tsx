@@ -20,8 +20,8 @@ import componentStyleOverrides from './compStyleOverride';
 import customShadows from './shadows';
 
 // types
-import { CustomShadowProps } from '@/types/default-theme';
-import { TypographyOptions } from '@mui/material/styles/createTypography';
+import type { CustomShadowProps } from '@/types/default-theme';
+import type { TypographyOptions } from '@mui/material/styles/createTypography';
 
 interface Props {
   children: ReactNode;

@@ -11,10 +11,9 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
-import { Character, Owner } from '@/types/graph';
 import NetworkContext from './NetworkContext';
+import type { Character, Owner } from '@/types/graph';
 
 interface Context {
   isDegenOwner: boolean;
@@ -49,8 +48,7 @@ export const BalanceProvider = ({
 }: {
   children: React.ReactElement | React.ReactElement[];
 }): JSX.Element => {
-  const { address, readContracts } = useContext(NetworkContext);
-  const [refreshClaimKey, setRefreshClaimKey] = useState(0);
+  const { address } = useContext(NetworkContext);
   const {
     loading,
     data,
@@ -80,18 +78,11 @@ export const BalanceProvider = ({
     [characters],
   );
 
-  const totalAccrued = useClaimableNFTL(
-    readContracts,
-    tokenIndices,
-    refreshClaimKey,
-  );
+  const { totalAccrued, refetch: refreshClaimableNFTL } =
+    useClaimableNFTL(tokenIndices);
 
   const { balance: userNFTLBalance, refetch: refreshNFTLBalance } =
     useNFTLBalance();
-
-  const refreshClaimableNFTL = () => {
-    setRefreshClaimKey(Math.random());
-  };
 
   const refreshDegenBalance = useCallback(() => {
     if (address) refetchDegens({ address: address.toLowerCase() });
@@ -101,7 +92,7 @@ export const BalanceProvider = ({
     if (!address) return;
     refreshDegenBalance();
     refreshClaimableNFTL();
-  }, [address, refreshDegenBalance, refreshNFTLBalance]);
+  }, [address, refreshDegenBalance, refreshNFTLBalance, refreshClaimableNFTL]);
 
   return (
     <BalanceContext.Provider

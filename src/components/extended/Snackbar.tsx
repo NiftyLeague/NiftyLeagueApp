@@ -15,7 +15,7 @@ import MuiSnackbar from '@mui/material/Snackbar';
 // assets
 import CloseIcon from '@mui/icons-material/Close';
 
-import { KeyedObject } from '@/types';
+import type { KeyedObject } from '@/types';
 import { useDispatch, useSelector } from '@/store';
 import { closeSnackbar } from '@/store/slices/snackbar';
 

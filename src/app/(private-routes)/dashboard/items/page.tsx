@@ -20,7 +20,7 @@ import SectionSlider from '@/components/sections/SectionSlider';
 
 import IMXContext from '@/contexts/IMXContext';
 import NetworkContext from '@/contexts/NetworkContext';
-import { Comic, Item } from '@/types/comic';
+import type { Comic, Item } from '@/types/comic';
 import useComicsBalance from '@/hooks/useComicsBalance';
 import { COMICS_OPENSEA_URL, ITEM_PURCHASE_URL } from '@/constants/url';
 import ComicDetail from '@/components/cards/ComicDetail';

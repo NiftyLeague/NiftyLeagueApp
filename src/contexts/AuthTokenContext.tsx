@@ -4,7 +4,7 @@ import { createContext, useCallback, useState, useEffect } from 'react';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount } from 'wagmi';
 
-import { AuthTokenContextType } from '@/types/auth';
+import type { AuthTokenContextType } from '@/types/auth';
 import { useSelector } from '@/store';
 import useCheckAuth from '@/hooks/useCheckAuth';
 import useLocalStorageContext from '@/hooks/useLocalStorageContext';
