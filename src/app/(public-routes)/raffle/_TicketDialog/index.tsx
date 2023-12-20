@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import NetworkContext from '@/contexts/NetworkContext';
-import { type BigNumberish, parseEther } from 'ethers6';
+import { parseEther } from 'ethers6';
 import { NFTL_CONTRACT, NFTL_RAFFLE_CONTRACT } from '@/constants/contracts';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
 import { DEBUG } from '@/constants/index';
@@ -49,11 +49,12 @@ const TicketDialogContext = ({ onSuccess }: Props): JSX.Element => {
     const getAllowance = async () => {
       const raffleContract = writeContracts[NFTL_RAFFLE_CONTRACT];
       const nftl = writeContracts[NFTL_CONTRACT];
+      const raffleAddress = await raffleContract.getAddress();
       const allowanceBN = (await nftl.allowance(
         address,
-        raffleContract.address,
-      )) as BigNumberish;
-      setAllowance(BigInt(allowanceBN.toString()));
+        raffleAddress,
+      )) as bigint;
+      setAllowance(allowanceBN);
     };
     if (
       writeContracts &&

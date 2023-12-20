@@ -10,7 +10,6 @@ import {
 } from 'react';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { isMobileOnly, withOrientationChange } from 'react-device-detect';
-import { type BigNumberish } from 'ethers6';
 
 import useRemovedTraits from '@/hooks/useRemovedTraits';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
@@ -354,7 +353,7 @@ const CharacterCreatorContainer = memo(
           getMintableTraits(e.detail);
         const nftContract = writeContracts[DEGEN_CONTRACT];
         const args = [character, head, clothing, accessories, items];
-        const value = (await nftContract.getNFTPrice()) as BigNumberish;
+        const value = (await nftContract.getNFTPrice()) as bigint;
         const minimumGas = 250000n;
         const txCallback: NotifyCallback = (mintTx) => {
           if (mintTx?.status === 'pending') e.detail.callback('true');

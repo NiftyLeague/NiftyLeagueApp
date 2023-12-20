@@ -28,8 +28,7 @@ export default function useClaimableNFTL(
     abi: NFTL_CONTRACT.abi as Abi,
     functionName: 'accumulatedMultiCheck',
     args: [tokenIndices],
-    watch: true,
-    cacheTime: 300_000,
+    cacheTime: 10_000,
     enabled: tokenIndices.length > 0,
     select: (data) => parseFloat(formatEther(data as bigint)),
   });

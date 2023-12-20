@@ -60,12 +60,12 @@ export const calculateGasMargin = (
   minimumGas?: bigint,
 ): bigint => {
   if (minimumGas) {
-    const calculatedWithMargin = (BigInt(value) * 1000n + 2000n) / 10000n;
-    return calculatedWithMargin < BigInt(minimumGas)
-      ? BigInt(minimumGas)
+    const calculatedWithMargin = (value * 1000n + 2000n) / 10000n;
+    return calculatedWithMargin < minimumGas
+      ? minimumGas
       : calculatedWithMargin;
   }
-  return (BigInt(value) + 1000n) / 1000n;
+  return (value + 1000n) / 1000n;
 };
 
 // account is not optional

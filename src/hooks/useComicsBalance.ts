@@ -1,7 +1,6 @@
 'use client';
 
 import { useContext, useEffect, useState } from 'react';
-import { type BigNumberish } from 'ethers6';
 import NetworkContext from '@/contexts/NetworkContext';
 import { COMICS_CONTRACT } from '@/constants/contracts';
 import { COMICS } from '@/constants/comics';
@@ -35,9 +34,9 @@ export default function useComicsBalance(refreshKey = 0): {
       );
       setComicsBal(comicsData);
       setComicsBal(
-        comicsData.map((c: BigNumberish, i: number) => ({
+        comicsData.map((c: bigint, i: number) => ({
           ...COMICS[i],
-          balance: BigInt(c),
+          balance: Number(c),
         })),
       );
       setLoading(false);

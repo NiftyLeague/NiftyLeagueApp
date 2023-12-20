@@ -43,7 +43,7 @@ const ComicsBurner = () => {
   useEffect(() => {
     const getAllowance = async () => {
       const burnContract = writeContracts[COMICS_BURNER_CONTRACT];
-      const burnContractAddress = burnContract.address;
+      const burnContractAddress = await burnContract.getAddress();
       const comicsContract = writeContracts[COMICS_CONTRACT];
       const approved = (await comicsContract.isApprovedForAll(
         address,
