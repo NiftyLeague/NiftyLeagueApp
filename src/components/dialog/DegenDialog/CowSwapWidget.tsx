@@ -2,7 +2,7 @@
 
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { type BigNumberish, formatEther, parseEther } from 'ethers6';
+import { formatEther, parseEther } from 'ethers6';
 import { OrderKind } from '@cowprotocol/cow-sdk';
 import {
   createOrderSwapEtherToNFTL,
@@ -107,13 +107,13 @@ const CowSwapWidget = ({ refreshBalance }: CowSwapWidgetProps) => {
   useEffect(() => {
     const getAllowance = async () => {
       const gameAccountContract = writeContracts[GAME_ACCOUNT_CONTRACT];
-      const gameAccountAddress = gameAccountContract.address;
+      const gameAccountAddress = await gameAccountContract.getAddress();
       const nftl = writeContracts[NFTL_CONTRACT];
       const allowanceBN = (await nftl.allowance(
         address,
         gameAccountAddress,
-      )) as BigNumberish;
-      setAllowance(BigInt(allowanceBN));
+      )) as bigint;
+      setAllowance(allowanceBN);
     };
     if (
       writeContracts &&

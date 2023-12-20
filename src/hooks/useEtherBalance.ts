@@ -32,7 +32,6 @@ export default function useEtherBalance(): EtherBalanceState {
   const { address, isConnected } = useAccount();
   const { data, isLoading, isFetched, refetch } = useBalance({
     address,
-    watch: true,
     cacheTime: 10_000,
     formatUnits: 'ether',
     enabled: isConnected,

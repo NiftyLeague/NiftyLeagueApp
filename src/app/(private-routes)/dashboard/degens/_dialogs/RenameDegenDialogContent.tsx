@@ -14,7 +14,7 @@ import {
 
 import type { Degen } from '@/types/degens';
 import NetworkContext from '@/contexts/NetworkContext';
-import { type BigNumberish, parseEther } from 'ethers6';
+import { parseEther } from 'ethers6';
 import { NFTL_CONTRACT, DEGEN_CONTRACT } from '@/constants/contracts';
 import { getErrorForName } from '@/utils/name';
 import { submitTxWithGasEstimate } from '@/utils/Notifier';
@@ -43,13 +43,13 @@ const RenameDegenDialogContent = ({ degen, onSuccess }: Props): JSX.Element => {
   useEffect(() => {
     const getAllowance = async () => {
       const degenContract = writeContracts[DEGEN_CONTRACT];
-      const DEGENAddress = degenContract.address;
+      const DEGENAddress = await degenContract.getAddress();
       const nftl = writeContracts[NFTL_CONTRACT];
       const allowanceBN = (await nftl.allowance(
         address,
         DEGENAddress,
-      )) as BigNumberish;
-      setAllowance(BigInt(allowanceBN));
+      )) as bigint;
+      setAllowance(allowanceBN);
     };
     setRenameSuccess(false);
     if (

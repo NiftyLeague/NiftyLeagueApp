@@ -117,7 +117,7 @@ const ComicCard: React.FC<
             <Typography
               sx={{ fontSize: 20, color: '#FFFFFF', fontWeight: 700 }}
             >
-              {balance}
+              <span>{balance}</span>
             </Typography>
           </Box>
         </Box>

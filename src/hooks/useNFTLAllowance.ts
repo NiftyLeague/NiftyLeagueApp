@@ -9,16 +9,16 @@ import type { Abi } from 'viem';
 
 const NFTL_CONTRACT = CONTRACTS[TARGET_NETWORK.chainId].NFTLToken;
 
-interface NFTLClaimableState {
-  totalAccrued: number;
+interface NFTLAllowanceState {
+  allowance: number;
   loading: boolean;
   refetch: () => void;
 }
 
-export default function useClaimableNFTL(
-  tokenIndices: number[],
-): NFTLClaimableState {
-  const [totalAccrued, setTotalAccrued] = useState(0);
+export default function useNFTLAllowance(
+  contractAddress: `0x${string}`,
+): NFTLAllowanceState {
+  const [allowance, setAllowance] = useState(0);
   const {
     data,
     isLoading: loading,
@@ -26,18 +26,18 @@ export default function useClaimableNFTL(
   } = useContractRead({
     address: NFTL_CONTRACT.address,
     abi: NFTL_CONTRACT.abi as Abi,
-    functionName: 'accumulatedMultiCheck',
-    args: [tokenIndices],
+    functionName: 'allowance',
+    args: [contractAddress],
     cacheTime: 10_000,
-    enabled: tokenIndices.length > 0,
+    enabled: contractAddress.length > 26,
     select: (data) => parseFloat(formatEther(data as bigint)),
   });
 
   const updateBal = useCallback(
     (data?: number) => {
-      if (data && data !== totalAccrued) setTotalAccrued(data);
+      if (data && data !== allowance) setAllowance(data);
     },
-    [totalAccrued],
+    [allowance],
   );
 
   useEffect(() => {
@@ -49,5 +49,5 @@ export default function useClaimableNFTL(
     updateBal(data);
   }, [updateBal, refetchBal]);
 
-  return { totalAccrued, loading, refetch };
+  return { allowance, loading, refetch };
 }

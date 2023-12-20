@@ -19,7 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { type BigNumberish, parseEther } from 'ethers6';
+import { parseEther } from 'ethers6';
 import { DialogContext } from '@/components/dialog';
 import useWithdrawalHistory from '@/hooks/useWithdrawalHistory';
 import useContractReader from '@/hooks/useContractReader';
@@ -41,10 +41,10 @@ function useBalanceManagerNonce(address: string = ''): number {
     undefined,
     undefined,
     !address.length,
-  ) as BigNumberish;
+  ) as bigint;
 
   useEffect(() => {
-    if (result && result !== nonce) setNonce(BigInt(result));
+    if (result && result !== nonce) setNonce(result);
   }, [result, nonce]);
 
   return Number(nonce);

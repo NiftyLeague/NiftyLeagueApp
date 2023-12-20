@@ -31,8 +31,7 @@ export default function useNFTLBalance(): NFTLBalanceState {
   } = useBalance({
     address,
     token: NFTL_TOKEN_ADDRESS[TARGET_NETWORK.chainId],
-    watch: true,
-    cacheTime: 300_000,
+    cacheTime: 10_000,
     formatUnits: 'ether',
     enabled: isConnected,
   });

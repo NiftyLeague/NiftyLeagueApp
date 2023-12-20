@@ -209,7 +209,11 @@ const WithdrawForm = ({
             control={control}
             render={({ field }) => (
               <NumericFormat
-                {...field}
+                disabled={field.disabled}
+                name={field.name}
+                onBlur={field.onBlur}
+                value={field.value}
+                inputRef={field.ref}
                 allowNegative={false}
                 isAllowed={({ value }) =>
                   Number(value) <= Number(balance) && Number(value) <= 100000
@@ -294,6 +298,9 @@ const WithdrawForm = ({
             Only 1 withdrawal per week is allowed at this time
           </Alert>
         )}
+        {balanceWithdraw > 100000 ? (
+          <Alert severity="error">Maximum weekly withdrawal is 100K NFTL</Alert>
+        ) : null}
         <LoadingButton
           size="large"
           type="submit"
@@ -303,7 +310,7 @@ const WithdrawForm = ({
           disabled={
             !getValues('isCheckedTerm') ||
             balanceWithdraw === 0 ||
-            balanceWithdraw >= 100000 ||
+            balanceWithdraw > 100000 ||
             withdrawDisabled
           }
         >
