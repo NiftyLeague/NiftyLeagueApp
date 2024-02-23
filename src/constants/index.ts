@@ -11,9 +11,10 @@ export const ALCHEMY_ID: { [key in ChainId]?: string } = {
   [goerli.id]: process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API as string,
 };
 
-export const SUBGRAPH_URI = `${process.env.NEXT_PUBLIC_SUBGRAPH_URI as string}${
-  process.env.NEXT_PUBLIC_SUBGRAPH_VERSION || ''
-}`;
+// export const SUBGRAPH_URI = `${process.env.NEXT_PUBLIC_SUBGRAPH_URI as string}${
+//   process.env.NEXT_PUBLIC_SUBGRAPH_VERSION || ''
+// }`;
+export const SUBGRAPH_URI = `https://gateway-arbitrum.network.thegraph.com/api/${process.env.NEXT_PUBLIC_GRAPH_API_KEY}/subgraphs/id/${process.env.NEXT_PUBLIC_GRAPH_ID}`;
 
 export const DEBUG =
   process.env.NODE_ENV === 'development' ||
