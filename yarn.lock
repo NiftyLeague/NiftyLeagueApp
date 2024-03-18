@@ -2721,6 +2721,11 @@ abitype@0.9.8:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.9.8.tgz#1f120b6b717459deafd213dfbf3a3dd1bf10ae8c"
   integrity sha512-puLifILdm+8sjyss4S+fsUN09obiT1g2YW6CtcQF+QDzxR0euzgEB29MZujC6zMk2a6SVmtttq1fc6+YFA7WYQ==
 
+abitype@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.0.0.tgz#237176dace81d90d018bebf3a45cb42f2a2d9e97"
+  integrity sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
@@ -8136,7 +8141,21 @@ valtio@1.12.1:
     proxy-compare "2.5.1"
     use-sync-external-store "1.2.0"
 
-viem@1.20.1, viem@^1.0.0:
+viem@2.8.11:
+  version "2.8.11"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.8.11.tgz#447b90e202c263fc3e2f9df5a6477b8ef9929aaa"
+  integrity sha512-TMmHle2k6gZ0+LENMr5ulb/bKGMTaCFj5V3sbS52OGCnhxI4t46NDIk6RIIAiaPR4AkwZPf31LY5LORjpb02Tg==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    abitype "1.0.0"
+    isows "1.0.3"
+    ws "8.13.0"
+
+viem@^1.0.0:
   version "1.20.1"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.20.1.tgz#ea92f9bab2fded4be556be4d4be724805d11780e"
   integrity sha512-PaYyfuCVkNFzdaVoV8HefMIt5YtjIG6UPqxOz0rYchN52cD05YcRJlO0h/XrehQfo8ib2RSOkZ0ChJ6Adlh1Jg==
